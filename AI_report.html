@@ -2,17 +2,54 @@
 <html>
 <head>
     <title>All Industries Report</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked@4.0.10/marked.min.js"></script>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; color: #333; }
         h1 { color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px; }
         h2 { color: #004085; margin-top: 25px; }
-        h3 { color: #002d6b; margin-top: 20px; }
+        h3 { color: #002d6b; margin-top: 20px; } 
         table { width: 100%; border-collapse: collapse; margin-top: 15px; background-color: #fff; box-shadow: 0 2px 3px rgba(0,0,0,0.1); }
         th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
         th { background-color: #f2f2f2; font-weight: bold; }
         .news-item { background-color: #e9f7ef; border-left: 5px solid #28a745; margin-bottom: 10px; padding: 10px; border-radius: 4px; }
         .news-date { font-weight: bold; color: #28a745; }
         .ticker-header { background-color: #d1ecf1; padding: 8px; margin-top: 15px; margin-bottom: 5px; border-radius: 4px; border-left: 5px solid #17a2b8; }
+        /* Style for markdown content */
+        .markdown-output {
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            margin-top: 15px;
+        }
+        .markdown-output h1, .markdown-output h2, .markdown-output h3, .markdown-output h4, .markdown-output h5, .markdown-output h6 {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.3em;
+            margin-top: 1em;
+            margin-bottom: 0.5em;
+            line-height: 1.25;
+        }
+        .markdown-output ul, .markdown-output ol {
+            padding-left: 2em;
+        }
+        .markdown-output blockquote {
+            color: #6a737d;
+            border-left: 0.25em solid #dfe2e5;
+            padding: 0 1em;
+            margin-left: 0;
+        }
+        .markdown-output pre {
+            background-color: #f6f8fa;
+            border-radius: 3px;
+            padding: 1em;
+            overflow: auto;
+        }
+        .markdown-output code {
+            background-color: rgba(27,31,35,.05);
+            border-radius: 3px;
+            padding: 0.2em 0.4em;
+            font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;
+        }
     </style>
 </head>
 <body>
@@ -123,49 +160,48 @@
     </tr>
   </tbody>
 </table>
-<h3>Recent News</h3>
-<div class="news-item"><p>Here are the latest announcements and SEC filings for the requested companies as of **Friday December 5 2025**:</p></div>
-<div class="ticker-header"><h3>IONQ (IONQ)</h3></div>
-<div class="news-item"><p>&bull; *   SEC Filings:
-    *   December 5 2025: IonQ Inc. filed an 8-K/A (Amendment to Current Report) to add details regarding the separation agreement with its former Chief Financial Officer Thomas Kramer. This includes a lump-sum cash severance his full and pro-rated 2025 target bonuses and health insurance premium coverage for up to nine months.
-    *   December 4 2025: IonQ Inc. filed a Form 144 SEC Filing.
-    *   December 3 2025: IonQ Inc. filed a Form 144 SEC Filing.</p></div>
-<div class="news-item"><p>&bull; News/Announcements:
-    *   December 1 2025: IonQ and CCRM announced a strategic quantum-biotech collaboration aimed at accelerating the development of advanced therapeutics.
-    *   December 1 2025: Heven AeroTech announced a $100M Series B raise reaching a $1B valuation with customer demand surging. This news is relevant as IonQ and Heven AeroTech partnered to develop quantum-enabled drones for national security applications.
-    *   November 24 2025: IonQ and Heven AeroTech partnered to develop quantum-enabled drones for national security applications.
-    *   November 24 2025: IonQ appointed Dr. Marco Pistoia as CEO of IonQ Italia to spearhead strategic quantum initiatives across the country.</p></div>
-<div class="ticker-header"><h3>D-Wave Quantum Inc. (QBTS)</h3></div>
-<div class="news-item"><p>&bull; *   SEC Filings:
-    *   December 5 2025: A Form 4 filing indicated insider trading activity by CFO John M. Markovich who exercised stock options and sold common stock on December 3rd and 4th 2025.
-    *   December 3 2025: A Form 144 SEC Filing was made for a proposed sale of 7000 shares of Class A common stock by Director Kirstjen Nielsen.
-    *   December 2 2025: D-Wave Quantum Inc. filed an 8-K (Current Report) to report a material event which was the formation of its U.S. Government Business Unit.</p></div>
-<div class="news-item"><p>&bull; News/Announcements:
-    *   December 2 2025: D-Wave announced the formation of a new U.S. Government Business Unit led by Jack Sears Jr. aimed at expanding the adoption of its quantum computing products and services within the U.S. government.</p></div>
-<div class="ticker-header"><h3>Rigetti Computing Inc. (RGTI)</h3></div>
-<div class="news-item"><p>&bull; *   SEC Filings:
-    *   No SEC filings were identified as being filed on December 5 2025. The most recent explicit filings found include a Form 4 showing a CTO sell-to-cover stock sale on November 21 2025 and an 8-K with financial results press release on November 10 2025.</p></div>
-<div class="news-item"><p>&bull; News/Announcements:
-    *   November 10 2025: Rigetti Computing reported its financial results for the third quarter ended September 30 2025 and provided technology roadmap updates for 2026 and 2027.</p></div>
-<div class="ticker-header"><h3>Quantum Computing Inc. (QUBT)</h3></div>
-<div class="news-item"><p>&bull; *   SEC Filings:
-    *   November 14 2025: Quantum Computing Inc. filed an 8-K (Current Report) related to its earnings release.
-    *   November 14 2025: Quantum Computing Inc. filed a 10-Q (Quarterly Report) for the quarter ending September 30 2025.</p></div>
-<div class="news-item"><p>&bull; News/Announcements:
-    *   Approximately November 29 2025: Quantum Computing Inc. is scheduled to attend the UBS Global Technology and AI Conference.
-    *   November 17 2025: Quantum Computing Inc. announced it would unveil Neurawave a photonics-based reservoir computing system at the SuperCompute25 conference.
-    *   November 14 2025: Quantum Computing Inc. reported its third-quarter 2025 financial results.</p></div>
-<div class="ticker-header"><h3>SEALSQ Corp (LAES)</h3></div>
-<div class="news-item"><p>&bull; *   SEC Filings:
-    *   November 25 2025: SEALSQ Corp filed a 6-K (Report of Foreign Issuer).</p></div>
-<div class="news-item"><p>&bull; News/Announcements:
-    *   No specific news announcements dated December 5 2025 or within the last few days were found. The most recent dated news item available in the search results is the November 25th 6-K filing.</p></div>
-<div class="ticker-header"><h3>Arqit Quantum Inc. (ARQQ)</h3></div>
-<div class="news-item"><p>&bull; *   SEC Filings:
-    *   October 21 2025: Arqit Quantum Inc. filed a 6-K (Report of foreign issuer).</p></div>
-<div class="news-item"><p>&bull; News/Announcements:
-    *   No news announcements were identified as being released on December 5 2025 or within the last few days. The latest significant corporate news found in the search results dates back to September 30 2024 regarding a registered direct offering.</p></div>
+<h3>Recent News (Markdown)</h3>
+<div class="markdown-raw-content">Here are the latest announcements and SEC filings for IonQ (IONQ) D-Wave Quantum Inc. (QBTS) Rigetti Computing Inc. (RGTI) Quantum Computing Inc. (QUBT) SEALSQ Corp (LAES) and Arqit Quantum Inc. (ARQQ) as of today December 6 2025:
 
+**IonQ (IONQ)**
+
+*   **December 5 2025**: IonQ filed an Amendment No. 1 to its Current Report on Form 8-K originally filed on September 4 2025 to disclose the material terms of a separation agreement and release of claims with its former Chief Financial Officer Thomas Kramer entered into on December 2 2025.
+*   **December 4 2025**: A Form 144 filing for a proposed sale of securities by IonQ Inc.
+*   **December 3 2025**: A Form 144 filing for a proposed sale of securities by IonQ Inc.
+*   **December 1 2025**: IonQ and CCRM announced a strategic quantum-biotech collaboration aimed at accelerating the development of advanced therapeutics.
+*   **December 1 2025**: Heven Aerotech announced $100 million in Series B raise reaching a $1 billion valuation and IonQ and Heven AeroTech partnered to develop quantum-enabled drones for national security applications.
+
+**D-Wave Quantum Inc. (QBTS)**
+
+*   **December 5 2025**: A Form 4 filing detailed insider trading activity specifically the sale of 7000 shares of common stock by Director Kirstjen Nielsen on December 3 2025.
+*   **December 4 2025**: D-Wave&#x27;s CFO John M. Markovich exercised stock options and sold 100000 shares of common stock.
+*   **December 3 2025**: D-Wave&#x27;s CFO John M. Markovich exercised stock options and sold 100000 shares of common stock.
+*   **December 3 2025**: A Form 144 filing for a proposed sale of securities by D-Wave Quantum Inc.
+*   **December 2 2025**: D-Wave announced the formation of a new U.S. Government Business Unit focused on accelerating the integration of its quantum computing products and services within the U.S. government.
+*   **December 2 2025**: An 8-K filing by D-Wave Quantum Inc. reported a material event.
+
+**Rigetti Computing Inc. (RGTI)**
+
+*   **December 5 2025**: Marex Group plc acquired a new position in Rigetti Computing Inc. shares during the second quarter purchasing 7370520 shares valued at approximately $87.4 million.
+*   **November 21 2025**: A Form 4 filing showed a sell-to-cover stock sale by Rigetti Computing&#x27;s CTO.
+*   **November 10 2025**: Rigetti Computing reported its financial results for the third quarter ended September 30 2025 and provided technology roadmap updates for 2026 and 2027. An 8-K filing was also made in connection with these financial results.
+
+**Quantum Computing Inc. (QUBT)**
+
+*   **November 17 2025**: Quantum Computing Inc. announced it would debut Neurawave a photonics-based reservoir computing system at the SuperCompute25 conference.
+*   **November 14 2025**: Quantum Computing Inc. hosted a third quarter 2025 shareholder call and released its Q3 2025 financial results after market close. An 8-K and 10-Q filing were made for the quarter ending September 30 2025.
+
+**SEALSQ Corp (LAES)**
+
+*   **December 4 2025**: SEALSQ Corp announced a strategic investment in EeroQ a U.S.-based quantum chip design company as part of its &quot;Quantum Made in USA&quot; strategy.
+*   **December 3 2025**: SEALSQ Corp held a strategic gathering in Provence France on December 2 2025 to celebrate its 2025 milestones and outline its vision for 2026/2030 including the development of a quantum-resistant chip engineered in France and its NASDAQ uplisting.
+*   **December 1 2025**: SEALSQ WISeKey and WISeSat.Space successfully launched their new satellite aboard a SpaceX Falcon 9 Transporter 16 mission.
+*   **November 25 2025**: A Form 6-K filing by SEALSQ Corp reported the appointment of Dr. Ballester Lafuente as Chief of Staff and Group AI Officer effective November 17 2025.
+
+**Arqit Quantum Inc. (ARQQ)**
+
+*   **December 3 2025**: Arqit and Sparkle announced a successful proof of concept demonstrating quantum-resistant encryption embedded at the optical transport layer across Sparkle&#x27;s metropolitan ring in Athens.
+*   **December 1 2025**: Arqit Quantum Inc. set its Fiscal Year 2025 Conference Call for Tuesday December 9 2025 at 11:00 a.m. ET.</div>
 <h3>Industry Image</h3>
 <img src="screenshots/quantum.png" alt="Quantum Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
@@ -275,43 +311,63 @@
     </tr>
   </tbody>
 </table>
-<h3>Recent News</h3>
-<div class="news-item"><p>Here are the latest announcements and SEC filings for the requested companies as of December 6 2025:
+<h3>Recent News (Markdown)</h3>
+<div class="markdown-raw-content">Here are the latest announcements and SEC filings for the specified NYSE/NASDAQ stocks dated as of or most recently before December 6 2025:
 
 **NVTS (Navitas Semiconductor Corp)**
-*   **December 6 2025:** Director Brian Long sold 48165 shares of Navitas Semiconductor stock at an average price of $8.50.
-*   **December 1 2025:** Navitas Semiconductor announced the sample availability of new 3300V and 2300V ultra-high voltage (UHV) GeneSiC silicon carbide (SiC) MOSFETs in power module discrete and known good die (KGD) formats. These products feature a Trench-Assisted Planar (TAP) architecture to enhance voltage blocking avalanche robustness and switching figures of merit. The company also introduced SiCPAK G+ power modules with an epoxy-resin potting offering significant improvements in power-cycling lifetime and thermal-shock reliability.
+*   **December 5 2025**: Director Brian Long sold 48165 shares of the firm&#x27;s stock for a total value of $409402.50.
+*   **December 3 2025**: A statement of changes in beneficial ownership of securities (Form 4) was filed.
+*   **December 1 2025**: Navitas announced the sample availability of new 3300V and 2300V ultra-high-voltage GeneSiC silicon carbide (SiC) MOSFETs in power module discrete and known-good-die (KGD) formats. These products utilize a proprietary Trench-Assisted Planar (TAP) architecture for improved voltage blocking avalanche robustness and switching figures of merit.
 
-**ON (onsemi)**
-*   **December 2 2025:** onsemi and Innoscience announced plans to collaborate to accelerate the global rollout of GaN power portfolio.
-*   **December 2 2025:** onsemi presented at the UBS Global Technology and AI Conference.
+**ON (ON Semiconductor Corporation)**
+*   No specific announcements or SEC filings for December 2025 were found in the provided search results.
 
 **AOSL (Alpha and Omega Semiconductor Limited)**
-*   **December 6 2025 (Today):** Alpha and Omega Semiconductor enabled 48V hot swap in AI servers with a new High SOA MOSFET in LFPAK 8x8.
-*   **December 5 2025 (Yesterday):** Alpha and Omega Semiconductor announced its participation in the 14th Annual NYC Summit 2025 scheduled for December 16 2025.
+*   **December 2 2025**: Alpha and Omega Semiconductor Limited announced a new high-performance 100V High Safe Operating Area MOSFET (AOLV66935) in an LFPAK 8x8 package specifically designed for AI server applications. This new MOSFET aims to address the increasing power demands in AI server infrastructure and 48V Hot Swap architectures.
 
-**MPWR (Monolithic Power Systems)**
-*   **December 6 2025 (Today):** An EVP & GC of Monolithic Power reported a major stock sell-off and an officer sold US$36.61 Million in Common Stock. Form 144 filings also indicate an officer proposed to sell 18.53 Million and 18.08 Million in Common Stocks.
+**MPWR (Monolithic Power Systems Inc.)**
+*   **December 5 2025**: Baird Financial Group Inc. lowered its stake in Monolithic Power Systems by 3.9% during the second quarter owning 104333 shares.
+*   **December 5 2025**: EVP Saria Tseng&#x27;s sale of 20000 shares on **November 26 2025** at $926.47 per share was reported.
+*   **December 4 2025**: Invesco Ltd. cut its position in Monolithic Power Systems by 6.7% during the second quarter holding 1166059 shares.
+*   **November 24 2025**: Maurice Sciammas EVP of Worldwide Sales &amp; Marketing reported selling 3976 shares of MPWR common stock at $895.23 per share in a Form 4 filing.
+*   **November 21 2025**: A company director reported selling 100 shares of MPWR common stock at $873.97 per share in a Form 4 filing.
 
 **POWI (Power Integrations Inc.)**
-*   **December 5 2025:** Power Integrations reported inducement grants under Nasdaq Listing Rule 5635(c)(4). On December 1 2025 the company granted 62333 restricted stock units (RSUs) and 1427 performance stock units (PSUs) to Julie Currie who began her employment as Chief People and Transformation Officer in November 2025.
-*   **November 24 2025:** Power Integrations bolstered its leadership team with the addition of Julie Currie as Chief People and Transformation Officer.
-*   **November 18 2025:** Power Integrations named Nancy Erba as Chief Financial Officer.
-*   **November 5 2025:** Power Integrations reported its third-quarter financial results. The company met EPS expectations at $0.36 but missed revenue forecasts with revenue at $118.92 million.
+*   No specific announcements or SEC filings for December 2025 were found in the provided search results. The most recent news highlighted were from November 2025 including leadership team changes and Q3 financial results.
 
 **WOLF (Wolfspeed Inc.)**
-*   **December 1 2025:** Wolfspeed announced that it received $698.6 million in cash tax refunds from the Internal Revenue Service (IRS) from the Advanced Manufacturing Investment Credit (AMIC) under Section 48D of the Internal Revenue Code.
+*   **December 5 2025**: Voya Financial Inc. filed an amended Schedule 13G reporting beneficial ownership of 1400509 Wolfspeed shares representing 5.4% of the common stock class as of **November 30 2025**.
+*   **December 1 2025**: Wolfspeed announced it received $698.6 million in cash tax refunds from the Internal Revenue Service (IRS) from the Advanced Manufacturing Investment Credit (AMIC) under Section 48D of the Internal Revenue Code. An 8-K filing regarding this material event was also reported on this date.
 
-**COHR (Coherent Corp.)**
-*   **December 5 2025:** A new analyst forecast for COHR from JP Morgan set a price target of $215.0.
-*   **December 4 2025:** Coherent Corp. filed an Amendment No. 4 to the Schedule 13D/A reflecting the mandatory conversion election on December 2 2025 of 106865 Series B-2 Convertible Preferred shares held by BCPE Watson into 14775938 common shares effective December 15 2025.
-*   **December 3 2025:** A director of Coherent Corp. exercised an option to acquire 2000 shares of common stock and subsequently sold 2000 shares in open-market transactions. The company also expanded its Silicon Carbide Platform with 300mm capability to support the growing demand of AI and datacenters.
+**COHR (Coherent Corp)**
+*   **December 4 2025**: Coherent Corp. filed an amended Schedule 13D/A reflecting the mandatory conversion election on **December 2 2025** of 106865 Series B-2 Convertible Preferred shares held by BCPE Watson (a Bain Capital affiliate) into 14775938 common shares effective **December 15 2025**.
+*   **December 3 2025**: Coherent expanded its silicon carbide platform with 300mm capability to support the growing demand from AI and datacenters.
+*   **December 3 2025**: A director of Coherent Corp. exercised an option to acquire 2000 shares of common stock at $21.67 per share on **December 2 2025** and subsequently sold 1000 shares at $168 and another 1000 shares at $172 on the same day.
+*   **December 1 2025**: A Form 144 was filed by a holder planning to sell 1377 common shares through Morgan Stanley Smith Barney LLC on the NYSE with an approximate sale date of **December 1 2025**.
 
 **INDI (indie Semiconductor Inc.)**
-*   **November 6 2025:** indie Semiconductor reported its third-quarter 2025 results. Q3 revenue was $53.7 million with a Non-GAAP gross margin of 49.6 percent.
-*   **November 6 2025:** indie Semiconductor announced the appointment of a new Chief Financial Officer.
-*   **October 28 2025:** indie Semiconductor entered into a definitive agreement to sell its interest in Wuxi indie Microelectronics.</p></div>
-
+*   **December 5 2025**: COO Michael Wittmann&#x27;s sale of 37500 shares of indie Semiconductor stock on **December 2 2025** at an average price of $3.74 for a total of $140250.00 was reported.
+*   **December 5 2025**: CEO Donald Mcclymont&#x27;s sale of 13065 shares of indie Semiconductor stock on **December 2 2025** at an average price of $3.54 for a total of $46250.10 was reported.
+*   **November 19 2025**: A Form 4 filing showed that indie Semiconductor&#x27;s president and director reported a series of equity transactions over **November 17-19 2025** including the exchange of ADK Class A Units for Class A common stock and the sale of a total of 175000 Class A common shares in the open market.</div>
 <h3>Industry Image</h3>
 <img src="screenshots/power_management_chips.png" alt="Power Management Chips Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Configure marked.js if needed (e.g., to sanitize HTML)
+        // marked.setOptions({ sanitize: true });
+
+        const markdownBlocks = document.querySelectorAll('.markdown-raw-content');
+        markdownBlocks.forEach(block => {
+            // Decode HTML entities before passing to marked.js, as we escaped them earlier
+            const rawMarkdown = block.innerHTML;
+            const decodedMarkdown = new DOMParser().parseFromString(rawMarkdown, 'text/html').documentElement.textContent;
+            block.innerHTML = marked.parse(decodedMarkdown);
+            block.classList.remove('markdown-raw-content'); // Remove the raw class
+            block.classList.add('markdown-output'); // Add a class for styled output
+        });
+    });
+</script>
+</body>
+</html>
