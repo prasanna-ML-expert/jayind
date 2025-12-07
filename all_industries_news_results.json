@@ -1,0 +1,81 @@
+{
+  "all_industries_news": [
+    {
+      "Industry": "quantum",
+      "news": "empty"
+    },
+    {
+      "Industry": "power_management_chips",
+      "news": "empty"
+    },
+    {
+      "Industry": "lidar_sensing",
+      "news": "empty"
+    },
+    {
+      "Industry": "autonomous_driving",
+      "news": "empty"
+    },
+    {
+      "Industry": "uas_defense_robotics",
+      "news": "empty"
+    },
+    {
+      "Industry": "service_robotics",
+      "news": "empty"
+    },
+    {
+      "Industry": "space_launch_systems",
+      "news": "empty"
+    },
+    {
+      "Industry": "earth_observation",
+      "news": "empty"
+    },
+    {
+      "Industry": "satellite_communications",
+      "news": "empty"
+    },
+    {
+      "Industry": "ev_charging_infrastructure",
+      "news": "empty"
+    },
+    {
+      "Industry": "evtol_air_mobility",
+      "news": "empty"
+    },
+    {
+      "Industry": "hydrogen_fuel_cells",
+      "news": "empty"
+    },
+    {
+      "Industry": "batteries_storage_tech",
+      "news": "empty"
+    },
+    {
+      "Industry": "batteries_storage_sw",
+      "news": "empty"
+    },
+    {
+      "Industry": "battery_materials_mining",
+      "news": "empty"
+    },
+    {
+      "Industry": "Hyperscalers",
+      "news": "empty"
+    },
+    {
+      "Industry": "Mining",
+      "news": "empty"
+    },
+    {
+      "Industry": "new_nuclear_energy",
+      "news": "empty"
+    },
+    {
+      "Industry": "Mag7",
+      "news": "empty"
+    }
+  ],
+  "updated_date": "2025-12-07T16:43:59.101878"
+}
