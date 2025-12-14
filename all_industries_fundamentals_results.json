@@ -5,8 +5,8 @@
       "Results": [
         {
           "Ticker": "OKLO",
-          "Debt_M": 2.0,
-          "Cash_M": 410.0,
+          "Debt_M": 1.94,
+          "Cash_M": 921.6,
           "QRevenue_M": 0.0,
           "QPL_M": -18.0,
           "OrderBook_M": 0.0
@@ -14,9 +14,9 @@
         {
           "Ticker": "SMR",
           "Debt_M": 0.0,
-          "Cash_M": 490.0,
-          "QRevenue_M": 8.0,
-          "QPL_M": -273.0,
+          "Cash_M": 753.8,
+          "QRevenue_M": 8.24,
+          "QPL_M": -532.65,
           "OrderBook_M": 0.0
         },
         {
@@ -38,22 +38,22 @@
         {
           "Ticker": "UEC",
           "Debt_M": 0.0,
-          "Cash_M": 455.0,
+          "Cash_M": 698.0,
           "QRevenue_M": 0.0,
-          "QPL_M": -10.0,
+          "QPL_M": -9.7,
           "OrderBook_M": 0.0
         },
         {
           "Ticker": "CCJ",
-          "Debt_M": 725.0,
-          "Cash_M": 565.0,
+          "Debt_M": 1000.0,
+          "Cash_M": 779.0,
           "QRevenue_M": 615.0,
           "QPL_M": 22.0,
           "OrderBook_M": 0.0
         },
         {
           "Ticker": "LEU",
-          "Debt_M": 1240.0,
+          "Debt_M": 429.8,
           "Cash_M": 1600.0,
           "QRevenue_M": 75.0,
           "QPL_M": 4.0,
@@ -61,10 +61,10 @@
         },
         {
           "Ticker": "BWXT",
-          "Debt_M": 1500.0,
-          "Cash_M": 80.0,
-          "QRevenue_M": 866.0,
-          "QPL_M": 90.0,
+          "Debt_M": 1510.0,
+          "Cash_M": 79.6,
+          "QRevenue_M": 866.3,
+          "QPL_M": 82.2,
           "OrderBook_M": 1000.0
         }
       ]
@@ -74,62 +74,62 @@
       "Results": [
         {
           "Ticker": "AAPL",
-          "Debt_M": 0.0,
-          "Cash_M": 0.0,
-          "QRevenue_M": 0.0,
-          "QPL_M": 0.0,
+          "Debt_M": 98650.0,
+          "Cash_M": 35930.0,
+          "QRevenue_M": 102470.0,
+          "QPL_M": 27470.0,
           "OrderBook_M": 0.0
         },
         {
           "Ticker": "NVDA",
-          "Debt_M": 0.0,
-          "Cash_M": 0.0,
-          "QRevenue_M": 0.0,
-          "QPL_M": 0.0,
-          "OrderBook_M": 0.0
+          "Debt_M": 8467.0,
+          "Cash_M": 60600.0,
+          "QRevenue_M": 57000.0,
+          "QPL_M": 31900.0,
+          "OrderBook_M": 500000.0
         },
         {
           "Ticker": "META",
-          "Debt_M": 0.0,
-          "Cash_M": 0.0,
-          "QRevenue_M": 0.0,
-          "QPL_M": 0.0,
+          "Debt_M": 51060.0,
+          "Cash_M": 44400.0,
+          "QRevenue_M": 51240.0,
+          "QPL_M": 2710.0,
           "OrderBook_M": 0.0
         },
         {
           "Ticker": "MSFT",
-          "Debt_M": 0.0,
-          "Cash_M": 0.0,
-          "QRevenue_M": 0.0,
-          "QPL_M": 0.0,
-          "OrderBook_M": 0.0
+          "Debt_M": 60550.0,
+          "Cash_M": 102010.0,
+          "QRevenue_M": 77673.0,
+          "QPL_M": 27750.0,
+          "OrderBook_M": 392000.0
         },
         {
           "Ticker": "AVGO",
-          "Debt_M": 0.0,
-          "Cash_M": 0.0,
-          "QRevenue_M": 0.0,
-          "QPL_M": 0.0,
-          "OrderBook_M": 0.0
+          "Debt_M": 65140.0,
+          "Cash_M": 16180.0,
+          "QRevenue_M": 18020.0,
+          "QPL_M": 8520.0,
+          "OrderBook_M": 162000.0
         },
         {
           "Ticker": "GOOG",
-          "Debt_M": 0.0,
-          "Cash_M": 0.0,
-          "QRevenue_M": 0.0,
-          "QPL_M": 0.0,
-          "OrderBook_M": 0.0
+          "Debt_M": 21607.0,
+          "Cash_M": 98500.0,
+          "QRevenue_M": 102300.0,
+          "QPL_M": 34900.0,
+          "OrderBook_M": 155000.0
         },
         {
           "Ticker": "AMZN",
-          "Debt_M": 0.0,
-          "Cash_M": 0.0,
-          "QRevenue_M": 0.0,
-          "QPL_M": 0.0,
-          "OrderBook_M": 0.0
+          "Debt_M": 135410.0,
+          "Cash_M": 78677.0,
+          "QRevenue_M": 180200.0,
+          "QPL_M": 21200.0,
+          "OrderBook_M": 200000.0
         }
       ]
     }
   ],
-  "updated_date": "2025-12-13T23:29:10.846342+00:00"
+  "updated_date": "2025-12-14T23:31:29.752838+00:00"
 }
