@@ -2,12 +2,134 @@
   "updates": [
     {
       "Industry": "new_nuclear_energy",
-      "Results": []
+      "Results": [
+        {
+          "Ticker": "OKLO",
+          "Debt_M": 2.0,
+          "Cash_M": 410.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": -18.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "SMR",
+          "Debt_M": 0.0,
+          "Cash_M": 490.0,
+          "QRevenue_M": 8.0,
+          "QPL_M": -273.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "NNE",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": -8.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "IMSR",
+          "Debt_M": 28.0,
+          "Cash_M": 28.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "UEC",
+          "Debt_M": 0.0,
+          "Cash_M": 455.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": -10.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "CCJ",
+          "Debt_M": 725.0,
+          "Cash_M": 565.0,
+          "QRevenue_M": 615.0,
+          "QPL_M": 22.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "LEU",
+          "Debt_M": 1240.0,
+          "Cash_M": 1600.0,
+          "QRevenue_M": 75.0,
+          "QPL_M": 4.0,
+          "OrderBook_M": 3900.0
+        },
+        {
+          "Ticker": "BWXT",
+          "Debt_M": 1500.0,
+          "Cash_M": 80.0,
+          "QRevenue_M": 866.0,
+          "QPL_M": 90.0,
+          "OrderBook_M": 1000.0
+        }
+      ]
     },
     {
       "Industry": "Mag7",
-      "Results": []
+      "Results": [
+        {
+          "Ticker": "AAPL",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "NVDA",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "META",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "MSFT",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "AVGO",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "GOOG",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "AMZN",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        }
+      ]
     }
   ],
-  "updated_date": "2025-12-13T23:18:19.746940+00:00"
+  "updated_date": "2025-12-14T23:25:02.388352+00:00"
 }
