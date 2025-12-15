@@ -1,92 +1,66 @@
 {
   "updates": [
     {
-      "Industry": "service_robotics",
+      "Industry": "earth_observation",
       "Results": [
         {
-          "Ticker": "RICHTECH ROBOTICS RR",
-          "FDS": NaN,
-          "SI": NaN,
-          "tutes%": NaN,
-          "pcr": NaN
+          "Ticker": "PL",
+          "FDS": 288.0,
+          "SI": 11.77,
+          "tutes%": 59.33,
+          "pcr": 0.49
         },
         {
-          "Ticker": "SERV",
-          "FDS": 66.22,
-          "SI": 24.99,
-          "tutes%": 34.09,
-          "pcr": 0.7163
-        },
-        {
-          "Ticker": "PRCT",
-          "FDS": 55.88,
-          "SI": 14.71,
-          "tutes%": 103.8,
-          "pcr": 0.52
-        },
-        {
-          "Ticker": "ZBRA",
-          "FDS": 51.0,
-          "SI": 2.21,
-          "tutes%": 95.43,
-          "pcr": 0.52
-        },
-        {
-          "Ticker": "IRBT",
-          "FDS": 34.866,
-          "SI": 44.62,
-          "tutes%": 38.1,
-          "pcr": 1.8
-        }
-      ]
-    },
-    {
-      "Industry": "space_launch_systems",
-      "Results": [
-        {
-          "Ticker": "RKLB",
-          "FDS": 0.0,
-          "SI": 9.61,
-          "tutes%": 58.6,
-          "pcr": 0.7
-        },
-        {
-          "Ticker": "FLY",
-          "FDS": 0.0,
-          "SI": 1.84,
-          "tutes%": 37.56,
-          "pcr": 1.1661
-        },
-        {
-          "Ticker": "MNTS",
-          "FDS": 0.0,
-          "SI": 4.31,
-          "tutes%": 1.06,
-          "pcr": 0.0
-        },
-        {
-          "Ticker": "SPCE",
-          "FDS": 0.0,
-          "SI": 26.39,
-          "tutes%": 15.41,
-          "pcr": 0.85
-        },
-        {
-          "Ticker": "LUNR",
-          "FDS": 0.0,
-          "SI": 26.21,
-          "tutes%": 62.66,
+          "Ticker": "BKSY",
+          "FDS": 35.194,
+          "SI": 25.12,
+          "tutes%": 59.1,
           "pcr": 0.3
         },
         {
-          "Ticker": "RDW",
+          "Ticker": "SPIR",
+          "FDS": 32.72,
+          "SI": 12.04,
+          "tutes%": 47.19,
+          "pcr": 0.48
+        },
+        {
+          "Ticker": "SATL",
           "FDS": 0.0,
-          "SI": 11.96,
-          "tutes%": 75.05,
-          "pcr": 0.36
+          "SI": 7.94,
+          "tutes%": 39.48,
+          "pcr": 0.1
+        },
+        {
+          "Ticker": "ASTS",
+          "FDS": 272.831,
+          "SI": 14.44,
+          "tutes%": 61.0,
+          "pcr": 0.5
+        },
+        {
+          "Ticker": "IRDM",
+          "FDS": 106.095,
+          "SI": 8.09,
+          "tutes%": 95.02,
+          "pcr": 0.3
+        },
+        {
+          "Ticker": "SATS",
+          "FDS": 287.505,
+          "SI": 16.7,
+          "tutes%": 94.49,
+          "pcr": 0.76
+        },
+        {
+          "Ticker": "VSAT",
+          "FDS": 135.119,
+          "SI": 9.8,
+          "tutes%": 98.97,
+          "pcr": 0.7
         }
       ]
     }
   ],
-  "updated_date": "2025-12-13T01:03:50.199388+00:00"
+  "updated_date": "2025-12-15T01:05:48.082389+00:00"
 }
