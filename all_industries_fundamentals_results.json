@@ -1,135 +1,294 @@
 {
   "updates": [
     {
-      "Industry": "new_nuclear_energy",
+      "Industry": "quantum",
       "Results": [
         {
-          "Ticker": "OKLO",
-          "Debt_M": 1.94,
-          "Cash_M": 921.6,
-          "QRevenue_M": 0.0,
-          "QPL_M": -18.0,
+          "Ticker": "IONQ",
+          "Debt_M": 28.516,
+          "Cash_M": 3500.0,
+          "QRevenue_M": 39.9,
+          "QPL_M": -1100.0,
           "OrderBook_M": 0.0
         },
         {
-          "Ticker": "SMR",
+          "Ticker": "QBTS",
+          "Debt_M": 32.198,
+          "Cash_M": 836.2,
+          "QRevenue_M": 3.74,
+          "QPL_M": -139.99,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "RGTI",
           "Debt_M": 0.0,
-          "Cash_M": 753.8,
-          "QRevenue_M": 8.24,
-          "QPL_M": -532.65,
+          "Cash_M": 600.0,
+          "QRevenue_M": 1.95,
+          "QPL_M": -201.0,
+          "OrderBook_M": 5.7
+        },
+        {
+          "Ticker": "QUBT",
+          "Debt_M": 2.58,
+          "Cash_M": 1500.0,
+          "QRevenue_M": 0.38,
+          "QPL_M": 2.4,
           "OrderBook_M": 0.0
         },
         {
-          "Ticker": "NNE",
+          "Ticker": "LAES",
+          "Debt_M": 5.4,
+          "Cash_M": 120.95,
+          "QRevenue_M": 2.413,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "ARQQ",
+          "Debt_M": 0.719,
+          "Cash_M": 36.9,
+          "QRevenue_M": 0.0,
+          "QPL_M": -17.17,
+          "OrderBook_M": 0.0
+        }
+      ]
+    },
+    {
+      "Industry": "power_management_chips",
+      "Results": [
+        {
+          "Ticker": "NVTS",
+          "Debt_M": NaN,
+          "Cash_M": NaN,
+          "QRevenue_M": NaN,
+          "QPL_M": NaN,
+          "OrderBook_M": NaN
+        },
+        {
+          "Ticker": "ON",
+          "Debt_M": NaN,
+          "Cash_M": NaN,
+          "QRevenue_M": NaN,
+          "QPL_M": NaN,
+          "OrderBook_M": NaN
+        },
+        {
+          "Ticker": "AOSL",
+          "Debt_M": NaN,
+          "Cash_M": NaN,
+          "QRevenue_M": NaN,
+          "QPL_M": NaN,
+          "OrderBook_M": NaN
+        },
+        {
+          "Ticker": "COHR",
+          "Debt_M": NaN,
+          "Cash_M": NaN,
+          "QRevenue_M": NaN,
+          "QPL_M": NaN,
+          "OrderBook_M": NaN
+        },
+        {
+          "Ticker": "MPWR",
+          "Debt_M": NaN,
+          "Cash_M": NaN,
+          "QRevenue_M": NaN,
+          "QPL_M": NaN,
+          "OrderBook_M": NaN
+        },
+        {
+          "Ticker": "POWI",
+          "Debt_M": NaN,
+          "Cash_M": NaN,
+          "QRevenue_M": NaN,
+          "QPL_M": NaN,
+          "OrderBook_M": NaN
+        },
+        {
+          "Ticker": "ALAB",
+          "Debt_M": NaN,
+          "Cash_M": NaN,
+          "QRevenue_M": NaN,
+          "QPL_M": NaN,
+          "OrderBook_M": NaN
+        },
+        {
+          "Ticker": "INDI",
+          "Debt_M": NaN,
+          "Cash_M": NaN,
+          "QRevenue_M": NaN,
+          "QPL_M": NaN,
+          "OrderBook_M": NaN
+        }
+      ]
+    },
+    {
+      "Industry": "lidar_sensing",
+      "Results": [
+        {
+          "Ticker": "AEVA",
+          "Debt_M": 6.12,
+          "Cash_M": 48.88,
+          "QRevenue_M": 3.58,
+          "QPL_M": -27.91,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "LAZR",
+          "Debt_M": 0.0,
+          "Cash_M": 74.0,
+          "QRevenue_M": 18.75,
+          "QPL_M": -30.501,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "MVIS",
+          "Debt_M": 46.59,
+          "Cash_M": 72.832,
+          "QRevenue_M": 0.24,
+          "QPL_M": -22.095,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "LIDR",
           "Debt_M": 0.0,
           "Cash_M": 0.0,
-          "QRevenue_M": 0.0,
-          "QPL_M": -8.0,
-          "OrderBook_M": 0.0
-        },
-        {
-          "Ticker": "IMSR",
-          "Debt_M": 28.0,
-          "Cash_M": 28.0,
           "QRevenue_M": 0.0,
           "QPL_M": 0.0,
           "OrderBook_M": 0.0
         },
         {
-          "Ticker": "UEC",
-          "Debt_M": 0.0,
-          "Cash_M": 698.0,
-          "QRevenue_M": 0.0,
-          "QPL_M": -9.7,
+          "Ticker": "OUST",
+          "Debt_M": 15.9,
+          "Cash_M": 247.0,
+          "QRevenue_M": 39.5,
+          "QPL_M": -22.0,
           "OrderBook_M": 0.0
         },
         {
-          "Ticker": "CCJ",
-          "Debt_M": 1000.0,
-          "Cash_M": 779.0,
-          "QRevenue_M": 615.0,
-          "QPL_M": 22.0,
-          "OrderBook_M": 0.0
-        },
-        {
-          "Ticker": "LEU",
-          "Debt_M": 429.8,
-          "Cash_M": 1600.0,
-          "QRevenue_M": 75.0,
-          "QPL_M": 4.0,
-          "OrderBook_M": 3900.0
-        },
-        {
-          "Ticker": "BWXT",
-          "Debt_M": 1510.0,
-          "Cash_M": 79.6,
-          "QRevenue_M": 866.3,
-          "QPL_M": 82.2,
-          "OrderBook_M": 1000.0
+          "Ticker": "ARBE",
+          "Debt_M": 11.43,
+          "Cash_M": 52.6,
+          "QRevenue_M": 0.254,
+          "QPL_M": -11.0,
+          "OrderBook_M": 0.5
         }
       ]
     },
     {
-      "Industry": "Mag7",
+      "Industry": "autonomous_driving",
       "Results": [
         {
-          "Ticker": "AAPL",
-          "Debt_M": 98650.0,
-          "Cash_M": 35930.0,
-          "QRevenue_M": 102470.0,
-          "QPL_M": 27470.0,
+          "Ticker": "MBLY",
+          "Debt_M": 61.0,
+          "Cash_M": 1750.0,
+          "QRevenue_M": 504.0,
+          "QPL_M": -97.65,
           "OrderBook_M": 0.0
         },
         {
-          "Ticker": "NVDA",
-          "Debt_M": 8467.0,
-          "Cash_M": 60600.0,
-          "QRevenue_M": 57000.0,
-          "QPL_M": 31900.0,
-          "OrderBook_M": 500000.0
-        },
-        {
-          "Ticker": "META",
-          "Debt_M": 51060.0,
-          "Cash_M": 44400.0,
-          "QRevenue_M": 51240.0,
-          "QPL_M": 2710.0,
+          "Ticker": "AUR",
+          "Debt_M": 107.0,
+          "Cash_M": 1400.0,
+          "QRevenue_M": 1.0,
+          "QPL_M": -143.6,
           "OrderBook_M": 0.0
         },
         {
-          "Ticker": "MSFT",
-          "Debt_M": 60550.0,
-          "Cash_M": 102010.0,
-          "QRevenue_M": 77673.0,
-          "QPL_M": 27750.0,
-          "OrderBook_M": 392000.0
+          "Ticker": "TSLA",
+          "Debt_M": 5778.0,
+          "Cash_M": 41647.0,
+          "QRevenue_M": 28095.0,
+          "QPL_M": 1373.0,
+          "OrderBook_M": 0.0
         },
         {
-          "Ticker": "AVGO",
-          "Debt_M": 65140.0,
-          "Cash_M": 16180.0,
-          "QRevenue_M": 18020.0,
-          "QPL_M": 8520.0,
-          "OrderBook_M": 162000.0
+          "Ticker": "XPEV",
+          "Debt_M": 0.0,
+          "Cash_M": 6790.0,
+          "QRevenue_M": 2860.0,
+          "QPL_M": -50.0,
+          "OrderBook_M": 0.0
         },
         {
-          "Ticker": "GOOG",
-          "Debt_M": 21607.0,
-          "Cash_M": 98500.0,
-          "QRevenue_M": 102300.0,
-          "QPL_M": 34900.0,
-          "OrderBook_M": 155000.0
+          "Ticker": "KODIAK AI KDK",
+          "Debt_M": 62.2,
+          "Cash_M": 72.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": -61.5,
+          "OrderBook_M": 0.0
+        }
+      ]
+    },
+    {
+      "Industry": "uas_defense_robotics",
+      "Results": [
+        {
+          "Ticker": "DPRO",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
         },
         {
-          "Ticker": "AMZN",
-          "Debt_M": 135410.0,
-          "Cash_M": 78677.0,
-          "QRevenue_M": 180200.0,
-          "QPL_M": 21200.0,
-          "OrderBook_M": 200000.0
+          "Ticker": "RCAT",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "ZENA",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "ONDS",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "AVAV",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "KTOS",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "UMAC",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "SPAI",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
         }
       ]
     }
   ],
-  "updated_date": "2025-12-13T23:31:29.752838+00:00"
+  "updated_date": "2025-12-15T00:47:45.673045+00:00"
 }
