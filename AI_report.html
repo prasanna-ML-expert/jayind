@@ -6,35 +6,116 @@
     <script>
         // Embed Python variables as JavaScript variables
         const csvExportUrl = 'https://docs.google.com/spreadsheets/d/1qwnwuUR6kOBMZqrZIX97sMetNKZyXjot-SmEWfI8LUg/export?format=csv&gid=445351489';
-        const tickerMap = JSON.parse('{"quantum": ["ionq", "qbts", "rgti", "qubt", "laes", "arqq"], "power_management_chips": ["nvts", "on", "aosl", "cohr", "mpwr", "powi", "alab", "indi"], "lidar_sensing": ["aeva", "lazr", "mvis", "lidr", "oust", "arbe"], "autonomous_driving": ["mbly", "aur", "tsla", "xpev", "kdk"], "uas_defense_robotics": ["dpro", "rcat", "zena", "onds", "avav", "ktos", "umac", "spai"], "service_robotics": ["rr", "serv", "prct", "zbra", "irbt"], "space_launch_systems": ["rklb", "fly", "mnts", "spce", "lunr", "rdw"], "earth_observation": ["pl", "bksy", "spir", "satl", "asts", "irdm", "sats", "vsat"], "ev_charging_infrastructure": ["evgo", "blnk", "chpt", "beem", "adse"], "evtol_air_mobility": ["achr", "joby", "evex", "evtl"], "hydrogen_fuel_cells": ["fcel", "be", "plug", "hyln", "bw", "bldp"], "batteries_storage_tech": ["qs", "envx", "ses", "mvst", "ampx", "sldp"], "batteries_storage_sw": ["enph", "stem", "flnc", "eose", "gwh", "kulr", "t1 energy inc te", "nrgv"], "battery_materials_mining": ["atlx", "abat", "alb", "sqm", "sgml", "elvr", "lac", "nb"], "Hyperscalers": ["crwv", "nbis", "corz", "apld", "cifr", "wulf"], "Mining": ["mara", "clsk", "bitf", "hive", "btbt", "hut", "riot", "iren"], "new_nuclear_energy": ["oklo", "smr", "nne", "imsr", "uec", "ccj", "leu", "bwxt"], "Mag7": ["aapl", "nvda", "meta", "msft", "avgo", "goog", "amzn"]}');
-        const sectorDesc = JSON.parse('{"quantum": "Quantum computing and advanced quantum technologies, including hardware, software, and quantum information processing platforms", "power_management_chips": "Semiconductor manufacturing & wafers: nvts/on/aosl/cohr; Power electronics & battery management / modules: mpwr/powi; Advanced materials & coatings: alab; Electronics components / industrial semiconductors: indi", "lidar_sensing": "Automotive LiDAR & sensing hardware: aeva/oust/arbe; 3D sensing & mapping technologies: lazr/mvis/lidr", "autonomous_driving": "Autonomous driving / self-driving tech", "uas_defense_robotics": "Defense & aerospace technology / military systems", "service_robotics": "Industrial automation, robotics, and service automation technologies, including collaborative robots, warehouse automation, and consumer robotics", "space_launch_systems": "Space technology and services companies, including satellite operators, launch service providers, space infrastructure, and space-based data analytics", "earth_observation": "Satellite communications, space technology, and related infrastructure companies, including satellite operators, ground station providers, and satellite communication services", "ev_charging_infrastructure": "EV charging infrastructure & solutions", "evtol_air_mobility": "Urban air mobility and eVTOL aircraft companies focused on electric vertical takeoff and landing transportation solutions", "hydrogen_fuel_cells": "Hydrogen & fuel cell technology", "batteries_storage_tech": "EV battery technology", "batteries_storage_sw": "Energy storage & battery tech", "battery_materials_mining": "Lithium & battery metals / mining", "Hyperscalers": "HPC/NeoCloud: building data centers for AI workloads and renting out GPU capacity to hyperscalers and AI companies", "Mining": "Cryptocurrency mining and blockchain infrastructure companies", "new_nuclear_energy": "OKLO/SMR/nne new advanced nuclear tech reactors; UEC/nxe/CCJ/leu uranium mining/exploration/enrichment; bwxt eng services; ceg/nee/exc/etr/d/duk/uuuu power generation utility not covered here", "Mag7": "Large-cap technology companies, including consumer electronics, cloud computing, social media, AI, semiconductor manufacturing, and e-commerce platforms"}');
+        const tickerMap = JSON.parse(`{"quantum": ["ionq", "qbts", "rgti", "qubt", "laes", "arqq"], "power_management_chips": ["nvts", "on", "aosl", "cohr", "mpwr", "powi", "alab", "indi"], "lidar_sensing": ["aeva", "lazr", "mvis", "lidr", "oust", "arbe"], "autonomous_driving": ["mbly", "aur", "tsla", "xpev", "kdk"], "uas_defense_robotics": ["dpro", "rcat", "zena", "onds", "avav", "ktos", "umac", "spai"], "service_robotics": ["rr", "serv", "prct", "zbra", "irbt"], "space_launch_systems": ["rklb", "fly", "mnts", "spce", "lunr", "rdw"], "earth_observation": ["pl", "bksy", "spir", "satl", "asts", "irdm", "sats", "vsat"], "ev_charging_infrastructure": ["evgo", "blnk", "chpt", "beem", "adse"], "evtol_air_mobility": ["achr", "joby", "evex", "evtl"], "hydrogen_fuel_cells": ["fcel", "be", "plug", "hyln", "bw", "bldp"], "batteries_storage_tech": ["qs", "envx", "ses", "mvst", "ampx", "sldp"], "batteries_storage_sw": ["enph", "stem", "flnc", "eose", "gwh", "kulr", "t1 energy inc te", "nrgv"], "battery_materials_mining": ["atlx", "abat", "alb", "sqm", "sgml", "elvr", "lac", "nb"], "Hyperscalers": ["crwv", "nbis", "corz", "apld", "cifr", "wulf"], "Mining": ["mara", "clsk", "bitf", "hive", "btbt", "hut", "riot", "iren"], "new_nuclear_energy": ["oklo", "smr", "nne", "imsr", "uec", "ccj", "leu", "bwxt"], "Mag7": ["aapl", "nvda", "meta", "msft", "avgo", "goog", "amzn"]}`); // Use backticks for template literal
 
-        // Function for conditional coloring of 'price%' column
-        function getColorForPricePercent(val) {
+        // JavaScript function for conditional coloring of 'price%' column
+        function colorPricePercent(val) {
             try {
                 val = parseFloat(val);
             } catch (e) {
                 return ''; // No coloring for non-numeric values
             }
 
+            if (isNaN(val)) return '';
+
             if (val <= -10) {
                 return 'background-color: #8B0000; color: white;'; // Dark Red
             } else if (val >= 10) {
                 return 'background-color: #006400; color: white;'; // Dark Green
             } else if (val < 0) { // Between -10 and 0, scale from white to dark red
-                const ratio = Math.abs(val) / 10.0;
-                const r = parseInt(255 - (255 - 139) * ratio);
-                const g = parseInt(255 - (255 - 0) * ratio);
-                const b = parseInt(255 - (255 - 0) * ratio);
+                let ratio = Math.abs(val) / 10.0;
+                let r = parseInt(255 - (255 - 139) * ratio);
+                let g = parseInt(255 - (255 - 0) * ratio);
+                let b = parseInt(255 - (255 - 0) * ratio);
                 return `background-color: rgb(${r}, ${g}, ${b});`;
             } else if (val > 0) { // Between 0 and 10, scale from white to dark green
-                const ratio = val / 10.0;
-                const r = parseInt(255 - (255 - 0) * ratio);
-                const g = parseInt(255 - (255 - 100) * ratio);
-                const b = parseInt(255 - (255 - 0) * ratio);
+                let ratio = val / 10.0;
+                let r = parseInt(255 - (255 - 0) * ratio);
+                let g = parseInt(255 - (255 - 100) * ratio);
+                let b = parseInt(255 - (255 - 0) * ratio);
                 return `background-color: rgb(${r}, ${g}, ${b});`;
             } else { // val == 0
                 return 'background-color: white;';
+            }
+        }
+
+        // Function to fetch CSV data and render tables
+        async function fetchAndRenderFundamentals() {
+            try {
+                const response = await fetch(csvExportUrl);
+                const csvText = await response.text();
+                const lines = csvText.split('
+');
+                const headers = lines[0].split(',').map(h => h.trim());
+                const data = [];
+
+                for (let i = 1; i < lines.length; i++) {
+                    const currentLine = lines[i].split(',');
+                    if (currentLine.length === headers.length) {
+                        let row = {};
+                        for (let j = 0; j < headers.length; j++) {
+                            row[headers[j]] = currentLine[j].trim();
+                        }
+                        data.push(row);
+                    }
+                }
+
+                // Columns to display (must match Python list)
+                const columnsToDisplay = [
+                    'Ticker', 'price%', 'Price', 'mcap', 'TSO', 'FDS',
+                    'Q revenue', 'Q spend', 'Order Book', 'SI','Debt', 'cash',
+                    'tutes%','PCR'
+                ];
+
+                for (const industryKey in tickerMap) {
+                    const industryTickers = tickerMap[industryKey];
+                    const industryData = data.filter(row => industryTickers.includes(row['Ticker'].toLowerCase()));
+
+                    if (industryData.length > 0) {
+                        let tableHtml = '<table class="dataframe"><thead><tr>';
+                        // Filter headers to only include those in columnsToDisplay
+                        const actualHeaders = headers.filter(h => columnsToDisplay.includes(h));
+
+                        actualHeaders.forEach(header => {
+                            tableHtml += `<th>${header}</th>`;
+                        });
+                        tableHtml += '</tr></thead><tbody>';
+
+                        industryData.forEach(row => {
+                            tableHtml += '<tr>';
+                            actualHeaders.forEach(header => {
+                                let cellValue = row[header] || '';
+                                let style = '';
+                                if (header === 'price%') {
+                                    style = colorPricePercent(cellValue);
+                                }
+                                // Format numeric values (remove trailing zeros for integers)
+                                if (!isNaN(parseFloat(cellValue)) && isFinite(cellValue)) {
+                                    // Convert to number, then back to string to remove .0 if it's an integer
+                                    cellValue = parseFloat(cellValue).toString();
+                                }
+                                tableHtml += `<td style="${style}">${cellValue}</td>`;
+                            });
+                            tableHtml += '</tr>';
+                        });
+                        tableHtml += '</tbody></table>';
+
+                        const placeholderDiv = document.getElementById(`fundamentals-table-${industryKey}`);
+                        if (placeholderDiv) {
+                            placeholderDiv.innerHTML = tableHtml;
+                        }
+                    }
+                }
+
+            } catch (error) {
+                console.error('Error fetching or processing CSV:', error);
+                // Optionally, update placeholders to show an error message
+                for (const industryKey in tickerMap) {
+                    const placeholderDiv = document.getElementById(`fundamentals-table-${industryKey}`);
+                    if (placeholderDiv) {
+                        placeholderDiv.innerHTML = '<p>Error loading fundamentals data.</p>';
+                    }
+                }
             }
         }
     </script>
@@ -137,9 +218,9 @@
 <div class="industry-section" id="quantum"><h2>1. Quantum <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Quantum computing and advanced quantum technologies, including hardware, software, and quantum information processing platforms</i></p>
 <h3 class="fundamentals-section">Fundamentals</h3>
-<div id="fundamentals-table-quantum" class="fundamentals-section">Loading fundamentals data...</div>
+<div id="fundamentals-table-quantum" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="notes-section">Notes </h3>
-<div id="notes-quantum" class="markdown-notes-block notes-section">Loading notes...</div>
+<div class="markdown-notes-block notes-section">ionq:&gt; By March dilution may get over</div>
 <h3 class="news-section">Recent News </h3>
 <div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for IONQ, QBTS, RGTI, QUBT, LAES, and ARQQ, dated as of today, December 15, 2025:
 
@@ -209,15 +290,16 @@
 *   **December 3, 2025**: A quantum-resistant encryption proof of concept was announced.
 *   **December 1, 2025**: Arqit Quantum announced its plan to report financial results for the fiscal year ended September 30, 2025, and to hold a conference call on **December 9, 2025**.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Fri, 12 Dec)</i></small></h3>
-<div class="charts-section">    <img src="screenshots/quantum.png" alt="Quantum Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
+<div class="charts-section">
+    <img src="screenshots/quantum.png" alt="Quantum Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
 <div class="industry-section" id="power_management_chips"><h2>2. Power Management Chips <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Semiconductor manufacturing &amp; wafers: nvts/on/aosl/cohr; Power electronics &amp; battery management / modules: mpwr/powi; Advanced materials &amp; coatings: alab; Electronics components / industrial semiconductors: indi</i></p>
 <h3 class="fundamentals-section">Fundamentals</h3>
-<div id="fundamentals-table-power_management_chips" class="fundamentals-section">Loading fundamentals data...</div>
+<div id="fundamentals-table-power_management_chips" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="notes-section">Notes </h3>
-<div id="notes-power_management_chips" class="markdown-notes-block notes-section">Loading notes...</div>
+<div class="markdown-notes-block notes-section">on:&gt; 6B repurchage announced on Dec 2</div>
 <h3 class="news-section">Recent News </h3>
 <div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for the requested companies, as of **December 15, 2025**:
 
@@ -281,15 +363,14 @@
 *   **SEC Filings:**
     *   **December 10 and December 11, 2025**: Naixi Wu, Chief Financial Officer of indie Semiconductor, sold shares of the company&#x27;s Class A Common Stock in multiple transactions, totaling approximately $91,392. These sales were reported in a Form 4 filing.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Wed, 10 Dec)</i></small></h3>
-<div class="charts-section">    <img src="screenshots/power_management_chips.png" alt="Power Management Chips Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
+<div class="charts-section">
+    <img src="screenshots/power_management_chips.png" alt="Power Management Chips Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
 <div class="industry-section" id="lidar_sensing"><h2>3. Lidar Sensing <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Automotive LiDAR &amp; sensing hardware: aeva/oust/arbe; 3D sensing &amp; mapping technologies: lazr/mvis/lidr</i></p>
 <h3 class="fundamentals-section">Fundamentals</h3>
-<div id="fundamentals-table-lidar_sensing" class="fundamentals-section">Loading fundamentals data...</div>
-<h3 class="notes-section">Notes </h3>
-<div id="notes-lidar_sensing" class="markdown-notes-block notes-section">Loading notes...</div>
+<div id="fundamentals-table-lidar_sensing" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="news-section">Recent News </h3>
 <div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for the requested companies, as of December 15, 2025:
 
@@ -354,15 +435,14 @@
 *   **August 15, 2025**: Arbe Robotics Ltd. filed a 6-K (Report of Foreign Issuer).
 *   **August 7, 2025**: Arbe announced its Q2 2025 Financial Results, reporting revenues of $0.3 million and progress in OEM selection processes.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Wed, 10 Dec)</i></small></h3>
-<div class="charts-section">    <img src="screenshots/lidar_sensing.png" alt="Lidar Sensing Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
+<div class="charts-section">
+    <img src="screenshots/lidar_sensing.png" alt="Lidar Sensing Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
 <div class="industry-section" id="autonomous_driving"><h2>4. Autonomous Driving <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Autonomous driving / self-driving tech</i></p>
 <h3 class="fundamentals-section">Fundamentals</h3>
-<div id="fundamentals-table-autonomous_driving" class="fundamentals-section">Loading fundamentals data...</div>
-<h3 class="notes-section">Notes </h3>
-<div id="notes-autonomous_driving" class="markdown-notes-block notes-section">Loading notes...</div>
+<div id="fundamentals-table-autonomous_driving" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="news-section">Recent News </h3>
 <div class="markdown-raw-content news-section">Here&#x27;s a summary of the latest announcements and SEC filings for the requested companies, as of December 15, 2025:
 
@@ -432,15 +512,14 @@
 *   **October 22, 2025:** Kodiak announced it would release its Third Quarter 2025 results after market close on Wednesday, November 12, 2025.
 *   **October 16, 2025:** Kodiak&#x27;s self-driving trucks achieved a top safety score in a Nauto Driver Safety Evaluation.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Thu, 11 Dec)</i></small></h3>
-<div class="charts-section">    <img src="screenshots/autonomous_driving.png" alt="Autonomous Driving Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
+<div class="charts-section">
+    <img src="screenshots/autonomous_driving.png" alt="Autonomous Driving Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
 <div class="industry-section" id="uas_defense_robotics"><h2>5. Uas Defense Robotics <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Defense &amp; aerospace technology / military systems</i></p>
 <h3 class="fundamentals-section">Fundamentals</h3>
-<div id="fundamentals-table-uas_defense_robotics" class="fundamentals-section">Loading fundamentals data...</div>
-<h3 class="notes-section">Notes </h3>
-<div id="notes-uas_defense_robotics" class="markdown-notes-block notes-section">Loading notes...</div>
+<div id="fundamentals-table-uas_defense_robotics" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="news-section">Recent News </h3>
 <div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for the requested NYSE/NASDAQ stocks, as of **December 15, 2025**:
 
@@ -473,15 +552,14 @@
 
 No relevant announcements or SEC filings dated today (December 15, 2025) or the very recent past were found for DPRO or SPAI.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Fri, 12 Dec)</i></small></h3>
-<div class="charts-section">    <img src="screenshots/uas_defense_robotics.png" alt="Uas Defense Robotics Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
+<div class="charts-section">
+    <img src="screenshots/uas_defense_robotics.png" alt="Uas Defense Robotics Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
 <div class="industry-section" id="service_robotics"><h2>6. Service Robotics <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Industrial automation, robotics, and service automation technologies, including collaborative robots, warehouse automation, and consumer robotics</i></p>
 <h3 class="fundamentals-section">Fundamentals</h3>
-<div id="fundamentals-table-service_robotics" class="fundamentals-section">Loading fundamentals data...</div>
-<h3 class="notes-section">Notes </h3>
-<div id="notes-service_robotics" class="markdown-notes-block notes-section">Loading notes...</div>
+<div id="fundamentals-table-service_robotics" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="news-section">Recent News </h3>
 <div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for Richtech Robotics (RR), Serve Robotics (SERV), PROCEPT BioRobotics (PRCT), Zebra Technologies (ZBRA), and iRobot Corporation (IRBT) as of today, December 15, 2025:
 
@@ -532,15 +610,16 @@ No relevant announcements or SEC filings dated today (December 15, 2025) or the 
 *   **November 6, 2025**: iRobot Corporation furnished an 8-K announcing its financial results for the fiscal quarter ended September 27, 2025.
 *   **October 27, 2025**: An 8-K filing on October 27, 2025, indicated that on **October 22, 2025**, iRobot Corporation entered into Amendment No. 6 to its Credit Agreement, which extended the waiver period for certain covenant obligations to December 1, 2025.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Thu, 11 Dec)</i></small></h3>
-<div class="charts-section">    <img src="screenshots/service_robotics.png" alt="Service Robotics Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
+<div class="charts-section">
+    <img src="screenshots/service_robotics.png" alt="Service Robotics Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
 <div class="industry-section" id="space_launch_systems"><h2>7. Space Launch Systems <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Space technology and services companies, including satellite operators, launch service providers, space infrastructure, and space-based data analytics</i></p>
 <h3 class="fundamentals-section">Fundamentals</h3>
-<div id="fundamentals-table-space_launch_systems" class="fundamentals-section">Loading fundamentals data...</div>
+<div id="fundamentals-table-space_launch_systems" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="notes-section">Notes </h3>
-<div id="notes-space_launch_systems" class="markdown-notes-block notes-section">Loading notes...</div>
+<div class="markdown-notes-block notes-section">spce:&gt; $254M ATM on Dec9</div>
 <h3 class="news-section">Recent News </h3>
 <div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for the requested NYSE/NASDAQ stocks as of today, **December 15, 2025**:
 
@@ -580,15 +659,16 @@ No relevant announcements or SEC filings dated today (December 15, 2025) or the 
 *   **November 10, 2025**: CEO Peter Anthony Cannito, Jr. bought 32,155 shares of the stock.
 *   **November 5, 2025**: Redwire Corporation reported its Third Quarter 2025 Financial Results.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Thu, 11 Dec)</i></small></h3>
-<div class="charts-section">    <img src="screenshots/space_launch_systems.png" alt="Space Launch Systems Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
+<div class="charts-section">
+    <img src="screenshots/space_launch_systems.png" alt="Space Launch Systems Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
 <div class="industry-section" id="earth_observation"><h2>8. Earth Observation <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Satellite communications, space technology, and related infrastructure companies, including satellite operators, ground station providers, and satellite communication services</i></p>
 <h3 class="fundamentals-section">Fundamentals</h3>
-<div id="fundamentals-table-earth_observation" class="fundamentals-section">Loading fundamentals data...</div>
+<div id="fundamentals-table-earth_observation" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="notes-section">Notes </h3>
-<div id="notes-earth_observation" class="markdown-notes-block notes-section">Loading notes...</div>
+<div class="markdown-notes-block notes-section">bksy:&gt; 4M shares convertible at $27</div>
 <h3 class="news-section">Recent News </h3>
 <div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for the requested companies, bulleted with highlighted dates:
 
@@ -677,15 +757,14 @@ No relevant announcements or SEC filings dated today (December 15, 2025) or the 
     *   **November 19, 2025**: Form 3 (initial statement of beneficial ownership) and Form 4 (statement of changes in beneficial ownership) for Barbara L. Frenkel, who was appointed to the board of directors.
     *   **November 19, 2025**: Form 8-K Current report.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Fri, 12 Dec)</i></small></h3>
-<div class="charts-section">    <img src="screenshots/earth_observation.png" alt="Earth Observation Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
+<div class="charts-section">
+    <img src="screenshots/earth_observation.png" alt="Earth Observation Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
 <div class="industry-section" id="ev_charging_infrastructure"><h2>9. Ev Charging Infrastructure <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>EV charging infrastructure &amp; solutions</i></p>
 <h3 class="fundamentals-section">Fundamentals</h3>
-<div id="fundamentals-table-ev_charging_infrastructure" class="fundamentals-section">Loading fundamentals data...</div>
-<h3 class="notes-section">Notes </h3>
-<div id="notes-ev_charging_infrastructure" class="markdown-notes-block notes-section">Loading notes...</div>
+<div id="fundamentals-table-ev_charging_infrastructure" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="news-section">Recent News </h3>
 <div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for the requested companies, dated as of today, December 15, 2025, or the most recent available:
 
@@ -719,15 +798,16 @@ No relevant announcements or SEC filings dated today (December 15, 2025) or the 
 *   **September 26, 2025:** ADS-TEC Energy announced one of the world&#x27;s largest battery energy storage projects.
 *   **September 19, 2025:** ADS-TEC Energy reported its financial results for HY1 2025.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Thu, 11 Dec)</i></small></h3>
-<div class="charts-section">    <img src="screenshots/ev_charging_infrastructure.png" alt="Ev Charging Infrastructure Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
+<div class="charts-section">
+    <img src="screenshots/ev_charging_infrastructure.png" alt="Ev Charging Infrastructure Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
 <div class="industry-section" id="evtol_air_mobility"><h2>10. Evtol Air Mobility <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Urban air mobility and eVTOL aircraft companies focused on electric vertical takeoff and landing transportation solutions</i></p>
 <h3 class="fundamentals-section">Fundamentals</h3>
-<div id="fundamentals-table-evtol_air_mobility" class="fundamentals-section">Loading fundamentals data...</div>
+<div id="fundamentals-table-evtol_air_mobility" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="notes-section">Notes </h3>
-<div id="notes-evtol_air_mobility" class="markdown-notes-block notes-section">Loading notes...</div>
+<div class="markdown-notes-block notes-section">achr:&gt; SECTOR not great LL forming</div>
 <h3 class="news-section">Recent News </h3>
 <div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for ACHR, JOBY, EVEX, and EVTL:
 
@@ -769,15 +849,16 @@ No relevant announcements or SEC filings dated today (December 15, 2025) or the 
 *   **November 4, 2025**: Vertical Aerospace Ltd. filed a Form 6-K (Current Report).
 *   **October 29, 2025**: Stephen James Fitzpatrick filed a Form 144 indicating an intent to sell up to 2,800,000 ordinary shares of EVTL.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Mon, 08 Dec)</i></small></h3>
-<div class="charts-section">    <img src="screenshots/evtol_air_mobility.png" alt="Evtol Air Mobility Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
+<div class="charts-section">
+    <img src="screenshots/evtol_air_mobility.png" alt="Evtol Air Mobility Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
 <div class="industry-section" id="hydrogen_fuel_cells"><h2>11. Hydrogen Fuel Cells <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Hydrogen &amp; fuel cell technology</i></p>
 <h3 class="fundamentals-section">Fundamentals</h3>
-<div id="fundamentals-table-hydrogen_fuel_cells" class="fundamentals-section">Loading fundamentals data...</div>
+<div id="fundamentals-table-hydrogen_fuel_cells" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="notes-section">Notes </h3>
-<div id="notes-hydrogen_fuel_cells" class="markdown-notes-block notes-section">Loading notes...</div>
+<div class="markdown-notes-block notes-section">bw:&gt; announced the full redemption of all $26 million aggregate principal amount outstanding of its 8.125% Senior Notes due 2026 on Dec5</div>
 <h3 class="news-section">Recent News </h3>
 <div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for the requested NYSE/NASDAQ stocks as of December 15, 2025:
 
@@ -835,15 +916,14 @@ No relevant announcements or SEC filings dated today (December 15, 2025) or the 
 *   **October 15, 2025:** Ballard announced a change of Transfer Agent, with Odyssey Trust Company replacing Computershare Trust.
 *   **October 9, 2025:** Ballard Power Systems filed a 6-K confirming its Form 40-F status.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Fri, 12 Dec)</i></small></h3>
-<div class="charts-section">    <img src="screenshots/hydrogen_fuel_cells.png" alt="Hydrogen Fuel Cells Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
+<div class="charts-section">
+    <img src="screenshots/hydrogen_fuel_cells.png" alt="Hydrogen Fuel Cells Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
 <div class="industry-section" id="batteries_storage_tech"><h2>12. Batteries Storage Tech <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>EV battery technology</i></p>
 <h3 class="fundamentals-section">Fundamentals</h3>
-<div id="fundamentals-table-batteries_storage_tech" class="fundamentals-section">Loading fundamentals data...</div>
-<h3 class="notes-section">Notes </h3>
-<div id="notes-batteries_storage_tech" class="markdown-notes-block notes-section">Loading notes...</div>
+<div id="fundamentals-table-batteries_storage_tech" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="news-section">Recent News </h3>
 <div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for the requested NYSE/NASDAQ stocks:
 
@@ -878,15 +958,18 @@ No relevant announcements or SEC filings dated today (December 15, 2025) or the 
 *   **November 4, 2025**: Solid Power reported its Third Quarter 2025 Results. This was also reported as an 8-K filing.
 *   **October 30, 2025**: Solid Power announced a partnership with Samsung SDI and BMW to further develop and validate all-solid-state battery (ASSB) technology. This was also reported as an 8-K filing.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Thu, 11 Dec)</i></small></h3>
-<div class="charts-section">    <img src="screenshots/batteries_storage_tech.png" alt="Batteries Storage Tech Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
+<div class="charts-section">
+    <img src="screenshots/batteries_storage_tech.png" alt="Batteries Storage Tech Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
 <div class="industry-section" id="batteries_storage_sw"><h2>13. Batteries Storage Sw <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Energy storage &amp; battery tech</i></p>
 <h3 class="fundamentals-section">Fundamentals</h3>
-<div id="fundamentals-table-batteries_storage_sw" class="fundamentals-section">Loading fundamentals data...</div>
+<div id="fundamentals-table-batteries_storage_sw" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="notes-section">Notes </h3>
-<div id="notes-batteries_storage_sw" class="markdown-notes-block notes-section">Loading notes...</div>
+<div class="markdown-notes-block notes-section">stem:&gt; Nov 26 filed $200M s-3 shelf registration
+
+te:&gt; 17M shares given to notes. $3B dilution($1.5B ATM) Dec 05</div>
 <h3 class="news-section">Recent News </h3>
 <div class="markdown-raw-content news-section">Here&#x27;s a summary of the latest announcements and SEC filings for the requested US NYSE/NASDAQ stocks, as of **December 15, 2025**, excluding stock price changes as standalone news items and disclaimers:
 
@@ -943,15 +1026,16 @@ No relevant announcements or SEC filings dated today (December 15, 2025) or the 
 *   **December 9, 2025**: A Form S-3 (Shelf Registration Statement) was filed.
 *   **December 4, 2025**: Energy Vault announced its entry into the Swiss market with signed B-VAULT™ Deployment Contracts for the Schindler and Energie Wettingen Projects, and the launch of its FlexGrid Product designed for urban and utility applications.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Thu, 11 Dec)</i></small></h3>
-<div class="charts-section">    <img src="screenshots/batteries_storage_sw.png" alt="Batteries Storage Sw Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
+<div class="charts-section">
+    <img src="screenshots/batteries_storage_sw.png" alt="Batteries Storage Sw Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
 <div class="industry-section" id="battery_materials_mining"><h2>14. Battery Materials Mining <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Lithium &amp; battery metals / mining</i></p>
 <h3 class="fundamentals-section">Fundamentals</h3>
-<div id="fundamentals-table-battery_materials_mining" class="fundamentals-section">Loading fundamentals data...</div>
+<div id="fundamentals-table-battery_materials_mining" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="notes-section">Notes </h3>
-<div id="notes-battery_materials_mining" class="markdown-notes-block notes-section">Loading notes...</div>
+<div class="markdown-notes-block notes-section">atlx:&gt; $200M Offering Dec5 over time</div>
 <h3 class="news-section">Recent News </h3>
 <div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for the requested companies, as of December 15, 2025:
 
@@ -1064,15 +1148,14 @@ No relevant announcements or SEC filings dated today (December 15, 2025) or the 
     *   **October 14, 2025**: NioCorp filed a 424B5 for common shares and pre-funded warrants.
     *   **October 14, 2025**: NioCorp filed an 8-K, furnishing preliminary results via Exhibit 99.1.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Fri, 12 Dec)</i></small></h3>
-<div class="charts-section">    <img src="screenshots/battery_materials_mining.png" alt="Battery Materials Mining Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
+<div class="charts-section">
+    <img src="screenshots/battery_materials_mining.png" alt="Battery Materials Mining Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
 <div class="industry-section" id="Hyperscalers"><h2>15. Hyperscalers <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>HPC/NeoCloud: building data centers for AI workloads and renting out GPU capacity to hyperscalers and AI companies</i></p>
 <h3 class="fundamentals-section">Fundamentals</h3>
-<div id="fundamentals-table-Hyperscalers" class="fundamentals-section">Loading fundamentals data...</div>
-<h3 class="notes-section">Notes </h3>
-<div id="notes-Hyperscalers" class="markdown-notes-block notes-section">Loading notes...</div>
+<div id="fundamentals-table-Hyperscalers" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="news-section">Recent News </h3>
 <div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for the requested companies, as of December 15, 2025:
 
@@ -1142,15 +1225,16 @@ No relevant announcements or SEC filings dated today (December 15, 2025) or the 
 *   **October 20, 2025**: A Form 4 filing detailed changes in beneficial ownership of securities.
 *   **October 17, 2025**: A Form 4 filing detailed changes in beneficial ownership of securities.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Wed, 10 Dec)</i></small></h3>
-<div class="charts-section">    <img src="screenshots/Hyperscalers.png" alt="Hyperscalers Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
+<div class="charts-section">
+    <img src="screenshots/Hyperscalers.png" alt="Hyperscalers Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
 <div class="industry-section" id="Mining"><h2>16. Mining <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Cryptocurrency mining and blockchain infrastructure companies</i></p>
 <h3 class="fundamentals-section">Fundamentals</h3>
-<div id="fundamentals-table-Mining" class="fundamentals-section">Loading fundamentals data...</div>
+<div id="fundamentals-table-Mining" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="notes-section">Notes </h3>
-<div id="notes-Mining" class="markdown-notes-block notes-section">Loading notes...</div>
+<div class="markdown-notes-block notes-section">iren:&gt; 40M shares at $41 CB on Dec 8</div>
 <h3 class="news-section">Recent News </h3>
 <div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for the requested companies, with dates highlighted:
 
@@ -1196,15 +1280,20 @@ No relevant announcements or SEC filings dated today (December 15, 2025) or the 
 *   **November 17, 2025:** Hut 8 announced the sale of a 310 MW power portfolio to TransAlta following successful optimization and long-term contract wins.
 *   **November 4, 2025:** Hut 8 reported Third Quarter 2025 Results, reporting ($0.07) earnings per share (EPS), surpassing analysts&#x27; consensus estimates of ($0.16) by $0.09. The company&#x27;s revenue for the quarter was $80.72 million, exceeding analysts&#x27; expectations of $64.70 million.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Fri, 12 Dec)</i></small></h3>
-<div class="charts-section">    <img src="screenshots/Mining.png" alt="Mining Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
+<div class="charts-section">
+    <img src="screenshots/Mining.png" alt="Mining Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
 <div class="industry-section" id="new_nuclear_energy"><h2>17. New Nuclear Energy <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>OKLO/SMR/nne new advanced nuclear tech reactors; UEC/nxe/CCJ/leu uranium mining/exploration/enrichment; bwxt eng services; ceg/nee/exc/etr/d/duk/uuuu power generation utility not covered here</i></p>
 <h3 class="fundamentals-section">Fundamentals</h3>
-<div id="fundamentals-table-new_nuclear_energy" class="fundamentals-section">Loading fundamentals data...</div>
+<div id="fundamentals-table-new_nuclear_energy" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="notes-section">Notes </h3>
-<div id="notes-new_nuclear_energy" class="markdown-notes-block notes-section">Loading notes...</div>
+<div class="markdown-notes-block notes-section">nne:&gt; cash will be $600 after offering Oct7
+
+oklo:&gt; $3.5B shelf registration,Dec 4 $1.5B ATM
+
+leu:&gt; $3.5B shelf registration,Dec 4 $1.5B ATM</div>
 <h3 class="news-section">Recent News </h3>
 <div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for the specified NYSE/NASDAQ stocks as of December 10 2025:
 
@@ -1261,135 +1350,69 @@ No relevant announcements or SEC filings dated today (December 15, 2025) or the 
 *   **November 7 2025:** Constellation Energy Corp filed a 10-Q Quarterly Earnings Report.
 *   **November 7 2025:** Constellation Energy Corp filed an 8-K report indicating a material event.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Fri, 12 Dec)</i></small></h3>
-<div class="charts-section">    <img src="screenshots/new_nuclear_energy.png" alt="New Nuclear Energy Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
+<div class="charts-section">
+    <img src="screenshots/new_nuclear_energy.png" alt="New Nuclear Energy Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
 <div class="industry-section" id="Mag7"><h2>18. Mag7 <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Large-cap technology companies, including consumer electronics, cloud computing, social media, AI, semiconductor manufacturing, and e-commerce platforms</i></p>
 <h3 class="fundamentals-section">Fundamentals</h3>
-<div id="fundamentals-table-Mag7" class="fundamentals-section">Loading fundamentals data...</div>
-<h3 class="notes-section">Notes </h3>
-<div id="notes-Mag7" class="markdown-notes-block notes-section">Loading notes...</div>
+<div id="fundamentals-table-Mag7" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="news-section">Recent News </h3>
 <div class="markdown-raw-content news-section"><p>No news available for this industry.</p></div>
 <h3 class="charts-section">Technicals & charts <small><i>(Thu, 11 Dec)</i></small></h3>
-<div class="charts-section">    <img src="screenshots/Mag7.png" alt="Mag7 Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
+<div class="charts-section">
+    <img src="screenshots/Mag7.png" alt="Mag7 Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {{
+        // Call the function to fetch and render fundamentals tables
+        fetchAndRenderFundamentals();
+
         // Configure marked.js if needed (e.g., to sanitize HTML)
-        // marked.setOptions({ sanitize: true });
+        // marked.setOptions({{ sanitize: true }});
 
         const markdownBlocks = document.querySelectorAll('.markdown-raw-content');
-        markdownBlocks.forEach(block => {
+        markdownBlocks.forEach(block => {{
             // Decode HTML entities before passing to marked.js, as we escaped them earlier
             const rawMarkdown = block.innerHTML;
             const decodedMarkdown = new DOMParser().parseFromString(rawMarkdown, 'text/html').documentElement.textContent;
             block.innerHTML = marked.parse(decodedMarkdown);
             block.classList.remove('markdown-raw-content'); // Remove the raw class
             block.classList.add('markdown-output'); // Add a class for styled output
-        });
+        }});
 
         // Toggle functionality
-        const toggleVisibility = (selector, isChecked) => {
-            document.querySelectorAll(selector).forEach(element => {
-                if (isChecked) {
+        const toggleVisibility = (selector, isChecked) => {{
+            document.querySelectorAll(selector).forEach(element => {{
+                if (isChecked) {{
                     element.classList.remove('hidden');
-                } else {
+                }} else {{
                     element.classList.add('hidden');
-                }
-            });
-        };
+                }}
+            }});
+        }};
 
-        document.getElementById('toggleTables').addEventListener('change', function() {
+        document.getElementById('toggleTables').addEventListener('change', function() {{
             toggleVisibility('.fundamentals-section', this.checked);
-        });
+        }});
 
-        document.getElementById('toggleNews').addEventListener('change', function() {
+        document.getElementById('toggleNews').addEventListener('change', function() {{
             toggleVisibility('.news-section', this.checked);
             toggleVisibility('.markdown-output', this.checked); // Also toggle the rendered markdown news
-        });
+        }});
 
-        document.getElementById('toggleCharts').addEventListener('change', function() {
+        document.getElementById('toggleCharts').addEventListener('change', function() {{
             toggleVisibility('.charts-section', this.checked);
-        });
+        }});
 
-        document.getElementById('toggleNotes').addEventListener('change', function() {
+        document.getElementById('toggleNotes').addEventListener('change', function() {{
             toggleVisibility('.notes-section', this.checked);
             toggleVisibility('.markdown-notes-block', this.checked); // Also toggle the markdown notes block
-        });
-
-        // Client-side rendering of fundamentals table and notes
-        async function fetchAndRenderFundamentals() {
-            const response = await fetch(csvExportUrl);
-            const csvText = await response.text();
-            const rows = csvText.trim().split('
-');
-            const headers = rows[0].split(',').map(h => h.trim());
-            const data = rows.slice(1).map(row => {
-                const values = row.split(',');
-                return headers.reduce((obj, header, i) => {
-                    obj[header] = values[i] || ''; // Handle potential missing values
-                    return obj;
-                }, {});
-            });
-
-            for (const industryKey in tickerMap) {
-                const industryTickers = tickerMap[industryKey].map(t => t.toUpperCase());
-                const industryData = data.filter(item => industryTickers.includes(item.Ticker.toUpperCase()));
-
-                // Render Fundamentals Table
-                const tableContainer = document.getElementById(`fundamentals-table-${industryKey}`);
-                if (tableContainer) {
-                    let tableHtml = '<table class="dataframe"><thead><tr>';
-                    const columnsToDisplay = ['Ticker', 'price%', 'Price', 'mcap', 'TSO', 'FDS', 'Q revenue', 'Q spend', 'Order Book', 'SI','Debt', 'cash', 'tutes%','PCR'];
-                    const availableColumns = headers.filter(col => columnsToDisplay.includes(col));
-
-                    availableColumns.forEach(col => {
-                        tableHtml += `<th>${col}</th>`;
-                    });
-                    tableHtml += '</tr></thead><tbody>';
-
-                    industryData.forEach(row => {
-                        tableHtml += '<tr>';
-                        availableColumns.forEach(col => {
-                            let cellContent = row[col] || '';
-                            let style = '';
-                            if (col === 'price%') {
-                                style = getColorForPricePercent(cellContent);
-                            }
-                            tableHtml += `<td style="${style}">${cellContent}</td>`;
-                        });
-                        tableHtml += '</tr>';
-                    });
-                    tableHtml += '</tbody></table>';
-                    tableContainer.innerHTML = tableHtml;
-                }
-
-                // Render Notes
-                const notesContainer = document.getElementById(`notes-${industryKey}`);
-                if (notesContainer) {
-                    const industryNotes = industryData.filter(item => item.Notes && item.Notes.trim() !== '');
-                    if (industryNotes.length > 0) {
-                        let notesMarkdown = '';
-                        industryNotes.forEach(item => {
-                            notesMarkdown += `${item.Ticker}:> ${item.Notes}
-
-`;
-                        });
-                        notesContainer.innerHTML = marked.parse(notesMarkdown);
-                        notesContainer.classList.add('markdown-output');
-                        notesContainer.classList.remove('markdown-notes-block');
-                    } else {
-                        notesContainer.innerHTML = '<p>No notes available for this industry.</p>';
-                    }
-                }
-            }
-        }
-        fetchAndRenderFundamentals();
-    });
+        }});
+    }});
 </script>
 <hr/>
 
