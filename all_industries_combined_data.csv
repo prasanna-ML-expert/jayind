@@ -1,0 +1,20 @@
+Industry,Ticker,Debt_M,Cash_M,QRevenue_M,QPL_M,OrderBook_M,FDS,SI,tutes%,pcr
+earth_observation,ASTS,,,,,,272.831,14.44,61.0,0.5
+earth_observation,BKSY,,,,,,35.194,25.12,59.1,0.3
+space_launch_systems,FLY,0.0,0.0,0.0,0.0,0.0,,,,
+service_robotics,IRBT,205.3,24.8,145.8,-21.5,0.0,,,,
+earth_observation,IRDM,,,,,,106.095,8.09,95.02,0.3
+space_launch_systems,LUNR,334.8,622.0,52.4,-10.0,235.9,,,,
+space_launch_systems,MNTS,4.63,0.67,0.0,0.0,0.0,,,,
+earth_observation,PL,,,,,,288.0,11.77,59.33,0.49
+service_robotics,PRCT,0.0,297.3,83.3,-21.4,0.0,,,,
+space_launch_systems,RDW,184.7,54.3,103.4,-41.2,355.6,,,,
+service_robotics,RICHTECH ROBOTICS RR,0.0,0.0,0.0,0.0,0.0,,,,
+space_launch_systems,RKLB,516.62,976.74,155.1,-18.26,1100.0,,,,
+earth_observation,SATL,,,,,,0.0,7.94,39.48,0.1
+earth_observation,SATS,,,,,,287.505,16.7,94.49,0.76
+service_robotics,SERV,0.0,0.0,0.0,0.0,0.0,,,,
+space_launch_systems,SPCE,421.84,424.0,0.365,-64.4,189.0,,,,
+earth_observation,SPIR,,,,,,32.72,12.04,47.19,0.48
+earth_observation,VSAT,,,,,,135.119,9.8,98.97,0.7
+service_robotics,ZBRA,2183.0,1053.0,1320.0,101.0,0.0,,,,
