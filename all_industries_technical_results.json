@@ -1,120 +1,92 @@
 {
   "updates": [
     {
-      "Industry": "new_nuclear_energy",
+      "Industry": "service_robotics",
       "Results": [
         {
-          "Ticker": "OKLO",
-          "FDS": 156.39,
-          "SI": 15.9,
-          "tutes%": 47.03,
-          "pcr": 0.9
+          "Ticker": "RICHTECH ROBOTICS RR",
+          "FDS": NaN,
+          "SI": NaN,
+          "tutes%": NaN,
+          "pcr": NaN
         },
         {
-          "Ticker": "SMR",
-          "FDS": 298.48,
-          "SI": 14.25,
-          "tutes%": 78.37,
-          "pcr": 0.7
+          "Ticker": "SERV",
+          "FDS": 66.22,
+          "SI": 24.99,
+          "tutes%": 34.09,
+          "pcr": 0.7163
         },
         {
-          "Ticker": "NNE",
-          "FDS": 50.25,
-          "SI": 36.73,
-          "tutes%": 32.79,
-          "pcr": 0.6
+          "Ticker": "PRCT",
+          "FDS": 55.88,
+          "SI": 14.71,
+          "tutes%": 103.8,
+          "pcr": 0.52
         },
         {
-          "Ticker": "IMSR",
-          "FDS": 105.78,
-          "SI": 1.5,
-          "tutes%": 12.25,
-          "pcr": 0.2
+          "Ticker": "ZBRA",
+          "FDS": 51.0,
+          "SI": 2.21,
+          "tutes%": 95.43,
+          "pcr": 0.52
         },
         {
-          "Ticker": "UEC",
-          "FDS": 483.0,
-          "SI": 9.59,
-          "tutes%": 74.31,
-          "pcr": 0.37
-        },
-        {
-          "Ticker": "CCJ",
-          "FDS": 435.0,
-          "SI": 1.62,
-          "tutes%": 65.45,
-          "pcr": 1.2
-        },
-        {
-          "Ticker": "LEU",
-          "FDS": 20.56,
-          "SI": 26.61,
-          "tutes%": 49.96,
-          "pcr": 0.74
-        },
-        {
-          "Ticker": "BWXT",
-          "FDS": 91.85,
-          "SI": 2.53,
-          "tutes%": 96.11,
-          "pcr": 0.5
+          "Ticker": "IRBT",
+          "FDS": 34.866,
+          "SI": 44.62,
+          "tutes%": 38.1,
+          "pcr": 1.8
         }
       ]
     },
     {
-      "Industry": "Mag7",
+      "Industry": "space_launch_systems",
       "Results": [
         {
-          "Ticker": "AAPL",
-          "FDS": 14864.0,
-          "SI": 0.88,
-          "tutes%": 63.66,
+          "Ticker": "RKLB",
+          "FDS": 0.0,
+          "SI": 9.61,
+          "tutes%": 58.6,
           "pcr": 0.7
         },
         {
-          "Ticker": "NVDA",
-          "FDS": NaN,
-          "SI": 1.0,
-          "tutes%": 75.64,
-          "pcr": 0.89
+          "Ticker": "FLY",
+          "FDS": 0.0,
+          "SI": 1.84,
+          "tutes%": 37.56,
+          "pcr": 1.1661
         },
         {
-          "Ticker": "META",
-          "FDS": NaN,
-          "SI": 1.39,
-          "tutes%": 79.79,
-          "pcr": 0.57
+          "Ticker": "MNTS",
+          "FDS": 0.0,
+          "SI": 4.31,
+          "tutes%": 1.06,
+          "pcr": 0.0
         },
         {
-          "Ticker": "MSFT",
-          "FDS": NaN,
-          "SI": 0.65,
-          "tutes%": 83.22,
-          "pcr": 0.65
+          "Ticker": "SPCE",
+          "FDS": 0.0,
+          "SI": 26.39,
+          "tutes%": 15.41,
+          "pcr": 0.85
         },
         {
-          "Ticker": "AVGO",
-          "FDS": NaN,
-          "SI": 0.93,
-          "tutes%": 77.2,
-          "pcr": 1.03
+          "Ticker": "LUNR",
+          "FDS": 0.0,
+          "SI": 26.21,
+          "tutes%": 62.66,
+          "pcr": 0.3
         },
         {
-          "Ticker": "GOOG",
-          "FDS": NaN,
-          "SI": 0.7,
-          "tutes%": 58.95,
-          "pcr": 0.75
-        },
-        {
-          "Ticker": "AMZN",
-          "FDS": NaN,
-          "SI": 0.77,
-          "tutes%": 64.99,
-          "pcr": 0.71
+          "Ticker": "RDW",
+          "FDS": 0.0,
+          "SI": 11.96,
+          "tutes%": 75.05,
+          "pcr": 0.36
         }
       ]
     }
   ],
-  "updated_date": "2025-12-13T19:45:07.319327+00:00"
+  "updated_date": "2025-12-15T01:02:37.473812+00:00"
 }
