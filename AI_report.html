@@ -43,21 +43,42 @@
         async function fetchAndRenderFundamentals() {
             try {
                 const response = await fetch(csvExportUrl);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
                 const csvText = await response.text();
-                const lines = csvText.split('
-');
+                // Use a regex to split by newlines, handling both 
+ and 
+
+                const lines = csvText.split(/
+?
+/);
+                if (lines.length < 2) { // Check if there's at least a header and one data line
+                    console.warn('CSV data is empty or contains only headers.');
+                    // Explicitly update all placeholders with a "no data" message
+                    for (const industryKey in tickerMap) {
+                        const placeholderDiv = document.getElementById(`fundamentals-table-${industryKey}`);
+                        if (placeholderDiv) {
+                            placeholderDiv.innerHTML = '<p>No CSV data loaded or only headers found.</p>';
+                        }
+                    }
+                    return;
+                }
+
                 const headers = lines[0].split(',').map(h => h.trim());
                 const data = [];
 
                 for (let i = 1; i < lines.length; i++) {
+                    if (lines[i].trim() === '') continue; // Skip empty lines
+
                     const currentLine = lines[i].split(',');
-                    if (currentLine.length === headers.length) {
-                        let row = {};
-                        for (let j = 0; j < headers.length; j++) {
-                            row[headers[j]] = currentLine[j].trim();
-                        }
-                        data.push(row);
+                    // Create a row object, handling potential missing values in cells
+                    let row = {};
+                    for (let j = 0; j < headers.length; j++) {
+                        // Assign trimmed value or empty string if cell is undefined/null
+                        row[headers[j]] = (currentLine[j] || '').trim();
                     }
+                    data.push(row);
                 }
 
                 // Columns to display (must match Python list)
@@ -69,12 +90,19 @@
 
                 for (const industryKey in tickerMap) {
                     const industryTickers = tickerMap[industryKey];
+                    // Ensure Ticker in CSV data is compared case-insensitively
                     const industryData = data.filter(row => industryTickers.includes(row['Ticker'].toLowerCase()));
+
+                    const placeholderDiv = document.getElementById(`fundamentals-table-${industryKey}`);
+                    if (!placeholderDiv) {
+                        console.warn(`Placeholder div not found for industry: ${industryKey}`);
+                        continue; // Skip if placeholder doesn't exist
+                    }
 
                     if (industryData.length > 0) {
                         let tableHtml = '<table class="dataframe"><thead><tr>';
-                        // Filter headers to only include those in columnsToDisplay
-                        const actualHeaders = headers.filter(h => columnsToDisplay.includes(h));
+                        // Filter headers to only include those in columnsToDisplay and present in our actual data
+                        const actualHeaders = headers.filter(h => columnsToDisplay.includes(h) && industryData[0].hasOwnProperty(h));
 
                         actualHeaders.forEach(header => {
                             tableHtml += `<th>${header}</th>`;
@@ -99,21 +127,19 @@
                             tableHtml += '</tr>';
                         });
                         tableHtml += '</tbody></table>';
-
-                        const placeholderDiv = document.getElementById(`fundamentals-table-${industryKey}`);
-                        if (placeholderDiv) {
-                            placeholderDiv.innerHTML = tableHtml;
-                        }
+                        placeholderDiv.innerHTML = tableHtml;
+                    } else {
+                        placeholderDiv.innerHTML = '<p>No fundamentals data available for this industry.</p>';
                     }
                 }
 
             } catch (error) {
                 console.error('Error fetching or processing CSV:', error);
-                // Optionally, update placeholders to show an error message
+                // Update all placeholders to show an error message with more details
                 for (const industryKey in tickerMap) {
                     const placeholderDiv = document.getElementById(`fundamentals-table-${industryKey}`);
                     if (placeholderDiv) {
-                        placeholderDiv.innerHTML = '<p>Error loading fundamentals data.</p>';
+                        placeholderDiv.innerHTML = `<p>Error loading fundamentals data: ${error.message}</p>`;
                     }
                 }
             }
