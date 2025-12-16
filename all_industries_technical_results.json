@@ -1,20 +1,363 @@
 {
   "updates": [
     {
+      "Industry": "quantum",
+      "Results": [
+        {
+          "Ticker": "IONQ",
+          "FDS": 294.525,
+          "SI": 20.08,
+          "tutes%": 49.9,
+          "pcr": 1.3
+        },
+        {
+          "Ticker": "QBTS",
+          "FDS": 0.0,
+          "SI": 0.0,
+          "tutes%": 0.0,
+          "pcr": 0.0
+        },
+        {
+          "Ticker": "RGTI",
+          "FDS": NaN,
+          "SI": NaN,
+          "tutes%": NaN,
+          "pcr": NaN
+        },
+        {
+          "Ticker": "QUBT",
+          "FDS": NaN,
+          "SI": NaN,
+          "tutes%": NaN,
+          "pcr": NaN
+        },
+        {
+          "Ticker": "LAES",
+          "FDS": NaN,
+          "SI": NaN,
+          "tutes%": NaN,
+          "pcr": NaN
+        },
+        {
+          "Ticker": "ARQQ",
+          "FDS": NaN,
+          "SI": NaN,
+          "tutes%": NaN,
+          "pcr": NaN
+        }
+      ]
+    },
+    {
+      "Industry": "power_management_chips",
+      "Results": [
+        {
+          "Ticker": "NVTS",
+          "FDS": 229.75,
+          "SI": 30.61,
+          "tutes%": 40.46,
+          "pcr": 0.3
+        },
+        {
+          "Ticker": "ON",
+          "FDS": 414.9,
+          "SI": 9.89,
+          "tutes%": 97.7,
+          "pcr": 1.45
+        },
+        {
+          "Ticker": "AOSL",
+          "FDS": 0.0,
+          "SI": 6.31,
+          "tutes%": 78.97,
+          "pcr": 0.0
+        },
+        {
+          "Ticker": "COHR",
+          "FDS": 156.94,
+          "SI": 3.94,
+          "tutes%": 94.82,
+          "pcr": 0.7
+        },
+        {
+          "Ticker": "MPWR",
+          "FDS": 47.91,
+          "SI": 4.0,
+          "tutes%": 101.47,
+          "pcr": 1.2849
+        },
+        {
+          "Ticker": "POWI",
+          "FDS": 0.0,
+          "SI": 10.44,
+          "tutes%": 102.13,
+          "pcr": 0.27
+        },
+        {
+          "Ticker": "ALAB",
+          "FDS": 127.23,
+          "SI": 8.17,
+          "tutes%": 0.0,
+          "pcr": 1.0
+        },
+        {
+          "Ticker": "INDI",
+          "FDS": 219.63,
+          "SI": 25.11,
+          "tutes%": 98.93,
+          "pcr": 0.0
+        }
+      ]
+    },
+    {
+      "Industry": "lidar_sensing",
+      "Results": [
+        {
+          "Ticker": "AEVA",
+          "FDS": 0.0,
+          "SI": 21.49,
+          "tutes%": 64.59,
+          "pcr": 0.22
+        },
+        {
+          "Ticker": "LAZR",
+          "FDS": 0.0,
+          "SI": 30.73,
+          "tutes%": 26.68,
+          "pcr": 1.7
+        },
+        {
+          "Ticker": "MVIS",
+          "FDS": 0.0,
+          "SI": 20.39,
+          "tutes%": 0.0,
+          "pcr": 0.1
+        },
+        {
+          "Ticker": "LIDR",
+          "FDS": 0.0,
+          "SI": 6.42,
+          "tutes%": 0.0,
+          "pcr": 0.0
+        },
+        {
+          "Ticker": "OUST",
+          "FDS": 0.0,
+          "SI": 11.74,
+          "tutes%": 54.78,
+          "pcr": 0.33
+        },
+        {
+          "Ticker": "ARBE",
+          "FDS": 0.0,
+          "SI": 3.35,
+          "tutes%": 0.0,
+          "pcr": 0.0
+        }
+      ]
+    },
+    {
+      "Industry": "autonomous_driving",
+      "Results": [
+        {
+          "Ticker": "MBLY",
+          "FDS": 814.0,
+          "SI": 3.07,
+          "tutes%": 71.33,
+          "pcr": 0.56
+        },
+        {
+          "Ticker": "AUR",
+          "FDS": 0.0,
+          "SI": 8.91,
+          "tutes%": 94.94,
+          "pcr": 0.0
+        },
+        {
+          "Ticker": "TSLA",
+          "FDS": 3526.0,
+          "SI": 2.67,
+          "tutes%": 48.11,
+          "pcr": 0.8896
+        },
+        {
+          "Ticker": "XPEV",
+          "FDS": 1905.38,
+          "SI": 5.31,
+          "tutes%": 8.61,
+          "pcr": 0.6649
+        },
+        {
+          "Ticker": "KDK",
+          "FDS": 89.8,
+          "SI": 8.57,
+          "tutes%": 41.0,
+          "pcr": 0.31
+        }
+      ]
+    },
+    {
+      "Industry": "uas_defense_robotics",
+      "Results": [
+        {
+          "Ticker": "DPRO",
+          "FDS": 0.0,
+          "SI": 10.53,
+          "tutes%": 10.39,
+          "pcr": 0.0
+        },
+        {
+          "Ticker": "RCAT",
+          "FDS": 0.0,
+          "SI": 21.02,
+          "tutes%": 0.0,
+          "pcr": 0.0
+        },
+        {
+          "Ticker": "ZENA",
+          "FDS": 0.0,
+          "SI": 4.99,
+          "tutes%": 0.0,
+          "pcr": 0.0
+        },
+        {
+          "Ticker": "ONDS",
+          "FDS": 0.0,
+          "SI": 0.0,
+          "tutes%": 0.0,
+          "pcr": 0.0
+        },
+        {
+          "Ticker": "AVAV",
+          "FDS": 0.0,
+          "SI": 4.52,
+          "tutes%": 83.19,
+          "pcr": 0.0
+        },
+        {
+          "Ticker": "KTOS",
+          "FDS": 0.0,
+          "SI": 5.59,
+          "tutes%": 91.35,
+          "pcr": 0.0
+        },
+        {
+          "Ticker": "UMAC",
+          "FDS": 0.0,
+          "SI": 14.78,
+          "tutes%": 29.69,
+          "pcr": 0.46
+        },
+        {
+          "Ticker": "SPAI",
+          "FDS": 0.0,
+          "SI": 5.56,
+          "tutes%": 0.0,
+          "pcr": 0.0
+        }
+      ]
+    },
+    {
+      "Industry": "service_robotics",
+      "Results": [
+        {
+          "Ticker": "RR",
+          "FDS": 149.894,
+          "SI": 20.86,
+          "tutes%": 21.28,
+          "pcr": 0.22
+        },
+        {
+          "Ticker": "SERV",
+          "FDS": 65.887,
+          "SI": 24.99,
+          "tutes%": 27.84,
+          "pcr": 0.32
+        },
+        {
+          "Ticker": "PRCT",
+          "FDS": 55.879,
+          "SI": 14.71,
+          "tutes%": 89.46,
+          "pcr": 0.47
+        },
+        {
+          "Ticker": "ZBRA",
+          "FDS": 51.0,
+          "SI": 2.21,
+          "tutes%": 95.72,
+          "pcr": 0.0
+        },
+        {
+          "Ticker": "IRBT",
+          "FDS": 35.982,
+          "SI": 44.62,
+          "tutes%": 44.54,
+          "pcr": 1.22
+        }
+      ]
+    },
+    {
+      "Industry": "space_launch_systems",
+      "Results": [
+        {
+          "Ticker": "RKLB",
+          "FDS": 528.726,
+          "SI": 9.61,
+          "tutes%": 51.71,
+          "pcr": 0.6446
+        },
+        {
+          "Ticker": "FLY",
+          "FDS": 93.8,
+          "SI": 1.84,
+          "tutes%": 37.56,
+          "pcr": 1.1661
+        },
+        {
+          "Ticker": "MNTS",
+          "FDS": 24.15,
+          "SI": 10.1,
+          "tutes%": 1.06,
+          "pcr": 0.0
+        },
+        {
+          "Ticker": "SPCE",
+          "FDS": 63.2,
+          "SI": 24.28,
+          "tutes%": 15.41,
+          "pcr": 0.85
+        },
+        {
+          "Ticker": "LUNR",
+          "FDS": 119.32,
+          "SI": 23.61,
+          "tutes%": 62.66,
+          "pcr": 0.26
+        },
+        {
+          "Ticker": "RDW",
+          "FDS": 165.15,
+          "SI": 12.28,
+          "tutes%": 75.05,
+          "pcr": 0.37
+        }
+      ]
+    },
+    {
       "Industry": "earth_observation",
       "Results": [
         {
           "Ticker": "PL",
           "FDS": 288.0,
-          "SI": 11.77,
+          "SI": 11.65,
           "tutes%": 59.33,
           "pcr": 0.49
         },
         {
           "Ticker": "BKSY",
           "FDS": 35.194,
-          "SI": 25.12,
-          "tutes%": 59.1,
+          "SI": 24.37,
+          "tutes%": 52.84,
           "pcr": 0.3
         },
         {
@@ -28,8 +371,8 @@
           "Ticker": "SATL",
           "FDS": 0.0,
           "SI": 7.94,
-          "tutes%": 39.48,
-          "pcr": 0.1
+          "tutes%": 22.96,
+          "pcr": 0.0368
         },
         {
           "Ticker": "ASTS",
@@ -43,13 +386,13 @@
           "FDS": 106.095,
           "SI": 8.09,
           "tutes%": 95.02,
-          "pcr": 0.3
+          "pcr": 0.4
         },
         {
           "Ticker": "SATS",
-          "FDS": 287.505,
+          "FDS": 361.851,
           "SI": 16.7,
-          "tutes%": 94.49,
+          "tutes%": 94.5,
           "pcr": 0.76
         },
         {
@@ -60,7 +403,519 @@
           "pcr": 0.7
         }
       ]
+    },
+    {
+      "Industry": "ev_charging_infrastructure",
+      "Results": [
+        {
+          "Ticker": "EVGO",
+          "FDS": 135.18,
+          "SI": 26.56,
+          "tutes%": 76.16,
+          "pcr": 0.27
+        },
+        {
+          "Ticker": "BLNK",
+          "FDS": 145.13,
+          "SI": 14.38,
+          "tutes%": 15.11,
+          "pcr": 0.19
+        },
+        {
+          "Ticker": "CHPT",
+          "FDS": 23.2,
+          "SI": 16.18,
+          "tutes%": 17.66,
+          "pcr": 1.1
+        },
+        {
+          "Ticker": "BEEM",
+          "FDS": 19.03,
+          "SI": 6.89,
+          "tutes%": 14.85,
+          "pcr": 0.04
+        },
+        {
+          "Ticker": "ADSE",
+          "FDS": 56.93,
+          "SI": 0.22,
+          "tutes%": 30.19,
+          "pcr": 2.16
+        }
+      ]
+    },
+    {
+      "Industry": "evtol_air_mobility",
+      "Results": [
+        {
+          "Ticker": "ACHR",
+          "FDS": 733.0,
+          "SI": 15.17,
+          "tutes%": 43.99,
+          "pcr": 0.2
+        },
+        {
+          "Ticker": "JOBY",
+          "FDS": 912.0,
+          "SI": 9.36,
+          "tutes%": 51.47,
+          "pcr": 0.55
+        },
+        {
+          "Ticker": "EVEX",
+          "FDS": 348.3,
+          "SI": 1.01,
+          "tutes%": 10.49,
+          "pcr": 0.19
+        },
+        {
+          "Ticker": "EVTL",
+          "FDS": 99.79,
+          "SI": 15.79,
+          "tutes%": 16.03,
+          "pcr": 0.0
+        }
+      ]
+    },
+    {
+      "Industry": "hydrogen_fuel_cells",
+      "Results": [
+        {
+          "Ticker": "FCEL",
+          "FDS": 24.441,
+          "SI": 11.18,
+          "tutes%": 0.0,
+          "pcr": 0.514
+        },
+        {
+          "Ticker": "BE",
+          "FDS": 0.0,
+          "SI": 8.14,
+          "tutes%": 0.0,
+          "pcr": 0.0
+        },
+        {
+          "Ticker": "PLUG",
+          "FDS": 1748.211,
+          "SI": 24.48,
+          "tutes%": 38.42,
+          "pcr": 0.1741
+        },
+        {
+          "Ticker": "HYLN",
+          "FDS": 0.0,
+          "SI": 11.39,
+          "tutes%": 26.05,
+          "pcr": 0.14
+        },
+        {
+          "Ticker": "BW",
+          "FDS": 0.0,
+          "SI": 2.51,
+          "tutes%": 0.0,
+          "pcr": 0.5604
+        },
+        {
+          "Ticker": "BLDP",
+          "FDS": 0.0,
+          "SI": 6.89,
+          "tutes%": 0.0,
+          "pcr": 0.1
+        }
+      ]
+    },
+    {
+      "Industry": "batteries_storage_tech",
+      "Results": [
+        {
+          "Ticker": "QS",
+          "FDS": 601.31,
+          "SI": 9.17,
+          "tutes%": 29.87,
+          "pcr": 0.71
+        },
+        {
+          "Ticker": "ENVX",
+          "FDS": 225.0,
+          "SI": 0.0,
+          "tutes%": 0.0,
+          "pcr": 0.0
+        },
+        {
+          "Ticker": "SES",
+          "FDS": 0.0,
+          "SI": 0.0,
+          "tutes%": 0.0,
+          "pcr": 0.0
+        },
+        {
+          "Ticker": "MVST",
+          "FDS": 0.0,
+          "SI": 0.0,
+          "tutes%": 0.0,
+          "pcr": 0.0
+        },
+        {
+          "Ticker": "AMPX",
+          "FDS": 146.38,
+          "SI": 10.36,
+          "tutes%": 58.38,
+          "pcr": 0.0
+        },
+        {
+          "Ticker": "SLDP",
+          "FDS": 0.0,
+          "SI": 0.0,
+          "tutes%": 0.0,
+          "pcr": 0.0
+        }
+      ]
+    },
+    {
+      "Industry": "batteries_storage_sw",
+      "Results": [
+        {
+          "Ticker": "ENPH",
+          "FDS": NaN,
+          "SI": NaN,
+          "tutes%": NaN,
+          "pcr": NaN
+        },
+        {
+          "Ticker": "STEM",
+          "FDS": 8.83,
+          "SI": 14.61,
+          "tutes%": 25.57,
+          "pcr": 0.16
+        },
+        {
+          "Ticker": "FLNC",
+          "FDS": 0.0,
+          "SI": 33.67,
+          "tutes%": 69.8,
+          "pcr": 1.0
+        },
+        {
+          "Ticker": "EOSE",
+          "FDS": 447.25,
+          "SI": 30.69,
+          "tutes%": 51.25,
+          "pcr": 0.4
+        },
+        {
+          "Ticker": "GWH",
+          "FDS": 0.0,
+          "SI": 3.6,
+          "tutes%": 46.77,
+          "pcr": 0.0
+        },
+        {
+          "Ticker": "KULR",
+          "FDS": 0.0,
+          "SI": 17.05,
+          "tutes%": 20.73,
+          "pcr": 0.17
+        },
+        {
+          "Ticker": "TE",
+          "FDS": 0.0,
+          "SI": 7.35,
+          "tutes%": 52.31,
+          "pcr": 0.0
+        },
+        {
+          "Ticker": "NRGV",
+          "FDS": 201.04,
+          "SI": 5.48,
+          "tutes%": 33.71,
+          "pcr": 0.13
+        }
+      ]
+    },
+    {
+      "Industry": "battery_materials_mining",
+      "Results": [
+        {
+          "Ticker": "ATLX",
+          "FDS": NaN,
+          "SI": NaN,
+          "tutes%": NaN,
+          "pcr": NaN
+        },
+        {
+          "Ticker": "ABAT",
+          "FDS": 129.97,
+          "SI": 11.86,
+          "tutes%": 0.0,
+          "pcr": 0.0
+        },
+        {
+          "Ticker": "ALB",
+          "FDS": 0.0,
+          "SI": 8.31,
+          "tutes%": 92.87,
+          "pcr": 1.0
+        },
+        {
+          "Ticker": "SQM",
+          "FDS": 0.0,
+          "SI": 1.03,
+          "tutes%": 0.0,
+          "pcr": 0.0
+        },
+        {
+          "Ticker": "SGML",
+          "FDS": 111.36,
+          "SI": 18.78,
+          "tutes%": 82.91,
+          "pcr": 0.58
+        },
+        {
+          "Ticker": "ELVR",
+          "FDS": 16.77,
+          "SI": 2.64,
+          "tutes%": 4.98,
+          "pcr": 0.0
+        },
+        {
+          "Ticker": "LAC",
+          "FDS": 303.49,
+          "SI": 9.3,
+          "tutes%": 0.0,
+          "pcr": 0.2
+        },
+        {
+          "Ticker": "NB",
+          "FDS": 0.0,
+          "SI": 0.0,
+          "tutes%": 0.0,
+          "pcr": 0.0
+        }
+      ]
+    },
+    {
+      "Industry": "Hyperscalers",
+      "Results": [
+        {
+          "Ticker": "CRWV",
+          "FDS": 0.0,
+          "SI": 12.94,
+          "tutes%": 0.0,
+          "pcr": 0.49
+        },
+        {
+          "Ticker": "NBIS",
+          "FDS": 0.0,
+          "SI": 13.84,
+          "tutes%": 0.0,
+          "pcr": 0.0
+        },
+        {
+          "Ticker": "CORZ",
+          "FDS": 0.0,
+          "SI": 19.29,
+          "tutes%": 0.0,
+          "pcr": 0.27
+        },
+        {
+          "Ticker": "APLD",
+          "FDS": 0.0,
+          "SI": 32.63,
+          "tutes%": 0.0,
+          "pcr": 0.49
+        },
+        {
+          "Ticker": "CIFR",
+          "FDS": 0.0,
+          "SI": 19.83,
+          "tutes%": 0.0,
+          "pcr": 0.0
+        },
+        {
+          "Ticker": "WULF",
+          "FDS": 0.0,
+          "SI": 35.19,
+          "tutes%": 0.0,
+          "pcr": 0.54
+        }
+      ]
+    },
+    {
+      "Industry": "Mining",
+      "Results": [
+        {
+          "Ticker": "MARA",
+          "FDS": 0.0,
+          "SI": 26.27,
+          "tutes%": 70.66,
+          "pcr": 0.5308
+        },
+        {
+          "Ticker": "CLSK",
+          "FDS": 0.0,
+          "SI": 31.54,
+          "tutes%": 75.11,
+          "pcr": 0.222
+        },
+        {
+          "Ticker": "BITF",
+          "FDS": 0.0,
+          "SI": 14.3,
+          "tutes%": 29.79,
+          "pcr": 0.21
+        },
+        {
+          "Ticker": "HIVE",
+          "FDS": 0.0,
+          "SI": 6.1,
+          "tutes%": 30.07,
+          "pcr": 0.1957
+        },
+        {
+          "Ticker": "BTBT",
+          "FDS": 0.0,
+          "SI": 17.02,
+          "tutes%": 46.61,
+          "pcr": 0.0
+        },
+        {
+          "Ticker": "HUT",
+          "FDS": 0.0,
+          "SI": 15.33,
+          "tutes%": 57.02,
+          "pcr": 0.0
+        },
+        {
+          "Ticker": "RIOT",
+          "FDS": 0.0,
+          "SI": 13.69,
+          "tutes%": 69.7,
+          "pcr": 2.2491
+        },
+        {
+          "Ticker": "IREN",
+          "FDS": 0.0,
+          "SI": 20.25,
+          "tutes%": 39.53,
+          "pcr": 0.5247
+        }
+      ]
+    },
+    {
+      "Industry": "new_nuclear_energy",
+      "Results": [
+        {
+          "Ticker": "OKLO",
+          "FDS": 156.25,
+          "SI": 15.9,
+          "tutes%": 85.03,
+          "pcr": 0.9
+        },
+        {
+          "Ticker": "SMR",
+          "FDS": 279.0,
+          "SI": 26.04,
+          "tutes%": 38.82,
+          "pcr": 0.7
+        },
+        {
+          "Ticker": "NNE",
+          "FDS": 50.07,
+          "SI": 36.56,
+          "tutes%": 40.58,
+          "pcr": 0.61
+        },
+        {
+          "Ticker": "IMSR",
+          "FDS": 58.4,
+          "SI": 1.5,
+          "tutes%": 9.16,
+          "pcr": 0.2
+        },
+        {
+          "Ticker": "UEC",
+          "FDS": 483.38,
+          "SI": 9.57,
+          "tutes%": 75.47,
+          "pcr": 0.36
+        },
+        {
+          "Ticker": "CCJ",
+          "FDS": 435.0,
+          "SI": 1.62,
+          "tutes%": 70.21,
+          "pcr": 1.2
+        },
+        {
+          "Ticker": "LEU",
+          "FDS": 18.21,
+          "SI": 27.38,
+          "tutes%": 87.09,
+          "pcr": 0.72
+        },
+        {
+          "Ticker": "BWXT",
+          "FDS": 91.43,
+          "SI": 2.53,
+          "tutes%": 94.39,
+          "pcr": 0.63
+        }
+      ]
+    },
+    {
+      "Industry": "Mag7",
+      "Results": [
+        {
+          "Ticker": "AAPL",
+          "FDS": 0.0,
+          "SI": 0.0,
+          "tutes%": 0.0,
+          "pcr": 0.72
+        },
+        {
+          "Ticker": "NVDA",
+          "FDS": 0.0,
+          "SI": 1.0,
+          "tutes%": 0.0,
+          "pcr": 0.9
+        },
+        {
+          "Ticker": "META",
+          "FDS": 0.0,
+          "SI": 0.0,
+          "tutes%": 0.0,
+          "pcr": 0.58
+        },
+        {
+          "Ticker": "MSFT",
+          "FDS": 0.0,
+          "SI": 0.0,
+          "tutes%": 0.0,
+          "pcr": 0.6
+        },
+        {
+          "Ticker": "AVGO",
+          "FDS": 0.0,
+          "SI": 1.22,
+          "tutes%": 79.87,
+          "pcr": 1.0
+        },
+        {
+          "Ticker": "GOOG",
+          "FDS": 0.0,
+          "SI": 0.0,
+          "tutes%": 0.0,
+          "pcr": 0.75
+        },
+        {
+          "Ticker": "AMZN",
+          "FDS": 0.0,
+          "SI": 0.76,
+          "tutes%": 0.0,
+          "pcr": 0.7
+        }
+      ]
     }
   ],
-  "updated_date": "2025-12-13T01:11:13.076341+00:00"
+  "updated_date": "2025-12-16T02:46:28.396149+00:00"
 }
