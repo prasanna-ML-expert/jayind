@@ -81,9 +81,9 @@
 
                 // Columns to display (must match Python list)
                 const columnsToDisplay = [
-                    'Ticker', 'price%', 'Price', 'mcap', 'TSO', 'FDS',
-                    'Q revenue', 'Q spend', 'Order Book', 'SI','Debt', 'cash',
-                    'tutes%','PCR'
+                    'Ticker', 'price%', 'Price', 'mcap', 'TSO', 'FDS_M',
+                    'QRev', 'QPL', 'Order Book', 'SI%','Debt', 'cash',
+                    'institutes%','pcr'
                 ];
 
                 for (const industryKey in tickerMap) {
@@ -98,7 +98,7 @@
                         const mcapB = parseFloat(b['mcap']) || 0;
                         return mcapB - mcapA; // Decreasing order
                     });
-                    
+
                     const placeholderDiv = document.getElementById(`fundamentals-table-${industryKey}`);
                     if (!placeholderDiv) {
                         console.warn(`Placeholder div not found for industry: ${industryKey}`);
@@ -947,7 +947,7 @@ No relevant announcements or SEC filings dated today (December 15, 2025) or the 
 *   **November 2, 2025:** The company noted its ISO 27001 certification for information technology security, cybersecurity, and privacy protection.
 *   **October 15, 2025:** Ballard announced a change of Transfer Agent, with Odyssey Trust Company replacing Computershare Trust.
 *   **October 9, 2025:** Ballard Power Systems filed a 6-K confirming its Form 40-F status.</div>
-<h3 class="charts-section">Technicals & charts <small><i>(Fri, 12 Dec)</i></small></h3>
+<h3 class="charts-section">Technicals & charts <small><i>(Tue, 16 Dec)</i></small></h3>
 <div class="charts-section">
     <img src="screenshots/hydrogen_fuel_cells.png" alt="Hydrogen Fuel Cells Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
@@ -989,7 +989,7 @@ No relevant announcements or SEC filings dated today (December 15, 2025) or the 
 *   **November 5, 2025**: Solid Power, Inc. filed a 10-Q Quarterly Earnings Report.
 *   **November 4, 2025**: Solid Power reported its Third Quarter 2025 Results. This was also reported as an 8-K filing.
 *   **October 30, 2025**: Solid Power announced a partnership with Samsung SDI and BMW to further develop and validate all-solid-state battery (ASSB) technology. This was also reported as an 8-K filing.</div>
-<h3 class="charts-section">Technicals & charts <small><i>(Thu, 11 Dec)</i></small></h3>
+<h3 class="charts-section">Technicals & charts <small><i>(Tue, 16 Dec)</i></small></h3>
 <div class="charts-section">
     <img src="screenshots/batteries_storage_tech.png" alt="Batteries Storage Tech Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
@@ -1057,7 +1057,7 @@ te:&gt; 17M shares given to notes. $3B dilution($1.5B ATM) Dec 05</div>
 *   **December 11, 2025**: A Form 4 was filed by Robert Piconi, a Director, CEO, and 10% owner, reporting the withholding of 8,612 shares of common stock by the company to satisfy tax obligations upon the vesting of restricted stock units.
 *   **December 9, 2025**: A Form S-3 (Shelf Registration Statement) was filed.
 *   **December 4, 2025**: Energy Vault announced its entry into the Swiss market with signed B-VAULT™ Deployment Contracts for the Schindler and Energie Wettingen Projects, and the launch of its FlexGrid Product designed for urban and utility applications.</div>
-<h3 class="charts-section">Technicals & charts <small><i>(Thu, 11 Dec)</i></small></h3>
+<h3 class="charts-section">Technicals & charts <small><i>(Tue, 16 Dec)</i></small></h3>
 <div class="charts-section">
     <img src="screenshots/batteries_storage_sw.png" alt="Batteries Storage Sw Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
@@ -1179,7 +1179,7 @@ te:&gt; 17M shares given to notes. $3B dilution($1.5B ATM) Dec 05</div>
     *   **October 15, 2025**: NioCorp sold 10,152,175 shares and 5,925,000 pre-funded warrants.
     *   **October 14, 2025**: NioCorp filed a 424B5 for common shares and pre-funded warrants.
     *   **October 14, 2025**: NioCorp filed an 8-K, furnishing preliminary results via Exhibit 99.1.</div>
-<h3 class="charts-section">Technicals & charts <small><i>(Fri, 12 Dec)</i></small></h3>
+<h3 class="charts-section">Technicals & charts <small><i>(Tue, 16 Dec)</i></small></h3>
 <div class="charts-section">
     <img src="screenshots/battery_materials_mining.png" alt="Battery Materials Mining Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
