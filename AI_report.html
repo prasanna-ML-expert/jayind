@@ -91,6 +91,14 @@
                     // Ensure Ticker in CSV data is compared case-insensitively
                     const industryData = data.filter(row => industryTickers.includes(row['Ticker'].toLowerCase()));
 
+                    // Sort industryData by 'mcap' in decreasing order
+
+                    industryData.sort((a, b) => {
+                        const mcapA = parseFloat(a['mcap']) || 0;
+                        const mcapB = parseFloat(b['mcap']) || 0;
+                        return mcapB - mcapA; // Decreasing order
+                    });
+                    
                     const placeholderDiv = document.getElementById(`fundamentals-table-${industryKey}`);
                     if (!placeholderDiv) {
                         console.warn(`Placeholder div not found for industry: ${industryKey}`);
@@ -313,7 +321,7 @@
     *   A Form 20-F Registration statement was filed.
 *   **December 3, 2025**: A quantum-resistant encryption proof of concept was announced.
 *   **December 1, 2025**: Arqit Quantum announced its plan to report financial results for the fiscal year ended September 30, 2025, and to hold a conference call on **December 9, 2025**.</div>
-<h3 class="charts-section">Technicals & charts <small><i>(Fri, 12 Dec)</i></small></h3>
+<h3 class="charts-section">Technicals & charts <small><i>(Tue, 16 Dec)</i></small></h3>
 <div class="charts-section">
     <img src="screenshots/quantum.png" alt="Quantum Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
@@ -458,7 +466,7 @@
 *   **September 18, 2025**: Arbe Robotics Ltd. filed a 6-K (Report of Foreign Issuer).
 *   **August 15, 2025**: Arbe Robotics Ltd. filed a 6-K (Report of Foreign Issuer).
 *   **August 7, 2025**: Arbe announced its Q2 2025 Financial Results, reporting revenues of $0.3 million and progress in OEM selection processes.</div>
-<h3 class="charts-section">Technicals & charts <small><i>(Wed, 10 Dec)</i></small></h3>
+<h3 class="charts-section">Technicals & charts <small><i>(Tue, 16 Dec)</i></small></h3>
 <div class="charts-section">
     <img src="screenshots/lidar_sensing.png" alt="Lidar Sensing Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
@@ -575,7 +583,7 @@
     *   **December 4, 2025**: Unusual Machines announced that its adjourned Annual Meeting of Stockholders will reconvene on **December 19, 2025**, as a virtual meeting to gather additional proxies and vote on the election of five directors.
 
 No relevant announcements or SEC filings dated today (December 15, 2025) or the very recent past were found for DPRO or SPAI.</div>
-<h3 class="charts-section">Technicals & charts <small><i>(Fri, 12 Dec)</i></small></h3>
+<h3 class="charts-section">Technicals & charts <small><i>(Tue, 16 Dec)</i></small></h3>
 <div class="charts-section">
     <img src="screenshots/uas_defense_robotics.png" alt="Uas Defense Robotics Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
@@ -682,7 +690,7 @@ No relevant announcements or SEC filings dated today (December 15, 2025) or the 
 *   **November 12, 2025**: Redwire announced a contract to deliver Uncrewed Aerial Systems to the Croatian Border Patrol.
 *   **November 10, 2025**: CEO Peter Anthony Cannito, Jr. bought 32,155 shares of the stock.
 *   **November 5, 2025**: Redwire Corporation reported its Third Quarter 2025 Financial Results.</div>
-<h3 class="charts-section">Technicals & charts <small><i>(Thu, 11 Dec)</i></small></h3>
+<h3 class="charts-section">Technicals & charts <small><i>(Tue, 16 Dec)</i></small></h3>
 <div class="charts-section">
     <img src="screenshots/space_launch_systems.png" alt="Space Launch Systems Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
@@ -1248,7 +1256,7 @@ te:&gt; 17M shares given to notes. $3B dilution($1.5B ATM) Dec 05</div>
 *   **October 31, 2025**: TeraWulf scheduled a conference call to discuss its Third Quarter 2025 Financial Results.
 *   **October 20, 2025**: A Form 4 filing detailed changes in beneficial ownership of securities.
 *   **October 17, 2025**: A Form 4 filing detailed changes in beneficial ownership of securities.</div>
-<h3 class="charts-section">Technicals & charts <small><i>(Wed, 10 Dec)</i></small></h3>
+<h3 class="charts-section">Technicals & charts <small><i>(Tue, 16 Dec)</i></small></h3>
 <div class="charts-section">
     <img src="screenshots/Hyperscalers.png" alt="Hyperscalers Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
@@ -1303,7 +1311,7 @@ te:&gt; 17M shares given to notes. $3B dilution($1.5B ATM) Dec 05</div>
 *   **December 12, 2025:** Northern Right Capital Management L.P. increased its holdings in Hut 8 Corp. by 48.1% during the second quarter, acquiring an additional 315,522 shares, bringing its total ownership to 971,852 shares, as reported in its most recent Form 13F filing with the SEC.
 *   **November 17, 2025:** Hut 8 announced the sale of a 310 MW power portfolio to TransAlta following successful optimization and long-term contract wins.
 *   **November 4, 2025:** Hut 8 reported Third Quarter 2025 Results, reporting ($0.07) earnings per share (EPS), surpassing analysts&#x27; consensus estimates of ($0.16) by $0.09. The company&#x27;s revenue for the quarter was $80.72 million, exceeding analysts&#x27; expectations of $64.70 million.</div>
-<h3 class="charts-section">Technicals & charts <small><i>(Fri, 12 Dec)</i></small></h3>
+<h3 class="charts-section">Technicals & charts <small><i>(Tue, 16 Dec)</i></small></h3>
 <div class="charts-section">
     <img src="screenshots/Mining.png" alt="Mining Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
@@ -1373,7 +1381,7 @@ leu:&gt; $3.5B shelf registration,Dec 4 $1.5B ATM</div>
 *   **November 7 2025:** Constellation reported its Third Quarter 2025 Results.
 *   **November 7 2025:** Constellation Energy Corp filed a 10-Q Quarterly Earnings Report.
 *   **November 7 2025:** Constellation Energy Corp filed an 8-K report indicating a material event.</div>
-<h3 class="charts-section">Technicals & charts <small><i>(Fri, 12 Dec)</i></small></h3>
+<h3 class="charts-section">Technicals & charts <small><i>(Tue, 16 Dec)</i></small></h3>
 <div class="charts-section">
     <img src="screenshots/new_nuclear_energy.png" alt="New Nuclear Energy Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
@@ -1384,7 +1392,7 @@ leu:&gt; $3.5B shelf registration,Dec 4 $1.5B ATM</div>
 <div id="fundamentals-table-Mag7" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="news-section">Recent News </h3>
 <div class="markdown-raw-content news-section"><p>No news available for this industry.</p></div>
-<h3 class="charts-section">Technicals & charts <small><i>(Thu, 11 Dec)</i></small></h3>
+<h3 class="charts-section">Technicals & charts <small><i>(Tue, 16 Dec)</i></small></h3>
 <div class="charts-section">
     <img src="screenshots/Mag7.png" alt="Mag7 Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
