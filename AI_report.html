@@ -50,9 +50,7 @@
                 // Use a regex to split by newlines, handling both 
  and 
 
-                const lines = csvText.split(/
-?
-/);
+                const lines = csvText.split(new RegExp('\\r?\\n'));
                 if (lines.length < 2) { // Check if there's at least a header and one data line
                     console.warn('CSV data is empty or contains only headers.');
                     // Explicitly update all placeholders with a "no data" message
