@@ -47,11 +47,11 @@
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const csvText = await response.text();
-                // Use a regex to split by newlines, handling both 
- and 
+                // Use a direct string split by newline, then map to remove carriage returns if present
+                const lines = csvText.split('\n').map(line => line.endsWith('\r') ? line.slice(0, -1) : line);
+                console.log('Parsed CSV lines:', lines);
 
-                const lines = csvText.split(new RegExp('\\r?\\n'));
-                if (lines.length < 2) { // Check if there's at least a header and one data line
+                if (lines.length < 2 || lines.every(line => line.trim() === '')) { // Check if there's at least a header and one data line, or if all lines are empty
                     console.warn('CSV data is empty or contains only headers.');
                     // Explicitly update all placeholders with a "no data" message
                     for (const industryKey in tickerMap) {
