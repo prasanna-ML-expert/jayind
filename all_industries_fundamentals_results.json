@@ -1,15 +1,304 @@
 {
   "updates": [
     {
-      "Industry": "service_robotics",
+      "Industry": "quantum",
       "Results": [
         {
-          "Ticker": "RICHTECH ROBOTICS RR",
+          "Ticker": "IONQ",
+          "Debt_M": 28.516,
+          "Cash_M": 1500.0,
+          "QRevenue_M": 39.9,
+          "QPL_M": -1050.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "QBTS",
+          "Debt_M": 32.198,
+          "Cash_M": 836.2,
+          "QRevenue_M": 3.74,
+          "QPL_M": -139.99,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "RGTI",
+          "Debt_M": 7.59,
+          "Cash_M": 446.9,
+          "QRevenue_M": 1.9,
+          "QPL_M": -201.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "QUBT",
+          "Debt_M": 2.58,
+          "Cash_M": 352.0,
+          "QRevenue_M": 0.384,
+          "QPL_M": 2.4,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "LAES",
+          "Debt_M": 5.4,
+          "Cash_M": 120.95,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "ARQQ",
+          "Debt_M": 0.0,
+          "Cash_M": 36.9,
+          "QRevenue_M": 0.235,
+          "QPL_M": -17.17,
+          "OrderBook_M": 0.0
+        }
+      ]
+    },
+    {
+      "Industry": "power_management_chips",
+      "Results": [
+        {
+          "Ticker": "NVTS",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 10.11,
+          "QPL_M": -19.23,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "ON",
+          "Debt_M": 3350.0,
+          "Cash_M": 2870.0,
+          "QRevenue_M": 1550.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "AOSL",
+          "Debt_M": 0.0,
+          "Cash_M": 169.57,
+          "QRevenue_M": 182.5,
+          "QPL_M": -10.81,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "COHR",
           "Debt_M": 0.0,
           "Cash_M": 0.0,
           "QRevenue_M": 0.0,
           "QPL_M": 0.0,
           "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "MPWR",
+          "Debt_M": 15.94,
+          "Cash_M": 1080.0,
+          "QRevenue_M": 737.18,
+          "QPL_M": 178.27,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "POWI",
+          "Debt_M": 0.0,
+          "Cash_M": 48.65,
+          "QRevenue_M": 118.9,
+          "QPL_M": -1.4,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "ALAB",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "INDI",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 53.7,
+          "QPL_M": -38.3,
+          "OrderBook_M": 7400.0
+        }
+      ]
+    },
+    {
+      "Industry": "lidar_sensing",
+      "Results": [
+        {
+          "Ticker": "AEVA",
+          "Debt_M": 6.12,
+          "Cash_M": 48.9,
+          "QRevenue_M": 3.6,
+          "QPL_M": -33.6,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "LAZR",
+          "Debt_M": 429.2,
+          "Cash_M": 74.0,
+          "QRevenue_M": 18.75,
+          "QPL_M": -48.5,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "MVIS",
+          "Debt_M": 46.6,
+          "Cash_M": 99.51,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "LIDR",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "OUST",
+          "Debt_M": 15.9,
+          "Cash_M": 247.0,
+          "QRevenue_M": 39.53,
+          "QPL_M": -22.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "ARBE",
+          "Debt_M": 0.0,
+          "Cash_M": 36.7,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        }
+      ]
+    },
+    {
+      "Industry": "autonomous_driving",
+      "Results": [
+        {
+          "Ticker": "MBLY",
+          "Debt_M": 61.0,
+          "Cash_M": 1769.0,
+          "QRevenue_M": 504.0,
+          "QPL_M": -96.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "AUR",
+          "Debt_M": 107.0,
+          "Cash_M": 1247.0,
+          "QRevenue_M": 1.0,
+          "QPL_M": -222.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "TSLA",
+          "Debt_M": 13780.0,
+          "Cash_M": 41640.0,
+          "QRevenue_M": 28095.0,
+          "QPL_M": 1400.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "XPEV",
+          "Debt_M": 2666.0,
+          "Cash_M": 6790.0,
+          "QRevenue_M": 2860.0,
+          "QPL_M": -50.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "KDK",
+          "Debt_M": 549.0,
+          "Cash_M": 168.0,
+          "QRevenue_M": 269.0,
+          "QPL_M": 13.0,
+          "OrderBook_M": 0.0
+        }
+      ]
+    },
+    {
+      "Industry": "uas_defense_robotics",
+      "Results": [
+        {
+          "Ticker": "DPRO",
+          "Debt_M": 0.25,
+          "Cash_M": 51.81,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "RCAT",
+          "Debt_M": 21.91,
+          "Cash_M": 206.43,
+          "QRevenue_M": 9.65,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "ZENA",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "ONDS",
+          "Debt_M": 18.03,
+          "Cash_M": 451.63,
+          "QRevenue_M": 10.1,
+          "QPL_M": 0.0,
+          "OrderBook_M": 22.2
+        },
+        {
+          "Ticker": "AVAV",
+          "Debt_M": 726.79,
+          "Cash_M": 588.48,
+          "QRevenue_M": 472.5,
+          "QPL_M": 21.87,
+          "OrderBook_M": 1400.0
+        },
+        {
+          "Ticker": "KTOS",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 347.6,
+          "QPL_M": 18.2,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "UMAC",
+          "Debt_M": 1.28,
+          "Cash_M": 81.14,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "SPAI",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        }
+      ]
+    },
+    {
+      "Industry": "service_robotics",
+      "Results": [
+        {
+          "Ticker": "RR",
+          "Debt_M": 6740.0,
+          "Cash_M": 7500.0,
+          "QRevenue_M": 5563.0,
+          "QPL_M": 1063.0,
+          "OrderBook_M": 102625.0
         },
         {
           "Ticker": "SERV",
@@ -21,7 +310,7 @@
         },
         {
           "Ticker": "PRCT",
-          "Debt_M": 0.0,
+          "Debt_M": 52.0,
           "Cash_M": 297.3,
           "QRevenue_M": 83.3,
           "QPL_M": -21.4,
@@ -50,9 +339,9 @@
       "Results": [
         {
           "Ticker": "RKLB",
-          "Debt_M": 516.62,
-          "Cash_M": 976.74,
-          "QRevenue_M": 155.1,
+          "Debt_M": 510.0,
+          "Cash_M": 807.9,
+          "QRevenue_M": 155.0,
           "QPL_M": -18.26,
           "OrderBook_M": 1100.0
         },
@@ -66,18 +355,18 @@
         },
         {
           "Ticker": "MNTS",
-          "Debt_M": 4.63,
-          "Cash_M": 0.67,
-          "QRevenue_M": 0.0,
-          "QPL_M": 0.0,
+          "Debt_M": 4.1,
+          "Cash_M": 0.7,
+          "QRevenue_M": 0.234,
+          "QPL_M": -11.1,
           "OrderBook_M": 0.0
         },
         {
           "Ticker": "SPCE",
-          "Debt_M": 421.84,
+          "Debt_M": 425.0,
           "Cash_M": 424.0,
-          "QRevenue_M": 0.365,
-          "QPL_M": -64.4,
+          "QRevenue_M": 0.4,
+          "QPL_M": -64.0,
           "OrderBook_M": 189.0
         },
         {
@@ -90,14 +379,661 @@
         },
         {
           "Ticker": "RDW",
-          "Debt_M": 184.7,
-          "Cash_M": 54.3,
+          "Debt_M": 220.0,
+          "Cash_M": 52.3,
           "QRevenue_M": 103.4,
           "QPL_M": -41.2,
           "OrderBook_M": 355.6
         }
       ]
+    },
+    {
+      "Industry": "earth_observation",
+      "Results": [
+        {
+          "Ticker": "PL",
+          "Debt_M": 446.2,
+          "Cash_M": 677.3,
+          "QRevenue_M": 81.3,
+          "QPL_M": -59.2,
+          "OrderBook_M": 734.5
+        },
+        {
+          "Ticker": "BKSY",
+          "Debt_M": 0.0,
+          "Cash_M": 147.6,
+          "QRevenue_M": 19.6,
+          "QPL_M": -15.3,
+          "OrderBook_M": 322.7
+        },
+        {
+          "Ticker": "SPIR",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "SATL",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "ASTS",
+          "Debt_M": 0.0,
+          "Cash_M": 1220.123,
+          "QRevenue_M": 14.7,
+          "QPL_M": -122.874,
+          "OrderBook_M": 1000.0
+        },
+        {
+          "Ticker": "IRDM",
+          "Debt_M": 0.0,
+          "Cash_M": 88.5,
+          "QRevenue_M": 226.9,
+          "QPL_M": 37.1,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "SATS",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 3610.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 1500.0
+        },
+        {
+          "Ticker": "VSAT",
+          "Debt_M": 5660.0,
+          "Cash_M": 1560.0,
+          "QRevenue_M": 1100.0,
+          "QPL_M": -158.0,
+          "OrderBook_M": 0.0
+        }
+      ]
+    },
+    {
+      "Industry": "ev_charging_infrastructure",
+      "Results": [
+        {
+          "Ticker": "EVGO",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "BLNK",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "CHPT",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "BEEM",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "ADSE",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        }
+      ]
+    },
+    {
+      "Industry": "evtol_air_mobility",
+      "Results": [
+        {
+          "Ticker": "ACHR",
+          "Debt_M": 88.6,
+          "Cash_M": 1640.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": -129.9,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "JOBY",
+          "Debt_M": 45.61,
+          "Cash_M": 978.1,
+          "QRevenue_M": 22.57,
+          "QPL_M": -401.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "EVEX",
+          "Debt_M": 168.09,
+          "Cash_M": 410.07,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "EVTL",
+          "Debt_M": 0.0,
+          "Cash_M": 123.4,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        }
+      ]
+    },
+    {
+      "Industry": "hydrogen_fuel_cells",
+      "Results": [
+        {
+          "Ticker": "FCEL",
+          "Debt_M": 102.9,
+          "Cash_M": 236.9,
+          "QRevenue_M": 49.3,
+          "QPL_M": -92.46,
+          "OrderBook_M": 160.0
+        },
+        {
+          "Ticker": "BE",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "PLUG",
+          "Debt_M": NaN,
+          "Cash_M": NaN,
+          "QRevenue_M": NaN,
+          "QPL_M": NaN,
+          "OrderBook_M": NaN
+        },
+        {
+          "Ticker": "HYLN",
+          "Debt_M": NaN,
+          "Cash_M": NaN,
+          "QRevenue_M": NaN,
+          "QPL_M": NaN,
+          "OrderBook_M": NaN
+        },
+        {
+          "Ticker": "BW",
+          "Debt_M": NaN,
+          "Cash_M": NaN,
+          "QRevenue_M": NaN,
+          "QPL_M": NaN,
+          "OrderBook_M": NaN
+        },
+        {
+          "Ticker": "BLDP",
+          "Debt_M": NaN,
+          "Cash_M": NaN,
+          "QRevenue_M": NaN,
+          "QPL_M": NaN,
+          "OrderBook_M": NaN
+        }
+      ]
+    },
+    {
+      "Industry": "batteries_storage_tech",
+      "Results": [
+        {
+          "Ticker": "QS",
+          "Debt_M": 0.0,
+          "Cash_M": 225.826,
+          "QRevenue_M": 0.0,
+          "QPL_M": -105.82,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "ENVX",
+          "Debt_M": 530.0,
+          "Cash_M": 558.82,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "SES",
+          "Debt_M": 1.9,
+          "Cash_M": 0.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "MVST",
+          "Debt_M": 429.08,
+          "Cash_M": 90.75,
+          "QRevenue_M": 123.3,
+          "QPL_M": -1.5,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "AMPX",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 6.09,
+          "QPL_M": -0.188,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "SLDP",
+          "Debt_M": 8.21,
+          "Cash_M": 47.29,
+          "QRevenue_M": 3.73,
+          "QPL_M": -25.9,
+          "OrderBook_M": 0.0
+        }
+      ]
+    },
+    {
+      "Industry": "batteries_storage_sw",
+      "Results": [
+        {
+          "Ticker": "ENPH",
+          "Debt_M": NaN,
+          "Cash_M": NaN,
+          "QRevenue_M": NaN,
+          "QPL_M": NaN,
+          "OrderBook_M": NaN
+        },
+        {
+          "Ticker": "STEM",
+          "Debt_M": 366.92,
+          "Cash_M": 43.1,
+          "QRevenue_M": 38.2,
+          "QPL_M": -23.8,
+          "OrderBook_M": 64.6
+        },
+        {
+          "Ticker": "FLNC",
+          "Debt_M": 390.8,
+          "Cash_M": 690.77,
+          "QRevenue_M": 1040.0,
+          "QPL_M": 17.95,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "EOSE",
+          "Debt_M": 448.5,
+          "Cash_M": 58.73,
+          "QRevenue_M": 30.5,
+          "QPL_M": -641.4,
+          "OrderBook_M": 7000.0
+        },
+        {
+          "Ticker": "GWH",
+          "Debt_M": 8.29,
+          "Cash_M": 0.0,
+          "QRevenue_M": 0.21,
+          "QPL_M": -10.38,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "KULR",
+          "Debt_M": 5.39,
+          "Cash_M": 20.59,
+          "QRevenue_M": 6.88,
+          "QPL_M": -6.97,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "TE",
+          "Debt_M": 622.3,
+          "Cash_M": 86.7,
+          "QRevenue_M": 210.52,
+          "QPL_M": -140.8,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "NRGV",
+          "Debt_M": 62.46,
+          "Cash_M": 32.7,
+          "QRevenue_M": 33.3,
+          "QPL_M": -26.8,
+          "OrderBook_M": 0.0
+        }
+      ]
+    },
+    {
+      "Industry": "battery_materials_mining",
+      "Results": [
+        {
+          "Ticker": "ATLX",
+          "Debt_M": 10.1,
+          "Cash_M": 20.98,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "ABAT",
+          "Debt_M": 0.27,
+          "Cash_M": 55.6,
+          "QRevenue_M": 0.94,
+          "QPL_M": -10.3,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "ALB",
+          "Debt_M": 3760.0,
+          "Cash_M": 1930.0,
+          "QRevenue_M": 1330.0,
+          "QPL_M": -18.79,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "SQM",
+          "Debt_M": 4720.0,
+          "Cash_M": 1490.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "SGML",
+          "Debt_M": 166.41,
+          "Cash_M": 6.11,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "ELVR",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "LAC",
+          "Debt_M": 405.32,
+          "Cash_M": 386.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "NB",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        }
+      ]
+    },
+    {
+      "Industry": "Hyperscalers",
+      "Results": [
+        {
+          "Ticker": "CRWV",
+          "Debt_M": 14084.0,
+          "Cash_M": 1900.0,
+          "QRevenue_M": 1365.0,
+          "QPL_M": -110.0,
+          "OrderBook_M": 55000.0
+        },
+        {
+          "Ticker": "NBIS",
+          "Debt_M": 4510.0,
+          "Cash_M": 4790.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "CORZ",
+          "Debt_M": 1160.0,
+          "Cash_M": 453.0,
+          "QRevenue_M": 81.0,
+          "QPL_M": -147.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "APLD",
+          "Debt_M": 703.0,
+          "Cash_M": 286.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "CIFR",
+          "Debt_M": 1040.0,
+          "Cash_M": 1200.0,
+          "QRevenue_M": 74.0,
+          "QPL_M": -3.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "WULF",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        }
+      ]
+    },
+    {
+      "Industry": "Mining",
+      "Results": [
+        {
+          "Ticker": "MARA",
+          "Debt_M": 3642.0,
+          "Cash_M": 826.4,
+          "QRevenue_M": 252.4,
+          "QPL_M": 123.1,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "CLSK",
+          "Debt_M": 285.35,
+          "Cash_M": 330.7,
+          "QRevenue_M": 180.2,
+          "QPL_M": 104.5,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "BITF",
+          "Debt_M": 644.6,
+          "Cash_M": 43.0,
+          "QRevenue_M": 198.6,
+          "QPL_M": 257.4,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "HIVE",
+          "Debt_M": 73.684,
+          "Cash_M": 637.0,
+          "QRevenue_M": 69.0,
+          "QPL_M": -46.0,
+          "OrderBook_M": 128.0
+        },
+        {
+          "Ticker": "BTBT",
+          "Debt_M": 18.3,
+          "Cash_M": 47.0,
+          "QRevenue_M": 87.3,
+          "QPL_M": -15.8,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "HUT",
+          "Debt_M": 150.0,
+          "Cash_M": 179.1,
+          "QRevenue_M": 30.5,
+          "QPL_M": 146.7,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "RIOT",
+          "Debt_M": 390.0,
+          "Cash_M": 33.49,
+          "QRevenue_M": 83.5,
+          "QPL_M": 50.6,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "IREN",
+          "Debt_M": 2300.0,
+          "Cash_M": 1030.0,
+          "QRevenue_M": 240.3,
+          "QPL_M": 384.6,
+          "OrderBook_M": 1250.0
+        }
+      ]
+    },
+    {
+      "Industry": "new_nuclear_energy",
+      "Results": [
+        {
+          "Ticker": "OKLO",
+          "Debt_M": 1.94,
+          "Cash_M": 410.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": -36.3,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "SMR",
+          "Debt_M": 0.0,
+          "Cash_M": 753.8,
+          "QRevenue_M": 8.24,
+          "QPL_M": -273.3,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "NNE",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "IMSR",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": 0.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "UEC",
+          "Debt_M": 0.0,
+          "Cash_M": 214.0,
+          "QRevenue_M": 0.0,
+          "QPL_M": -30.2,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "CCJ",
+          "Debt_M": 725.0,
+          "Cash_M": 565.0,
+          "QRevenue_M": 630.7,
+          "QPL_M": 32.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "LEU",
+          "Debt_M": 1210.0,
+          "Cash_M": 1600.0,
+          "QRevenue_M": 74.9,
+          "QPL_M": 3.9,
+          "OrderBook_M": 3900.0
+        },
+        {
+          "Ticker": "BWXT",
+          "Debt_M": 0.0,
+          "Cash_M": 0.0,
+          "QRevenue_M": 866.3,
+          "QPL_M": 82.2,
+          "OrderBook_M": 7400.0
+        }
+      ]
+    },
+    {
+      "Industry": "Mag7",
+      "Results": [
+        {
+          "Ticker": "AAPL",
+          "Debt_M": 112400.0,
+          "Cash_M": 35930.0,
+          "QRevenue_M": 94900.0,
+          "QPL_M": 14736.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "NVDA",
+          "Debt_M": 14770.0,
+          "Cash_M": 43210.0,
+          "QRevenue_M": 39300.0,
+          "QPL_M": 22091.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "META",
+          "Debt_M": 28830.0,
+          "Cash_M": 77810.0,
+          "QRevenue_M": 48385.0,
+          "QPL_M": 20838.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "MSFT",
+          "Debt_M": 120400.0,
+          "Cash_M": 28850.0,
+          "QRevenue_M": 64700.0,
+          "QPL_M": 22000.0,
+          "OrderBook_M": 0.0
+        },
+        {
+          "Ticker": "AVGO",
+          "Debt_M": 64220.0,
+          "Cash_M": 16200.0,
+          "QRevenue_M": 18000.0,
+          "QPL_M": 8520.0,
+          "OrderBook_M": 73000.0
+        },
+        {
+          "Ticker": "GOOG",
+          "Debt_M": 21607.0,
+          "Cash_M": 98490.0,
+          "QRevenue_M": 96500.0,
+          "QPL_M": 26500.0,
+          "OrderBook_M": 155000.0
+        },
+        {
+          "Ticker": "AMZN",
+          "Debt_M": 160400.0,
+          "Cash_M": 101200.0,
+          "QRevenue_M": 187800.0,
+          "QPL_M": 20000.0,
+          "OrderBook_M": 0.0
+        }
+      ]
     }
   ],
-  "updated_date": "2025-12-13T00:53:41.862373+00:00"
+  "updated_date": "2025-12-16T02:21:21.914972+00:00"
 }
