@@ -1,4 +1,4 @@
-Industry,Ticker,Debt_M,Cash_M,QRevenue_M,QPL_M,OrderBook_M,FDS_M,SI%,tutes,pcr
+Industry,Ticker,Debt_M,Cash_M,QRevenue_M,QPL_M,OrderBook_M,FDS,SI,tutes%,pcr
 Mag7,AAPL,112400.0,35930.0,94900.0,14736.0,0.0,0.0,0.0,0.0,0.72
 battery_materials_mining,ABAT,0.27,55.6,0.94,-10.3,0.0,129.97,11.86,0.0,0.0
 evtol_air_mobility,ACHR,88.6,1640.0,0.0,-129.9,0.0,733.0,15.17,43.99,0.2
