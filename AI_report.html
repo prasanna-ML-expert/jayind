@@ -82,9 +82,7 @@
                 }
                 const csvText = await response.text();
                 // Use a direct string split by newline, then map to remove carriage returns if present
-                const lines = csvText.split('
-').map(line => line.endsWith('
-') ? line.slice(0, -1) : line);
+                const lines = csvText.split('\n').map(line => line.endsWith('\r') ? line.slice(0, -1) : line);
                 console.log('Parsed CSV lines:', lines);
 
                 if (lines.length < 2 || lines.every(line => line.trim() === '')) { // Check if there's at least a header and one data line, or if all lines are empty
@@ -142,7 +140,7 @@
                     }
 
                     if (industryData.length > 0) {
-                        let tableHtml = '<table class="dataframe"><thead><tr>';
+                        let tableHtml = '<table class="\dataframe"><thead><tr>';
                         // Filter headers to only include those in columnsToDisplay and present in our actual data
                         const actualHeaders = headers.filter(h => columnsToDisplay.includes(h) && industryData[0].hasOwnProperty(h));
 
