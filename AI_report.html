@@ -107,6 +107,20 @@
             document.getElementById('dilution-inline-popup').dataset.currentTicker = ''; // Clear current ticker
         }
 
+
+        // Generic toggle function for sections
+        function toggleSection(contentId, headerElement) {
+            const content = document.getElementById(contentId);
+            const icon = headerElement.querySelector('.toggle-icon');
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.innerHTML = '&uarr;'; // Up arrow
+            } else {
+                content.classList.add('hidden');
+                icon.innerHTML = '&darr;'; // Down arrow
+            }
+        }
+
         // Function to fetch CSV data and render tables
         async function fetchAndRenderFundamentals() {
             try {
@@ -350,13 +364,21 @@
             color: #003366;
             text-decoration: none;
         }
+
+        .toggle-header { cursor: pointer; }
+        .toggle-icon { margin-left: 10px; }
     </style>
 </head>
 <body id="top">
     <div id="dilution-backdrop" class="dilution-backdrop"></div>
     <div id="dilution-inline-popup" class="dilution-inline-popup"></div>
     <h1>NASDAQ S&P Growth Stoks AI generated fundamentals technicals and Latest updates</h1>
-    <h2>Government and Prominent Investor News</h2>
+    
+<h2 class="toggle-header" onclick="toggleSection('govt-news-content', this)">
+    Government and Prominent Investor News <span class="toggle-icon">&darr;</span>
+</h2>
+
+<div id="govt-news-content" class="hidden">
 <div class="markdown-raw-content govt-news-section">Here&#x27;s a summary of recent announcements, news, contracts, projects, and investments in quantum tech, drone tech, robotics, space tech, satellite communication, nuclear energy, AI, and other innovative technologies, as of December 24, 2025:
 
 ## USA Government Organizations (DOD, DOE, NASA, NIST, FDA, HHS)
@@ -445,6 +467,7 @@
     *   Raised $40 million in Series A funding in November 2025 to build a GPU-sharing marketplace for AI workloads.
 *   **Black Forest Labs:**
     *   Raised $300 million in Series B funding in November 2025 to scale its generative visual AI platform.</div>
+</div>
 <h2>Industry Index</h2><nav><ul>
 <li><a href="#quantum">1. Quantum (ionq, qbts, rgti, qubt, laes, arqq)</a></li>
 <li><a href="#power_management_chips">2. Power Management Chips (nvts, on, aosl, cohr, mpwr, powi, alab, indi)</a></li>
