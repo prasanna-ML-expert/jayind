@@ -259,8 +259,6 @@
                                         <td colspan="${actualHeaders.length}" style="padding: 10px 8px;">
                                             <div style="position: relative; width: 100%; height: 10px; background: linear-gradient(to right, #4CAF50 0%, #FFEB3B 50%, #F44336 100%); border-radius: 5px;">
                                                 <div style="position: absolute; left: ${pricePosition}%; top: -5px; width: 20px; height: 20px; background-color: #333; border-radius: 50%; transform: translateX(-50%); box-shadow: 0 0 5px rgba(0,0,0,0.5);" title="Current Price: $${currentPrice.toFixed(2)}"></div>
-                                                <div style="position: absolute; left: 0%; top: 12px; font-size: 0.7em; color: #333; transform: translateX(-50%);">Floor: $${floorRange.min.toFixed(2)}</div>
-                                                <div style="position: absolute; right: 0%; top: 12px; font-size: 0.7em; color: #333; transform: translateX(50%);">Ceiling: $${ceilingRange.max.toFixed(2)}</div>
                                             </div>
                                         </td>
                                     </tr>
@@ -421,89 +419,132 @@
 </h2>
 
 <div id="govt-news-content" class="hidden">
-<div class="markdown-raw-content govt-news-section">Here&#x27;s a comprehensive list of recent announcements, news, contracts, projects, and investments by USA government organizations, Magnificent 7 companies, and prominent industry figures in quantum tech, drone tech, robotics, space tech, satellite communication, nuclear energy, AI, and other innovative technologies.
+<div class="markdown-raw-content govt-news-section">Here&#x27;s a compilation of recent announcements, news, contracts, projects, and rumors by USA government organizations, Magnificent 7 companies, and prominent industry figures in the fields of quantum tech, drone tech, robotics, space tech, satellite communication, nuclear energy, and AI.
 
-### **I. USA Governments, DOD, DOE, NASA, and Similar Organizations**
-
-**Quantum Technology**
-*   **IonQ Federal Establishment:** IonQ announced the creation of IonQ Federal in September 2025 to integrate its quantum computing and networking technologies for the U.S. government and allied agencies. This new entity builds on over $100 million in existing contracts with agencies such as the Air Force Research Lab, DARPA, Oak Ridge National Labs, and ARLIS.
-*   **NIST Contract for Quantum Computing Inc. (QCi):** The National Institute of Standards and Technology (NIST) awarded QCi a contract from June 2025 through April 2026 for the design and fabrication of thin-film lithium niobate (TFLN) photonic integrated circuits. This marks QCi&#x27;s first direct government contract for TFLN foundry services.
-*   **DARPA Quantum Benchmarking Initiative (QBI) 2026:** The Defense Advanced Research Projects Agency (DARPA) issued a Special Notice in October 2025 announcing the future Quantum Benchmarking Initiative (QBI) 2026 Solicitation. This initiative seeks novel approaches for constructing industrially useful fault-tolerant quantum computers. Responses were due by November 30, 2025.
-*   **Coldquanta, Inc. Contract:** Coldquanta, Inc. (doing business as Infleqtion) was awarded a $20,029,904.00 firm-fixed-price contract by a civilian federal agency for QGG APP TECHNOLOGY MATURATION AND DESIGN BASED ON AN ATOM CHIP, with a completion date of January 25, 2026.
-*   **Federal Quantum Resilience:** Federal contracts are increasingly demanding quantum resilience, as major cybersecurity agencies warn of &quot;harvest now, decrypt later&quot; attacks, putting pressure on federal agencies to fortify digital infrastructure.
-*   **Federal Funding Outlook:** The United States plans to allocate over $2.5 billion in federal quantum funding between 2026 and 2030.
-
-**Drone Technology**
-*   **War Department&#x27;s Drone Dominance Program:** The Department of Defense (DOD) launched a $1 billion Drone Dominance Program in December 2025 to accelerate the growth of the U.S. defense industrial base by developing U.S.-built attack drones. Phase one begins in February 2026, aiming to procure 30,000 drones at $5,000 each from up to 12 vendors. The program targets hundreds of thousands of drones by 2027.
-*   **&quot;Year of the Drones&quot; in 2026:** A December 2025 report by Stifel predicts that 2026 will be &quot;The Year of the Drones&quot; for U.S. military spending, driven by technological advancements, geopolitical threats, and new political will following changes in administration. Key allocations include billions in new funding for drone infrastructure, with expected growth in Collaborative Combat Aircraft (CCA), Loitering Munitions, Maritime Systems, and Counter-UAS (C-UAS).
-*   **Air Force CCA Program:** The Air Force awarded early design contracts to nine companies for the second increment of its Collaborative Combat Aircraft (CCA) program, encompassing a variety of drone concepts.
-*   **DHS Counter-UAS Contracts:** The Department of Homeland Security is expected to issue a surge in contracts for Counter-UAS (C-UAS) systems to protect stadiums and transport hubs during the 2026 World Cup.
-*   **Taiwanese Company Pursues Pentagon Contract:** Taiwan-based drone manufacturer Thunder Tiger is pursuing a US$1 billion Pentagon drone contract.
-
-**Robotics**
-*   **ARM Institute Project Call:** The Advanced Robotics in Manufacturing (ARM) Institute issued its final Technology Project Call 26-01 in December 2025, seeking projects to serve high-priority defense application areas. Approximately $2 million will be awarded to multiple projects focusing on topics such as multi-modal inputs for AI robotics in manufacturing, rapid re-tasking, multi-robot and multi-human collaboration, and mobile robotics. Concept papers are due by February 4, 2026.
-*   **Army OIB Modernization:** The Army Contracting Command – Red River Army Depot (ACC-RRAD) issued a Commercial Solutions Opening (CSO) for Organic Industrial Base (OIB) Modernization, which remains open until September 30, 2026. This initiative seeks innovative commercial technologies and services to modernize the Army&#x27;s manufacturing capabilities.
-*   **Trump Administration Robotics Focus:** The Trump administration is reportedly pivoting its focus to robotics technology, with the Commerce Secretary expressing commitment and considering an executive order on robotics in the coming year. The Department of Transportation is also preparing to announce a robotics task force.
-*   **Pentagon APFIT Program:** The Pentagon&#x27;s initial FY 2026 selections under the Accelerate the Procurement and Fielding of Innovative Technologies (APFIT) program include an &quot;Autonomous Unmanned Ground Vehicle for Ground Based Air Defense&quot; for the U.S. Marine Corps.
-
-**Space Technology**
-*   **NASA Artemis II Mission:** NASA&#x27;s Artemis II test flight, which will be the first crewed mission around the Moon, is slated to launch as early as February 2026. This mission will lay the groundwork for future crewed missions to Mars.
-*   **NASA SpaceTech REDDI 2025:** NASA launched a $2 million Space Technology Innovation contract called SpaceTech REDDI 2025 in May 2025. This program aims to award a maximum of 300 small research awards focusing on nearly 200 technology needs.
-*   **NASA STMD Announcement of Collaboration Opportunity (ACO):** NASA&#x27;s Space Technology Mission Directorate (STMD) anticipates releasing a Space Technology Announcement of Collaboration Opportunity (ACO) around July 30, 2025. This five-year umbrella opportunity will feature topic-specific appendix releases every six to twelve months to address evolving space technology needs.
-
-**Satellite Communication**
-*   **Space Force Contracting Opportunities:** The U.S. Space Force&#x27;s Commercial Satellite Communications Office (CSCO) forecasts $2.3 billion in contracting opportunities for commercial satellite services for fiscal years 2025 and 2026. This includes the &quot;maneuverable GEO program&quot; (approximately $895 million to $905 million) and the U.S. Army&#x27;s &quot;Satcom as a Managed Service&quot; (SATaaMS) program (approximately $195 million to $205 million).
-*   **Protected Tactical Satellite Communications-Global (PTS-G) Contract:** Five companies—Astranis Space Technologies, Boeing, Intelsat General (acquired by SES), Northrop Grumman, and Viasat—won positions on a five-year, $4 billion Space Force contract for the Protected Tactical Satellite Communications-Global (PTS-G) program in July 2025. This program aims to build and deliver communications satellites for a proliferated network in geostationary orbit.
-*   **Boeing ESS Contract:** The Space Force awarded Boeing a $2.8 billion contract in July 2025 for the Evolved Strategic Satellite Communications (ESS) program to modernize space-based nuclear command, control, and communications (NC3) capabilities.
-*   **SES Space &amp; Defense STN Contract:** SES Space &amp; Defense, a wholly-owned subsidiary of SES, was awarded an $89.6 million five-year Sustainment Tactical Network (STN) contract by the U.S. Army in August 2025 to provide COMSATCOM services.
+### USA Governments &amp; Similar Organizations
 
 **Nuclear Energy**
-*   **DOE Nuclear Reactor Pilot Program:** The U.S. Department of Energy (DOE) announced the selection of 11 projects for its Nuclear Reactor Pilot Program in August 2025. The goal is to construct, operate, and achieve criticality of at least three test reactors using the DOE authorization process by July 4, 2026. Companies involved include Aalo Atomics, Antares Nuclear, Atomic Alchemy, Deep Fission, Last Energy, Natura Resources, Oklo, Radiant Industries, Terrestrial Energy, and Valar Atomics.
-*   **Expanded Nuclear Energy Funding:** The DOE is directed to provide funding to facilitate 5 gigawatts of power uprates to existing nuclear reactors and to have 10 new large reactors with complete designs under construction by 2030.
-*   **Advanced Nuclear for AI Infrastructure:** DOE will designate DOE sites, including National Laboratories, for the use and deployment of advanced nuclear reactor technologies to power AI infrastructure and other critical national security needs.
-*   **U.S. Army Nuclear Energy Program:** The U.S. Army, with DOE support, is creating a program of record for the utilization of nuclear energy for both installation and operational energy, aiming to operate a nuclear reactor at a domestic military installation no later than September 30, 2028.
-*   **Executive Orders for Nuclear Innovation:** President Donald Trump issued executive orders in May 2025 aimed at &quot;unleashing the domestic nuclear base,&quot; reestablishing the United States as a global leader in nuclear energy, and bringing advanced nuclear technologies into domestic production as soon as possible.
+*   **Department of Energy (DOE)**:
+    *   The DOE officially launched President Trump&#x27;s Nuclear Reactor Pilot Program, announcing initial selections for 11 advanced reactor projects. The goal is to construct, operate, and achieve criticality of at least three test reactors by July 4, 2026. Participating companies are responsible for all associated costs.
+    *   The DOE will work with industry on these 11 projects, which include Aalo Atomics Inc., Antares Nuclear Inc., Atomic Alchemy Inc., Deep Fission Inc., Last Energy Inc., Oklo Inc., and Natura Resources LLC.
+    *   This program aims to streamline nuclear reactor testing and expedite commercial licensing activities.
+    *   In May 2025, President Trump signed four executive orders to revitalize the nuclear energy sector, directing actions by the DoD, DOE, and NRC to support increased development and deployment.
+    *   One executive order sets a goal to have three experimental reactor designs operational by July 4, 2026.
+    *   The President also directed the DoD and DOE to deploy advanced nuclear reactors to support national security objectives, including powering AI infrastructure and military bases, with a goal of deploying an advanced nuclear reactor at a domestic military base by September 30, 2028.
+*   **Nuclear Regulatory Commission (NRC)**:
+    *   The NRC has made decisions on three policy matters to facilitate the deployment of microreactors.
 
 **Artificial Intelligence (AI)**
-*   **President Trump&#x27;s AI Action Plan:** President Trump&#x27;s AI Action Plan, published in July 2025, outlines a strategy to accelerate AI innovation, build American AI infrastructure, and ensure the United States leads the global AI race.
-*   **GSA AI Initiatives:** The General Services Administration (GSA) is transforming federal services with AI. In 2025, changes to the Federal Risk and Authorization Management Program included the launch of FedRAMP 20x, introducing innovative approaches to simplify and streamline automated authorization for commercial cloud providers to access government AI services. The GSA also launched USAi in August 2025, a shared platform for federal agencies to experiment with AI models.
-*   **OPM AI Workforce Development:** The Office of Personnel Management (OPM) will initiate the first pilot wave of Project Management Fellows and Data Science Fellows programs by Spring 2026. These programs aim to rapidly infuse federal agencies with specialized technical expertise in emerging fields like AI and address critical skills gaps.
-*   **War Department xAI for Government Capabilities:** The War Department plans to provide xAI for Government Capabilities via GenAI.mil.
+*   **Department of Defense (DoD)**:
+    *   The DoD has requested $13.4 billion for AI and autonomy in Fiscal Year 2026, marking the largest single-year AI investment in defense history. This funding is for operational AI implementation across autonomous systems, decision support platforms, and mission-critical applications.
+    *   The War Department (DoD) announced an agreement with xAI for Government to expand the GenAI.mil platform with xAI&#x27;s frontier-grade AI capabilities, based on the Grok family of models. This integration, targeted for early 2026, will allow military and civilian personnel to use xAI&#x27;s capabilities at Impact Level 5 (IL5) for secure handling of Controlled Unclassified Information (CUI).
+    *   The FY 2026 National Defense Authorization Act (NDAA) includes provisions for AI, directing the development of AI Security Guidance to defend AI technologies from theft and requiring the Intelligence Community (IC) to identify &quot;commonly used&quot; AI systems and create &quot;model contract terms&quot; for AI systems to promote cost-effective adoption.
+*   **Department of Energy (DOE)**:
+    *   The DOE announced over $320 million in investments to advance the Genesis Mission&#x27;s AI capabilities, which includes building and deploying self-improving AI models and supporting 14 projects in robotics, automated laboratories, and autonomous control of large-scale experiments.
+    *   The DOE is partnering with Oracle and Nvidia to build its largest &quot;AI supercomputer&quot; at Argonne National Laboratory. A smaller supercomputer, Equinox, with 10,000 Nvidia chips, is scheduled for delivery in the first half of 2026.
+*   **Biden-Harris Administration**:
+    *   The Permitting Council announced the allocation of over $30 million in funding to enhance permitting efficiency across the federal government, which includes incorporating new technologies like AI and GIS mapping into permitting processes.
+    *   President Biden highlighted advancing ethical AI throughout government and harnessing the promise of AI to protect from peril during the State of the Union address in March 2024.
 
-**Latest Innovative Technologies (General)**
-*   **Federal IT Modernization:** Federal IT spending is expected to continue growing, creating opportunities in areas such as cloud migration, cybersecurity, and data management.
-*   **SBIR and STTR Programs:** Programs like Small Business Innovation Research (SBIR) and Small Business Technology Transfer (STTR) are designed to facilitate small business participation in the development of emerging technologies.
-*   **&quot;Commercial First&quot; Approach in Federal Contracting:** Key trends in federal contracting for 2026 include a stronger focus on &quot;Commercial First&quot; solutions and modernization of defense acquisitions, including the accelerated usage of agile acquisition methods like Other Transaction Authorities (OTAs) and Commercial Solutions Openings (CSOs).
+**Drone Tech / Robotics**
+*   **U.S. Air Force**:
+    *   Northrop Grumman&#x27;s autonomous drone wingman, Project Talon, received the designation YFQ-48A in December 2025, making it a leading contender for the Air Force&#x27;s Collaborative Combat Aircraft (CCA) program.
+    *   The Air Force previously awarded contracts to Anduril and General Atomics in April 2024 to develop the first increment of CCAs, with flight tests beginning in 2025.
+*   **U.S. Marine Corps**:
+    *   The Marine Corps plans to acquire 10,000 new first-person view (FPV) drones and expand training for their use in 2026, with a goal of equipping every infantry, reconnaissance, and littoral combat team by May.
+    *   In 2025, the Marine Corps awarded a $17 million contract for 8,000 Neros Archer UAVs and a $642 million base defense C-UAS contract, including Anduril Anvil systems.
+*   **U.S. Navy**:
+    *   The Navy is spending $3 billion on Counter-UAS (C-UAS) systems in 2026, deploying Raytheon Coyote and Anduril Roadrunner drone interceptors.
+    *   For 2026, the Navy is requesting $5.3 billion for unmanned systems, including $1.7 billion for autonomous USVs, $1.2 billion for software, and $734 million for UUVs.
+*   **DoD (General)**:
+    *   The War Department announced the first round of Accelerate the Procurement and Fielding of Innovative Technologies (APFIT) projects for FY 2026, including $20 million for Autonomous Unmanned Ground Vehicle (UGV) for Ground Based Air Defense (GBAD) for the U.S. Marine Corps, and $28 million for Domestic High Performance UAS Batteries for the U.S. Navy.
 
-### **II. Magnificent 7 Companies, Prominent Investors, and Industry Figures**
+**Space Tech &amp; Satellite Communication**
+*   **NASA**:
+    *   NASA launched a $2 million Space Technology Innovation contract called &quot;Space Technology Research, Development, Demonstration, and Infusion – 2025&quot; (SpaceTech REDDI 2025). This vehicle plans up to 300 small research awards focusing on nearly 200 technology needs, including sensors and instruments, autonomous systems, and advanced manufacturing.
+    *   NASA&#x27;s Communications Services Project is actively demonstrating next-generation satellite relay capabilities with commercial partners to modernize agency communications in near-Earth orbit. This initiative aims to transition from the TDRS system to commercial services by 2031.
+    *   Commercial partners include Amazon, SES Space &amp; Defense, and Telesat U.S. Services LLC, which are demonstrating various high-rate data exchanges and optical communications. Amazon Leo demonstrations are scheduled for early 2026 to test optical communication systems.
+    *   Boeing is working on thrusters for its Starliner spacecraft. NASA announced in November 2025 that Starliner is trusted to fly an uncrewed cargo mission to the ISS in April 2026.
+    *   The Nancy Grace Roman Space Telescope is expected to embark on its journey in fall 2026.
+    *   NASA announced a five-year standing opportunity to enter into Unfunded Space Act Agreements (USAAs) to stimulate the U.S. commercial space industry through partnerships to develop and demonstrate technologies.
+*   **U.S. Space Force**:
+    *   The Commercial Satellite Communications Office (CSCO) forecasts $2.3 billion in contracting opportunities for commercial satellite services for fiscal years 2025 and 2026.
+    *   The largest opportunity is the maneuverable GEO program, valued at $895 million to $905 million, seeking custom-built small satellites for geostationary Earth orbit.
+    *   The U.S. Army&#x27;s Satcom as a Managed Service (SATaaMS) program, valued at $195 million to $205 million, could be awarded in summer 2025 for companies to manage satellite communication services.
+    *   Boeing Co. was awarded a $2.8 billion contract for Evolved Strategic Satellite (ESS) communications space development and production, involving four ESS space vehicles, with work expected to be completed by December 31, 2033.
+    *   The FY 2026 APFIT Projects include $22.15 million for Deployable, Attritable Optical Systems for the U.S. Space Force.
+*   **Globalstar**:
+    *   Globalstar briefed the FCC in December 2025 on its pending request for U.S. market access for the C-3 system, a project representing over $1 billion investment in satellites and ground infrastructure.
 
-**Elon Musk (xAI, Tesla)**
-*   **xAI&#x27;s Nvidia GPU Investment:** Elon Musk announced that his AI company, xAI, intends to purchase at least 300,000 Nvidia B200 GPUs over the next year, with a planned expenditure of at least $9 billion, to significantly boost its processing power for developing complex AI systems and faster training cycles.
-*   **xAI Funding Round and Supercomputer:** xAI closed a monumental $6 billion Series B funding round in May 2024 from investors including Valor Equity Partners, Andreessen Horowitz, Sequoia Capital, and Saudi Arabia&#x27;s Prince Alwaleed Bin Talal. The funds will accelerate Grok chatbot development and the construction of a gigantic &quot;Gigafactory of Compute&quot; supercomputer, slated for completion by fall 2025.
-*   **Tesla&#x27;s AI and Robotics Focus:** Tesla is at a &quot;critical inflection point&quot; as it shifts its focus toward &quot;real-world&quot; applications of AI, including full self-driving technology and humanoid robots (Optimus). Musk views AI as a key driver of Tesla&#x27;s future value.
-*   **Proposed Tesla Investment in xAI:** Tesla is asking shareholders to approve a proposal for the company to invest in xAI, which has raised concerns about potential conflicts of interest for Musk.
-*   **Musk&#x27;s Surging Wealth:** Elon Musk&#x27;s net worth surged significantly in 2025, driven by the compounding valuations of his stakes in Tesla, SpaceX, and xAI.
+**Quantum Tech**
+*   **White House**:
+    *   The White House is preparing executive actions to accelerate federal adoption of quantum technology and post-quantum cryptography, with drafts in development since summer 2025. Post-quantum cryptography migration is expected to be a centerpiece, with directives likely to include deadlines for agencies and contractors.
+    *   The National Institute of Standards and Technology (NIST) released the first versions of post-quantum cryptography algorithms in 2023 and is working on guidance for migration.
+*   **Department of Defense (DoD)**:
+    *   The Defense Advanced Research Projects Agency (DARPA) Microsystems Technology Office issued a Special Notice in October 2025 announcing the future Quantum Benchmarking Initiative (QBI) 2026 Solicitation, seeking novel approaches to fault-tolerant quantum computing development.
+*   **Department of Energy (DOE)**:
+    *   The DOE announced a partnership between Fermi National Accelerator Laboratory and Qblox in November 2025, where Qblox will coordinate manufacturing, distribution, and support for the Quantum Instrumentation Control Kit (QICK) to advance U.S. quantum research.
+    *   In September 2025, the DOE strengthened its &quot;Quantum-in-Space&quot; collaboration with new partners IonQ, Honeywell, and EPB to advance commercialization and U.S. innovation in space-based quantum technologies.
+    *   IonQ also announced a memorandum of understanding with the US Department of Energy to deploy quantum technology in space and launched a federal unit for US government use cases.
+*   **Microsoft**:
+    *   Microsoft announced plans to build a quantum center in Maryland.
+    *   Microsoft launched its Quantum Ready Initiative to help enterprises with quantum computing use cases.
+*   **Rigetti Computing**:
+    *   Rigetti announced two orders for quantum computing systems totaling $5.7 million and a $5.8 million AFRL contract with QphoX.
+*   **D-Wave Quantum**:
+    *   D-Wave launched a US government unit and announced it would expand distribution of its quantum computing offerings via a partnership with Carahsoft, a premier IT distributor to the government.
+    *   D-Wave plans to outline its commercial quantum plans at CES 2026.
 
-**Peter Thiel**
-*   **Investments in Quantum Systems (Drone Tech):** Peter Thiel, through his family office Thiel Capital, was a prominent investor in German drone company Quantum Systems. Quantum Systems secured €180 million in an extension of its Series C financing round in November 2025, tripling its valuation to more than €3 billion. The company develops AI-powered surveillance drones for military and civilian use, with a focus on counter-drone systems.
-*   **Investment in Stark (Drone Tech):** Peter Thiel also backed Stark, a German defense tech startup focused on weaponized drone systems, which raised $62 million in fresh funding in August 2025, bringing its total capital raised to $100 million since its founding in 2024.
+### Magnificent 7 Companies &amp; Prominent Investors
 
-**Sam Altman**
-*   **Investments in AI, Nuclear Fusion, and Robotics:** Sam Altman&#x27;s 2025 investment activity centered on startups in AI-driven security, biotechnology, and nuclear fusion. He was a lead investor in Coco Robotics&#x27; $80 million Series B round in June 2025, a company developing small delivery robots using AI systems.
-*   **Investment in Helion Energy (Nuclear Fusion):** Altman&#x27;s latest investment in Helion Energy, a fusion power company, was part of its $425 million Series F round in January 2025.
-*   **OpenAI&#x27;s AI Expansion Plan:** Sam Altman unveiled an ambitious $1.4 trillion AI expansion plan for OpenAI, aiming to develop an unprecedented 30 gigawatts of computing power. In January 2025, he announced Stargate, a $500 billion AI infrastructure project in partnership with Oracle, SoftBank, Nvidia, and CoreWeave, which now plans to triple its data center capacity.
-*   **AI and Robotics Predictions:** Altman projects that by 2026, AI might unveil novel insights autonomously, and by 2027, robots capable of executing real-world tasks could emerge.
+**Artificial Intelligence (AI)**
+*   **Microsoft**:
+    *   Named a top AI stock for 2026 by Wedbush analyst Dan Ives.
+    *   Wall Street is reportedly underestimating Microsoft&#x27;s Azure cloud computing program, expected to grow significantly due to AI.
+    *   Microsoft has partnered with OpenAI, increased spending on AI infrastructure, and is promoting the integration of its Copilot AI offering in Office 365.
+    *   Microsoft is among the &quot;Magnificent Seven&quot; giants with billion-dollar quantum programs.
+*   **Alphabet (Google)**:
+    *   Ranked as the No. 1 Magnificent Seven stock for 2026 by an analyst, citing its dominant internet search leveraging powerful AI tools for relevant answers, AI Overviews, and optimizing advertising.
+    *   Alphabet is developing its own Tensor Processing Units (TPUs) as an alternative to Nvidia GPUs.
+    *   Alphabet has designed its own quantum processors, dubbed Willow.
+*   **Nvidia**:
+    *   Despite not being Ives&#x27; top pick, Wedbush Securities still considers Nvidia a top technology stock for 2026 due to its leading role in providing high-powered GPUs to data centers, powering the AI revolution.
+    *   Nvidia is quietly building a full-spectrum quantum computing suite.
+    *   Nvidia is partnering with DOE to build an AI supercomputer.
+*   **Tesla (Elon Musk)**:
+    *   Named a top AI stock for 2026 by Wedbush analyst Dan Ives.
+    *   Elon Musk&#x27;s xAI for Government is partnering with the US War Department to expand the GenAI.mil platform, with initial deployment of xAI&#x27;s capabilities targeted for early 2026.
+*   **Amazon**:
+    *   Amazon is exploring quantum computing technology.
+    *   Amazon&#x27;s underperformance in 2025 was partially attributed to its substantial AI infrastructure spending, including $125 billion, with specific projects like a 1,200-acre data center in Indiana.
+    *   Amazon has designed its own quantum processors, dubbed Ocelot.
+*   **Apple**:
+    *   Named a top AI stock for 2026 by Wedbush analyst Dan Ives, highlighting its &quot;invisible AI&quot; strategy and plans to ramp up AI CapEx.
+*   **Meta Platforms**:
+    *   Focusing on developing &quot;personal superintelligence&quot; through AI.
+    *   Meta Platforms has shelled out enormous sums of cash for Meta AI, impacting its bottom line.
+*   **Oracle**:
+    *   Partnering with the Department of Energy and Nvidia to build the DOE&#x27;s largest &quot;AI supercomputer&quot; at Argonne National Laboratory.
 
-**Magnificent 7 Companies (Apple, Microsoft, Amazon, Alphabet, Meta, Nvidia, Tesla)**
-*   **Heavy AI Investments:** The &quot;Magnificent Seven&quot; companies are making massive investments in AI infrastructure, with capital expenditures for AI expected to continue growing in 2026.
-*   **Nvidia and Tesla in Quantum &amp; Robotics:** Nvidia and Tesla are identified as spearheading AI&#x27;s next frontiers in quantum computing and robotics.
-*   **Nvidia&#x27;s Quantum AI:** Nvidia supports quantum simulation through its CUDA-Q framework, bridging classical and quantum computing.
-*   **Google (Alphabet) Quantum AI:** Google Quantum AI continues to pursue scalable error-corrected processors and recently announced its Willow chip demonstrated a verifiable quantum computing advantage.
-*   **Microsoft and Amazon in Quantum:** Microsoft (through its Azure Quantum platform) and Amazon (through its Braket cloud service) also have active quantum computing programs.
-*   **Microsoft Copilot Adoption:** Analysts estimate that AI cloud adoption could add up to $25 billion to Microsoft&#x27;s revenue by the end of its FY 2026, driven by the growing adoption of its AI-powered assistant, Copilot.
-*   **Amazon&#x27;s Robotics Expansion:** Amazon is expanding its robotics program as part of its business diversification strategy.
-*   **Meta&#x27;s AI Capital Expenditures:** Meta&#x27;s capital expenditures for AI are projected to be between $70 billion and $72 billion in 2025 and are expected to increase in 2026.
-*   **Amazon&#x27;s AI Infrastructure Spending:** Amazon&#x27;s AI infrastructure spending constituted a significant portion of the $400 billion Big Tech allocated to chips, data centers, and storage solution services in 2025.</div>
+**Quantum Tech**
+*   **Alphabet, Amazon, Microsoft, Nvidia**:
+    *   Several members of the &quot;Magnificent Seven&quot; are actively exploring quantum computing technology alongside their existing generative AI efforts.
+    *   Alphabet (Willow), Amazon (Ocelot), and Microsoft (Majorana) have designed their own custom quantum processors.
+    *   Nvidia is building a quantum AI ecosystem.
+*   **IonQ, Rigetti Computing, D-Wave Quantum**:
+    *   Pure-play quantum developers like IonQ, Rigetti Computing, and D-Wave Quantum have outperformed the S&amp;P 500 in 2025 and are considered potential acquisition targets for the &quot;Magnificent Seven.&quot;
+    *   IonQ announced the purchase of Vector Atomic, completed the Oxford Ionics acquisition, and inked a US Department of Energy memorandum of understanding to deploy quantum technology in space.
+*   **Microsoft, Nvidia, OpenAI**:
+    *   An agreement includes partnerships with Microsoft, Nvidia, and OpenAI, laying the foundation for joint research in quantum hardware and applications.
+
+**Space Tech &amp; Satellite Communication**
+*   **SpaceX (Elon Musk)**:
+    *   NASA awarded SpaceX a $2.89 billion contract in 2021 to adapt its Starship spacecraft as the lunar landing vehicle for Artemis III and beyond. However, due to serial failures of the Starship rocket, NASA announced in October 2025 that it was opening up the contract to competitors, including Blue Origin and Lockheed Martin.
+*   **Blue Origin (Jeff Bezos)**:
+    *   Blue Origin&#x27;s Blue Moon spacecraft is planned to lift off as early as January 2026, aiming for a landing in the south lunar pole, carrying cargo and potentially crew.
+    *   Blue Origin is now a competitor for NASA&#x27;s lunar landing vehicle contract.
+*   **Amazon (Project Kuiper)**:
+    *   Amazon Leo demonstrations are scheduled to begin in early 2026 to test the pointing, acquisition, and tracking capabilities of their optical communications systems for NASA missions.</div>
 </div>
 <h2>Industry Index</h2><nav><ul>
 <li><a href="#quantum">1. Quantum (ionq, qbts, rgti, qubt, laes, arqq)</a></li>
