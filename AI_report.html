@@ -261,7 +261,7 @@
 
                             let lineHtml = '';
                             // Only draw the line if we have valid price, floor, and ceiling, and a valid range
-                            if (!isNaN(currentPrice) && !isNaN(floorRange.min) && !isNaN(ceilingRange.max) && floorRange.max > floorRange.min) { // Ensure floor.max for the base of the gradient
+                            if (!isNaN(currentPrice) && !isNaN(floorRange.min) && !isNaN(ceilingRange.max)) { // Ensure floor.max for the base of the gradient
                                 const overallMin = floorRange.min;
                                 const overallMax = ceilingRange.max;
 
