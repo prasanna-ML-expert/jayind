@@ -34,13 +34,26 @@
         // Function to parse price ranges like "$185.00 – $205.00" or single values "$93.00"
         function parsePriceRange(rangeStr) {
             if (!rangeStr || typeof rangeStr !== 'string') return { min: NaN, max: NaN };
-            const cleanedStr = rangeStr.replace(/[^\d.\s–-]+/g, '').trim(); // Remove currency symbols and other non-numeric/separator chars
-            const parts = cleanedStr.split(/[–-]/).map(p => parseFloat(p.replace(/,/g, ''))); // Split by en-dash or hyphen
 
-            if (parts.length === 1 && !isNaN(parts[0])) {
-                return { min: parts[0], max: parts[0] }; // Single value
-            } else if (parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
-                return { min: Math.min(parts[0], parts[1]), max: Math.max(parts[0], parts[1]) };
+            // Attempt to match a range pattern: e.g., "$X.XX - $Y.YY" or "$X.XX – $Y.YY"
+            // Use non-greedy quantifiers and capture numbers
+            const rangeMatch = rangeStr.match(/(\d+(?:\.\d+)?)\s*[–-]\s*(\d+(?:\.\d+)?)/);
+
+            if (rangeMatch && rangeMatch.length >= 4) { // group 1 is first price, group 3 is second price
+                const num1 = parseFloat(rangeMatch[1].replace(/,/g, ''));
+                const num2 = parseFloat(rangeMatch[3].replace(/,/g, ''));
+                if (!isNaN(num1) && !isNaN(num2)) {
+                    return { min: Math.min(num1, num2), max: Math.max(num1, num2) };
+                }
+            }
+
+            // If no range pattern is found, try to extract the first single number
+            const singleNumberMatch = rangeStr.match(/\d+(?:\.\d+)?/);
+            if (singleNumberMatch && singleNumberMatch.length >= 1) {
+                const num = parseFloat(singleNumberMatch[0].replace(/,/g, ''));
+                if (!isNaN(num)) {
+                    return { min: num, max: num };
+                }
             }
             return { min: NaN, max: NaN };
         }
@@ -258,7 +271,7 @@
                                     <tr class="price-line-row">
                                         <td colspan="${actualHeaders.length}" style="padding: 0px;">
                                             <div style="position: relative; width: 100%; height: 4px; background: linear-gradient(to right, #4CAF50 0%, #FFEB3B 50%, #F44336 100%); border-radius: 5px;">
-                                                <div style="position: absolute; left: ${pricePosition}%; top: -2px; width: 10px; height: 10px; background-color: #333; border-radius: 50%; transform: translateX(-50%); box-shadow: 0 0 5px rgba(0,0,0,0.5);" title="Current Price: $${currentPrice.toFixed(2)}"></div>
+                                                <div style="position: absolute; left: ${pricePosition}%; top: -3px; width: 10px; height: 10px; background-color: #333; border-radius: 50%; transform: translateX(-50%); box-shadow: 0 0 5px rgba(0,0,0,0.5);" title="Current Price: $${currentPrice.toFixed(2)}"></div>
                                             </div>
                                         </td>
                                     </tr>
