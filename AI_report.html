@@ -36,10 +36,10 @@
             if (!rangeStr || typeof rangeStr !== 'string') return { min: NaN, max: NaN };
 
             // Clean the string by removing dollar signs and commas first
-            const cleanStr = rangeStr.replace(/[$,]/g, '');
+            const cleanStr = rangeStr.replace(/[$,]/g, '').trim();
 
             // Attempt to match a range pattern: e.g., "X.XX - Y.YY" or "X.XX – Y.YY"
-            const rangeMatch = cleanStr.match(/(\d+(?:\.\d+)?)\s*[–-]\s*(\d+(?:\[0-9]2)?)/);
+            const rangeMatch = cleanStr.match(/(\d+(?:\.\d+)?)\s*[–-]\s*(\d+(?:\.\d+)?)/);
 
             if (rangeMatch && rangeMatch.length >= 3) { // group 0 is full match, 1 is first number, 2 is second number
                 const num1 = parseFloat(rangeMatch[1]);
