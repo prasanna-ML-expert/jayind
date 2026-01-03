@@ -256,9 +256,9 @@
 
                                 lineHtml = `
                                     <tr class="price-line-row">
-                                        <td colspan="${actualHeaders.length}" style="padding: 10px 8px;">
-                                            <div style="position: relative; width: 100%; height: 10px; background: linear-gradient(to right, #4CAF50 0%, #FFEB3B 50%, #F44336 100%); border-radius: 5px;">
-                                                <div style="position: absolute; left: ${pricePosition}%; top: -5px; width: 20px; height: 20px; background-color: #333; border-radius: 50%; transform: translateX(-50%); box-shadow: 0 0 5px rgba(0,0,0,0.5);" title="Current Price: $${currentPrice.toFixed(2)}"></div>
+                                        <td colspan="${actualHeaders.length}" style="padding: 10px 0px;">
+                                            <div style="position: relative; width: 100%; height: 4px; background: linear-gradient(to right, #4CAF50 0%, #FFEB3B 50%, #F44336 100%); border-radius: 5px;">
+                                                <div style="position: absolute; left: ${pricePosition}%; top: -5px; width: 10px; height: 10px; background-color: #333; border-radius: 50%; transform: translateX(-50%); box-shadow: 0 0 5px rgba(0,0,0,0.5);" title="Current Price: $${currentPrice.toFixed(2)}"></div>
                                             </div>
                                         </td>
                                     </tr>
@@ -419,132 +419,94 @@
 </h2>
 
 <div id="govt-news-content" class="hidden">
-<div class="markdown-raw-content govt-news-section">Here&#x27;s a compilation of recent announcements, news, contracts, projects, and rumors by USA government organizations, Magnificent 7 companies, and prominent industry figures in the fields of quantum tech, drone tech, robotics, space tech, satellite communication, nuclear energy, and AI.
+<div class="markdown-raw-content govt-news-section">Here&#x27;s a summary of recent announcements, news, contracts, projects, and investments in quantum tech, drone tech, robotics, space tech, satellite communication, nuclear energy, and AI from USA government organizations, the Magnificent 7 companies, and prominent industry figures.
 
-### USA Governments &amp; Similar Organizations
+## USA Government Organizations (DOD, DOE, NASA, etc.)
+
+**Quantum Technology**
+*   The U.S. Department of Energy (DOE) announced $625 million in funding to renew its five National Quantum Information Science Research Centers, aiming to advance quantum computing, simulation, networking, and sensing technologies. This funding will be distributed over five years, with $125 million in Fiscal Year 2025.
+*   IonQ has signed a memorandum of understanding with the US Department of Energy to deploy quantum technology in space and has also launched a federal unit to focus on US government use cases.
+*   SandboxAQ secured a Pentagon deal for its AQtive Guard platform, which will assist the government in identifying and rectifying vulnerabilities in current systems to prepare for quantum threats.
+*   Federal contracts are increasingly requiring quantum-safe standards, positioning companies developing next-generation security platforms for significant government opportunities.
+
+**Drone Technology**
+*   The Department of Defense (DOD) is initiating a $1 billion &quot;Drone Dominance Program&quot; to establish an industrial base for US-built attack drones. Phase one of this program is set to commence in February 2026, with an initial goal to acquire 30,000 drones.
+*   The Marine Corps plans to acquire 10,000 new drones in 2026 to expand its first-person view drone capabilities and increase troop training.
+*   Elsight Ltd secured a US$21.2 million contract for its Halo platform, providing multi-link bonding technology to ensure beyond-visual-line-of-sight drone connectivity for uncrewed aerial and ground systems for a US military customer.
+*   Skydio&#x27;s X10D drone has been added to the DoD&#x27;s elite Blue UAS List, facilitating its adoption for secure, high-performance missions.
+*   Anduril secured a $200 million contract for Marine Corps drone defense.
+*   Red Cat Holdings won a U.S. Army contract for its advanced drone technology.
+*   Darkhive was awarded a $5 million contract by the US Air Force for autonomy software integration.
+*   Leidos and Elroy Air are preparing to demonstrate an autonomous resupply aircraft for the U.S. Marines, with flight tests scheduled for July 2024.
+*   DroneShield secured an $8.2 million contract to supply handheld counter-drone systems and related services to a Western military customer.
 
 **Nuclear Energy**
-*   **Department of Energy (DOE)**:
-    *   The DOE officially launched President Trump&#x27;s Nuclear Reactor Pilot Program, announcing initial selections for 11 advanced reactor projects. The goal is to construct, operate, and achieve criticality of at least three test reactors by July 4, 2026. Participating companies are responsible for all associated costs.
-    *   The DOE will work with industry on these 11 projects, which include Aalo Atomics Inc., Antares Nuclear Inc., Atomic Alchemy Inc., Deep Fission Inc., Last Energy Inc., Oklo Inc., and Natura Resources LLC.
-    *   This program aims to streamline nuclear reactor testing and expedite commercial licensing activities.
-    *   In May 2025, President Trump signed four executive orders to revitalize the nuclear energy sector, directing actions by the DoD, DOE, and NRC to support increased development and deployment.
-    *   One executive order sets a goal to have three experimental reactor designs operational by July 4, 2026.
-    *   The President also directed the DoD and DOE to deploy advanced nuclear reactors to support national security objectives, including powering AI infrastructure and military bases, with a goal of deploying an advanced nuclear reactor at a domestic military base by September 30, 2028.
-*   **Nuclear Regulatory Commission (NRC)**:
-    *   The NRC has made decisions on three policy matters to facilitate the deployment of microreactors.
+*   The U.S. Department of Energy (DOE) has selected 11 projects for a new nuclear reactor pilot program. The program aims to fast-track these projects through the development process and expedite authorization procedures for nuclear reactors.
+*   The DOE announced $11 million in awards to five U.S. companies for the development and licensing of new or modified transportation packages for high-assay low-enriched uranium.
+*   Idaho National Laboratory successfully created the first batch of fuel salt for the Molten Chloride Reactor Experiment.
+*   The DOE selected the Tennessee Valley Authority and Holtec Government Services to support early deployments of advanced light-water small modular reactors in the United States.
+*   General Atomics finalized the concept for a new fast modular reactor (FMR) design, one of three early-stage concept projects supported by the DOE&#x27;s Advanced Reactor Demonstration Program.
+*   Texas-based HGP Intelligent Energy submitted a proposal to the DOE under President Donald Trump&#x27;s Genesis Mission to repurpose two retired U.S. Navy nuclear reactors to power an AI data center project at Oak Ridge National Laboratory in Tennessee.
 
-**Artificial Intelligence (AI)**
-*   **Department of Defense (DoD)**:
-    *   The DoD has requested $13.4 billion for AI and autonomy in Fiscal Year 2026, marking the largest single-year AI investment in defense history. This funding is for operational AI implementation across autonomous systems, decision support platforms, and mission-critical applications.
-    *   The War Department (DoD) announced an agreement with xAI for Government to expand the GenAI.mil platform with xAI&#x27;s frontier-grade AI capabilities, based on the Grok family of models. This integration, targeted for early 2026, will allow military and civilian personnel to use xAI&#x27;s capabilities at Impact Level 5 (IL5) for secure handling of Controlled Unclassified Information (CUI).
-    *   The FY 2026 National Defense Authorization Act (NDAA) includes provisions for AI, directing the development of AI Security Guidance to defend AI technologies from theft and requiring the Intelligence Community (IC) to identify &quot;commonly used&quot; AI systems and create &quot;model contract terms&quot; for AI systems to promote cost-effective adoption.
-*   **Department of Energy (DOE)**:
-    *   The DOE announced over $320 million in investments to advance the Genesis Mission&#x27;s AI capabilities, which includes building and deploying self-improving AI models and supporting 14 projects in robotics, automated laboratories, and autonomous control of large-scale experiments.
-    *   The DOE is partnering with Oracle and Nvidia to build its largest &quot;AI supercomputer&quot; at Argonne National Laboratory. A smaller supercomputer, Equinox, with 10,000 Nvidia chips, is scheduled for delivery in the first half of 2026.
-*   **Biden-Harris Administration**:
-    *   The Permitting Council announced the allocation of over $30 million in funding to enhance permitting efficiency across the federal government, which includes incorporating new technologies like AI and GIS mapping into permitting processes.
-    *   President Biden highlighted advancing ethical AI throughout government and harnessing the promise of AI to protect from peril during the State of the Union address in March 2024.
+**AI &amp; Latest Innovative Technologies**
+*   The Pentagon&#x27;s Chief Digital and Artificial Intelligence Office awarded four tech companies—Anthropic, Google, OpenAI, and xAI—individual contracts valued at up to $200 million. These contracts are for providing advanced AI capabilities to address national security challenges.
+*   Elon Musk&#x27;s company, xAI, also announced its &quot;Grok for Government&quot; offering following the Pentagon contract.
+*   The U.S. Department of Energy (DOE), in collaboration with two dozen AI labs and companies, announced partnerships for the &quot;Genesis Mission,&quot; aimed at enhancing the use of artificial intelligence in scientific research. Private sector partners include OpenAI, Anthropic, Google DeepMind, Nvidia, Intel, Oracle CoreWeave, and Amazon Web Services.
+*   Accenture Federal Services partnered with Google Public Sector to establish the &quot;Federal AI Solution Factory,&quot; a dedicated hub for rapidly prototyping and piloting AI solutions.
+*   Empower AI secured a $45 million task order to modernize IT infrastructure for military treatment facilities for defense and healthcare agencies.
+*   The National Geospatial-Intelligence Agency (NGA) selected Enabled Intelligence to provide AI/ML data labeling services under a $708 million SEQUOIA contract.
 
-**Drone Tech / Robotics**
-*   **U.S. Air Force**:
-    *   Northrop Grumman&#x27;s autonomous drone wingman, Project Talon, received the designation YFQ-48A in December 2025, making it a leading contender for the Air Force&#x27;s Collaborative Combat Aircraft (CCA) program.
-    *   The Air Force previously awarded contracts to Anduril and General Atomics in April 2024 to develop the first increment of CCAs, with flight tests beginning in 2025.
-*   **U.S. Marine Corps**:
-    *   The Marine Corps plans to acquire 10,000 new first-person view (FPV) drones and expand training for their use in 2026, with a goal of equipping every infantry, reconnaissance, and littoral combat team by May.
-    *   In 2025, the Marine Corps awarded a $17 million contract for 8,000 Neros Archer UAVs and a $642 million base defense C-UAS contract, including Anduril Anvil systems.
-*   **U.S. Navy**:
-    *   The Navy is spending $3 billion on Counter-UAS (C-UAS) systems in 2026, deploying Raytheon Coyote and Anduril Roadrunner drone interceptors.
-    *   For 2026, the Navy is requesting $5.3 billion for unmanned systems, including $1.7 billion for autonomous USVs, $1.2 billion for software, and $734 million for UUVs.
-*   **DoD (General)**:
-    *   The War Department announced the first round of Accelerate the Procurement and Fielding of Innovative Technologies (APFIT) projects for FY 2026, including $20 million for Autonomous Unmanned Ground Vehicle (UGV) for Ground Based Air Defense (GBAD) for the U.S. Marine Corps, and $28 million for Domestic High Performance UAS Batteries for the U.S. Navy.
+## Magnificent 7 Companies &amp; Prominent Investors/Industry Figures
 
-**Space Tech &amp; Satellite Communication**
-*   **NASA**:
-    *   NASA launched a $2 million Space Technology Innovation contract called &quot;Space Technology Research, Development, Demonstration, and Infusion – 2025&quot; (SpaceTech REDDI 2025). This vehicle plans up to 300 small research awards focusing on nearly 200 technology needs, including sensors and instruments, autonomous systems, and advanced manufacturing.
-    *   NASA&#x27;s Communications Services Project is actively demonstrating next-generation satellite relay capabilities with commercial partners to modernize agency communications in near-Earth orbit. This initiative aims to transition from the TDRS system to commercial services by 2031.
-    *   Commercial partners include Amazon, SES Space &amp; Defense, and Telesat U.S. Services LLC, which are demonstrating various high-rate data exchanges and optical communications. Amazon Leo demonstrations are scheduled for early 2026 to test optical communication systems.
-    *   Boeing is working on thrusters for its Starliner spacecraft. NASA announced in November 2025 that Starliner is trusted to fly an uncrewed cargo mission to the ISS in April 2026.
-    *   The Nancy Grace Roman Space Telescope is expected to embark on its journey in fall 2026.
-    *   NASA announced a five-year standing opportunity to enter into Unfunded Space Act Agreements (USAAs) to stimulate the U.S. commercial space industry through partnerships to develop and demonstrate technologies.
-*   **U.S. Space Force**:
-    *   The Commercial Satellite Communications Office (CSCO) forecasts $2.3 billion in contracting opportunities for commercial satellite services for fiscal years 2025 and 2026.
-    *   The largest opportunity is the maneuverable GEO program, valued at $895 million to $905 million, seeking custom-built small satellites for geostationary Earth orbit.
-    *   The U.S. Army&#x27;s Satcom as a Managed Service (SATaaMS) program, valued at $195 million to $205 million, could be awarded in summer 2025 for companies to manage satellite communication services.
-    *   Boeing Co. was awarded a $2.8 billion contract for Evolved Strategic Satellite (ESS) communications space development and production, involving four ESS space vehicles, with work expected to be completed by December 31, 2033.
-    *   The FY 2026 APFIT Projects include $22.15 million for Deployable, Attritable Optical Systems for the U.S. Space Force.
-*   **Globalstar**:
-    *   Globalstar briefed the FCC in December 2025 on its pending request for U.S. market access for the C-3 system, a project representing over $1 billion investment in satellites and ground infrastructure.
+**Meta Platforms (Robotics, AI)**
+*   Meta Platforms is establishing a new division within its Reality Labs unit dedicated to developing AI-powered humanoid robots designed to assist with physical tasks. The initiative is led by Marc Whitten, former CEO of Cruise.
+*   Meta plans to develop its own humanoid robot hardware, initially for household chores, and aims to create AI, sensors, and software that can power robots manufactured by various companies.
+*   The company has begun discussions with robotics firms such as Unitree Robotics and Figure AI regarding potential partnerships for prototypes.
+*   Meta reportedly plans to invest $65 billion in robotics development in 2025.
 
-**Quantum Tech**
-*   **White House**:
-    *   The White House is preparing executive actions to accelerate federal adoption of quantum technology and post-quantum cryptography, with drafts in development since summer 2025. Post-quantum cryptography migration is expected to be a centerpiece, with directives likely to include deadlines for agencies and contractors.
-    *   The National Institute of Standards and Technology (NIST) released the first versions of post-quantum cryptography algorithms in 2023 and is working on guidance for migration.
-*   **Department of Defense (DoD)**:
-    *   The Defense Advanced Research Projects Agency (DARPA) Microsystems Technology Office issued a Special Notice in October 2025 announcing the future Quantum Benchmarking Initiative (QBI) 2026 Solicitation, seeking novel approaches to fault-tolerant quantum computing development.
-*   **Department of Energy (DOE)**:
-    *   The DOE announced a partnership between Fermi National Accelerator Laboratory and Qblox in November 2025, where Qblox will coordinate manufacturing, distribution, and support for the Quantum Instrumentation Control Kit (QICK) to advance U.S. quantum research.
-    *   In September 2025, the DOE strengthened its &quot;Quantum-in-Space&quot; collaboration with new partners IonQ, Honeywell, and EPB to advance commercialization and U.S. innovation in space-based quantum technologies.
-    *   IonQ also announced a memorandum of understanding with the US Department of Energy to deploy quantum technology in space and launched a federal unit for US government use cases.
-*   **Microsoft**:
-    *   Microsoft announced plans to build a quantum center in Maryland.
-    *   Microsoft launched its Quantum Ready Initiative to help enterprises with quantum computing use cases.
-*   **Rigetti Computing**:
-    *   Rigetti announced two orders for quantum computing systems totaling $5.7 million and a $5.8 million AFRL contract with QphoX.
-*   **D-Wave Quantum**:
-    *   D-Wave launched a US government unit and announced it would expand distribution of its quantum computing offerings via a partnership with Carahsoft, a premier IT distributor to the government.
-    *   D-Wave plans to outline its commercial quantum plans at CES 2026.
+**Apple (AI, Robotics)**
+*   Apple is accelerating its AI efforts as part of a four-year, $500-billion package of U.S.-based investments. This includes building a 250,000-square-foot advanced server manufacturing facility in Houston, slated to open in 2026, and expanding data center capacity across several states.
+*   Apple intends to hire approximately 20,000 new employees, primarily focusing on silicon engineering, software development, and AI/machine learning expertise.
+*   A major overhaul of Siri is anticipated in spring 2026, featuring enhanced conversational abilities. Apple is believed to be leveraging Google&#x27;s Gemini technology to power the new Siri.
+*   Apple is reportedly exploring humanoid and non-humanoid robots for its smart home ecosystem.
 
-### Magnificent 7 Companies &amp; Prominent Investors
+**Microsoft (Quantum Technology, AI)**
+*   Microsoft unveiled its new Majorana 1 quantum chip in February 2025, which utilizes a novel Topological Core architecture aimed at developing more stable and scalable qubits to solve large-scale problems within years.
+*   Microsoft&#x27;s partnership with Atom Computing is progressing rapidly, leading to the development of one of the first Level 2 quantum computers.
+*   Microsoft has invested over $1 billion in quantum computing research and development.
+*   Wedbush analysts rank Microsoft first overall in AI plays, citing Azure&#x27;s AI inflection as a key driver.
 
-**Artificial Intelligence (AI)**
-*   **Microsoft**:
-    *   Named a top AI stock for 2026 by Wedbush analyst Dan Ives.
-    *   Wall Street is reportedly underestimating Microsoft&#x27;s Azure cloud computing program, expected to grow significantly due to AI.
-    *   Microsoft has partnered with OpenAI, increased spending on AI infrastructure, and is promoting the integration of its Copilot AI offering in Office 365.
-    *   Microsoft is among the &quot;Magnificent Seven&quot; giants with billion-dollar quantum programs.
-*   **Alphabet (Google)**:
-    *   Ranked as the No. 1 Magnificent Seven stock for 2026 by an analyst, citing its dominant internet search leveraging powerful AI tools for relevant answers, AI Overviews, and optimizing advertising.
-    *   Alphabet is developing its own Tensor Processing Units (TPUs) as an alternative to Nvidia GPUs.
-    *   Alphabet has designed its own quantum processors, dubbed Willow.
-*   **Nvidia**:
-    *   Despite not being Ives&#x27; top pick, Wedbush Securities still considers Nvidia a top technology stock for 2026 due to its leading role in providing high-powered GPUs to data centers, powering the AI revolution.
-    *   Nvidia is quietly building a full-spectrum quantum computing suite.
-    *   Nvidia is partnering with DOE to build an AI supercomputer.
-*   **Tesla (Elon Musk)**:
-    *   Named a top AI stock for 2026 by Wedbush analyst Dan Ives.
-    *   Elon Musk&#x27;s xAI for Government is partnering with the US War Department to expand the GenAI.mil platform, with initial deployment of xAI&#x27;s capabilities targeted for early 2026.
-*   **Amazon**:
-    *   Amazon is exploring quantum computing technology.
-    *   Amazon&#x27;s underperformance in 2025 was partially attributed to its substantial AI infrastructure spending, including $125 billion, with specific projects like a 1,200-acre data center in Indiana.
-    *   Amazon has designed its own quantum processors, dubbed Ocelot.
-*   **Apple**:
-    *   Named a top AI stock for 2026 by Wedbush analyst Dan Ives, highlighting its &quot;invisible AI&quot; strategy and plans to ramp up AI CapEx.
-*   **Meta Platforms**:
-    *   Focusing on developing &quot;personal superintelligence&quot; through AI.
-    *   Meta Platforms has shelled out enormous sums of cash for Meta AI, impacting its bottom line.
-*   **Oracle**:
-    *   Partnering with the Department of Energy and Nvidia to build the DOE&#x27;s largest &quot;AI supercomputer&quot; at Argonne National Laboratory.
+**Nvidia (Quantum Technology, AI)**
+*   Nvidia&#x27;s venture capital arm, NVentures, made significant investments in quantum computing startups in early 2025, including Quantinuum (part of a $600 million funding round, valuing the firm at $10 billion), QuEra, and PsiQuantum (part of a $1 billion funding round). These investments cover neutral atom, trapped ion, and photonic quantum hardware modalities.
+*   Nvidia also invested in SandboxAQ&#x27;s $95 million funding round, a company focused on AI with quantum-adjacent applications.
+*   Nvidia is a private sector partner in the DOE&#x27;s &quot;Genesis Mission&quot; to accelerate scientific discovery with AI.
 
-**Quantum Tech**
-*   **Alphabet, Amazon, Microsoft, Nvidia**:
-    *   Several members of the &quot;Magnificent Seven&quot; are actively exploring quantum computing technology alongside their existing generative AI efforts.
-    *   Alphabet (Willow), Amazon (Ocelot), and Microsoft (Majorana) have designed their own custom quantum processors.
-    *   Nvidia is building a quantum AI ecosystem.
-*   **IonQ, Rigetti Computing, D-Wave Quantum**:
-    *   Pure-play quantum developers like IonQ, Rigetti Computing, and D-Wave Quantum have outperformed the S&amp;P 500 in 2025 and are considered potential acquisition targets for the &quot;Magnificent Seven.&quot;
-    *   IonQ announced the purchase of Vector Atomic, completed the Oxford Ionics acquisition, and inked a US Department of Energy memorandum of understanding to deploy quantum technology in space.
-*   **Microsoft, Nvidia, OpenAI**:
-    *   An agreement includes partnerships with Microsoft, Nvidia, and OpenAI, laying the foundation for joint research in quantum hardware and applications.
+**Alphabet (Google) (AI, Robotics, Quantum Technology)**
+*   Google (Alphabet) is among the four tech companies awarded individual contracts worth up to $200 million by the Pentagon for advanced AI capabilities to address national security challenges.
+*   Google DeepMind will provide its frontier scientific AI models and tools to scientists at all 17 national laboratories as part of the DOE&#x27;s &quot;Genesis Mission&quot;.
+*   Alphabet&#x27;s Google was an investor in Apptronik, an AI-powered humanoid robot company that secured $350 million in funding to scale production.
+*   Alphabet continues to develop its own AI models and possesses a leading cloud computing platform.
+*   Waymo, Google&#x27;s self-driving car project, is continuously expanding its autonomous driving capabilities with AI, reportedly providing 100,000 robotaxi rides per week in October 2024.
+*   In December 2025, Alphabet announced its acquisition of Intersect, a provider of data center and energy infrastructure solutions, for $4.75 billion.
+*   Alphabet is actively pursuing growth in quantum computing technology.
 
-**Space Tech &amp; Satellite Communication**
-*   **SpaceX (Elon Musk)**:
-    *   NASA awarded SpaceX a $2.89 billion contract in 2021 to adapt its Starship spacecraft as the lunar landing vehicle for Artemis III and beyond. However, due to serial failures of the Starship rocket, NASA announced in October 2025 that it was opening up the contract to competitors, including Blue Origin and Lockheed Martin.
-*   **Blue Origin (Jeff Bezos)**:
-    *   Blue Origin&#x27;s Blue Moon spacecraft is planned to lift off as early as January 2026, aiming for a landing in the south lunar pole, carrying cargo and potentially crew.
-    *   Blue Origin is now a competitor for NASA&#x27;s lunar landing vehicle contract.
-*   **Amazon (Project Kuiper)**:
-    *   Amazon Leo demonstrations are scheduled to begin in early 2026 to test the pointing, acquisition, and tracking capabilities of their optical communications systems for NASA missions.</div>
+**Tesla (Robotics, AI)**
+*   CEO Elon Musk has significantly steered Tesla into AI and robotics, with the humanoid robot &quot;Tesla Optimus&quot; projected to constitute the majority of Tesla&#x27;s valuation in the future.
+*   Tesla&#x27;s robotaxi service launched in 2025.
+*   Investors are increasingly focusing on Tesla&#x27;s long-term investments in autonomous driving, robotics, and AI.
+*   Wedbush analysts anticipate Tesla&#x27;s market capitalization to reach $2 trillion soon, potentially $3 trillion by the end of 2026, driven by the adoption of Full Self-Driving (FSD), the rollout of Cybercab, and acceleration in robotics.
+
+**Amazon (Nuclear Energy, AI, Quantum Technology)**
+*   Amazon was mentioned as potentially exploring the development of small modular reactors to power its AI data centers.
+*   Amazon Web Services (AWS) is a private sector partner in the DOE&#x27;s &quot;Genesis Mission&quot; for advancing scientific research with AI.
+*   Amazon has also designed its own quantum processor known as Ocelot.
+
+**Elon Musk (AI, Robotics, Drone Tech)**
+*   Beyond Tesla&#x27;s advancements in AI and robotics, Elon Musk&#x27;s xAI received a Pentagon contract for AI tools and launched its &quot;Grok for Government&quot; offering.
+*   SpaceX, another of Musk&#x27;s ventures, was mentioned in the context of Silicon Valley firms forming a consortium to bid for DoD contracts.
+
+**Sam Altman &amp; Peter Thiel**
+*   While no direct personal investments were detailed, OpenAI, co-founded by Sam Altman, was awarded a Pentagon AI contract and signed a memorandum of understanding with the DOE for the Genesis Mission. No specific recent announcements for Peter Thiel&#x27;s investments in these sectors were found in the provided information.</div>
 </div>
 <h2>Industry Index</h2><nav><ul>
 <li><a href="#quantum">1. Quantum (ionq, qbts, rgti, qubt, laes, arqq)</a></li>
