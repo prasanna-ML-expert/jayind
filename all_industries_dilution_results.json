@@ -2,7 +2,7 @@
   "updates": [
     {
       "Industry": "quantum",
-      "Results": "IONQ:$85.00-110.00, $55.49-93.00, Redeemed 2021, No active convert overhang, $450M; QBTS:$15.00-18.00, $11.50-13.00, Redeemed Nov 2025, No material convertible debt, $125M; RGTI:$3.50-5.50, $2.00-2.75, $18.00 trigger (20/30 days), No active convert overhang, $215M; QUBT:$14.00-18.00, $70.00 (split-adjusted offering), $18.00 trigger (20/30 days), No material convertible debt, $85M; LAES:$1.50-2.50, $1.05-1.50, $18.00 trigger (20/30 days), No material convertible debt, $65M; ARQQ:$1.00-1.50, $0.78-0.95, $18.00 trigger (20/30 days), No active convert overhang, $110M"
+      "Results": "IONQ:$125.00-155.00, $93.00 (Feb 2025 Offering), Active (Trading at $32), No active convert overhang, $450M; QBTS:$28.00-35.00, $11.50-13.00, Redeemed Nov 2025, No material convertible debt, $125M; RGTI:$35.00-45.00, $11.59 (Quanta Computer No Warrants), $18.00 trigger (Redeemable), No active convert overhang, Unlimited (WKSI Status); QUBT:$22.00-28.00, $20.17 (Oct 2025 Institutional), $18.00 trigger (20/30 days), No material convertible debt, $85M; LAES:$7.50-9.25, $7.50 (Oct 2025 RDO Heights), $18.00 trigger (20/30 days), $200M Senior Notes, $65M; ARQQ:$30.00-35.00, $21.88 (Dec 2025 Base), $18.00 trigger (20/30 days), No active convert overhang, $110M"
     },
     {
       "Industry": "power_management_chips",
