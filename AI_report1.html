@@ -41,7 +41,7 @@
             const cleanStr = rangeStr.replace(/[$,]/g, '').trim();
 
             // Attempt to match a range pattern: e.g., "X.XX - Y.YY" or "X.XX – Y.YY"
-            const rangeMatch = cleanStr.match(/(\d+(?:\.\d+)?)\s*[\u2013-]\s*(\d+(?:\.\d+)?)/);
+            const rangeMatch = cleanStr.match(/(\d+(?:\.\d+)?)\s*[–-]\s*(\d+(?:\.\d+)?)/);
 
             if (rangeMatch && rangeMatch.length >= 3) { // group 0 is full match, 1 is first number, 2 is second number
                 const num1 = parseFloat(rangeMatch[1]);
@@ -120,7 +120,7 @@
                 let r = parseInt(255 - (255 - 0) * ratio);
                 let g = parseInt(255 - (255 - 100) * ratio);
                 let b = parseInt(255 - (255 - 0) * ratio);
-                return `background-color: rgb(${r}, ${g}, ${b})`;
+                return `background-color: rgb(${r}, ${g}, ${b});`;
             } else {
                 return 'background-color: white;';
             }
@@ -680,7 +680,7 @@
 <div style="margin-top: 20px; margin-bottom: 20px;">
     <label><input type="checkbox" id="toggleTables" checked> Show Tables</label>
     <label><input type="checkbox" id="toggleNews" checked> Show News</label>
-    <label><input type="checkbox" id="toggleCharts" checked> Show Charts</label>
+    <label><input type="checkbox" id="checkbox" id="toggleCharts" checked> Show Charts</label>
     <label><input type="checkbox" id="toggleNotes" checked> Show Notes</label>
 </div>
 <div class="industry-section" id="quantum"><h2>1. Quantum <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
@@ -1770,7 +1770,7 @@ oklo:&gt; $3.5B shelf registration,Dec 4 $1.5B ATM</div>
         fetchAndRenderFundamentals();
 
         // Configure marked.js if needed (e.g., to sanitize HTML)
-        // marked.setOptions({{ sanitize: true }});
+        marked.setOptions({{ sanitize: true }});
 
         const markdownBlocks = document.querySelectorAll('.markdown-raw-content');
         markdownBlocks.forEach(block => {
