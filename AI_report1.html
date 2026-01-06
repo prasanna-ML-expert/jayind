@@ -12,9 +12,14 @@
         let tickerDilutionMap = {};
         const GITHUB_RAW_URL_BASE = "https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/";
         const DILUTION_DATA_FILENAME = "all_industries_detailed_dilution_results.json";
-        const CHARTING_DATA_FILENAME = "all_industries_charting_data.csv"; // NEW: Charting data filename
+        const CHARTING_DATA_FILENAME = "all_industries_charting_data.csv";
+        // NEW: Combined data filename for the main table
+        const COMBINED_DATA_FILENAME = "all_industries_combined_data.csv";
+
         const DATA_URL = GITHUB_RAW_URL_BASE + DILUTION_DATA_FILENAME;
-        const CHARTING_DATA_URL = GITHUB_RAW_URL_BASE + CHARTING_DATA_FILENAME; // NEW: Charting data URL
+        const CHARTING_DATA_URL = GITHUB_RAW_URL_BASE + CHARTING_DATA_FILENAME;
+        // NEW: Combined data URL
+        const COMBINED_DATA_URL = GITHUB_RAW_URL_BASE + COMBINED_DATA_FILENAME;
 
         async function fetchDilutionData() {
             try {
@@ -25,9 +30,11 @@
                 const rawData = await response.json();
                 // Assuming rawData is already in the { "TICKER": "dilution_string" } format
                 // Convert all keys to uppercase for consistent lookup
-                tickerDilutionMap = Object.fromEntries(
-                    Object.entries(rawData).map(([key, value]) => [key.toUpperCase(), value])
-                );
+                let tempMap = {};
+                for (const [key, value] of Object.entries(rawData)) {
+                    tempMap[key.toUpperCase()] = value;
+                }
+                tickerDilutionMap = tempMap;
                 console.log("Dilution data fetched successfully:", Object.keys(tickerDilutionMap).length, "tickers.");
             } catch (error) {
                 console.error('Error fetching dilution data:', error);
@@ -120,7 +127,7 @@
                 let r = parseInt(255 - (255 - 0) * ratio);
                 let g = parseInt(255 - (255 - 100) * ratio);
                 let b = parseInt(255 - (255 - 0) * ratio);
-                return `background-color: rgb(${r}, ${g}, ${b});`;
+                return `background-color: rgb(${r}, ${g}, ${b})`;
             } else {
                 return 'background-color: white;';
             }
@@ -184,204 +191,262 @@
             }
         }
 
-        // Function to fetch CSV data and render tables
+        // Helper function to parse CSV text into an array of objects
+        function parseCsv(csvText) {
+            const lines = csvText.split('\u000A'); // Using Unicode escape for newline
+            const processedLines = [];
+            for (let i = 0; i < lines.length; i++) {
+                let line = lines[i];
+                if (line.endsWith('\u000D')) { // Using Unicode escape for carriage return
+                    processedLines.push(line.slice(0, -1));
+                } else {
+                    processedLines.push(line);
+                }
+            }
+
+            if (processedLines.length < 2 || processedLines.every(line => line.trim() === '')) {
+                console.warn('CSV data is empty or contains only headers.');
+                return [];
+            }
+
+            const rawHeaders = processedLines[0].split(',');
+            const headers = [];
+            for (let i = 0; i < rawHeaders.length; i++) {
+                headers.push(rawHeaders[i].trim());
+            }
+
+            const data = [];
+            for (let i = 1; i < processedLines.length; i++) {
+                if (processedLines[i].trim() === '') continue;
+                const currentLine = processedLines[i].split(',');
+                let row = {};
+                for (let j = 0; j < headers.length; j++) {
+                    row[headers[j]] = (currentLine[j] || '').trim();
+                }
+                data.push(row);
+            }
+            return data;
+        }
+
+        // Function to fetch CSV data and render tables and charts
         async function fetchAndRenderFundamentals() {
+            let combinedData = [];
+            let chartingData = [];
+
+            // 1. Fetch data from COMBINED_DATA_URL for the main table
             try {
-                const response = await fetch(CHARTING_DATA_URL); // NEW: Use CHARTING_DATA_URL
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                const combinedResponse = await fetch(COMBINED_DATA_URL);
+                if (!combinedResponse.ok) {
+                    throw new Error(`HTTP error fetching combined data! status: ${combinedResponse.status}`);
                 }
-                const csvText = await response.text();
-                // Use a direct string split by newline, then map to remove carriage returns if present
-                const lines = csvText.split('
-').map(line => line.endsWith('
-') ? line.slice(0, -1) : line);
-                console.log('Parsed CSV lines:', lines);
-
-                if (lines.length < 2 || lines.every(line => line.trim() === '')) {
-                    console.warn('Charting CSV data is empty or contains only headers.');
-                    // Explicitly update all placeholders with a "no data" message
-                    for (const industryKey in tickerMap) {
-                        const tablePlaceholder = document.getElementById(`fundamentals-table-${industryKey}`);
-                        if (tablePlaceholder) tablePlaceholder.innerHTML = '<p>No data loaded for tables.</p>';
-                        const chartsPlaceholder = document.getElementById(`charts-container-${industryKey}`);
-                        if (chartsPlaceholder) chartsPlaceholder.innerHTML = '<p>No data loaded for charts.</p>';
-                    }
-                    return;
-                }
-
-                const headers = lines[0].split(',').map(h => h.trim());
-                const data = [];
-
-                for (let i = 1; i < lines.length; i++) {
-                    if (lines[i].trim() === '') continue; // Skip empty lines
-
-                    const currentLine = lines[i].split(',');
-                    // Create a row object, handling potential missing values in cells
-                    let row = {};
-                    for (let j = 0; j < headers.length; j++) {
-                        // Assign trimmed value or empty string if cell is undefined/null
-                        row[headers[j]] = (currentLine[j] || '').trim();
-                    }
-                    data.push(row);
-                }
-
-                // NEW: Columns to display in the table from the charting data
-                const columnsToDisplayForTable = [
-                    'Ticker', 'mcap', 'Debt_M', 'Cash_M', 'SI%', 'institutes%', 'Pending Shelf_M'
-                ];
-
-                for (const industryKey in tickerMap) {
-                    const industryTickers = tickerMap[industryKey];
-                    // Ensure Ticker in CSV data is compared case-insensitively
-                    const industryData = data.filter(row => industryTickers.includes(row['Ticker'].toLowerCase()));
-
-                    // Sort industryData by 'mcap' in decreasing order
-                    industryData.sort((a, b) => {
-                        const mcapA = parseFloat(a['mcap']) || 0;
-                        const mcapB = parseFloat(b['mcap']) || 0;
-                        return mcapB - mcapA; // Decreasing order
-                    });
-
-                    // --- Table Generation (simplified) ---
-                    const tablePlaceholderDiv = document.getElementById(`fundamentals-table-${industryKey}`);
-                    if (tablePlaceholderDiv) {
-                        if (industryData.length > 0) {
-                            let tableHtml = '<table class="dataframe"><thead><tr>';
-                            // Filter headers to only include those in columnsToDisplayForTable
-                            const actualHeadersForTable = headers.filter(h => columnsToDisplayForTable.includes(h));
-
-                            actualHeadersForTable.forEach(header => {
-                                tableHtml += `<th>${header}</th>`;
-                            });
-                            tableHtml += '</tr></thead><tbody>';
-
-                            industryData.forEach(row => {
-                                tableHtml += '<tr>';
-                                actualHeadersForTable.forEach(header => {
-                                    let cellValue = row[header] || '';
-                                    let displayValue = cellValue;
-                                    // Removed price% coloring and price line visualization as those columns are no longer in data.
-                                    if (header === 'Ticker') {
-                                        const ticker = cellValue.toUpperCase();
-                                        if (tickerDilutionMap[ticker]) {
-                                            displayValue = `<button class="ticker-button" onclick="toggleDilutionInline(this, '${ticker}', event)">${cellValue}</button>`;
-                                        }
-                                    }
-                                    tableHtml += `<td>${displayValue}</td>`;
-                                });
-                                tableHtml += '</tr>';
-                            });
-                            tableHtml += '</tbody></table>';
-                            tablePlaceholderDiv.innerHTML = tableHtml;
-                        } else {
-                            tablePlaceholderDiv.innerHTML = '<p>No data available for this industry's table.</p>';
-                        }
-                    }
-
-                    // --- Chart Generation ---
-                    const chartsContainerDiv = document.getElementById(`charts-container-${industryKey}`);
-                    if (chartsContainerDiv) {
-                        if (industryData.length > 0) {
-                            let chartsHtml = '';
-                            chartsHtml += '<div class="peer-chart-wrapper">';
-
-                            // Find max values for dynamic scaling within this industry
-                            let maxDebtRatio = 0;
-                            let maxCashRatio = 0;
-                            let maxPendingShelfRatio = 0;
-
-                            industryData.forEach(row => {
-                                const mcap = parseFloat(row['mcap']) || 0;
-                                const debt_M = parseFloat(row['Debt_M']) || 0;
-                                const cash_M = parseFloat(row['Cash_M']) || 0;
-                                const pendingShelf_M = parseFloat(row['Pending Shelf_M']) || 0;
-
-                                if (mcap > 0) {
-                                    maxDebtRatio = Math.max(maxDebtRatio, debt_M / mcap);
-                                    maxCashRatio = Math.max(maxCashRatio, cash_M / mcap);
-                                    maxPendingShelfRatio = Math.max(maxPendingShelfRatio, pendingShelf_M / mcap);
-                                }
-                            });
-
-                            maxDebtRatio = Math.max(0.1, maxDebtRatio); // Ensure a minimum for scaling to avoid division by zero or too small bars
-                            maxCashRatio = Math.max(0.1, maxCashRatio);
-                            maxPendingShelfRatio = Math.max(0.1, maxPendingShelfRatio);
-
-                            industryData.forEach(row => {
-                                const ticker = row['Ticker'].toUpperCase();
-                                const mcap = parseFloat(row['mcap']) || 0;
-                                const debt_M = parseFloat(row['Debt_M']) || 0;
-                                const cash_M = parseFloat(row['Cash_M']) || 0;
-                                const si_percent = parseFloat(row['SI%']) || 0;
-                                const institutes_percent = parseFloat(row['institutes%']) || 0;
-                                const pendingShelf_M = parseFloat(row['Pending Shelf_M']) || 0;
-
-                                let debtRatio = mcap > 0 ? (debt_M / mcap) : 0; // as fraction
-                                let cashRatio = mcap > 0 ? (cash_M / mcap) : 0; // as fraction
-                                let pendingShelfRatio = mcap > 0 ? (pendingShelf_M / mcap) : 0; // as fraction
-
-                                chartsHtml += '<div class="ticker-chart-group">';
-                                chartsHtml += '<div class="ticker-chart-label">' + ticker + '</div>';
-
-                                const maxChartBarWidthPx = 200; // Max width of the visual bar container in pixels, used for scaling
-
-                                // Debt/mcap
-                                const debtBarWidth = Math.min((debtRatio / maxDebtRatio) * 100, 100); // Scale relative to max in industry, cap at 100%
-                                chartsHtml += '<div class="chart-item">' +
-                                    '<span class="bar-label">Debt/mcap:</span>' +
-                                    '<div class="chart-bar-container" style="width:' + maxChartBarWidthPx + 'px;"><div class="chart-bar debt-bar" style="width: ' + debtBarWidth + '%;"></div></div>' +
-                                    '<span class="bar-value">' + (debtRatio * 100).toFixed(1) + '%</span>' +
-                                '</div>';
-
-                                // Cash/mcap
-                                const cashBarWidth = Math.min((cashRatio / maxCashRatio) * 100, 100); // Scale relative to max in industry, cap at 100%
-                                chartsHtml += '<div class="chart-item">' +
-                                    '<span class="bar-label">Cash/mcap:</span>' +
-                                    '<div class="chart-bar-container" style="width:' + maxChartBarWidthPx + 'px;"><div class="chart-bar cash-bar" style="width: ' + cashBarWidth + '%;"></div></div>' +
-                                    '<span class="bar-value">' + (cashRatio * 100).toFixed(1) + '%</span>' +
-                                '</div>';
-
-                                // Pending Shelf/mcap
-                                const pendingShelfBarWidth = Math.min((pendingShelfRatio / maxPendingShelfRatio) * 100, 100); // Scale relative to max in industry, cap at 100%
-                                chartsHtml += '<div class="chart-item">' +
-                                    '<span class="bar-label">Shelf/mcap:</span>' +
-                                    '<div class="chart-bar-container" style="width:' + maxChartBarWidthPx + 'px;"><div class="chart-bar shelf-bar" style="width: ' + pendingShelfBarWidth + '%;"></div></div>' +
-                                    '<span class="bar-value">' + (pendingShelfRatio * 100).toFixed(1) + '%</span>' +
-                                '</div>';
-
-                                // SI%
-                                chartsHtml += '<div class="chart-item">' +
-                                    '<span class="bar-label">SI%:</span>' +
-                                    '<div class="chart-bar-container" style="width:' + maxChartBarWidthPx + 'px;"><div class="chart-bar si-bar" style="width: ' + si_percent + '%;"></div></div>' +
-                                    '<span class="bar-value">' + si_percent.toFixed(1) + '%</span>' +
-                                '</div>';
-
-                                // institutes%
-                                const institutesBarWidth = Math.min(institutes_percent, 100); // Ensure it doesn't exceed 100%
-                                chartsHtml += '<div class="chart-item">' +
-                                    '<span class="bar-label">Institutes%:</span>' +
-                                    '<div class="chart-bar-container" style="width:' + maxChartBarWidthPx + 'px;"><div class="chart-bar institutes-bar" style="width: ' + institutesBarWidth + '%;"></div></div>' +
-                                    '<span class="bar-value">' + institutes_percent.toFixed(1) + '%</span>' +
-                                '</div>';
-
-                                chartsHtml += '</div>'; // End ticker-chart-group
-                            });
-                            chartsHtml += '</div>'; // End peer-chart-wrapper
-                            chartsContainerDiv.innerHTML = chartsHtml;
-                        } else {
-                            chartsContainerDiv.innerHTML = '<p>No data available for this industry's charts.</p>';
-                        }
-                    }
-                }
-
+                const combinedCsvText = await combinedResponse.text();
+                combinedData = parseCsv(combinedCsvText);
+                console.log('Combined data loaded for tables.');
             } catch (error) {
-                console.error('Error fetching or processing charting data:', error);
+                console.error('Error fetching or processing Combined CSV:', error);
                 for (const industryKey in tickerMap) {
                     const tablePlaceholder = document.getElementById(`fundamentals-table-${industryKey}`);
-                    if (tablePlaceholder) tablePlaceholder.innerHTML = `<p>Error loading data: ${error.message}</p>`;
+                    if (tablePlaceholder) tablePlaceholder.innerHTML = `<p>Error loading fundamentals data: ${error.message}</p>`;
+                }
+            }
+
+            // 2. Fetch data from CHARTING_DATA_URL for the charts
+            try {
+                const chartingResponse = await fetch(CHARTING_DATA_URL);
+                if (!chartingResponse.ok) {
+                    throw new Error(`HTTP error fetching charting data! status: ${chartingResponse.status}`);
+                }
+                const chartingCsvText = await chartingResponse.text();
+                chartingData = parseCsv(chartingCsvText);
+                console.log('Charting data loaded for charts.');
+            } catch (error) {
+                console.error('Error fetching or processing Charting CSV:', error);
+                for (const industryKey in tickerMap) {
                     const chartsPlaceholder = document.getElementById(`charts-container-${industryKey}`);
-                    if (chartsPlaceholder) chartsPlaceholder.innerHTML = `<p>Error loading data: ${error.message}</p>`;
+                    if (chartsPlaceholder) chartsPlaceholder.innerHTML = `<p>Error loading charting data: ${error.message}</p>`;
+                }
+            }
+
+            // Define columns to display in the table from the combined data
+            const columnsToDisplayForTable = [
+                'Ticker', 'price%', 'Price', 'mcap', 'TSO', 'FDS', 'SI%', 'institutes%', 'pcr',
+                'Debt_M', 'Cash_M', 'QRevenue_M', 'QPL_M', 'OrderBook_M',
+                'Ceiling', 'Floor', 'Warrant Redemption Risk', 'Convertible Overhang', 'Pending Shelf'
+            ];
+
+            for (const industryKey in tickerMap) {
+                // Filter combinedData for the table
+                const industryCombinedData = combinedData.filter(row => tickerMap[industryKey].includes(row['Ticker'].toLowerCase()));
+
+                // Filter chartingData for the charts
+                const industryChartingData = chartingData.filter(row => tickerMap[industryKey].includes(row['Ticker'].toLowerCase()));
+
+                // --- Table Generation ---
+                const tablePlaceholderDiv = document.getElementById(`fundamentals-table-${industryKey}`);
+                if (tablePlaceholderDiv) {
+                    if (industryCombinedData.length > 0) {
+                        let tableHtml = '<table class="dataframe"><thead><tr>';
+                        const actualHeadersForTable = columnsToDisplayForTable.filter(h => industryCombinedData[0].hasOwnProperty(h));
+
+                        actualHeadersForTable.forEach(header => {
+                            tableHtml += `<th>${header}</th>`;
+                        });
+                        tableHtml += '</tr></thead><tbody>';
+
+                        industryCombinedData.forEach(row => {
+                            tableHtml += '<tr>';
+                            actualHeadersForTable.forEach(header => {
+                                let cellValue = row[header] || '';
+                                let style = '';
+                                if (header === 'price%') {
+                                    style = colorPricePercent(cellValue);
+                                }
+                                // Format numeric values (remove trailing zeros for integers)
+                                if (!isNaN(parseFloat(cellValue)) && isFinite(cellValue)) {
+                                    cellValue = parseFloat(cellValue).toString();
+                                }
+                                let displayValue = cellValue;
+                                if (header === 'Ticker') {
+                                    const ticker = cellValue.toUpperCase();
+                                    if (tickerDilutionMap[ticker]) {
+                                        displayValue = `<button class="ticker-button" onclick="toggleDilutionInline(this, '${ticker}', event)">${cellValue}</button>`;
+                                    }
+                                }
+                                tableHtml += `<td style="${style}">${displayValue}</td>`;
+                            });
+                            tableHtml += '</tr>'; // End of the data row
+
+                            // Add the price line visualization below each ticker row
+                            const currentPrice = parseFloat(row['Price']) || NaN;
+                            const ceilingRange = parsePriceRange(row['Ceiling']);
+                            const floorRange = parsePriceRange(row['Floor']);
+
+                            let lineHtml = '';
+                            // Only draw the line if we have valid price, floor, and ceiling, and a valid range
+                            if (!isNaN(currentPrice) && !isNaN(floorRange.min) && !isNaN(ceilingRange.max)) {
+                                const overallMin = floorRange.min;
+                                const overallMax = ceilingRange.max;
+
+                                let pricePosition = ((currentPrice - overallMin) / (overallMax - overallMin)) * 100;
+                                pricePosition = Math.max(0, Math.min(100, pricePosition)); // Clamp between 0 and 100
+                                let rowBackgroundColor = getColorAtGradientPosition(pricePosition);
+
+                                lineHtml = `
+                                    <tr class="price-line-row">
+                                        <td colspan="${actualHeadersForTable.length}" style="padding: 0px;">
+                                            <div style="position: relative; width: 100%; height: 4px; background-color: ${rowBackgroundColor}; border-radius: 5px;">
+                                                <div style="position: absolute; left: ${pricePosition}%; top: -3px; width: 10px; height: 10px; background-color: #333; border-radius: 50%; transform: translateX(-50%); box-shadow: 0 0 5px rgba(0,0,0,0.5);" title="Current Price: $${currentPrice.toFixed(2)}"></div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                `;
+                            }
+                            tableHtml += lineHtml;
+                        });
+                        tableHtml += '</tbody></table>';
+                        tablePlaceholderDiv.innerHTML = tableHtml;
+                    } else {
+                        tablePlaceholderDiv.innerHTML = '<p>No fundamentals data available for this industry.</p>';
+                    }
+                }
+
+                // --- Chart Generation ---
+                const chartsContainerDiv = document.getElementById(`charts-container-${industryKey}`);
+                if (chartsContainerDiv) {
+                    if (industryChartingData.length > 0) {
+                        let chartsHtml = '';
+                        chartsHtml += '<div class="peer-chart-wrapper">';
+
+                        // Find max values for dynamic scaling within this industry
+                        let maxDebtRatio = 0;
+                        let maxCashRatio = 0;
+                        let maxPendingShelfRatio = 0;
+
+                        // Use standard for loop to avoid arrow function parsing issues in f-string
+                        for (let i = 0; i < industryChartingData.length; i++) {
+                            const row = industryChartingData[i];
+                            const mcap = parseFloat(row['mcap']) || 0;
+                            const debt_M = parseFloat(row['Debt_M']) || 0;
+                            const cash_M = parseFloat(row['Cash_M']) || 0;
+                            const pendingShelf_M = parseFloat(row['Pending Shelf_M']) || 0;
+
+                            if (mcap > 0) {
+                                maxDebtRatio = Math.max(maxDebtRatio, debt_M / mcap);
+                                maxCashRatio = Math.max(maxCashRatio, cash_M / mcap);
+                                maxPendingShelfRatio = Math.max(maxPendingShelfRatio, pendingShelf_M / mcap);
+                            }
+                        }
+
+                        maxDebtRatio = Math.max(0.1, maxDebtRatio); // Ensure a minimum for scaling
+                        maxCashRatio = Math.max(0.1, maxCashRatio);
+                        maxPendingShelfRatio = Math.max(0.1, maxPendingShelfRatio);
+
+                        // Use standard for loop here as well
+                        for (let i = 0; i < industryChartingData.length; i++) {
+                            const row = industryChartingData[i];
+                            const ticker = row['Ticker'].toUpperCase();
+                            const mcap = parseFloat(row['mcap']) || 0;
+                            const debt_M = parseFloat(row['Debt_M']) || 0;
+                            const cash_M = parseFloat(row['Cash_M']) || 0;
+                            const si_percent = parseFloat(row['SI%']) || 0;
+                            const institutes_percent = parseFloat(row['institutes%']) || 0;
+                            const pendingShelf_M = parseFloat(row['Pending Shelf_M']) || 0;
+
+                            let debtRatio = mcap > 0 ? (debt_M / mcap) : 0;
+                            let cashRatio = mcap > 0 ? (cash_M / mcap) : 0;
+                            let pendingShelfRatio = mcap > 0 ? (pendingShelf_M / mcap) : 0;
+
+                            chartsHtml += '<div class="ticker-chart-group">';
+                            chartsHtml += '<div class="ticker-chart-label">' + ticker + '</div>';
+
+                            const maxChartBarWidthPx = 200;
+
+                            // Debt/mcap
+                            const debtBarWidth = Math.min((debtRatio / maxDebtRatio) * 100, 100);
+                            chartsHtml += '<div class="chart-item">' +
+                                '<span class="bar-label">Debt/mcap:</span>' +
+                                '<div class="chart-bar-container" style="width:' + maxChartBarWidthPx + 'px;"><div class="chart-bar debt-bar" style="width: ' + debtBarWidth + '%;"></div></div>' +
+                                '<span class="bar-value">' + (debtRatio * 100).toFixed(1) + '%</span>' +
+                            '</div>';
+
+                            // Cash/mcap
+                            const cashBarWidth = Math.min((cashRatio / maxCashRatio) * 100, 100);
+                            chartsHtml += '<div class="chart-item">' +
+                                '<span class="bar-label">Cash/mcap:</span>' +
+                                '<div class="chart-bar-container" style="width:' + maxChartBarWidthPx + 'px;"><div class="chart-bar cash-bar" style="width: ' + cashBarWidth + '%;"></div></div>' +
+                                '<span class="bar-value">' + (cashRatio * 100).toFixed(1) + '%</span>' +
+                            '</div>';
+
+                            // Pending Shelf/mcap
+                            const pendingShelfBarWidth = Math.min((pendingShelfRatio / maxPendingShelfRatio) * 100, 100);
+                            chartsHtml += '<div class="chart-item">' +
+                                '<span class="bar-label">Shelf/mcap:</span>' +
+                                '<div class="chart-bar-container" style="width:' + maxChartBarWidthPx + 'px;"><div class="chart-bar shelf-bar" style="width: ' + pendingShelfBarWidth + '%;"></div></div>' +
+                                '<span class="bar-value">' + (pendingShelfRatio * 100).toFixed(1) + '%</span>' +
+                            '</div>';
+
+                            // SI%
+                            chartsHtml += '<div class="chart-item">' +
+                                '<span class="bar-label">SI%:</span>' +
+                                '<div class="chart-bar-container" style="width:' + maxChartBarWidthPx + 'px;"><div class="chart-bar si-bar" style="width: ' + si_percent + '%;"></div></div>' +
+                                '<span class="bar-value">' + si_percent.toFixed(1) + '%</span>' +
+                            '</div>';
+
+                            // institutes%
+                            const institutesBarWidth = Math.min(institutes_percent, 100);
+                            chartsHtml += '<div class="chart-item">' +
+                                '<span class="bar-label">Institutes%:</span>' +
+                                '<div class="chart-bar-container" style="width:' + maxChartBarWidthPx + 'px;"><div class="chart-bar institutes-bar" style="width: ' + institutesBarWidth + '%;"></div></div>' +
+                                '<span class="bar-value">' + institutes_percent.toFixed(1) + '%</span>' +
+                            '</div>';
+
+                            chartsHtml += '</div>'; // End ticker-chart-group
+                        }
+                        chartsHtml += '</div>'; // End peer-chart-wrapper
+                        chartsContainerDiv.innerHTML = chartsHtml;
+                    } else {
+                        chartsContainerDiv.innerHTML = '<p>No data available for this industry's charts.</p>';
+                    }
                 }
             }
         }
@@ -652,7 +717,7 @@
 <div style="margin-top: 20px; margin-bottom: 20px;">
     <label><input type="checkbox" id="toggleTables" checked> Show Tables</label>
     <label><input type="checkbox" id="toggleNews" checked> Show News</label>
-    <label><input type="checkbox" id="checkbox" id="toggleCharts" checked> Show Charts</label>
+    <label><input type="checkbox" id="toggleCharts" checked> Show Charts</label>
     <label><input type="checkbox" id="toggleNotes" checked> Show Notes</label>
 </div>
 <div class="industry-section" id="quantum"><h2>1. Quantum <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
