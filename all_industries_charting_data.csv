@@ -50,7 +50,7 @@ batteries_storage_sw,FLNC,0.07,390.8,690.77,33.67,69.8,500.0
 space_launch_systems,FLY,4.1,0.0,0.0,1.84,37.56,200.0
 Mag7,GOOG,3820.61,21607.0,98490.0,0.0,0.0,6500.0
 batteries_storage_sw,GWH,0.04,8.29,0.0,3.6,46.77,85.0
-Mining,HIVE,0.99,73.684,637.0,6.1,30.07,285.0
+Mining,HIVE,1.0,73.684,637.0,6.1,30.07,285.0
 Mining,HUT,6.37,150.0,179.1,15.33,57.02,400.0
 hydrogen_fuel_cells,HYLN,0.34,,,11.39,26.05,150.0
 new_nuclear_energy,IMSR,,0.0,0.0,1.5,9.16,0.0
@@ -60,7 +60,7 @@ power_management_chips,INDI,0.8,0.0,0.0,25.11,98.93,200.0
 power_management_chips,INDI,0.8,0.0,0.0,25.11,98.93,200.0
 ,INVZ,0.26,,,,,185.0
 quantum,IONQ,17.26,28.516,1500.0,20.08,49.9,450.0
-service_robotics,IRBT,0.0,205.3,24.8,44.62,44.54,0.0
+service_robotics,IRBT,0.01,205.3,24.8,44.62,44.54,0.0
 earth_observation,IRDM,1.9,0.0,88.5,8.09,95.02,500.0
 Mining,IREN,13.92,2300.0,1030.0,20.25,39.53,650.0
 evtol_air_mobility,JOBY,14.63,45.61,978.1,9.36,51.47,591.0
