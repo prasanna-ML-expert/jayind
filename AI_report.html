@@ -3,6 +3,7 @@
 <head>
     <title>NASDAQ S&P Growth Stoks AI generated fundamentals technicals and Latest updates</title>
     <script src="https://cdn.jsdelivr.net/npm/marked@4.0.10/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         // Embed Python variables as JavaScript variables
         const csvExportUrl = 'https://docs.google.com/spreadsheets/d/1qwnwuUR6kOBMZqrZIX97sMetNKZyXjot-SmEWfI8LUg/export?format=csv&gid=445351489';
@@ -153,7 +154,7 @@
                     <div class="popup-content-scroll">${marked.parse(tickerDilutionMap[ticker])}</div>
                 `;
                 popup.dataset.currentTicker = ticker; // Store current ticker
-                popup.classList.add('active');ticker
+                popup.classList.add('active');
                 backdrop.classList.add('active');
             } else {
                 console.log(`No dilution data found for ticker: ${ticker}`);
@@ -182,21 +183,154 @@
             }
         }
 
-        // Function to fetch CSV data and render tables
-        async function fetchAndRenderFundamentals() {
+        // Helper to parse CSV data into an array of objects
+        function parseCsv(csvText) {
+            const lines = csvText.split('\n').map(line => line.trim()).filter(line => line !== '');
+            if (lines.length === 0) return [];
+
+            const headers = lines[0].split(',').map(h => h.trim());
+            const data = [];
+
+            for (let i = 1; i < lines.length; i++) {
+                const values = lines[i].split(',').map(v => v.trim());
+                let row = {};
+                headers.forEach((header, index) => {
+                    row[header] = values[index];
+                });
+                data.push(row);
+            }
+            return data;
+        }
+        // Function to render charts from provided data
+        async function renderCharts(allCsvData) {
+            try {
+                const chartingData = allCsvData;
+                console.log('Charting data received:', chartingData);
+
+                for (const industryKey in tickerMap) {
+                    const industryTickers = tickerMap[industryKey].map(t => t.toUpperCase()); // Ensure ticker case matches
+                    const filteredChartingData = chartingData.filter(row => industryTickers.includes(row['Ticker'].toUpperCase()));
+
+                    const chartCanvas = document.getElementById(`chart_${industryKey}`);
+                    if (!chartCanvas) {
+                        console.warn(`Chart canvas not found for industry: ${industryKey}`);
+                        continue;
+                    }
+
+                    if (filteredChartingData.length > 0) {
+                        const labels = filteredChartingData.map(row => row['Ticker']);
+                        const debtMcapRatios = filteredChartingData.map(row => {
+                            const mcap = parseFloat(row['mcap']);
+                            const debt_m = parseFloat(row['Debt_M']); // Use Debt_M from sheets_df
+                            return mcap > 0 ? (debt_m / mcap * 100).toFixed(2) : 0;
+                        });
+                        const cashMcapRatios = filteredChartingData.map(row => {
+                            const mcap = parseFloat(row['mcap']);
+                            const cash_m = parseFloat(row['Cash_M']); // Use Cash_M from sheets_df
+                            return mcap > 0 ? (cash_m / mcap * 100).toFixed(2) : 0;
+                        });
+                        const siPercents = filteredChartingData.map(row => parseFloat(row['SI%']) || 0);
+                        const institutesPercents = filteredChartingData.map(row => parseFloat(row['institutes%']) || 0);
+
+                        // Removed pendingShelfMcapRatios calculation as requested
+
+                        new Chart(chartCanvas, {
+                            type: 'bar',
+                            data: {
+                                labels: labels,
+                                datasets: [
+                                    {
+                                        label: 'Debt/Market Cap (%)',
+                                        data: debtMcapRatios,
+                                        backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                                        borderColor: 'rgba(255, 99, 132, 1)',
+                                        borderWidth: 1
+                                    },
+                                    {
+                                        label: 'Cash/Market Cap (%)',
+                                        data: cashMcapRatios,
+                                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                                        borderColor: 'rgba(54, 162, 235, 1)',
+                                        borderWidth: 1
+                                    },
+                                    {
+                                        label: 'Short Interest (%)',
+                                        data: siPercents,
+                                        backgroundColor: 'rgba(255, 206, 86, 0.6)',
+                                        borderColor: 'rgba(255, 206, 86, 1)',
+                                        borderWidth: 1
+                                    },
+                                    {
+                                        label: 'Institutional Ownership (%)',
+                                        data: institutesPercents,
+                                        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                                        borderColor: 'rgba(75, 192, 192, 1)',
+                                        borderWidth: 1
+                                    }
+                                    // Removed 'Pending Shelf/Market Cap (%)' dataset
+                                ]
+                            },
+                            options: {
+                                responsive: false,
+                                animation: false,
+                                events: [],
+                                maintainAspectRatio: false,
+                                scales: {
+                                    x: {
+                                        stacked: false,
+                                        title: {
+                                            display: false,
+                                            text: 'Ticker'
+                                        }
+                                    },
+                                    y: {
+                                        beginAtZero: true,
+                                        title: {
+                                            display: false,
+                                            text: 'Percentage (%)'
+                                        }
+                                    }
+                                },
+                                plugins: {
+                                    title: {
+                                        display: false,
+                                        text: `Peer Comparison for ${industryKey.replace('_', ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}`
+                                    },
+                                    legend: {
+                                        display: false,
+                                        position: 'bottom'
+                                    }
+                                }
+                            }
+                        });
+
+                    } else {
+                        chartCanvas.parentElement.innerHTML = '<p>No charting data available for this industry.</p>';
+                    }
+                }
+            } catch (error) {
+                console.error('Error rendering charts:', error); // Changed log message
+                for (const industryKey in tickerMap) {
+                    const chartCanvas = document.getElementById(`chart_${industryKey}`);
+                    if (chartCanvas) {
+                        chartCanvas.parentElement.innerHTML = `<p>Error loading charting data: ${error.message}</p>`;
+                    }
+                }
+            }
+        }
+        // Function to fetch CSV data and render tables (fundamentals)
+        async function fetchAndRenderTables() {
             try {
                 const response = await fetch(csvExportUrl);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const csvText = await response.text();
-                // Use a direct string split by newline, then map to remove carriage returns if present
                 const lines = csvText.split('\n').map(line => line.endsWith('\r') ? line.slice(0, -1) : line);
                 console.log('Parsed CSV lines:', lines);
 
                 if (lines.length < 2 || lines.every(line => line.trim() === '')) {
                     console.warn('CSV data is empty or contains only headers.');
-                    // Explicitly update all placeholders with a "no data" message
                     for (const industryKey in tickerMap) {
                         const placeholderDiv = document.getElementById(`fundamentals-table-${industryKey}`);
                         if (placeholderDiv) {
@@ -213,16 +347,17 @@
                     if (lines[i].trim() === '') continue; // Skip empty lines
 
                     const currentLine = lines[i].split(',');
-                    // Create a row object, handling potential missing values in cells
                     let row = {};
                     for (let j = 0; j < headers.length; j++) {
-                        // Assign trimmed value or empty string if cell is undefined/null
                         row[headers[j]] = (currentLine[j] || '').trim();
                     }
                     data.push(row);
                 }
 
-                // Columns to display (must match Python list)
+                // Call renderCharts with the parsed data
+                renderCharts(data);
+
+                // Columns to display (must match Python list in sheets_df)
                 const columnsToDisplay = [
                     'Ticker', 'price%', 'Price', 'mcap',
                     'QRev', 'QPL', 'Order Book', 'SI%','Debt', 'cash',
@@ -231,10 +366,7 @@
 
                 for (const industryKey in tickerMap) {
                     const industryTickers = tickerMap[industryKey];
-                    // Ensure Ticker in CSV data is compared case-insensitively
                     const industryData = data.filter(row => industryTickers.includes(row['Ticker'].toLowerCase()));
-
-                    // Sort industryData by 'mcap' in decreasing order
 
                     industryData.sort((a, b) => {
                         const mcapA = parseFloat(a['mcap']) || 0;
@@ -245,12 +377,11 @@
                     const placeholderDiv = document.getElementById(`fundamentals-table-${industryKey}`);
                     if (!placeholderDiv) {
                         console.warn(`Placeholder div not found for industry: ${industryKey}`);
-                        continue; // Skip if placeholder doesn't exist
+                        continue;
                     }
 
                     if (industryData.length > 0) {
                         let tableHtml = '<table class="\dataframe"><thead><tr>';
-                        // Filter headers to only include those in columnsToDisplay and present in our actual data
                         const actualHeaders = headers.filter(h => columnsToDisplay.includes(h) && industryData[0].hasOwnProperty(h));
 
                         actualHeaders.forEach(header => {
@@ -266,15 +397,12 @@
                                 if (header === 'price%') {
                                     style = colorPricePercent(cellValue);
                                 }
-                                // Format numeric values (remove trailing zeros for integers)
                                 if (!isNaN(parseFloat(cellValue)) && isFinite(cellValue)) {
-                                    // Convert to number, then back to string to remove .0 if it's an integer
                                     cellValue = parseFloat(cellValue).toString();
                                 }
                                 let displayValue = cellValue;
                                 if (header === 'Ticker') {
                                     const ticker = cellValue.toUpperCase();
-                                    // Only show the button if dilution data is available for this ticker
                                     if (tickerDilutionMap[ticker]) {
                                         displayValue = `
                                             <button class="ticker-button" onclick="toggleDilutionInline(this, '${ticker}', event)">
@@ -285,35 +413,32 @@
                                 }
                                 tableHtml += `<td style="${style}">${displayValue}</td>`;
                             });
-                            tableHtml += '</tr>'; // End of the data row
+                            tableHtml += '</tr>';
 
-                            // Add the price line visualization below each ticker row
-                            const currentPrice = parseFloat(row['Price']) || NaN;
-                            const ceilingRange = parsePriceRange(row['Ceiling']);
-                            const floorRange = parsePriceRange(row['Floor']);
+                            //const currentPrice = parseFloat(row['Price']) || NaN;
+                            //const ceilingRange = parsePriceRange(row['Ceiling']);
+                            //const floorRange = parsePriceRange(row['Floor']);
 
-                            let lineHtml = '';
-                            // Only draw the line if we have valid price, floor, and ceiling, and a valid range
-                            if (!isNaN(currentPrice) && !isNaN(floorRange.min) && !isNaN(ceilingRange.max)) { // Ensure floor.max for the base of the gradient
-                                const overallMin = floorRange.min;
-                                const overallMax = ceilingRange.max;
+                            //let lineHtml = '';
+                            //if (!isNaN(currentPrice) && !isNaN(floorRange.min) && !isNaN(ceilingRange.max)) {
+                            //    const overallMin = floorRange.min;
+                            //    const overallMax = ceilingRange.max;
 
-                                // Calculate position of current price as a percentage
-                                let pricePosition = ((currentPrice - overallMin) / (overallMax - overallMin)) * 100;
-                                pricePosition = Math.max(0, Math.min(100, pricePosition)); // Clamp between 0 and 100
-                                rowBackgroundColor = getColorAtGradientPosition(pricePosition);
+                            //    let pricePosition = ((currentPrice - overallMin) / (overallMax - overallMin)) * 100;
+                            //    pricePosition = Math.max(0, Math.min(100, pricePosition));
+                            //    rowBackgroundColor = getColorAtGradientPosition(pricePosition);
 
-                                lineHtml = `
-                                    <tr class="price-line-row">
-                                        <td colspan="${actualHeaders.length}" style="padding: 0px;">
-                                            <div style="position: relative; width: 100%; height: 4px; background-color: ${rowBackgroundColor}; border-radius: 5px;">
-                                                <div style="position: absolute; left: ${pricePosition}%; top: -3px; width: 10px; height: 10px; background-color: #333; border-radius: 50%; transform: translateX(-50%); box-shadow: 0 0 5px rgba(0,0,0,0.5);" title="Current Price: $${currentPrice.toFixed(2)}"></div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                `;
-                            }
-                            tableHtml += lineHtml; // Add the price line row
+                            //    lineHtml = `
+                            //        <tr class="price-line-row">
+                            //            <td colspan="${actualHeaders.length}" style="padding: 0px;">
+                            //                <div style="position: relative; width: 100%; height: 4px; background-color: ${rowBackgroundColor}; border-radius: 5px;">
+                            //                    <div style="position: absolute; left: ${pricePosition}%; top: -3px; width: 10px; height: 10px; background-color: #333; border-radius: 50%; transform: translateX(-50%); box-shadow: 0 0 5px rgba(0,0,0,0.5);" title="Current Price: $${currentPrice.toFixed(2)}"></div>
+                            //                </div>
+                            //            </td>
+                            //        </tr>
+                            //    `;
+                            //}
+                            //tableHtml += lineHtml;
                         });
                         tableHtml += '</tbody></table>';
                         placeholderDiv.innerHTML = tableHtml;
@@ -321,10 +446,8 @@
                         placeholderDiv.innerHTML = '<p>No fundamentals data available for this industry.</p>';
                     }
                 }
-
             } catch (error) {
                 console.error('Error fetching or processing CSV:', error);
-                // Update all placeholders to show an error message with more details
                 for (const industryKey in tickerMap) {
                     const placeholderDiv = document.getElementById(`fundamentals-table-${industryKey}`);
                     if (placeholderDiv) {
@@ -333,18 +456,20 @@
                 }
             }
         }
+
+
     </script>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; color: #333; }
         h1 { color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px; }
         h2 { color: #004085; margin-top: 25px; }
         h3 { color: #002d6b; margin-top: 20px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; background-color: #fff; box-shadow: 0 2px 3px rgba(0,0,0,0.1); }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; font-weight: bold; }
-        .news-item { background-color: #e9f7ef; border-left: 5px solid #28a745; margin-bottom: 10px; padding: 10px; border-radius: 4px; }
-        .news-date { font-weight: bold; color: #28a745; }
-        .ticker-header { background-color: #d1ecf1; padding: 8px; margin-top: 15px; margin-bottom: 5px; border-radius: 4px; border-left: 5px solid #17a2b8; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; background-color: #fff; box-shadow: 0 2px 3px rgba(0,0,0,0.1); } /* Added table styling */
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; } /* Added table cell styling */
+        th { background-color: #f2f2f2; font-weight: bold; } /* Added table header styling */
+        .news-item { background-color: #e9f7ef; border-left: 5px solid #28a745; margin-bottom: 10px; padding: 10px; border-radius: 4px; } /* Added news item styling */
+        .news-date { font-weight: bold; color: #28a745; } /* Added news date styling */
+        .ticker-header { background-color: #d1ecf1; padding: 8px; margin-top: 15px; margin-bottom: 5px; border-radius: 4px; border-left: 5px solid #17a2b8; } /* Added ticker header styling */
         /* Style for markdown content */
         .markdown-output {
             padding: 15px;
@@ -592,8 +717,9 @@
 *   **December 3, 2025:** Arqit and Sparkle achieved quantum-resistant encryption at the speed of light.
 *   **October 9, 2025:** Arqit Quantum provided preliminary unaudited financial results for the second half and full fiscal year ended September 30, 2025.
 *   **September 30, 2024:** Arqit Quantum Inc. announced a $13.6 million Registered Direct Offering.</div>
-<h3 class="charts-section">Technicals & charts <small><i>(Mon, 05 Jan)</i></small></h3>
+<h3 class="charts-section">Technicals & charts <small><i>(Tue, 06 Jan)</i></small></h3>
 <div class="charts-section">
+    <canvas id="chart_quantum" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
     <img src="screenshots/quantum.png" alt="Quantum Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
@@ -659,8 +785,9 @@
     *   **November 20, 2025:** Mixel MIPI IP was successfully integrated into indie&#x27;s automotive radar processors, supporting safety-critical applications.
     *   **November 6, 2025:** indie Semiconductor reported its third-quarter 2025 results for the period ended September 30, 2025. The company also announced the appointment of Naixi Wu as Chief Financial Officer (details for this announcement were within the Q3 results context).
     *   **SEC Filings:** indie Semiconductor noted that information regarding its equity awards (inducement grants) can be found on its investor relations website.</div>
-<h3 class="charts-section">Technicals & charts <small><i>(Wed, 10 Dec)</i></small></h3>
+<h3 class="charts-section">Technicals & charts <small><i>(Tue, 06 Jan)</i></small></h3>
 <div class="charts-section">
+    <canvas id="chart_power_management_chips" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
     <img src="screenshots/power_management_chips.png" alt="Power Management Chips Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
@@ -695,8 +822,9 @@
 *   **Arbe Robotics (ARBE)**
     *   **January 5, 2026:** Arbe announced it is combining its market-leading radar solution with powerful NVIDIA AI computing to create an advanced platform for AI-based driving.
     *   **December 30, 2025:** Arbe successfully completed a $15.7 million private placement follow-on offering of its Series A Convertible Bonds.</div>
-<h3 class="charts-section">Technicals & charts <small><i>(Mon, 05 Jan)</i></small></h3>
+<h3 class="charts-section">Technicals & charts <small><i>(Tue, 06 Jan)</i></small></h3>
 <div class="charts-section">
+    <canvas id="chart_lidar_sensing" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
     <img src="screenshots/lidar_sensing.png" alt="Lidar Sensing Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
@@ -735,6 +863,7 @@ There are no new announcements or SEC filings specifically dated for today, **Ja
 *   **December 31, 2025**: Kodiak AI announced the completion of a new $30 million senior secured debt facility with Horizon Technology Finance Corporation, which reduces interest rates, extends debt maturity to **January 1, 2030**, and enhances liquidity and financial flexibility. This was noted in a Form 8-K filing.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Wed, 31 Dec)</i></small></h3>
 <div class="charts-section">
+    <canvas id="chart_autonomous_driving" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
     <img src="screenshots/autonomous_driving.png" alt="Autonomous Driving Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
@@ -790,6 +919,7 @@ There are no new announcements or SEC filings specifically dated for today, **Ja
     *   The next earnings call is scheduled for **March 30, 2026**.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Mon, 05 Jan)</i></small></h3>
 <div class="charts-section">
+    <canvas id="chart_uas_defense_robotics" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
     <img src="screenshots/uas_defense_robotics.png" alt="Uas Defense Robotics Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
@@ -850,6 +980,7 @@ There are no new announcements or SEC filings specifically dated for today, **Ja
     *   **October 22, 2025**: The company entered into Amendment No. 6 to its Credit Agreement, which extended the Waiver Period to December 1, 2025. iRobot stated its dependence on continued waivers from lenders to avoid an event of default related to the Going Concern Covenant. The company also noted that it may be forced to significantly curtail or cease operations and would likely seek bankruptcy protection if necessary funding is not secured. It does not anticipate filing its Annual Report on Form 10-K for the year ending January 3, 2026, until March 2026.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Thu, 11 Dec)</i></small></h3>
 <div class="charts-section">
+    <canvas id="chart_service_robotics" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
     <img src="screenshots/service_robotics.png" alt="Service Robotics Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
@@ -883,6 +1014,7 @@ There are no new announcements or SEC filings specifically dated for today, **Ja
     *   **January 5, 2026**: Redwire Corp&#x27;s Chairman and CEO also reported equity award activity dated **December 31, 2025**, where 127,500 performance-based restricted stock units (PSUs) converted into 255,000 shares of common stock. 116,085 shares were mandatorily withheld to cover taxes on the PSU vesting.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Mon, 05 Jan)</i></small></h3>
 <div class="charts-section">
+    <canvas id="chart_space_launch_systems" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
     <img src="screenshots/space_launch_systems.png" alt="Space Launch Systems Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
@@ -926,6 +1058,7 @@ There are no new announcements or SEC filings specifically dated for today, **Ja
 *   No specific announcements or SEC filings dated January 6, 2026, or immediately surrounding this date were found. The most recent SEC filing identified is a Form 4 from December 23, 2025.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Mon, 05 Jan)</i></small></h3>
 <div class="charts-section">
+    <canvas id="chart_earth_observation" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
     <img src="screenshots/earth_observation.png" alt="Earth Observation Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
@@ -964,6 +1097,7 @@ There are no new announcements or SEC filings specifically dated for today, **Ja
 *   **November 20, 2025**: ADS-TEC Energy PLC filed a Form 6-K (Report of Foreign Issuer) with the SEC.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Thu, 11 Dec)</i></small></h3>
 <div class="charts-section">
+    <canvas id="chart_ev_charging_infrastructure" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
     <img src="screenshots/ev_charging_infrastructure.png" alt="Ev Charging Infrastructure Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
@@ -1009,8 +1143,9 @@ There are no new announcements or SEC filings specifically dated for today, **Ja
 *   **December 10, 2025**: Vertical Aerospace launched Valo eVTOL as the successor to its VX4 program. A related 6-K Current Report (Foreign Issuer) was also filed.
 *   **December 9, 2025**: Vertical Aerospace signed a new customer, Héli Air Monaco, to open up French Riviera routes.
 *   **December 9, 2025**: Vertical Aerospace announced its plan to launch the UK&#x27;s first electric air taxi network in partnership with Skyports Infrastructure and Bristow.</div>
-<h3 class="charts-section">Technicals & charts <small><i>(Mon, 05 Jan)</i></small></h3>
+<h3 class="charts-section">Technicals & charts <small><i>(Tue, 06 Jan)</i></small></h3>
 <div class="charts-section">
+    <canvas id="chart_evtol_air_mobility" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
     <img src="screenshots/evtol_air_mobility.png" alt="Evtol Air Mobility Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
@@ -1068,6 +1203,7 @@ bw:&gt; announced the full redemption of all $26 million aggregate principal amo
 *   **November 13, 2025**: Ballard Power Systems reported its Q3 2025 consolidated results, with revenue of $32.5 million (up 120% year-over-year). A [6-K] Current Report (Foreign Issuer) was also filed on this date.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Mon, 05 Jan)</i></small></h3>
 <div class="charts-section">
+    <canvas id="chart_hydrogen_fuel_cells" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
     <img src="screenshots/hydrogen_fuel_cells.png" alt="Hydrogen Fuel Cells Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
@@ -1105,6 +1241,7 @@ No specific announcements or SEC filings dated **January 6, 2026** were found. T
 *   **October 30, 2025**: Solid Power announced a joint evaluation agreement with Samsung SDI and BMW to develop and validate a demonstration vehicle powered by all-solid-state battery technology.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Mon, 05 Jan)</i></small></h3>
 <div class="charts-section">
+    <canvas id="chart_batteries_storage_tech" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
     <img src="screenshots/batteries_storage_tech.png" alt="Batteries Storage Tech Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
@@ -1165,6 +1302,7 @@ te:&gt; 17M shares given to notes. $3B dilution($1.5B ATM) Dec 05</div>
 *   **December 4, 2025**: Energy Vault Secures Swiss Market Entry with Signed B-VAULT™ Deployment Contracts for Schindler and Energie Wettingen Projects, Launch of FlexGrid Product for Urban and Utility Applications.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Tue, 06 Jan)</i></small></h3>
 <div class="charts-section">
+    <canvas id="chart_batteries_storage_sw" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
     <img src="screenshots/batteries_storage_sw.png" alt="Batteries Storage Sw Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
@@ -1236,6 +1374,7 @@ te:&gt; 17M shares given to notes. $3B dilution($1.5B ATM) Dec 05</div>
 *   NioCorp acquired Scandium Alloy Assets to support a potential first-ever vertically integrated U.S. Scandium Mine-to-Markets Supply Chain.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Tue, 06 Jan)</i></small></h3>
 <div class="charts-section">
+    <canvas id="chart_battery_materials_mining" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
     <img src="screenshots/battery_materials_mining.png" alt="Battery Materials Mining Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
@@ -1280,8 +1419,9 @@ te:&gt; 17M shares given to notes. $3B dilution($1.5B ATM) Dec 05</div>
 *   **December 31, 2025:** Keefe, Bruyette &amp; Woods upgraded TeraWulf to an &quot;outperform&quot; rating with a $24 price target.
 *   **December 18, 2025:** Multiple 8-K current reports were filed by TeraWulf Inc.
 *   **December 8, 2025:** A Schedule 13G was filed by certain investors to report beneficial ownership of more than 5% of a class of equity securities.</div>
-<h3 class="charts-section">Technicals & charts <small><i>(Mon, 05 Jan)</i></small></h3>
+<h3 class="charts-section">Technicals & charts <small><i>(Tue, 06 Jan)</i></small></h3>
 <div class="charts-section">
+    <canvas id="chart_Hyperscalers" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
     <img src="screenshots/Hyperscalers.png" alt="Hyperscalers Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
@@ -1325,6 +1465,7 @@ te:&gt; 17M shares given to notes. $3B dilution($1.5B ATM) Dec 05</div>
 *   **January 5, 2026:** IREN&#x27;s GPU footprint expansion is enhancing its revenue visibility and stock performance. The company advanced its strategy in Q1 fiscal 2026 through a multi-year AI Cloud contract with Microsoft. This partnership is solidifying IREN&#x27;s position as a leading AI Cloud Service Provider and expanding its reach into hyperscale customer segments. IREN plans to scale its GPU fleet from approximately 23,000 units to 140,000 GPUs by the end of 2026, targeting $3.4 billion in total AI Cloud annualized run-rate revenues. The company has secured a $9.7 billion contract with Microsoft for phased deployments at Childress through 2026.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Mon, 05 Jan)</i></small></h3>
 <div class="charts-section">
+    <canvas id="chart_Mining" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
     <img src="screenshots/Mining.png" alt="Mining Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
@@ -1378,6 +1519,7 @@ oklo:&gt; $3.5B shelf registration,Dec 4 $1.5B ATM</div>
     *   **December 2, 2025:** BWXT announced the expansion of its service offerings with an Owner&#x27;s Engineer Contract at Bulgaria&#x27;s New Kozloduy Nuclear Power Plant Units 7 &amp; 8.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Mon, 05 Jan)</i></small></h3>
 <div class="charts-section">
+    <canvas id="chart_new_nuclear_energy" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
     <img src="screenshots/new_nuclear_energy.png" alt="New Nuclear Energy Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
@@ -1421,6 +1563,7 @@ oklo:&gt; $3.5B shelf registration,Dec 4 $1.5B ATM</div>
     *   **January 5, 2026:** Amazon has granted temporary remote work authorization to tech employees stuck in India due to H-1B visa delays until March 2, 2026, with certain restrictions on work activities.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Mon, 05 Jan)</i></small></h3>
 <div class="charts-section">
+    <canvas id="chart_Mag7" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
     <img src="screenshots/Mag7.png" alt="Mag7 Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
@@ -1429,9 +1572,8 @@ oklo:&gt; $3.5B shelf registration,Dec 4 $1.5B ATM</div>
     document.addEventListener('DOMContentLoaded', async function() {{
         // Fetch dilution data first
         await fetchDilutionData();
-        // Then call the function to fetch and render fundamentals tables
-        fetchAndRenderFundamentals();
-
+        // Then call the function to fetch and render fundamentals tables, which will then call renderCharts
+        fetchAndRenderTables();
         // Configure marked.js if needed (e.g., to sanitize HTML)
         // marked.setOptions({{ sanitize: true }});
 
@@ -1450,7 +1592,8 @@ oklo:&gt; $3.5B shelf registration,Dec 4 $1.5B ATM</div>
             document.querySelectorAll(selector).forEach(element => {{
                 if (isChecked) {{
                     element.classList.remove('hidden');
-                }} else {{
+                }}
+                 else {{
                     element.classList.add('hidden');
                 }}
             }});
