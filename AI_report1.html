@@ -211,9 +211,7 @@
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const csvText = await response.text();
-                const lines = csvText.split('
-').map(line => line.endsWith('
-') ? line.slice(0, -1) : line);
+                const lines = csvText.split('\n').map(line => line.endsWith('\r') ? line.slice(0, -1) : line);
                 console.log('Parsed CSV lines:', lines);
 
                 if (lines.length < 2 || lines.every(line => line.trim() === '')) {
