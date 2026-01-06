@@ -300,30 +300,30 @@
                             });
                             tableHtml += '</tr>';
 
-                            const currentPrice = parseFloat(row['Price']) || NaN;
-                            const ceilingRange = parsePriceRange(row['Ceiling']);
-                            const floorRange = parsePriceRange(row['Floor']);
+                            //const currentPrice = parseFloat(row['Price']) || NaN;
+                            //const ceilingRange = parsePriceRange(row['Ceiling']);
+                            //const floorRange = parsePriceRange(row['Floor']);
 
-                            let lineHtml = '';
-                            if (!isNaN(currentPrice) && !isNaN(floorRange.min) && !isNaN(ceilingRange.max)) {
-                                const overallMin = floorRange.min;
-                                const overallMax = ceilingRange.max;
+                            //let lineHtml = '';
+                            //if (!isNaN(currentPrice) && !isNaN(floorRange.min) && !isNaN(ceilingRange.max)) {
+                            //    const overallMin = floorRange.min;
+                            //    const overallMax = ceilingRange.max;
 
-                                let pricePosition = ((currentPrice - overallMin) / (overallMax - overallMin)) * 100;
-                                pricePosition = Math.max(0, Math.min(100, pricePosition));
-                                rowBackgroundColor = getColorAtGradientPosition(pricePosition);
+                            //    let pricePosition = ((currentPrice - overallMin) / (overallMax - overallMin)) * 100;
+                            //    pricePosition = Math.max(0, Math.min(100, pricePosition));
+                            //    rowBackgroundColor = getColorAtGradientPosition(pricePosition);
 
-                                lineHtml = `
-                                    <tr class="price-line-row">
-                                        <td colspan="${actualHeaders.length}" style="padding: 0px;">
-                                            <div style="position: relative; width: 100%; height: 4px; background-color: ${rowBackgroundColor}; border-radius: 5px;">
-                                                <div style="position: absolute; left: ${pricePosition}%; top: -3px; width: 10px; height: 10px; background-color: #333; border-radius: 50%; transform: translateX(-50%); box-shadow: 0 0 5px rgba(0,0,0,0.5);" title="Current Price: $${currentPrice.toFixed(2)}"></div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                `;
-                            }
-                            tableHtml += lineHtml;
+                            //    lineHtml = `
+                            //        <tr class="price-line-row">
+                            //            <td colspan="${actualHeaders.length}" style="padding: 0px;">
+                            //                <div style="position: relative; width: 100%; height: 4px; background-color: ${rowBackgroundColor}; border-radius: 5px;">
+                            //                    <div style="position: absolute; left: ${pricePosition}%; top: -3px; width: 10px; height: 10px; background-color: #333; border-radius: 50%; transform: translateX(-50%); box-shadow: 0 0 5px rgba(0,0,0,0.5);" title="Current Price: $${currentPrice.toFixed(2)}"></div>
+                            //                </div>
+                            //            </td>
+                            //        </tr>
+                            //    `;
+                            //}
+                            //tableHtml += lineHtml;
                         });
                         tableHtml += '</tbody></table>';
                         placeholderDiv.innerHTML = tableHtml;
