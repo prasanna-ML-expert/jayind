@@ -108,19 +108,19 @@
                 return 'background-color: #8B0000; color: white;'; // Dark Red
             } else if (val >= 10) {
                 return 'background-color: #006400; color: white;'; // Dark Green
-            } else if (val < 0) { // Between -10 and 0, scale from white to dark red
+            } else if (val < 0) {
                 let ratio = Math.abs(val) / 10.0;
                 let r = parseInt(255 - (255 - 139) * ratio);
                 let g = parseInt(255 - (255 - 0) * ratio);
                 let b = parseInt(255 - (255 - 0) * ratio);
                 return `background-color: rgb(${r}, ${g}, ${b});`;
-            } else if (val > 0) { // Between 0 and 10, scale from white to dark green
+            } else if (val > 0) {
                 let ratio = val / 10.0;
                 let r = parseInt(255 - (255 - 0) * ratio);
                 let g = parseInt(255 - (255 - 100) * ratio);
                 let b = parseInt(255 - (255 - 0) * ratio);
                 return `background-color: rgb(${r}, ${g}, ${b});`;
-            } else { // val == 0
+            } else {
                 return 'background-color: white;';
             }
         }
