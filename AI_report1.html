@@ -125,7 +125,7 @@
             }
         }
         // Functions for inline dilution window
-        function toggleDilutionInline(element, ticker, event) {
+        function toggleDilutionInline(element, ticker, event, currentPrice) {
             event.stopPropagation(); // Prevent default button action or parent click
             const popup = document.getElementById('dilution-inline-popup');
             const backdrop = document.getElementById('dilution-backdrop');
@@ -148,7 +148,7 @@
                 // Set content
                 popup.innerHTML = `
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                        <h3 style="margin: 0;">Dilution Details for ${ticker}</h3>
+                        <h3 style="margin: 0;">Dilution Details for ${ticker}(Price: $${currentPrice})</h3>
                         <button onclick="closeDilutionInline()" style="background: none; border: none; font-size: 1.5em; cursor: pointer;">&times;</button>
                     </div>
                     <div class="popup-content-scroll">${marked.parse(tickerDilutionMap[ticker])}</div>
@@ -360,8 +360,7 @@
                 // Columns to display (must match Python list in sheets_df)
                 const columnsToDisplay = [
                     'Ticker', 'price%', 'Price', 'mcap',
-                    'QRev', 'QPL', 'Order Book', 'SI%','Debt', 'cash',
-                    'institutes%','pcr','Ceiling', 'Floor', 'Warrant Redemption Risk', 'Convertible Overhang','Pending Shelf'
+                    'QRev', 'QPL', 'Order Book','Pending Shelf'
                 ];
 
                 for (const industryKey in tickerMap) {
@@ -403,9 +402,10 @@
                                 let displayValue = cellValue;
                                 if (header === 'Ticker') {
                                     const ticker = cellValue.toUpperCase();
+                                    const price = row['Price'] || 'N/A'; // Get the price
                                     if (tickerDilutionMap[ticker]) {
                                         displayValue = `
-                                            <button class="ticker-button" onclick="toggleDilutionInline(this, '${ticker}', event)">
+                                            <button class="ticker-button" onclick="toggleDilutionInline(this, '${ticker}', event, '${price}')">
                                                 ${cellValue}
                                             </button>
                                         `;
@@ -415,30 +415,30 @@
                             });
                             tableHtml += '</tr>';
 
-                            //const currentPrice = parseFloat(row['Price']) || NaN;
-                            //const ceilingRange = parsePriceRange(row['Ceiling']);
-                            //const floorRange = parsePriceRange(row['Floor']);
+                            const currentPrice = parseFloat(row['Price']) || NaN;
+                            const ceilingRange = parsePriceRange(row['Ceiling']);
+                            const floorRange = parsePriceRange(row['Floor']);
 
-                            //let lineHtml = '';
-                            //if (!isNaN(currentPrice) && !isNaN(floorRange.min) && !isNaN(ceilingRange.max)) {
-                            //    const overallMin = floorRange.min;
-                            //    const overallMax = ceilingRange.max;
+                            let lineHtml = '';
+                            if (!isNaN(currentPrice) && !isNaN(floorRange.min) && !isNaN(ceilingRange.max)) {
+                                const overallMin = floorRange.min;
+                                const overallMax = ceilingRange.max;
 
-                            //    let pricePosition = ((currentPrice - overallMin) / (overallMax - overallMin)) * 100;
-                            //    pricePosition = Math.max(0, Math.min(100, pricePosition));
-                            //    rowBackgroundColor = getColorAtGradientPosition(pricePosition);
+                                let pricePosition = ((currentPrice - overallMin) / (overallMax - overallMin)) * 100;
+                                pricePosition = Math.max(0, Math.min(100, pricePosition));
+                                rowBackgroundColor = getColorAtGradientPosition(pricePosition);
 
-                            //    lineHtml = `
-                            //        <tr class="price-line-row">
-                            //            <td colspan="${actualHeaders.length}" style="padding: 0px;">
-                            //                <div style="position: relative; width: 100%; height: 4px; background-color: ${rowBackgroundColor}; border-radius: 5px;">
-                            //                    <div style="position: absolute; left: ${pricePosition}%; top: -3px; width: 10px; height: 10px; background-color: #333; border-radius: 50%; transform: translateX(-50%); box-shadow: 0 0 5px rgba(0,0,0,0.5);" title="Current Price: $${currentPrice.toFixed(2)}"></div>
-                            //                </div>
-                            //            </td>
-                            //        </tr>
-                            //    `;
-                            //}
-                            //tableHtml += lineHtml;
+                                lineHtml = `
+                                    <tr class="price-line-row">
+                                        <td colspan="${actualHeaders.length}" style="padding: 0px;">
+                                            <div style="position: relative; width: 100%; height: 4px; background-color: ${rowBackgroundColor}; border-radius: 5px;">
+                                                <div style="position: absolute; left: ${pricePosition}%; top: -3px; width: 10px; height: 10px; background-color: #333; border-radius: 50%; transform: translateX(-50%); box-shadow: 0 0 5px rgba(0,0,0,0.5);" title="Current Price: $${currentPrice.toFixed(2)}"></div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                `;
+                            }
+                            tableHtml += lineHtml;
                         });
                         tableHtml += '</tbody></table>';
                         placeholderDiv.innerHTML = tableHtml;
@@ -668,55 +668,27 @@
 <h3 class="notes-section">Notes </h3>
 <div class="markdown-notes-block notes-section">ionq:&gt; By March dilution may get over</div>
 <h3 class="news-section">Recent News </h3>
-<div class="markdown-raw-content news-section">Here&#x27;s a summary of the latest announcements and SEC filings for the requested companies, excluding stock price changes as standalone news items and disclaimers:
+<div class="markdown-raw-content news-section">Here are the latest announcements and news for the requested NYSE/NASDAQ stocks as of January 7, 2026:
 
-**IonQ (IONQ)**
-*   **December 23, 2025:** IonQ finalized an agreement with KISTI to deliver a 100-qubit quantum system in South Korea.
-*   **December 17, 2025:** IonQ and QuantumBasel expanded their long-term partnership on next-generation quantum systems.
-*   **December 10, 2025:** Einride and IonQ partnered to use quantum computing for optimizing the logistics of electric and autonomous freight.
-*   **December 9, 2025:** An affiliate of IonQ filed a notice of proposed sale of restricted stock under Rule 144.
-*   **December 8, 2025:** IonQ expanded its presence in the EU with Slovakia&#x27;s first National Quantum Communication Network.
-*   **September 30, 2025:** IonQ announced its Third Quarter 2025 Financial Results, reporting revenue that exceeded the high end of its guidance range by 37%, representing 222% year-over-year growth. The company completed the acquisitions of Oxford Ionics and Vector Atomic, strengthening its full-stack quantum platform. IonQ also achieved a world-record 99.99% two-qubit gate performance and met its 2025 technical milestone of #AQ 64 on IonQ Tempo three months ahead of schedule. The company raised its full-year 2025 revenue expectations to between $106 million and $110 million.
-*   **October 14, 2025:** IonQ completed a $2 billion equity offering.
-*   **August 6, 2025:** IonQ announced its Second Quarter Financial Results, surpassing its revenue guidance by 15%. The company also announced the proposed acquisition of Oxford Ionics and completed the acquisitions of Lightsynq and Capella.
+*   **IONQ (IonQ, Inc.)**
+    *   **January 6, 2026**: IonQ&#x27;s stock performance and analyst ratings were reported, with a consensus &quot;Hold&quot; rating and an average price target of $72.08. The company is noted for leading in quantum computing error reduction and has a potential for stock growth throughout 2026 if it continues to improve its systems. IonQ&#x27;s Q3 revenue surged 221.5% year-over-year to $39.9 million, beating company guidance by 37%, and it has surpassed Street estimates for 12 consecutive quarters. Projected revenue growth for the current quarter is +244.2% year-over-year.
+    *   **January 4, 2026**: Capital Advisors Inc. OK reduced its holdings in IonQ by 4.5% in the third quarter, according to an SEC filing.
 
-**D-Wave Quantum Inc. (QBTS)**
-*   **December 22, 2025:** D-Wave announced its participation in CES 2026 to showcase its commercial quantum computing technology and customer success stories.
-*   **December 15, 2025:** A D-Wave Quantum director reported selling 10,000 shares of common stock under a Rule 10b5-1 trading plan.
-*   **December 8, 2025:** D-Wave announced its Qubits 2026 Quantum Computing User Conference.
-*   **December 2, 2025:** D-Wave announced the formation of its U.S. Government Business Unit.
-*   **November 6, 2025:** D-Wave Quantum released its financial results for the third quarter of fiscal year 2025, reporting revenue that doubled year-over-year to $3.7 million.
-*   **October 31, 2025:** D-Wave Quantum announced it would release its third-quarter fiscal year 2025 financial results on November 6, 2025.
+*   **QBTS (D-Wave Quantum Inc.)**
+    *   **January 6, 2026**: D-Wave Quantum Inc. announced a breakthrough in gate-model quantum computing, successfully demonstrating scalable on-chip cryogenic control of qubits. This achievement significantly reduces the wiring required for large numbers of qubits without degrading fidelity, advancing the development of commercially viable gate-model quantum computers. This milestone was also disclosed in an 8-K SEC filing on the same date.
 
-**Rigetti Computing Inc. (RGTI)**
-*   **January 5, 2026:** Rigetti Computing announced that CEO Dr. Subodh Kulkarni will participate in a fireside chat at the 28th Annual Needham Growth Conference on **Tuesday, January 13, 2026**.
-*   **November 10, 2025:** Rigetti Computing reported its Third Quarter 2025 Financial Results and provided updates on its technology roadmap for 2026 and 2027.
-*   **October 28, 2025:** Rigetti announced its support for NVIDIA NVQLink, a new open platform for AI Supercomputer-Quantum Integration.
-*   **September 30, 2025:** Rigetti announced purchase orders for two quantum computing systems, totaling approximately $5.7 million.
+*   **RGTI (Rigetti Computing Inc.)**
+    *   **January 6, 2026**: Rigetti Computing reported hitting 99.5% median two-qubit gate fidelity and increased its cash reserves to approximately $575 million to fund scaling efforts in 2026. The company is gaining attention due to analyst endorsements, sector enthusiasm for quantum technology, and upcoming investor conference appearances.
 
-**Quantum Computing Inc. (QUBT)**
-*   **January 3, 2026:** UNICOM Systems Inc. reported a 34.4% reduction in its position in Quantum Computing Inc. shares during the third quarter in its Form 13F filing.
-*   **December 17, 2025:** Quantum Computing Inc. filed a Current Report on Form 8-K.
-*   **December 15, 2025:** Quantum Computing Inc. announced plans for a $110 million deal to acquire Luminar Semiconductor.
-*   **December 10, 2025:** QCi announced it would be showcasing its quantum technology at CES 2026.
-*   **November 14, 2025:** Quantum Computing Inc. reported its Third Quarter 2025 Financial Results and confirmed the agreement to acquire Luminar Semiconductor, Inc. The company posted a Q3 profit on a non-cash gain and reported liquidity topping $813 million.
-*   **October 9, 2025:** An S-3ASR filing by QUBT detailed multiple share counts and $101,500 in fees.
-*   **September 17, 2025:** Robert Fagenson, a director of Quantum Computing Inc., reported multiple open-market sales of the company&#x27;s common stock between September 9 and September 15, 2025, disposing of his entire reported stake.
-*   **August 2024:** The QCi August 2024 Newsletter highlighted progress on its thin-film lithium niobate (TFLN) fabrication facility and a recent application with NASA using Dirac-3.
+*   **QUBT (Quantum Computing Inc.)**
+    *   **January 6, 2026**: Quantum Computing Inc. reported strong 2025 results, including securing contracts with NASA and a major U.S. bank, deploying its DIRAC-3 quantum optimization system, and making its first U.S. quantum security sale. The company is also in focus ahead of CES 2026, where it plans live demonstrations, and a proposed US$110 million acquisition of Luminar Semiconductor. Its Q3 revenue grew to $384,000, driven by cloud-based DIRAC-3 access and foundry progress.
 
-**SEALSQ Corp (LAES)**
-*   **January 5, 2026:** SEALSQ Corp&#x27;s C-suite leadership began a strategic roadshow across India, scheduled from January 5-9, to establish partnerships related to post-quantum chips and space technology. This initiative includes targeting collaborations with Kaynes Semicon and Skyroot Aerospace, and working with WISeSat on potential satellite launches in 2026.
-*   **December 18, 2025:** SEALSQ Corp filed a Form 6-K, a report of a foreign private issuer.
-*   **December 10, 2025:** SEALSQ Corp filed a Form 6-K, a report of a foreign private issuer.
-*   **October 2025:** SEALSQ Corp surpassed a $1 billion market valuation and was upgraded to Nasdaq Global Select.
-*   **Full year 2025:** SEALSQ expects revenue to be between $17.5 million and $20 million.
+*   **LAES (Lightspeed Commerce Inc.)**
+    *   No specific dated announcements or SEC filings for LAES were found for January 6 or 7, 2026.
 
-**Arqit Quantum Inc. (ARQQ)**
-*   **December 11, 2025:** A filing for a proposed sale of securities under Rule 144 was made.
-*   **December 9, 2025:** Arqit Quantum Inc. announced its financial results for the fiscal year ended September 30, 2025, reporting revenue of $530,000 for the fiscal year. The company also held a conference call to discuss its results.
-*   **December 3, 2025:** Arqit and Sparkle achieved quantum-resistant encryption at the speed of light.
-*   **October 9, 2025:** Arqit Quantum provided preliminary unaudited financial results for the second half and full fiscal year ended September 30, 2025.
-*   **September 30, 2024:** Arqit Quantum Inc. announced a $13.6 million Registered Direct Offering.</div>
+*   **ARQQ (Arqit Quantum Inc.)**
+    *   **January 6, 2026**: Arqit Quantum Inc. is reported to be outperforming other computer and technology stocks year-to-date, with its Zacks Consensus Estimate for full-year earnings moving 9.5% higher over the past three months, signaling an improving earnings outlook. The company provides cybersecurity services through its QuantumCloud Platform as a Service, which creates unbreakable software encryption keys.
+    *   **Recent Filings (no specific date of January 6 or 7):** Arqit Quantum executed a term sheet to settle a previously disclosed U.S. federal putative class action for $7 million, pending court approval. This information is incorporated by reference into Arqit&#x27;s effective registration statements.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Tue, 06 Jan)</i></small></h3>
 <div class="charts-section">
     <canvas id="chart_quantum" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
@@ -730,61 +702,99 @@
 <h3 class="notes-section">Notes </h3>
 <div class="markdown-notes-block notes-section">on:&gt; 6B repurchage announced on Dec 2</div>
 <h3 class="news-section">Recent News </h3>
-<div class="markdown-raw-content news-section">Here are the latest announcements, news, and SEC filings for the specified companies as of January 6, 2026:
+<div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for the requested companies, dated as of today, **January 7, 2026**:
 
-*   **NVTS (Navitas Semiconductor)**
-    *   **December 11, 2025:** Navitas announced the expansion of its global distribution network with Avnet, building on its existing Avnet Silica (Europe) relationship to support high-growth, high-power markets such as AI data centers, performance computing, energy and grid infrastructure, and industrial electrification.
-    *   **December 8, 2025:** Navitas and Cyient Semiconductors entered into a strategic partnership to accelerate GaN adoption in India&#x27;s AI, mobility, industrial, and energy markets.
-    *   **December 1, 2025:** Navitas announced its 3300V and 2300V UHV Silicon Carbide Product Portfolio, designed to augment reliability and performance in mission-critical energy infrastructure applications.
-    *   **November 27, 2025:** Navitas consolidated its Asian distribution by signing a strategic distribution partnership with WT Microelectronics Co., Ltd.
-    *   **November 20, 2025:** GlobalFoundries and Navitas Semiconductor partnered to accelerate U.S. GaN technology and manufacturing for AI data centers and critical power applications.
-    *   **November 7, 2025:** Navitas announced a private placement of common stock for proceeds of $100 million to support its Navitas 2.0 strategy, focusing on high-power markets.
-    *   **November 3, 2025:** Navitas Semiconductor was scheduled to report its third-quarter 2025 financial results after the market close.
+### Navitas Semiconductor (NVTS)
 
-*   **ON (onsemi)**
-    *   **December 18, 2025:** onsemi announced plans to develop next-generation GaN power devices with GlobalFoundries.
-    *   **December 11, 2025:** onsemi and FORVIA HELLA extended their strategic collaboration with next-generation power technology.
-    *   **December 2, 2025:** onsemi and Innoscience announced plans to collaborate to speed the global rollout of onsemi&#x27;s GaN power portfolio.
-    *   **November 18, 2025:** onsemi announced a $6 billion share repurchase authorization.
-    *   **November 3, 2025:** onsemi reported its third-quarter 2025 results.
-    *   **SEC Filings:** The company&#x27;s third-quarter 2025 earnings conference call was held on November 3, 2025.
+*   **December 18, 2025**: Navitas Semiconductor Corp. filed a Form 4, indicating insider trading activity.
+*   **December 16, 2025**: A Form 4 filing by Navitas Semiconductor Corp. reported insider trading activity.
+*   **December 12, 2025**: Navitas Semiconductor Corp. filed a Form 4, detailing insider trading activity.
+*   **December 11, 2025**: Navitas announced it is expanding its global distribution network with Avnet.
+*   **December 9, 2025**: Navitas Semiconductor is scheduled to participate in an upcoming CICC Investor Call.
+*   **December 9, 2025**: A Form 4 filing by Navitas Semiconductor Corp. reported insider trading activity.
+*   **December 8, 2025**: Navitas and Cyient Semiconductors announced a strategic partnership to accelerate GaN adoption in India&#x27;s AI, Mobility, Industrial, and Energy Markets.
+*   **December 8, 2025**: Navitas Semiconductor Corp. filed a Form 4, detailing insider trading activity.
+*   **December 1, 2025**: Navitas announced a new 3300V and 2300V UHV Silicon Carbide product portfolio, aimed at augmenting reliability and performance in mission-critical energy infrastructure applications.
+*   **November 27, 2025**: Navitas consolidated its Asian distribution by signing a strategic partnership with WT Microelectronics Co., Ltd.
+*   **November 20, 2025**: GlobalFoundries and Navitas Semiconductor partnered to accelerate U.S. GaN technology and manufacturing for AI datacenters and critical power applications.
+*   **November 17, 2025**: A registration filing summary for Navitas Semiconductor was released.
+*   **November 7, 2025**: Navitas announced a private placement of common stock, raising $100 million in proceeds.
 
-*   **AOSL (Alpha and Omega Semiconductor)**
-    *   **December 16, 2025:** Alpha &amp; Omega Semiconductor Ltd officer and CFO and corporate secretary Yifan Liang reported a transaction involving 500 common shares.
-    *   **December 2, 2025:** Alpha and Omega Semiconductor enabled 48V hot swap in AI servers with a new high SOA MOSFET in LFPAK 8x8.
-    *   **December 1, 2025:** Alpha and Omega Semiconductor was scheduled to participate in the 14th Annual NYC Summit 2025.
-    *   **November 17, 2025:** Alpha &amp; Omega Semiconductor Ltd filed a Form 8-K Current report pursuant to Section 13 or 15(d) and also reported insider trading activity (Form 4) by Xue Bing.
-    *   **November 13, 2025:** Alpha and Omega Semiconductor announced a $30 million share repurchase program.
-    *   **November 5, 2025:** Alpha and Omega Semiconductor reported financial results for the fiscal first quarter of 2026 ended September 30, 2025. The company held a conference call and live webcast to review the financial results.
-    *   **October 14, 2025:** Alpha and Omega Semiconductor announced it would release its fiscal first-quarter financial results on November 5, 2025.
-    *   **SEC Filings:** Various Form 4 filings for insider trading activity were reported on **December 16, 2025**, **November 17, 2025**, and **November 12, 2025**. A Form 144, Notice of proposed sale of securities pursuant to Rule 144, was filed on **December 15, 2025**.
+### onsemi (ON)
 
-*   **COHR (Coherent Corp.)**
-    *   **January 2, 2026:** NYSE: COHR stock price data was updated.
-    *   **November 5, 2025:** Coherent Corp. announced financial results for its first quarter of fiscal year 2026 ended September 30, 2025. The company also stated its intention to file an investor presentation as an exhibit to a Current Report on Form 8-K.
+*   **December 18, 2025**: onsemi announced a collaboration with GlobalFoundries to develop next-generation GaN power devices.
+*   **December 11, 2025**: onsemi and FORVIA HELLA extended their strategic collaboration with next-generation power technology.
+*   **December 9, 2025**: onsemi participated in the 53rd Annual Nasdaq Investor Conference.
+*   **December 2, 2025**: onsemi and Innoscience announced plans to collaborate to speed the global rollout of onsemi&#x27;s GaN power portfolio.
+*   **November 18, 2025**: onsemi announced a $6 billion share repurchase authorization.
+*   **November 3, 2025**: onsemi reported its Third Quarter 2025 Results.
+*   **October 30, 2025**: onsemi unveiled vertical GaN semiconductors, highlighting them as a breakthrough for AI and electrification.
+*   **October 28, 2025**: onsemi&#x27;s Treo Platform was selected by Teledyne for advanced infrared imaging design.
+*   **October 27, 2025**: onsemi completed the acquisition of Vcore Power Technology from Aura Semiconductor.
+*   **October 16, 2025**: onsemi announced it would release its Third Quarter Financial Results.
+*   **September 23, 2025**: onsemi announced its intention to acquire Vcore Power Technology from Aura Semiconductor to strengthen its AI data center leadership.
 
-*   **MPWR (Monolithic Power Systems)**
-    *   No announcements or SEC filings specifically dated January 6, 2026, or in late December 2025/early January 2026 were found in the provided search results. The most recent financial results mentioned are for Q3 2025.
+### Alpha and Omega Semiconductor (AOSL)
 
-*   **POWI (Power Integrations)**
-    *   **January 5, 2026:** Power Integrations announced the appointment of Chris Jacobs as senior vice president for marketing and product strategy, effective immediately.
-    *   **December 5, 2025:** Power Integrations reported inducement grants under Nasdaq Listing Rule 5635(c)(4).
-    *   **November 24, 2025:** Power Integrations bolstered its leadership team with the addition of Julie Currie as Chief People and Transformation Officer.
-    *   **November 18, 2025:** Power Integrations named Nancy Erba as Chief Financial Officer.
-    *   **November 5, 2025:** Power Integrations announced financial results for the third quarter of 2025. The company also stated its board of directors increased the quarterly dividend to $0.215 per share for each of the four quarters of 2026.
-    *   **SEC Filings:** A Form 4 was filed on August 20, 2025.
+*   **December 16, 2025**: Alpha and Omega Semiconductor Limited&#x27;s CFO and corporate secretary, Yifan Liang, reported a transaction involving 500 common shares in a Form 4 SEC filing.
+*   **December 15, 2025**: Alpha and Omega Semiconductor Limited filed a Form 144, a notice of proposed sale of securities.
+*   **December 2, 2025**: Alpha and Omega Semiconductor announced a new High SOA MOSFET in LFPAK 8x8, enabling 48V hot swap in AI servers.
+*   **December 1, 2025**: Alpha and Omega Semiconductor participated in the 14th Annual NYC Summit 2025.
+*   **November 17, 2025**: Alpha and Omega Semiconductor Limited filed a Form 8-K, reporting a material event.
+*   **November 17, 2025**: A Form 4 filing by Alpha and Omega Semiconductor Limited reported insider trading activity.
+*   **November 14, 2025**: 235 shares were acquired under the employee stock purchase plan.
+*   **November 13, 2025**: Alpha and Omega Semiconductor announced a $30 Million Share Repurchase Program.
+*   **November 12, 2025**: A Form 4 filing by Alpha and Omega Semiconductor Limited reported insider trading activity.
+*   **November 5, 2025**: Alpha and Omega Semiconductor reported financial results for the Fiscal First Quarter of 2026, which ended **September 30, 2025**.
+*   **October 14, 2025**: Alpha and Omega Semiconductor announced it would release its Fiscal First Quarter Financial Results on **November 5, 2025**.
 
-*   **ALAB (Astera Labs)**
-    *   **December 11, 2025:** Astera Labs participated in the Barclays 23rd Annual Global Technology Conference.
-    *   **December 2, 2025:** Astera Labs expanded its connectivity portfolio with custom solutions.
-    *   **November 18, 2025:** Astera Labs&#x27; Leo CXL Smart Memory Controllers on Microsoft Azure M-series Virtual Machines were highlighted for overcoming the memory wall.
-    *   **November 13, 2025:** Astera Labs announced its participation in financial conferences for the fourth quarter of 2025.
+### Coherent Corp (COHR)
 
-*   **INDI (indi Semiconductor)**
-    *   **December 12, 2025:** indie Semiconductor announced new employee inducement grants.
-    *   **November 20, 2025:** Mixel MIPI IP was successfully integrated into indie&#x27;s automotive radar processors, supporting safety-critical applications.
-    *   **November 6, 2025:** indie Semiconductor reported its third-quarter 2025 results for the period ended September 30, 2025. The company also announced the appointment of Naixi Wu as Chief Financial Officer (details for this announcement were within the Q3 results context).
-    *   **SEC Filings:** indie Semiconductor noted that information regarding its equity awards (inducement grants) can be found on its investor relations website.</div>
+*   **December 3, 2025**: Coherent expanded its Silicon Carbide platform with 300mm capability to support the growing demand from AI and datacenters.
+*   **November 14, 2025**: Coherent introduced Axon FP, described as a breakthrough fiber-delivered femtosecond laser for multiphoton microscopy.
+*   **November 10, 2025**: Coherent unveiled the EDGE CUT20 OEM Cutting Solution for intelligent metal cutting at Photonix Japan 2025.
+*   **November 5, 2025**: Coherent Corp. reported its First Quarter Fiscal Year 2026 Results.
+*   **April 1, 2025**: Coherent Corp. announced it would host an Analyst and Investor Day on **May 28, 2025**, at the New York Stock Exchange.
+
+### Monolithic Power Systems (MPWR)
+
+*   **January 6, 2026**: News reported that an insider, Director Victor Lee, sold shares worth $2,821,399, according to a recent SEC Filing. The actual sale of 600 shares by Director Victor Lee occurred on **January 2, 2026**.
+*   **December 31, 2025**: This was the record date for the fourth quarter cash dividend of $1.56 per share.
+*   **December 12, 2025**: Monolithic Power Systems announced a fourth quarter cash dividend of $1.56 per common share. The dividend is scheduled to be paid on **January 15, 2026**.
+*   **December 12, 2025**: An 8-K SEC filing was made regarding the announcement of the fourth quarter cash dividend.
+*   **October 30, 2025**: Monolithic Power Systems announced results for the Third Quarter Ended **September 30, 2025**.
+*   **September 30, 2025**: This was the record date for the third quarter dividend of $1.56 per share, which was paid on **October 15, 2025**.
+
+### Power Integrations (POWI)
+
+*   **December 16, 2025**: Power Integrations participated in the Northland Growth Conference (Virtual).
+*   **December 3, 2025**: Power Integrations participated in the UBS Global Technology and AI Conference.
+*   **November 5, 2025**: Power Integrations reported its Third-Quarter Financial Results.
+*   **November 5, 2025**: Power Integrations held its Q3 Earnings Conference Call.
+*   **August 6, 2025**: Power Integrations reported its Second-Quarter Financial Results.
+*   **August 6, 2025**: Power Integrations held its Q2 Earnings Conference Call.
+*   **June 30, 2025**: A dividend of $0.21 per share was paid.
+
+### Astera Labs (ALAB)
+
+*   **December 11, 2025**: A summary of Astera Labs&#x27; participation in the Barclays 23rd Annual Global Technology Conference was released.
+*   **December 2, 2025**: Astera Labs expanded its connectivity portfolio with custom solutions to support NVLink Fusion-based heterogeneous AI infrastructure.
+*   **November 18, 2025**: Astera Labs announced that its Leo CXL Smart Memory Controllers on Microsoft Azure M-series Virtual Machines are enabling customers to overcome the memory wall.
+*   **November 13, 2025**: Astera Labs announced its participation in upcoming financial conferences during the fourth quarter 2025.
+*   **November 4, 2025**: Astera Labs announced financial results for the Third Quarter of Fiscal Year 2025.
+*   **October 22, 2025**: Astera Labs announced its intention to acquire aiXscale Photonics, a deal expected to help enable scale-up photonic chiplets in AI Infrastructure 2.0.
+*   **October 14, 2025**: Astera Labs joined Arm Total Design to accelerate custom AI.
+*   **October 13, 2025**: Astera Labs announced comprehensive collaborations spanning GPU, CPU, cables &amp; connectors, ODM, software management, and IP/design &amp; verification providers.
+*   **August 20, 2025**: Astera Labs announced its participation in financial conferences for the third quarter 2025.
+*   **August 5, 2025**: Astera Labs announced financial results for the Second Quarter of Fiscal Year 2025.
+
+### Indie Semiconductor (INDI)
+
+*   **December 12, 2025**: indie announced new employee inducement grants.
+*   **November 6, 2025**: indie reported its Third Quarter 2025 Results.
+*   **November 6, 2025**: indie appointed Naixi Wu as its new Chief Financial Officer.
+*   **October 28, 2025**: indie entered into a definitive agreement to sell its interest in Wuxi indie Microelectronics.
+*   **October 14, 2025**: indie Semiconductor announced it would release its Third Quarter 2025 Results on **November 6, 2025**.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Tue, 06 Jan)</i></small></h3>
 <div class="charts-section">
     <canvas id="chart_power_management_chips" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
@@ -796,32 +806,36 @@
 <h3 class="fundamentals-section">Fundamentals</h3>
 <div id="fundamentals-table-lidar_sensing" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="news-section">Recent News </h3>
-<div class="markdown-raw-content news-section">Here are the latest dated announcements and SEC filings for the requested companies, as of January 6, 2026:
+<div class="markdown-raw-content news-section">Here are today&#x27;s and latest dated announcements/news and SEC filings for the requested companies:
 
-*   **Aeva (AEVA)**
-    *   **December 17, 2025:** Aeva announced plans to showcase a passenger OEM vehicle with windshield-integrated 4D LiDAR and introduce new sensor technology for Physical AI at CES 2026. Interactive demonstrations will highlight how Aeva&#x27;s perception platform is transforming automation across automotive, robotics, factory automation, and smart infrastructure applications.
-    *   **December 9, 2025:** Aeva announced its participation in the 53rd Annual Nasdaq Investor Conference in association with Morgan Stanley.
-    *   **December 3, 2025:** Aeva secured an exclusive global production contract from a top European passenger OEM, becoming the exclusive Tier-1 supplier of LiDAR for the OEM&#x27;s vehicle platform worldwide outside China. This multi-year production program extends into the mid-2030s, with Aeva&#x27;s start of production targeted for 2028.
-    *   **December 3, 2025:** Aeva Technologies, Inc. filed an 8-K (Current Report) related to unscheduled material events or a corporate event.
+*   **Aeva Technologies Inc. (AEVA)**
+    *   **January 6, 2026:** Introduced &quot;Omni,&quot; a compact, wide-view short-range 4D LiDAR sensor designed for physical AI applications. This product was developed in collaboration with LG Innotek.
+    *   **January 6, 2026:** Announced that its Frequency Modulated Continuous Wave (FMCW) 4D LiDAR technology has been selected for integration into NVIDIA&#x27;s DRIVE Hyperion autonomous vehicle reference platform.
+    *   **January 5, 2026:** An SEC Form 4 filing indicated that Saurabh Sinha, the Chief Financial Officer, sold 12,147 shares on **January 2, 2026**.
+    *   **January 5, 2026:** An SEC Form 4 filing showed that Soroush Salehian Dardashti, the Chief Executive Officer, sold 488,160 shares on **January 1, 2026**.
+    *   **January 6, 2026:** Mina Rezk, Chief Technology Officer, sold 321,723 shares on **January 2, 2026**, and acquired 150,602 shares through a fully vested restricted stock unit award on **January 1, 2026**.
 
-*   **Luminar Technologies (LAZR)**
-    *   **January 5, 2026:** Luminar Technologies filed an 8-K (Current Report).
-    *   **December 29, 2025:** Luminar Technologies announced a plan to reduce its workforce by approximately 30% to lower operating expenses. This reduction began immediately and is expected to be substantially completed by the first quarter of 2026. The company estimates cash charges between $2.5 million and $3.0 million for employee severance and related costs, primarily in Q1 2026. The company&#x27;s Class A Common Stock also began trading on the OTC Pink Limited Market under the symbol LAZRQ on December 24, 2025, following delisting from The Nasdaq Stock Market LLC.
+*   **Luminar Technologies, Inc. (LAZR)**
+    *   **January 5, 2026:** Provided an update on its Chapter 11 bankruptcy proceedings, outlining the next steps for the sale of its assets and the company&#x27;s liquidation. The deadline for potential bidders to submit offers is set for **January 9, 2026**.
+    *   **January 5, 2026:** Filed a Current Report (8-K).
+    *   **December 29, 2025:** Announced a plan to reduce its workforce by approximately 30% to decrease operating expenses, with the reduction expected to be substantially completed by the first quarter of 2026.
+    *   **December 24, 2025:** The company&#x27;s Class A Common Stock began trading on the OTC Pink Limited Market under the ticker symbol LAZRQ, following its delisting from The Nasdaq Stock Market LLC.
 
-*   **MicroVision (MVIS)**
-    *   **December 16, 2025:** MicroVision reported commercial momentum in the Industrial, Security &amp; Defense sectors with an initial order for its MOVIA L sensors with integrated software. The company also stated it increased MOVIA L production capacity in 2025.
+*   **MicroVision, Inc. (MVIS)**
+    *   **December 16, 2025:** Reported receiving an initial commercial order for its MOVIA L sensors, which include integrated software, from a customer in the Security &amp; Defense sector.
+    *   The company expects the production launch of its next-generation MOVIA S sensor in the fourth quarter of 2026.
 
-*   **AEye (LIDR)**
-    *   **December 12, 2025:** AEye, Inc. reported that a director sold 32,000 shares of common stock.
-    *   **December 10, 2025:** AEye announced the termination of a $50 million share purchase agreement with New Circle Principal Investments LLC and increased its at-market stock offering by $50 million to up to $125 million.
+*   **AEye, Inc. (LIDR)**
+    *   **January 6, 2026:** Announced the integration of its long-range Apollo lidar with the NVIDIA AGX DRIVE Thor™ automotive computing platform.
+    *   **January 5, 2026:** Unveiled its Stratos™ Ultra-Long-Range Third Generation Lidar, capable of detecting objects at distances of up to 1.5 kilometers.
 
-*   **Ouster (OUST)**
-    *   **December 10, 2025:** Ouster appointed Phil Eyler to its Board of Directors.
-    *   **December 9, 2025:** Ouster announced its participation in the Northland Growth Conference 2025.
+*   **Ouster, Inc. (OUST)**
+    *   **December 19, 2025:** Amended its lease agreement for its San Francisco headquarters, extending the term to **August 31, 2034**. The annual base rent is set to decrease starting **January 1, 2026**.
 
-*   **Arbe Robotics (ARBE)**
-    *   **January 5, 2026:** Arbe announced it is combining its market-leading radar solution with powerful NVIDIA AI computing to create an advanced platform for AI-based driving.
-    *   **December 30, 2025:** Arbe successfully completed a $15.7 million private placement follow-on offering of its Series A Convertible Bonds.</div>
+*   **Arbe Robotics Ltd. (ARBE)**
+    *   **January 5, 2026:** Announced a partnership with NVIDIA at CES 2026 to jointly develop an AI-based perception platform for autonomous driving, which will integrate Arbe&#x27;s ultra-HD radar technology with NVIDIA&#x27;s accelerated computing. Arbe will also demonstrate its automotive-grade radar system at CES 2026.
+    *   **December 30, 2025:** Successfully completed a $15.7 million private placement follow-on offering of its Series A Convertible Bonds. This increased the total amount of Series A bonds held by the trustee to $24.3 million. Bondholders approved amendments to extend the Series A maturity to **December 31, 2026**, and reduce the annual interest rate from 6.5% to 4.35%, effective **January 1, 2026**.
+    *   **December 22, 2025:** Filed a 6-K report stating that its bondholders had approved the extension of the Series A Convertible Bonds&#x27; maturity date to **December 31, 2026**, and the reduction of the annual interest rate.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Tue, 06 Jan)</i></small></h3>
 <div class="charts-section">
     <canvas id="chart_lidar_sensing" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
@@ -833,34 +847,32 @@
 <h3 class="fundamentals-section">Fundamentals</h3>
 <div id="fundamentals-table-autonomous_driving" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="news-section">Recent News </h3>
-<div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for the requested companies, as of today, **January 6, 2026**:
+<div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for MBLY, AUR, TSLA, XPEV, and KDK, as of **Wednesday, January 7, 2026**:
 
-### Mobileye (MBLY)
+### Mobileye Global (MBLY)
 
-*   **January 6, 2026**: Mobileye is scheduled to host Mobileye Live at CES 2026, where CEO Prof. Amnon Shashua will deliver the annual address at 1:45 p.m. PT.
-*   **December 18, 2025**: Mobileye announced it would host Mobileye Live at CES 2026.
-*   **December 9, 2025**: Multiple directors of Mobileye Global Inc. filed Form 4 statements, indicating changes in beneficial ownership of securities.
+*   **January 6, 2026**: JPMorgan Chase &amp; Co. upgraded Mobileye Global&#x27;s stock rating from &quot;underweight&quot; to &quot;neutral&quot; with a $13.00 price target.
+*   **January 5, 2026**: Mobileye announced it secured a major U.S.-based automaker as a customer for its EyeQ6H-powered advanced driver assistance systems (ADAS). This deal is expected to lead to the implementation of Mobileye&#x27;s Surround ADAS technology as standard equipment across a range of mainstream and premium vehicles and is the second top-10 global automaker to adopt this solution. Mobileye now estimates future delivery of over 19 million EyeQ6H-based Surround systems, including 9 million from the newly announced automaker.
 
 ### Aurora Innovation (AUR)
 
-There are no new announcements or SEC filings specifically dated for today, **January 6, 2026**, or late December 2025. The most recent specific filings mentioned in the search results are from October 2025.
+*   No new announcements or non-price-related news/SEC filings have been found as of January 7, 2026. The latest SEC filing available is a 10-Q from **October 28, 2025**.
 
 ### Tesla (TSLA)
 
-*   **January 2, 2026**: Tesla filed a Form 144, a notice of proposed sale of securities, and an 8-K Current Report.
-*   **December 31, 2025**: Elon Musk filed a Form 4 statement, reporting changes in beneficial ownership of securities.
+*   **January 2, 2026**: Tesla, Inc. published a press release regarding its results of operations and financial condition, as detailed in an 8-K filing.
 
-### Xpeng (XPEV)
+### XPeng (XPEV)
 
-*   **January 2, 2026**: Xpeng Inc. filed a 6-K Current Report (Foreign Issuer).
-*   **January 1, 2026**: Xpeng announced its vehicle delivery results for December and the full year 2025. The company delivered 37,508 vehicles in December 2025 (a 2% year-over-year increase) and a total of 429,445 vehicles in 2025 (a 126% increase over the previous year). Overseas deliveries for 2025 reached 45,008 vehicles, marking a 96% year-over-year increase, and Xpeng expanded its global presence to 60 countries and regions.
-*   **December 29, 2025**: Collaborative research between XPENG and Peking University, focusing on a novel visual token pruning framework for autonomous driving, was accepted by AAAI 2026.
+*   **January 6, 2026**: Freedom Capital Markets upgraded XPeng&#x27;s stock rating from &quot;Hold&quot; to &quot;Buy&quot; and raised its price target to $25.00 from $20.00.
+*   **January 1, 2026**: XPENG announced vehicle delivery results for December and the full year 2025, reporting 429,445 total vehicles delivered in 2025 (a 126% year-over-year increase) and 37,508 vehicles delivered in December 2025 (a 2% year-over-year increase). Overseas deliveries in 2025 reached 45,008 units, a 96% year-over-year rise, with expansion to 60 countries and regions. The company also added over 1,100 charging stations in 2025, bringing its self-operated network to 3,000 stations.
+*   **December 2025 (Specific date not provided, but recent)**: XPENG entered a strategic partnership with Malaysian manufacturer EP Manufacturing Berhad to launch localized EV production in Malacca, with mass production scheduled to begin in 2026.
+*   **December 2025 (Specific date not provided, but recent)**: XPENG and Peking University&#x27;s collaborative research paper &quot;FastDriveVLA: Efficient End-to-End Driving via Plug-and-Play Reconstruction-based Token Pruning&quot; was accepted by AAAI 2026.
 
 ### Kodiak AI (KDK)
 
-*   **January 5, 2026**: Kodiak announced a strategic agreement with Bosch to collaborate on a production-grade, redundant autonomous trucking platform, integrating hardware, firmware, and software to scale the Kodiak Driver for deployment. A Kodiak Driver-powered autonomous truck will be displayed at CES 2026 (January 6–9) in the Bosch booth.
-*   **January 2, 2026**: Kodiak AI&#x27;s Chief People Officer reported exercising a stock option to acquire 10,000 shares of common stock (Form 4 filing).
-*   **December 31, 2025**: Kodiak AI announced the completion of a new $30 million senior secured debt facility with Horizon Technology Finance Corporation, which reduces interest rates, extends debt maturity to **January 1, 2030**, and enhances liquidity and financial flexibility. This was noted in a Form 8-K filing.</div>
+*   **January 5, 2026**: Kodiak AI announced a strategic agreement with Bosch to collaborate on and scale the manufacturing of a production-grade, redundant autonomous platform for autonomous trucking.
+*   **January 2, 2026**: Kodiak AI, Inc. filed a Form 8-K, which detailed a new senior secured term loan facility of up to $30.0 million entered into with Horizon Technology Finance Corporation on **December 31, 2025**. The company borrowed the full amount, using part to repay existing indebtedness and the remainder for working capital and general corporate purposes. The term loans accrue interest at the prime rate plus 3.50%, with a prime floor of 6.50%, and are interest-only from February 1, 2026, through July 1, 2028, followed by 18 equal monthly payments until maturity on January 1, 2030.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Wed, 31 Dec)</i></small></h3>
 <div class="charts-section">
     <canvas id="chart_autonomous_driving" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
@@ -872,51 +884,41 @@ There are no new announcements or SEC filings specifically dated for today, **Ja
 <h3 class="fundamentals-section">Fundamentals</h3>
 <div id="fundamentals-table-uas_defense_robotics" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="news-section">Recent News </h3>
-<div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for the requested NYSE/NASDAQ stocks, as of January 6, 2026:
+<div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for the requested NYSE/NASDAQ stocks, as of January 7, 2026:
 
-*   **DPRO (Draganfly Inc.)**
-    *   No new announcements or SEC filings specifically dated January 6, 2026, were found.
-    *   The latest available SEC filing is a Form 6-K (Current Report by a Foreign Issuer) dated **November 18, 2025**.
+**ZENA (ZenaTech, Inc.)**
+*   **January 6, 2026:** ZenaTech announced its strategic alignment with recent U.S. government restrictions on foreign-made drone equipment, which could benefit its ZenaDrone subsidiary in U.S. defense and government markets. The company highlighted the December 22, 2025, FCC update to its Covered List restricting authorization of new foreign-made unmanned aircraft systems. ZenaTech is pursuing Blue UAS certification and has drone manufacturing in Arizona and a Taiwan-based subsidiary for NDAA-compliant drone component parts.
+*   **December 30, 2025:** ZenaTech completed three acquisitions, accelerating its North American Drone-as-a-Service expansion and service capabilities.
 
-*   **RCAT (Red Cat Holdings, Inc.)**
-    *   No new announcements or SEC filings specifically dated January 6, 2026, were found.
-    *   Recent SEC filings largely consist of Form 4s (Statement of changes in beneficial ownership of securities) and Form 144s (Notice of proposed sale of securities) from **August 2025**.
-    *   The company&#x27;s Q3 2025 Earnings Report was filed on **November 13, 2025**.
+**ONDS (Ondas Holdings Inc.)**
+*   **January 5, 2026:** Ondas Holdings Inc. filed a prospectus supplement with the U.S. Securities and Exchange Commission to its existing registration statement on Form S-3ASR. This filing covers the potential resale of common stock by certain stockholders who acquired shares in connection with a previously disclosed exchange of securities of Ondas Autonomous Systems Inc., a subsidiary of Ondas Holdings, for shares of Ondas Holdings common stock.
+*   **December 31, 2025:** Ondas secured approximately $10 million in new purchase orders for its autonomous systems portfolio, including counter-UAS solutions and integrated drone systems for government and critical infrastructure operators.
+*   **December 18, 2025:** Ondas Holdings&#x27; 4M Defense and Safe Pro Group completed a Middle East pilot program demonstrating advanced demining capability with AI-powered hazard identification.
 
-*   **ZENA (ZenaTech, Inc.)**
-    *   No new announcements or SEC filings specifically dated January 6, 2026, were found.
-    *   **December 30, 2025:** ZenaTech completed three strategic Drone as a Service (DaaS) acquisitions, expanding its North American presence with two U.S. purchases and its first Canadian acquisition.
-    *   **December 23, 2025:** ZenaTech closed the acquisition of Vara 3D, a Utah-based surveying and mapping firm, expanding DaaS to the solar infrastructure market.
-    *   **December 18, 2025:** ZenaTech launched the Q1 2026 opening of its Zena AI Baton Rouge R&amp;D Center, supporting U.S. Defense, DARPA, Federal AI, and Quantum Computing Initiatives.
-    *   **December 16, 2025:** ZenaTech filed a 6-K Current Report (Foreign Issuer). On the same day, the company announced it was accelerating US Defense engagement efforts with customer field demonstrations and planned ZenaDrone pilots in 2026.
+**AVAV (AeroVironment, Inc.)**
+*   **January 7, 2026:** AeroVironment reported its quarterly earnings results on Tuesday. The aerospace company reported $0.44 EPS for the quarter, missing analysts&#x27; consensus estimates of $0.87. The firm had revenue of $472.51 million for the quarter, compared to analyst estimates of $466.16 million, representing a 150.7% increase compared to the same quarter last year. AeroVironment also set its FY 2026 guidance at 3.400-3.550 EPS.
+*   **January 2, 2026:** A Statement of changes in beneficial ownership of securities (Form 4) was filed.
+*   **December 30, 2025:** A Form 144, notice of proposed sale of securities, was filed by &quot;insiders&quot; prior to an intended sale of restricted stock.
 
-*   **ONDS (Ondas Holdings Inc.)**
-    *   No new announcements or SEC filings specifically dated January 6, 2026, were found.
-    *   **January 5, 2026:** Ondas Holdings Inc. filed a prospectus supplement with the U.S. Securities and Exchange Commission for the potential resale of common stock by certain stockholders.
-    *   **January 5, 2026:** Ondas Holdings Inc. announced it will host an OAS Investor Day on **January 16, 2026**, focusing on the company&#x27;s transformation, 2026 outlook, and the Core+ Strategic Growth Program.
-    *   **January 2, 2026:** Ondas Holdings announced a planned corporate name change to Ondas Inc. and the relocation of its corporate headquarters to West Palm Beach, Florida, effective in the first quarter of 2026.
+**KTOS (Kratos Defense &amp; Security Solutions, Inc.)**
+*   **January 6, 2026:** Kratos Defense &amp; Security Solutions (NASDAQ:KTOS) President and CEO Eric M. DeMarco sold a total of $18,053,805 in company stock on January 5th and 6th, involving 198,199 shares of common stock at prices ranging from $90.0014 to $91.0212. The sales were executed under a pre-arranged 10b5-1 trading plan adopted on August 29, 2025.
+*   **January 5, 2026:** A Form 144 was filed, indicating that Director THE SAVED FAMILY TRUST 2001 intends to sell 200,000 shares of its common stock, with a total market value of approximately $15.86 million.
+*   **January 2, 2026:** Kratos Defense &amp; Security Solutions CFO Deanna Lund sold 5,000 shares of the firm&#x27;s stock for a total transaction of $389,550.00.
+*   **January 2, 2026:** Kratos Defense (KTOS) received a Buy Rating on strong proprietary technology.
 
-*   **AVAV (AeroVironment, Inc.)**
-    *   No new announcements or SEC filings specifically dated January 6, 2026, were found.
-    *   **January 2, 2026:** A Form 4 (Statement of changes in beneficial ownership of securities) was filed.
-    *   **January 2, 2026:** Pacer Advisors Inc. reported purchasing a new stake of 4,182 shares in AeroVironment during the third quarter, valued at approximately $1.32 million.
-    *   **December 30, 2025:** A Form 144 was filed by &quot;insiders&quot; regarding an intended sale of restricted stock.
+**UMAC (Unusual Machines, Inc.)**
+*   **January 5, 2026:** Unusual Machines announced the appointment of Stacy Wright as Chief Revenue Officer.
+*   **December 31, 2025:** Unusual Machines, Inc. reported an equity grant to director Jeffrey Thompson of 3,140 shares of restricted common stock at a stated price of $0 per share under the company&#x27;s 2022 Equity Incentive Plan.
 
-*   **KTOS (Kratos Defense &amp; Security Solutions, Inc.)**
-    *   No new announcements or SEC filings specifically dated January 6, 2026, were found.
-    *   **January 5, 2026:** A Form 144 was disclosed, indicating that director THE SAVED FAMILY TRUST 2001 intends to sell 200,000 shares of common stock.
-    *   **December 13, 2025:** A Kratos Defense &amp; Security Solutions officer reported RSU vesting and tax share withholding involving 7,500 shares of common stock.
+**DPRO (Draganfly Inc.)**
+*   **December 8, 2025:** Draganfly Inc. filed a 6-K (Report of Foreign Issuer).
+*   **December 4, 2025:** Draganfly secured a strategic international military order for Commander 3XL Drone Systems.
 
-*   **UMAC (Unusual Machines, Inc.)**
-    *   No new announcements or SEC filings specifically dated January 6, 2026, were found.
-    *   **January 5, 2026:** Unusual Machines reported a Form 4 SEC filing indicating that director Jeffrey Thompson received a grant of 3,140 shares of restricted common stock on December 31, 2025.
-    *   **January 5, 2026:** Unusual Machines announced the appointment of Stacy Wright as Chief Revenue Officer.
-    *   **January 5, 2026:** Unusual Machines announced its participation in the 28th Annual Needham Growth Conference on **January 13 and 14, 2026**, where management will be available for one-on-one meetings and a fireside chat.
+**RCAT (Red Cat Holdings Inc.)**
+*   **December 29, 2025:** A Form 144 filing for a proposed sale of securities was disclosed.
 
-*   **SPAI (Safe Pro Group Inc.)**
-    *   No new announcements or SEC filings specifically dated January 6, 2026, were found.
-    *   The latest earnings report was on **November 14, 2025**, for Q3 2025, where SPAI reported an EPS of -$0.29, missing analyst estimates.
-    *   The next earnings call is scheduled for **March 30, 2026**.</div>
+**SPAI (Safe Pro Group Inc.)**
+No recent announcements or SEC filings as of January 7, 2026, were found in the provided search results.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Mon, 05 Jan)</i></small></h3>
 <div class="charts-section">
     <canvas id="chart_uas_defense_robotics" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
@@ -928,56 +930,36 @@ There are no new announcements or SEC filings specifically dated for today, **Ja
 <h3 class="fundamentals-section">Fundamentals</h3>
 <div id="fundamentals-table-service_robotics" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="news-section">Recent News </h3>
-<div class="markdown-raw-content news-section">Here&#x27;s a summary of the latest announcements and SEC filings for the requested NYSE/NASDAQ stocks as of today, **January 6, 2026**:
+<div class="markdown-raw-content news-section">Here are the latest announcements, news, and SEC filings for the requested companies, dated as of today, **January 7, 2026**, or the most recent available:
 
-### Richtech Robotics (RR) - NASDAQ
+### Richtech Robotics (RR)
 
-*   **SEC Filings:**
-    *   **December 29, 2025**: Filed an NT 10-K, serving as a notification that its Form 10-K annual report will be submitted late.
-    *   **November 17, 2025**: The company increased the number of authorized shares of its Class B Common Stock from 200 million to 1 billion, effective upon filing with the Nevada Secretary of State. This change, along with the adoption of the Second Amended and Restated Richtech Robotics Inc. 2023 Stock Option Plan (which automatically increases reserved shares for grants annually), was approved by the board of directors and shareholders.
-*   **News/Announcements:**
-    *   In other recent news mentioned in the November 17, 2025 filing, Richtech Robotics Inc. unveiled Dex, a mobile humanoid robot designed for industrial applications. The robot is powered by NVIDIA&#x27;s Jetson Thor platform, capable of operating in dynamic environments and performing complex tasks. Following discussions with the company&#x27;s management, H.C. Wainwright raised its price target for Richtech Robotics to $6.00, maintaining a Buy rating.
+*   **Expected Q4 2025 Earnings Announcement:** Richtech Robotics (NASDAQ:RR) is anticipated to release its Q4 2025 earnings before the market opens on **Tuesday, January 13, 2026**. Analysts project earnings of ($0.03) per share and revenue of $1.3110 million for the quarter.
+*   **Q4 2025 Earnings Call:** The company&#x27;s Q4 2025 earnings call is scheduled for **Friday, January 16, 2026**, at 4:00 PM ET.
+*   **Institutional Holdings Update:** MIRAE ASSET GLOBAL ETFS HOLDINGS Ltd. increased its stake in Richtech Robotics by 3.9% during Q3, now owning 896,059 shares. Raymond James Financial Inc. significantly raised its stake by 8,471.0%, holding 504,830 shares.
+*   **SEC Filing - Notification of Late 10-K:** A Form NT 10-K was filed on **December 29, 2025**, indicating that the company&#x27;s 10-K annual report will be submitted late.
 
-### Serve Robotics (SERV) - NASDAQ
+### Serve Robotics (SERV)
 
-*   **News/Announcements:**
-    *   **October 14, 2025**: Serve Robotics was named to Fast Company&#x27;s Next Big Things in Tech List.
-    *   **October 10, 2025**: The company announced a $100 Million Registered Direct Offering of Common Stock.
-    *   **October 9, 2025**: Serve Robotics partnered with DoorDash to integrate Serve&#x27;s delivery robots onto the DoorDash Platform.
-    *   **October 6, 2025**: Serve Robotics announced the deployment of its 1,000th autonomous delivery robot.
-    *   **September 30, 2025**: The company expanded its operations to Chicago, bringing autonomous deliveries to the city in partnership with Uber Eats.
-*   **SEC Filings:**
-    *   No specific SEC filings were found for today, January 6, 2026, or immediately preceding dates in the search results.
+*   **SEC Filings - Insider Stock Sales:** Forms 144 and 144/A were filed on **December 31, 2025**, related to insiders&#x27; prior intended sale of restricted stock.
 
-### PROCEPT BioRobotics (PRCT) - NASDAQ
+### PROCEPT BioRobotics (PRCT)
 
-*   **News/Announcements:**
-    *   **November 20, 2025**: PROCEPT BioRobotics announced plans to present at the upcoming 37th Annual Piper Sandler Healthcare Conference on December 2, 2025.
-    *   **November 4, 2025**: The company reported its Third Quarter 2025 Financial Results and issued its 2026 Revenue Guidance.
-    *   **October 15, 2025**: PROCEPT BioRobotics announced it would report its Third Quarter 2025 Financial Results on November 4, 2025.
-    *   **August 6, 2025**: The company reported its Second Quarter 2025 Financial Results and increased its 2025 Revenue Guidance.
-    *   **July 24, 2025**: PROCEPT BioRobotics announced that Larry L. Wood would join the company as President and CEO, effective September 2, 2025. The company also confirmed strong underlying business trends and pre-announced its 2Q25 revenue of approximately $79.2 million, representing an annual growth of 48%.
-    *   **July 14, 2025**: Aquablation therapy, developed by PROCEPT BioRobotics, was assigned a Category I code.
-*   **SEC Filings:**
-    *   No specific SEC filings were found for today, January 6, 2026, or immediately preceding dates in the search results.
+*   **Institutional Investment Increase:** Chicago Capital LLC increased its holdings in PROCEPT BioRobotics (NASDAQ:PRCT) by 175.7% in the third quarter, bringing its total ownership to 1,568,845 shares. Other institutional investors also adjusted their stakes in the second and third quarters.
+*   **Q3 2025 Financial Results &amp; 2026 Revenue Guidance:** PROCEPT BioRobotics reported its third-quarter 2025 financial results and issued its revenue guidance for 2026 on **November 4, 2025**.
+*   **Conference Presentation:** Management presented at the 37th Annual Piper Sandler Healthcare Conference on **December 2, 2025**.
 
-### Zebra Technologies (ZBRA) - NASDAQ
+### Zebra Technologies (ZBRA)
 
-*   **News/Announcements:**
-    *   **January 1, 2026**: Zebra Technologies named Melissa Luff Loizides as Chief People Officer, effective January 1, 2026. The current CPO, Jeff Schmitz, will step down on December 31, 2025, lead the Elo acquisition integration through Q2 2026, and then retire.
-    *   Zebra plans to roll out Digimarc&#x27;s newest on-scanner software across its retail scanner portfolio in early **2026**, which is expected to enhance tamper detection and improve Items Per Minute (IPM).
-    *   ODW Logistics has adopted Zebra Symmetry Fulfillment to optimize e-commerce fulfillment, anticipating a 42% improvement in pick rates by transitioning from a pick-to-tote to a pick-to-shipper model using Zebra Connect Fulfillment AMRs. A trial is currently underway in anticipation of ODW&#x27;s new facility opening in **2026**.
-*   **SEC Filings:**
-    *   **November 18, 2025**: A company director filed a Form 4, reporting open-market stock purchases of Class A common stock.
-    *   **August 14, 2025**: Robert John Jr., the Chief Marketing Officer, reported insider dispositions of Class A common stock and holds stock appreciation rights (SARs) exercisable in 2026-2027.
-    *   **Q3 2025**: Zebra Technologies reported Net sales of $1,320 million, a 5.2% increase year-over-year, with a gross margin of 48.0% and an operating income of $183 million. Net income was $101 million, or $1.97 diluted EPS, reflecting a higher effective tax rate.
+*   **SEC Filing - Insider Transactions:** A Form 4 (Statement of Changes in Beneficial Ownership) was filed on **December 19, 2025**.
+*   **Q3 2025 Results and Insider Dispositions:** Zebra Technologies reported Q3 2025 net sales of $1,320 million, up 5.2% year-over-year. The Chief Marketing Officer (CMO) reported insider dispositions on **August 14, 2025**, selling 5,488 shares and another 276 shares. The Chief Revenue Officer also filed a Form 4 on **November 3, 2025**, disposing of 759 shares.
+*   **SEC Filing - Quarterly Report:** A Form 10-Q (Quarterly Report) was filed on **October 28, 2025**.
+*   **SEC Filing - Current Report:** A Form 8-K (Current Report) was filed on **October 17, 2025**.
 
-### iRobot Corporation (IRBT) - NASDAQ
+### iRobot (IRBT)
 
-*   **SEC Filings:**
-    *   **December 15, 2025**: iRobot Corporation received notification from Nasdaq&#x27;s Listing Qualifications Department regarding the delisting of its common stock. Nasdaq determined the company was no longer suitable for listing due to its commencement of voluntary Chapter 11 bankruptcy proceedings on December 14, 2025. Trading of the common stock is scheduled to be suspended at the opening of business on December 22, 2025.
-    *   **December 1, 2025**: An 8-K filing indicated that the company&#x27;s ongoing review of strategic alternatives is unlikely to result in any transaction being consummated outside of a bankruptcy process.
-    *   **October 22, 2025**: The company entered into Amendment No. 6 to its Credit Agreement, which extended the Waiver Period to December 1, 2025. iRobot stated its dependence on continued waivers from lenders to avoid an event of default related to the Going Concern Covenant. The company also noted that it may be forced to significantly curtail or cease operations and would likely seek bankruptcy protection if necessary funding is not secured. It does not anticipate filing its Annual Report on Form 10-K for the year ending January 3, 2026, until March 2026.</div>
+*   **Nasdaq Delisting and Chapter 11 Bankruptcy:** Nasdaq notified iRobot Corporation on **December 15, 2025**, of its decision to delist the company&#x27;s common stock. This decision followed iRobot&#x27;s commencement of voluntary proceedings under Chapter 11 of the United States Bankruptcy Code on **December 14, 2025**. Trading of the common stock was suspended at the opening of business on **December 22, 2025**.
+*   **Financial Condition and Lender Waivers:** A Form 8-K filed on **October 27, 2025**, detailed iRobot&#x27;s declining financial condition and its dependence on continued waivers from lenders to avoid an event of default. The company was in discussions with lenders for additional capital to fund ongoing operations.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Thu, 11 Dec)</i></small></h3>
 <div class="charts-section">
     <canvas id="chart_service_robotics" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
@@ -991,27 +973,7 @@ There are no new announcements or SEC filings specifically dated for today, **Ja
 <h3 class="notes-section">Notes </h3>
 <div class="markdown-notes-block notes-section">spce:&gt; $254M ATM on Dec9</div>
 <h3 class="news-section">Recent News </h3>
-<div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for the requested stocks as of today, **January 6, 2026**:
-
-*   **RKLB (Rocket Lab USA, Inc.)**
-    *   **December 23, 2025**: A Rocket Lab insider sold shares worth $1,022,773, according to a recent SEC filing.
-
-*   **FLY (Firefly Aerospace Inc.)**
-    *   **January 5, 2026**: The Schall Law Firm issued a final reminder to investors of Firefly Aerospace Inc. regarding the **January 12, 2026**, deadline to seek the role of lead plaintiff in a pending securities fraud class action lawsuit. The lawsuit alleges that the company issued false and misleading statements to the market leading up to and following its Initial Public Offering (IPO) on August 7, 2025, concerning its Spacecraft Solutions and Alpha Rocket Program.
-
-*   **MNTS (Momentus Inc.)**
-    *   **January 5, 2026**: Momentus Inc. announced it entered into a securities purchase agreement with an existing institutional investor for approximately $5.0 million in gross proceeds. This includes the purchase of 925,926 shares of common stock (or equivalents) and warrants to purchase an equal number of shares. The transaction is expected to close on or about **January 6, 2026**. The company also agreed to amend certain existing warrants from October and December 2025, reducing their exercise price from $13.74 to $5.40 per share, subject to stockholder approval.
-    *   **January 5, 2026**: Momentus announced the development of an additively manufactured fuel tank in collaboration with Velo3D, intended for flight testing aboard its Vigoride-7 Orbital Service Vehicle.
-
-*   **SPCE (Virgin Galactic Holdings, Inc.)**
-    *   **January 2, 2026**: Virgin Galactic Holdings, Inc. disclosed an update to its at-the-market (ATM) program and activities related to convertible senior notes. The company had sold 34,142,965 shares for gross proceeds of $138,259,285.16 between November 6, 2024, and the supplement date. Virgin Galactic plans to use the net proceeds to accelerate the development and production of its next-generation spaceflight fleet, including an additional mothership and third and fourth Delta Class spaceships. The company also plans to file a new registration statement for an additional $45,588,728.57 that may be sold under the same Sales Agreement.
-
-*   **LUNR (Intuitive Machines, Inc.)**
-    *   **January 5, 2026**: Stephen J. Altemus, Chief Executive Officer of Intuitive Machines, executed an open-market sale of 2 million directly held shares for approximately $31.5 million, as disclosed in an SEC Form 4 filing. This transaction reduced his direct share ownership by 12.22%, leaving him with 14,368,615 directly held shares.
-
-*   **RDW (Redwire Corporation)**
-    *   **January 5, 2026**: Redwire Corp&#x27;s Chief Financial Officer reported that 20,250 performance-based restricted stock units (PSUs) converted into 40,500 shares of common stock on **December 31, 2025**, after meeting a stock price performance condition. 16,284 shares were mandatorily withheld to satisfy taxes due in connection with the vesting.
-    *   **January 5, 2026**: Redwire Corp&#x27;s Chairman and CEO also reported equity award activity dated **December 31, 2025**, where 127,500 performance-based restricted stock units (PSUs) converted into 255,000 shares of common stock. 116,085 shares were mandatorily withheld to cover taxes on the PSU vesting.</div>
+<div class="markdown-raw-content news-section"> I will also clarify the FLY vs FLYX tickers.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Mon, 05 Jan)</i></small></h3>
 <div class="charts-section">
     <canvas id="chart_space_launch_systems" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
@@ -1025,37 +987,45 @@ There are no new announcements or SEC filings specifically dated for today, **Ja
 <h3 class="notes-section">Notes </h3>
 <div class="markdown-notes-block notes-section">bksy:&gt; 4M shares convertible at $27</div>
 <h3 class="news-section">Recent News </h3>
-<div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for the requested NYSE/NASDAQ stocks, bulleted and with highlighted dates:
-
-**BKSY (BlackSky Technology Inc.)**
-*   **January 2, 2026:** BlackSky Technology&#x27;s director, William D. Porteous, reported receiving 1,200 shares of Class A Common Stock as compensation for the quarter ended December 31, 2025, in lieu of cash, as disclosed in a Form 4 SEC filing.
-*   **January 2, 2026:** BlackSky Technology launched its third Gen-3 satellite, intended for real-time, AI-powered geospatial intelligence.
-
-**ASTS (AST SpaceMobile, Inc.)**
-*   **January 6, 2026:** MarketBeat reported on AST SpaceMobile&#x27;s stock performance and highlighted recent insider trading, including COO Shanti B. Gupta selling 10,000 shares on December 10th and CTO Huiwen Yao selling 40,000 shares on December 5th, both disclosed in SEC filings. The report also provided recent quarterly revenue of $14.74 million and a negative net margin of 1,639.59%.
-*   **January 2, 2026:** AST SpaceMobile issued press releases titled &quot;The New Arms Race: Investing in Speed, Agility, and Responsive Space Infrastructure&quot; and &quot;Speed Superiority: U.S. Defense Spending Surges for Hypersonics and Rapid Launch.&quot;
-*   **December 23, 2025:** AST SpaceMobile announced the successful orbital launch of BlueBird 6, which features the largest commercial communications array ever deployed in Low Earth Orbit.
-
-**SATS (EchoStar Corporation)**
-*   **January 5, 2026:** EchoStar Corporation announced an additional conversion period for its 3.875% Convertible Senior Secured Notes due 2030, effective from January 1, 2026, to March 31, 2026. This conversion right was triggered as the company&#x27;s common stock price exceeded 130% of the conversion price for at least 20 trading days during the 30 consecutive trading days ending December 31, 2025.
-*   **January 6, 2026:** Simply Wall St News reported on EchoStar&#x27;s valuation following its license sales to AT&amp;T and SpaceX, and the resolution of a Federal Communications Commission dispute, which resulted in EchoStar becoming a significant shareholder in SpaceX.
-
-**VSAT (Viasat, Inc.)**
-*   **January 5, 2026:** Viasat reported its Q3 CY2025 earnings, with sales of $1.14 billion, missing analyst estimates, but adjusted EPS of $0.09 significantly beat consensus estimates.
-*   **January 2, 2026:** A Form 144 SEC filing was made by &quot;insiders&quot; regarding the intended sale of restricted stock.
-*   **December 15, 2025:** Mark D. Dankberg, Chairman and CEO of Viasat, sold 200,000 shares through indirect trust holdings, valued at approximately $7.0 million, as disclosed in an SEC Form 4 filing.
+<div class="markdown-raw-content news-section">Here are the latest dated announcements and SEC filings for the requested NYSE/NASDAQ stocks:
 
 **PL (Planet Labs PBC)**
-*   No specific announcements or SEC filings dated January 6, 2026, or immediately surrounding this date were found.
+*   **January 5, 2026**: A MarketBeat article noted that institutional investors recently adjusted their positions in Planet Labs PBC.
 
-**SPIR (Spire Global, Inc.)**
-*   No specific announcements or SEC filings dated January 6, 2026, or immediately surrounding this date were found. The most recent SEC filings identified are from late 2025, including a Form 10-Q filed on December 17, 2025.
+**BKSY (BlackSky Technology Inc.)**
+*   **January 2, 2026**: BlackSky Technology Inc. launched its Third Gen-3 Satellite, enhancing its capabilities for real-time, AI-powered geospatial intelligence.
+*   **January 2, 2026**: An SEC filing (Form 4) revealed that a BlackSky director received 1,200 shares of Class A common stock as a stock award.
+*   **January 2, 2026**: Another SEC filing indicated that a BlackSky director opted to receive company stock in lieu of cash fees for the quarter that ended December 31, 2025.
+
+**SPIR (Spire Global Inc.)**
+*   **January 5, 2026**: An SEC Form 4 filing disclosed that a Spire Global director received 3,249 fully vested Restricted Stock Units (RSUs) as compensation, which were granted in lieu of cash.
+*   **December 17, 2025**: Spire Global, Inc. filed its 10-Q Quarterly Report.
+*   **December 17, 2025**: Spire Global, Inc. filed an 8-K Current Report.
+*   **November 25, 2025**: Spire Global received a notice from the NYSE regarding non-compliance with listing standards due to the delayed filing of its Form 10-Q for the quarter ended September 30, 2025.
 
 **SATL (Satellogic Inc.)**
-*   No specific announcements or SEC filings dated January 6, 2026, or immediately surrounding this date were found. The latest news identified, a proposed public offering, is from October 15, 2025.
+*   No new announcements or SEC filings dated January 7, 2026, or January 6, 2026, were found. The most recent specific SEC filing found was a 10-K on March 26, 2025.
+
+**ASTS (AST SpaceMobile, Inc.)**
+*   **January 6, 2026**: Ethic Inc. acquired a new stake in AST SpaceMobile, purchasing 7,444 shares during the third quarter, as reported in its most recent Form 13F filing.
+*   **January 5, 2026**: Miracle Mile Advisors LLC increased its stake in AST SpaceMobile by 140.9% in the third quarter, holding 11,330 shares according to its latest SEC filing.
+*   **December 10, 2025**: COO Shanti B. Gupta sold 10,000 shares of AST SpaceMobile stock.
+*   **December 5, 2025**: CAO Maya Bernal sold 6,000 shares of AST SpaceMobile stock.
 
 **IRDM (Iridium Communications Inc.)**
-*   No specific announcements or SEC filings dated January 6, 2026, or immediately surrounding this date were found. The most recent SEC filing identified is a Form 4 from December 23, 2025.</div>
+*   **January 5, 2026**: Multiple SEC Form 4 filings reported changes in beneficial ownership of securities for Iridium Communications.
+*   **December 31, 2025**: An SEC filing discussed the EMSS contract, valued at $738.5 million through September 2026, and mentioned the introduction of new Iridium Certus offerings for IoT applications and the acquisition of Satelles for satellite-based time and location services.
+*   **December 9, 2025**: HD Hyundai Construction Equipment announced its selection of Iridium&#x27;s IoT services for critical machine data delivery.
+*   **December 4, 2025**: Iridium announced the appointment of Louis Alterman to its Board of Directors.
+*   **December 2, 2025**: Iridium was awarded a 5-year System Infrastructure Transformation and Hybridization Contract with a value of up to $85.8 million.
+
+**SATS (EchoStar Corporation)**
+*   **January 5, 2026**: EchoStar Corporation notified holders that its 3.875% Convertible Senior Secured Notes due 2030 are convertible from January 1, 2026, through March 31, 2026. This conversion option was triggered by the common stock&#x27;s last sale price exceeding 130% of the conversion price for a specified period. The company retains the option to settle conversions in cash, shares, or a combination.
+*   *Note: For &quot;SATS,&quot; there was also news regarding &quot;Satsuma Technology PLC&quot; (LSE:SATS) on **January 6, 2026**, where Roundhouse Digital Pte Ltd reduced its stake to below 1%. This is a UK-listed company, not NYSE/NASDAQ.*
+
+**VSAT (Viasat Inc.)**
+*   **January 7, 2026**: Evergreen Marine confirmed a fleetwide rollout of Inmarsat NexusWave bonded connectivity across its vessels, a solution that leverages the ViaSat-3 ultra-high-capacity network.
+*   **January 6, 2026**: An SEC filing reported that Garrett L. Chase, SVP of Viasat, sold 5,000 shares of the company on January 2, 2026.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Mon, 05 Jan)</i></small></h3>
 <div class="charts-section">
     <canvas id="chart_earth_observation" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
@@ -1069,32 +1039,42 @@ There are no new announcements or SEC filings specifically dated for today, **Ja
 <h3 class="notes-section">Notes </h3>
 <div class="markdown-notes-block notes-section">chpt:&gt; Dec12 S3 filed $400M total($150M ATM)</div>
 <h3 class="news-section">Recent News </h3>
-<div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for EVGO, BLNK, CHPT, BEEM, and ADSE, as of January 6, 2026:
+<div class="markdown-raw-content news-section">Here are the latest dated announcements and SEC filings for EVGO, BLNK, CHPT, BEEM, and ADSE, as of January 7, 2026:
 
-**EVgo (EVGO)**
-*   **January 2, 2026**: EVgo Inc. successfully deployed over 40% of its charging stations using a prefabricated approach, which reportedly reduced installation costs by 15% and expedited timelines.
-*   **December 16, 2025**: EVgo announced that it is accelerating its network expansion with domestically made prefabricated charging skids.
-*   **December 11, 2025**: EVgo announced the appointment of Keefer Lehner as Chief Financial Officer (CFO), succeeding Paul Dobson, with an effective date of January 12, 2025.
-*   **December 11, 2025**: A Form 8-K Current Report filing was made.
-*   **December 3, 2025**: EVgo Autocharge+ surpassed 5 million sessions and recorded a sixfold enrollment growth.
+### EVgo, Inc. (EVGO)
 
-**Blink Charging Co. (BLNK)**
-*   **December 12, 2025**: Blink Charging Co. filed a Form 8-K reporting a material event and also had insider trading activity reported via Form 4 filings.
-*   **December 11, 2025**: Blink Charging announced the pricing of a public offering of 26,666,666 shares of its common stock at $0.75 per share, aiming to raise $20 million. The closing was expected around December 12, 2025.
-*   **December 10, 2025**: A registration statement on Form S-1 related to the public offering was declared effective by the SEC.
+*   **December 29, 2025**: EVgo, Inc. announced the deployment of over 40% of its stations using prefabricated modular skids.
+*   **December 19, 2025**: EVgo highlighted its acceleration of network expansion with domestically made prefabricated charging skids.
+*   **December 11, 2025**: EVgo announced a Chief Financial Officer transition, naming Keefer Lehner as the new CFO, effective January 12, 2026.
+*   **December 7, 2025**: EVgo surpassed 5 million Autocharge+ sessions.
 
-**ChargePoint Holdings, Inc. (CHPT)**
-*   **January 2, 2026**: An [EFFECT] SEC Filing for ChargePoint Holdings, Inc. was noted, typically indicating that a registration statement has become effective.
-*   **December 23, 2025**: Multiple Form 4 filings (Statement of changes in beneficial ownership of securities) and Form 144 filings (Notice of proposed sale of securities) were made by various insiders.
-*   **December 19, 2025**: ChargePoint announced that it scaled and optimized EV charging at Loyola Marymount University.
+### Blink Charging Co. (BLNK)
+
+*   **January 6, 2026**: Blink Charging Co. introduced a cryptocurrency payment option at select DC fast charging stations across the United States, enabling drivers to pay for charging sessions using USD Coin (USDC) on Ethereum and Polygon blockchain networks.
+*   **November 17, 2025**: Blink Charging was awarded a Sourcewell contract, which expands access to EV charging solutions for public sector entities.
+*   **November 7, 2025**: Blink Charging Co. (BLNK) filed its Form 10-Q Quarterly Report.
+*   **November 6, 2025**: Blink Charging announced its Third Quarter 2025 Financial Results.
+
+### ChargePoint Holdings, Inc. (CHPT)
+
+*   **January 2, 2026**: ChargePoint Holdings, Inc. filed a Form EFFECT (Effectiveness Date: December 31, 2025 4:30 P.M.).
+*   **December 23, 2025**: ChargePoint Holdings, Inc. disclosed that its Chief Financial Officer sold 3,943 shares of common stock to cover tax withholding obligations related to the vesting and settlement of restricted stock units.
+*   **December 19, 2025**: ChargePoint announced it is scaling and optimizing EV charging at Loyola Marymount University.
+*   **December 5, 2025**: ChargePoint Holdings, Inc. (CHPT) filed its Form 10-Q Quarterly Report.
 *   **December 4, 2025**: ChargePoint reported its Third Quarter Fiscal Year 2026 Financial Results.
+*   **November 25, 2025**: ChargePoint and Dabaja Brothers Development Group announced an expansion of EV fast charging for drivers in Metro Detroit.
 
-**Beam Global (BEEM)**
-*   **November 14, 2025**: Beam Global announced its Third Quarter 2025 Operating Results. This included the filing of a Form 10-Q (Quarterly report) and a Form 8-K (Current report).
-*   **February 3, 2025**: A Form 4 (Statement of changes in beneficial ownership of securities) and a Form 144 (Notice of proposed sale of securities) were filed for Desmond C. Wheatley.
+### Beam Global (BEEM)
 
-**ADS-TEC Energy PLC (ADSE)**
-*   **November 20, 2025**: ADS-TEC Energy PLC filed a Form 6-K (Report of Foreign Issuer) with the SEC.</div>
+*   **November 14, 2025**: Beam Global (BEEM) filed a Form 424B5 - Prospectus [Rule 424(b)(5)], a Form 8-K Current Report, and a Form 10-Q Quarterly Report [Sections 13 or 15(d)].
+*   **November 14, 2025**: The Q3 2025 Earnings Call Transcript for Beam Global was released.
+*   **November 6, 2025**: Beam Global announced its Third Quarter 2025 Operating Results.
+*   **October 22, 2025**: Beam Global filed a Form 8-K Current Report.
+*   **September 19, 2025**: Beam Global filed a Form 8-K Current Report.
+
+### ADS-TEC Energy PLC (ADSE)
+
+*   **November 2025**: ADS-TEC Energy PLC (ADSE) filed a Form 6-K Report of Foreign Issuer.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Thu, 11 Dec)</i></small></h3>
 <div class="charts-section">
     <canvas id="chart_ev_charging_infrastructure" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
@@ -1108,41 +1088,31 @@ There are no new announcements or SEC filings specifically dated for today, **Ja
 <h3 class="notes-section">Notes </h3>
 <div class="markdown-notes-block notes-section">achr:&gt; SECTOR not great LL forming</div>
 <h3 class="news-section">Recent News </h3>
-<div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for ACHR, JOBY, EVEX, and EVTL as of today, January 6, 2026:
+<div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for ACHR, JOBY, EVEX, and EVTL as of today, January 7, 2026:
 
-**Archer Aviation (ACHR)**
+**Archer Aviation Inc. (ACHR)**
 
-*   **January 4, 2026**: An insider stock sale notice (Form 144) was filed by Thomas Muniz, an officer at Archer Aviation, disclosing plans to sell up to 125,000 shares of Class A stock. This sale is described as a routine, compensation-related action tied to a Rule 10b5-1 trading plan established in September 2025.
-*   **December 17, 2025**: Archer announced its plans to launch air taxi trials in U.S. cities under a White House Executive Order, following the Department of Transportation&#x27;s unveiling of the National Advanced Air Mobility (AAM) Strategy.
-*   **December 16, 2025**: The company announced plans to establish a UK Engineering Hub and has hired a veteran British eVTOL engineering leader.
-*   **December 10, 2025**: Saudi Arabia&#x27;s General Authority of Civil Aviation advanced Archer&#x27;s pathway for electric air taxi deployment.
-*   **December 9, 2025**: Archer completed the first phase of transactions to acquire control of Hawthorne Airport.
+*   **January 6, 2026**: An SEC Filing (SCHEDULE 13D/A) from Stellantis N.V. reported beneficial ownership of 78,235,067 shares of Archer&#x27;s Class A common stock, representing 10.4% of the class. This filing also noted the vesting of Tranche 3 of Stellantis warrants on January 3, 2026, which are exercisable for 5,000,000 Class A shares at $0.01 per share.
+*   **January 6, 2026**: Archer Aviation&#x27;s Chief Technology Officer, Thomas Paul Muniz, reported selling 125,000 shares of Class A Common Stock on January 2, 2026, at a price of $8.0 per share. This transaction was conducted under a pre-established Rule 10b5-1 trading plan.
+*   **January 2, 2026**: Archer Aviation Inc. filed an SEC Form 144.
 
-**Joby Aviation (JOBY)**
+**Joby Aviation, Inc. (JOBY)**
 
-*   **January 5, 2026**: Chief Policy Officer Gregory Bowles reported the conversion of previously granted Restricted Stock Units (RSUs) into common stock on January 1, 2026, and subsequently sold 4,194 shares on January 2, 2026, to cover taxes.
-*   **January 6, 2026**: It was reported that CEO Joeben Bevirt sold 23,552 shares of Joby Aviation stock on January 2, 2026, to cover taxes due upon RSU settlement. Additionally, President Simi sold approximately $1.53 million in stock on January 1, 2026, as part of a pre-arranged 10b5-1 trading plan.
-*   **December 18, 2025**: Joby and Metropolis announced a partnership to develop 25 vertiport sites across the U.S..
-*   **December 17, 2025**: Joby stated that the U.S. Government&#x27;s Advanced Air Mobility Plan is a pivotal step toward commercial launch.
-*   **December 17, 2025**: Joby announced plans to double its manufacturing capacity in the United States.
-*   **December 15, 2025**: The company concluded a year of flight demonstrations, showcasing global commercial readiness and operational momentum towards FAA Certification.
+*   **January 6, 2026**: Joby announced preparations for the first wave of air taxi pilot training using CAE Flight Simulators.
+*   **January 6, 2026**: A director of Joby Aviation reported receiving 866 shares of common stock on January 5, 2026, through a fully vested Restricted Stock Unit (RSU) grant as an equity award.
+*   **January 2, 2026**: An SEC filing disclosed that Director Michael Jr. Thompson purchased 1,100 shares of Joby Aviation stock on December 31, 2025, at an average price of $13.24 per share.
 
 **Eve Holding, Inc. (EVEX)**
 
-*   **December 29, 2025**: An SEC filing indicated that an Eve Holding Inc. unit entered into a credit agreement with Pefco and Exim Bank.
-*   **December 23, 2025**: Eve Holding, Inc. filed an 8-K Current Report and an Initial Statement of Beneficial Ownership (Form 3).
-*   **December 19, 2025**: Eve Air Mobility completed the first flight of its uncrewed full-scale eVTOL prototype at Embraer&#x27;s Test Facility.
-*   **November 4, 2025**: Eve Holding, Inc. reported its Third Quarter 2025 Results.
+*   **December 29, 2025**: Eve Holding, Inc. filed a Current Report (Form 8-K).
+*   **December 23, 2025**: An Initial Statement of Beneficial Ownership of Securities (EX-10.1) was filed.
 
 **Vertical Aerospace Ltd. (EVTL)**
 
-*   **December 29, 2025**: Vertical announced it would call an Extraordinary General Meeting.
-*   **December 29, 2025**: Vertical Aerospace Ltd. filed an F-3 Foreign Issuer Shelf Registration and a 6-K Current Report (Foreign Issuer).
-*   **December 22, 2025**: Vertical Aerospace doubled its flight test capacity with the final prototype.
-*   **December 19, 2025**: Vertical Aerospace progressed towards full piloted transition flight.
-*   **December 10, 2025**: Vertical Aerospace launched Valo eVTOL as the successor to its VX4 program. A related 6-K Current Report (Foreign Issuer) was also filed.
-*   **December 9, 2025**: Vertical Aerospace signed a new customer, Héli Air Monaco, to open up French Riviera routes.
-*   **December 9, 2025**: Vertical Aerospace announced its plan to launch the UK&#x27;s first electric air taxi network in partnership with Skyports Infrastructure and Bristow.</div>
+*   **January 7, 2026**: Vertical Aerospace is scheduled to attend the Bank of America Defense Outlook and Commercial Aerospace Forum 2026.
+*   **December 29, 2025**: Vertical Aerospace Ltd. announced it will hold an Extraordinary General Meeting (EGM) on January 20, 2026, to propose resolutions related to an increase in the company&#x27;s authorized share capital. This announcement was furnished as an exhibit to a current report on Form 6-K.
+*   **December 29, 2025**: Vertical Aerospace Ltd. filed a Foreign Issuer Shelf Registration (Form F-3).
+*   **December 29, 2025**: Vertical Aerospace Ltd. filed a Current Report (Foreign Issuer) on Form 6-K.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Tue, 06 Jan)</i></small></h3>
 <div class="charts-section">
     <canvas id="chart_evtol_air_mobility" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
@@ -1158,49 +1128,41 @@ There are no new announcements or SEC filings specifically dated for today, **Ja
 
 bw:&gt; announced the full redemption of all $26 million aggregate principal amount outstanding of its 8.125% Senior Notes due 2026 on Dec5</div>
 <h3 class="news-section">Recent News </h3>
-<div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for the requested companies, as of January 6, 2026:
+<div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for the requested companies, as of today, January 7, 2026:
 
-### FuelCell Energy (FCEL)
+**FuelCell Energy (FCEL)**
+*   **January 2, 2026**: Multiple Form 4 filings detailing insider trading activity.
+*   **December 30, 2025**: Form 8-K filed regarding a common stock offering of up to $200 million.
+*   **December 18, 2025**:
+    *   Form 8-K furnishing Q4 and full-year 2025 results materials.
+    *   Announced ending fiscal year 2025 with revenue growth and a focus on data center opportunities.
 
-*   **January 2, 2026**: [Form 4] Insider Trading Activity.
-*   **December 30, 2025**: FuelCell Energy signed Amendment No. 3 to its Open Market Sale Agreement, increasing its at-the-market equity program capacity to $200 million. J.P. Morgan terminated its participation as a sales agent, with Jefferies and other agents continuing the program to maintain liquidity and financial flexibility. (8-K filing)
-*   **December 18, 2025**: FuelCell Energy furnished its Q4 and full-year 2025 results, highlighting revenue growth and a focus on data center opportunities. (10-K filing and press release)
-*   **December 1, 2025**: FuelCell Energy secured approximately $25 million in debt financing from the Export-Import Bank of the United States (EXIM) to support the Gyeonggi Green Energy fuel cell project in South Korea.
+**Bloom Energy (BE)**
+*   **January 5, 2026**:
+    *   Form 4 filing for a director acquiring 331 deferred stock units on December 31, 2025.
+    *   Form 4 filing for a director receiving 230 deferred stock units on December 31, 2025.
+*   **January 3, 2026**: Report on institutional investors adjusting their stakes and insider sales during the third quarter of 2025.
+*   **January 1, 2026**: Report on new institutional investor positions in the third quarter of 2025 and insider sales in December 2025.
 
-### Bloom Energy (BE)
+**Plug Power (PLUG)**
+*   **January 6, 2026**: Announced participation in the Goldman Sachs Energy, CleanTech &amp; Utilities Conference in Miami, Florida.
+*   **December 17, 2025**: Installed a 5MW GenEco Electrolyzer with Cleanergy Solutions Namibia for Africa&#x27;s first fully integrated green hydrogen facility.
+*   **December 5, 2025**: Form 8-K filed announcing the rescheduling of its special shareholder meeting to **January 29, 2026**, with a new record date of **December 12, 2025**. The meeting was originally scheduled for January 15, 2026.
+*   **December 4, 2025**: Signed a Letter of Intent with Hy2gen for a 5MW PEM Electrolyzer supporting France&#x27;s hydrogen roadmap at the Sunrhyse Green Hydrogen Project.
 
-*   No announcements or SEC filings were found dated on January 6, 2026, or in early January 2026. The most recent filings mentioned are from late 2025.
-*   **December 22, 2025**: Latest SEC filing activities were reported around this date.
-*   **November 26, 2025**: An insider stock sale by the Chief Commercial Officer was reported, involving 15,000 shares of Class A common stock.
-*   **November 14, 2025**: Insider stock sales were reported by the Chief Operations Officer and Chief Commercial Officer to cover tax withholding obligations arising from restricted stock units.
+**Hyliion (HYLN)**
+*   **January 6, 2026**: Announced the successful completion of the first phase of extensive performance testing evaluating the KARNO™ Power Module on a representative U.S. Navy load profile.
+*   **December 19, 2025**: Form 4 filing for an officer selling shares to cover tax withholding.
+*   **December 15, 2025**: Form 4 filing detailing the Chief Commercial Officer&#x27;s tax-related stock sale on December 12, 2025.
 
-### Plug Power (PLUG)
+**Broadwind (BW)**
+*   No new SEC filings or significant news announcements have been identified for Broadwind, Inc. (BWEN) specifically for January 2026 or late December 2025 in the search results. The most recent news found relates to its Third Quarter 2025 results.
+*   **November 13, 2025**: Announced Third Quarter 2025 Results, including a 25% year-over-year revenue increase and raising full-year 2025 revenue guidance.
+*   **October 8, 2025**: Awarded $11 million in new tower orders.
 
-*   **January 6, 2026**: Plug Power is in focus following a Clear Street analyst upgrade from &quot;hold&quot; to &quot;buy&quot;. News also highlighted its Namibia electrolyzer deployment and its first liquid hydrogen supply deal with NASA.
-*   **January 5, 2026**: Mixed options sentiment was observed for Plug Power, with shares showing an increase. Discussions also noted elevated risks for Plug Power stock due to dilution concerns, high short interest, and a new fundraising of $375 million through convertible senior notes.
-*   **January 29, 2026**: A special meeting is scheduled to approve two changes related to shareholder vote tallying.
-
-### Hyliion (HYLN)
-
-*   No announcements or SEC filings were found dated on January 6, 2026, or in early January 2026. The most recent activities are from late 2025.
-*   **December 12, 2025**: CEO Thomas J. Healy reported a sale of 134,963 shares of common stock at $1.94 per share, directed by the issuer to cover tax withholding obligations. Other insider sales for tax withholding purposes by a shareholder and the Chief Strategy Officer were also reported on this date.
-*   **November 17, 2025**: Hyliion announced a successful demonstration of dynamic fuel switching in its KARNO™ Power Module.
-*   **November 11, 2025**: Hyliion Holdings reported its third-quarter 2025 financial results.
-
-### Babcock &amp; Wilcox Enterprises (BW)
-
-*   No announcements or SEC filings were found dated on January 6, 2026, or in early January 2026. The latest news and filings are from late 2025.
-*   **December 19, 2025**: Babcock &amp; Wilcox was awarded a $40 million contract for advanced wet gas scrubbing technology at a Canadian petroleum refinery.
-*   **December 18, 2025**: Babcock &amp; Wilcox Canada was awarded the second portion of a $20 million boiler refurbishment project for a Canadian pulp &amp; paper mill.
-*   **December 9, 2025**: Babcock &amp; Wilcox Enterprises, Inc. filed an [8-K] Current Report to report a material event.
-*   **December 8, 2025**: Babcock &amp; Wilcox Enterprises announced the full redemption of notes.
-*   **December 8, 2025**: Babcock &amp; Wilcox received a limited notice to proceed to supply CO2 capture technology for a U.S. power plant.
-*   **December 5, 2025**: Babcock &amp; Wilcox Enterprises, Inc. filed a [25-NSE] SEC Filing.
-
-### Ballard Power Systems (BLDP)
-
-*   **January 4, 2026**: MarketBeat reported that Ballard Power Systems (NASDAQ: BLDP) was given an average recommendation of &quot;Reduce&quot; by analysts. The article also referenced the company&#x27;s Q3 2025 earnings results.
-*   **November 13, 2025**: Ballard Power Systems reported its Q3 2025 consolidated results, with revenue of $32.5 million (up 120% year-over-year). A [6-K] Current Report (Foreign Issuer) was also filed on this date.</div>
+**Ballard Power Systems (BLDP)**
+*   **January 4, 2026**: Analysts have given Ballard Power Systems an average recommendation of &quot;Reduce&quot;.
+*   **November 13, 2025**: Form 6-K current report of foreign issuer.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Mon, 05 Jan)</i></small></h3>
 <div class="charts-section">
     <canvas id="chart_hydrogen_fuel_cells" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
@@ -1212,33 +1174,31 @@ bw:&gt; announced the full redemption of all $26 million aggregate principal amo
 <h3 class="fundamentals-section">Fundamentals</h3>
 <div id="fundamentals-table-batteries_storage_tech" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="news-section">Recent News </h3>
-<div class="markdown-raw-content news-section">Here are the latest announcements, news, and SEC filings as of today, **January 6, 2026**, for the requested NYSE/NASDAQ stocks:
-
-**ENVX (Enovix Corporation)**
-*   **January 1, 2026**: Chief Accounting Officer Kristina Truong sold 2,296 shares of Enovix for an estimated $16,783. This was approximately a 1.2% decrease in her holdings of this class of stock. Following this transaction, she beneficially owns 196,748 shares.
-
-**SES (SES AI Corporation)**
-*   **January 5, 2026**: SES AI Corporation announced its schedule for January appearances and activities, including presentations by Dr. Kang Xu (CTO) on Material Discovery for Electrolytes in the AI Era, and by Dr. Qichao Hu (Founder and CEO) on SES AI&#x27;s latest developments in Drone Battery, ESS (Energy Storage Systems), and Materials, as well as investor meetings.
-
-**AMPX (Amprius Technologies, Inc.)**
-*   **January 1, 2026**: Calamos Advisors LLC reported buying a new stake of 171,052 shares in Amprius Technologies during the third quarter, valued at approximately $1,799,000.
-*   **January 1, 2026**: Insider selling activity was reported, with the CEO selling 68,655 shares and the CTO selling 198,255 shares. Total insider sales amounted to 1,291,934 shares, valued at approximately $13.63 million. Insiders now own 12.90% of the company&#x27;s stock.
-*   **January 1, 2026**: Dr. Kang Sun stepped down as CEO and became an Executive Advisor, with Tom Stepien appointed as the new Chief Executive Officer. Dr. Sun&#x27;s new employment agreement includes an annual salary of $633,000 and continued eligibility to vest in outstanding equity awards, but no annual bonus.
+<div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for the specified NYSE/NASDAQ stocks as of today, **January 7, 2026**:
 
 **QS (QuantumScape Corporation)**
-No specific announcements or SEC filings dated **January 6, 2026** were found. The most recent significant filings and news are from December 2025, including:
-*   **December 22, 2025**: QuantumScape Corporation submitted a Form 25 notification to remove its Class A common stock from listing and/or registration on the New York Stock Exchange, initiating the process to transfer its listing to Nasdaq.
-*   **December 17, 2025**: QuantumScape successfully accomplished its annual commercial engagement goal.
-*   **December 10, 2025**: QuantumScape announced its plan to transfer its stock exchange listing to Nasdaq.
+*   **January 6, 2026**: QuantumScape Corporation was added to the NASDAQ Composite Index on December 24, 2025.
 
-**MVST (Microvast Holdings, Inc.)**
-No specific announcements or SEC filings dated **January 6, 2026** were found. The most recent significant filing is from December 2025:
-*   **December 31, 2025**: A Form 144 was filed by &quot;insiders&quot; regarding a prior intended sale of restricted stock.
+**ENVX (Enovix Corporation)**
+*   **January 7, 2026**: Enovix&#x27;s Q3 2025 revenue showed significant year-on-year growth to US$8.0 million, with investor focus remaining on manufacturing scale-up and execution risks for its silicon-anode batteries for smartphones and wearables.
+*   **January 6, 2026**: Analysis highlighted Enovix&#x27;s operational challenges, including repeated delays, overpromising, and an inability to meet key customer requirements like Honor&#x27;s 1,000-cycle threshold, which underscores execution risk.
+*   **January 1, 2026**: Kristina Truong, Chief Accounting Officer of Enovix Corp, sold 2,296 shares of common stock at $7.31 per share for a total of $16,783.76, to cover tax withholding obligations related to the vesting of restricted stock units. This transaction was disclosed in a Form 4 filing with the Securities and Exchange Commission.
 
-**SLDP (Solid Power, Inc.)**
-No specific announcements or SEC filings dated **January 6, 2026** were found. The most recent news and filings are from late 2025, including:
-*   **November 4, 2025**: Solid Power reported its Third Quarter 2025 results.
-*   **October 30, 2025**: Solid Power announced a joint evaluation agreement with Samsung SDI and BMW to develop and validate a demonstration vehicle powered by all-solid-state battery technology.</div>
+**SES (SES AI Corporation)**
+*   **January 5, 2026 / January 6, 2026**: SES AI Corporation announced its January 2026 event calendar, which includes:
+    *   **January 6-9, 2026**: Participation in CES 2026 in Las Vegas.
+    *   **January 6, 2026**: Dr. Kang Xu, CTO, is scheduled to present on &quot;Material Discovery for Electrolytes in the AI Era&quot; at the Gordon Research Conference (Electrochemistry) in Ventura, California.
+    *   **January 16, 2026**: Dr. Qichao Hu, Founder and CEO, is scheduled to present on SES AI&#x27;s latest developments in Drone Battery, ESS (Energy Storage Systems), and Materials at the 28th Annual Needham Growth Conference (virtual event).
+    *   **January 20-22, 2026**: Participation in the NASA Aerospace Battery Workshop.
+
+**MVST (Microvast Holdings Inc)**
+*   No new announcements, news, or SEC filings dated today, **January 7, 2026**, or the immediate preceding days were found. The most recent relevant corporate news identified was their Q3 2025 financial results in November 2025.
+
+**AMPX (Amprius Technologies Inc)**
+*   **January 6, 2026**: Amprius Technologies, Inc. was honored with an Innovation Award from the Consumer Technology Association, the sponsor of CES 2026, for its 520 Wh/kg battery. The battery was recognized as a &quot;2026 Best of Innovation honoree in the Sustainability &amp; Energy Transition category&quot; and will be showcased at CES 2026, including powering a Nokia drone on display at their booth.
+
+**SLDP (Solid Power Inc)**
+*   No new announcements, news, or SEC filings dated today, **January 7, 2026**, or the immediate preceding days were found. The most recent relevant corporate news identified included their Q3 2025 results in November 2025 and a joint evaluation agreement in October 2025.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Mon, 05 Jan)</i></small></h3>
 <div class="charts-section">
     <canvas id="chart_batteries_storage_tech" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
@@ -1254,52 +1214,72 @@ No specific announcements or SEC filings dated **January 6, 2026** were found. T
 
 te:&gt; 17M shares given to notes. $3B dilution($1.5B ATM) Dec 05</div>
 <h3 class="news-section">Recent News </h3>
-<div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for the requested companies, as of today, **January 6, 2026**:
+<div class="markdown-raw-content news-section">Here are today&#x27;s and latest dated announcements/news and SEC filings for the requested NYSE/NASDAQ stocks:
 
 **ENPH (Enphase Energy, Inc.)**
-*   **December 16, 2025**: Enphase Energy Expands Safe Harbor Agreement with a Leading TPO Provider.
-*   **December 3, 2025**: Enphase Energy Begins Shipments of IQ EV Charger 2 in the United States.
-*   **December 2, 2025**: Enphase Energy Introduces PowerMatch Technology in Europe to Deliver More Usable Battery Energy and Savings.
+*   No specific announcements or SEC filings dated January 7, 2026, or late December 2025/early January 2026, were found in the provided search results. The latest detailed SEC filing referenced was a 10-Q from November 25, 2024, which is outside the requested timeframe.
 
 **STEM (Stem Inc.)**
-*   **December 9, 2025**: Stem Partners with Clean Energy Asset Owner to Operate and Optimize Energy Storage Portfolio for Southern California Utility.
-*   **December 3, 2025**: Stem Board of Directors Appoints CEO Arun Narayanan to Board.
-*   **October 29, 2025**: Stem Announces Third Quarter 2025 Results.
+*   **Announcements:**
+    *   **Q3 2025 Results**: Stem announced its financial results for the quarter ended **September 30, 2025**. Key figures included revenue of $38.2 million (up 31% from Q3 2024), GAAP gross profit of $13.5 million (up from $6.2 million in Q3 2024), and a net loss of $23.8 million.
+    *   **October 14, 2025**: The company announced the expansion of its Berlin operations with a move to centralized and collaborative facilities.
+    *   **September 12, 2025**: Stem published a letter to shareholders reflecting on its journey of strategic realignment since Q3 2024.
+    *   **September 5, 2025**: The rebranding of its flagship enterprise platform, Athena®, to PowerTrack Optimizer was announced.
+*   **SEC Filings:**
+    *   SEC filings for Stem are available through their Investor Relations section and the SEC website, but no specific new filings dated January 2026 were detailed in the search results.
 
 **FLNC (Fluence Energy, Inc.)**
-*   **December 11, 2025**: Fluence Named a Leading Global Battery Energy Storage Provider in S&amp;P Global Commodity Insights Report.
-*   **December 8, 2025**: Varco Energy and Fluence Advance 142.5 MW Sizing John Energy Storage Project: Phase 1 Fully Operational, Launch of Phase 2.
-*   **November 24, 2025**: Fluence Energy, Inc. Reports 2025 Financial Results and Initiates 2026 Guidance.
+*   **SEC Filings:**
+    *   **November 24, 2025**: An initial ownership report was filed for a Senior Vice President and Chief Growth Officer, indicating no beneficially owned securities as of that date.
+    *   **October 28, 2025**: A Form 4 filing showed SPT Invest Management Sarl transferred 11,761,131 shares of Class A common stock to SPT Holding, SARL, described as an internal reorganization.
+    *   **December 18, 2025**: Restricted Stock Units (RSUs) granted to the SVP &amp; Chief Legal and Compliance Officer and Secretary began vesting.
+*   No specific news announcements dated January 7, 2026, or late December 2025/early January 2026, were found in the provided search results.
 
 **EOSE (Eos Energy Enterprises, Inc.)**
-*   **December 22, 2025**: Eos Energy Honors Outgoing Chair Russ Stidolph for Years of Leadership and Investment and Appoints Industry Veteran Joseph Nigro as Chair of the Board of Directors.
-*   **December 16, 2025**: Eos Enters Global Energy Dialogue at World Economic Forum 2026.
-*   **November 24, 2025**: Eos Energy Successfully Closes $600 Million Convertible Senior Notes Offering and Registered Direct Offering of Common Stock, Enhancing Financial Liquidity and Fueling U.S. Manufacturing Expansion.
+*   No specific announcements or SEC filings dated January 7, 2026, or late December 2025/early January 2026, were found in the provided search results. Latest available information primarily points to general SEC filing pages.
 
 **GWH (ESS Tech, Inc.)**
-*   **November 13, 2025**: ESS Tech, Inc. Announced Third Quarter 2025 Financial Results.
-*   **January 2026**: ESS plans to host an Investor Day to provide an in-depth update on execution and strategic priorities.
+*   **Announcements:**
+    *   **January 6, 2026**: ESS Tech, Inc. announced the appointment of Drew Buckley as Chief Executive Officer, effective **January 1, 2026**. Kelly Goodman was appointed Chief Strategy Officer and General Counsel, and Kate Suhadolnik became Chief Financial Officer.
+*   **SEC Filings:**
+    *   **December 11, 2025**: A 424B3 Prospectus was filed for the resale of up to 1,181,416 shares of common stock.
+    *   **December 11, 2025**: A 424B5 Prospectus Supplement (Debt Securities) was filed.
+    *   **December 5, 2025**: An 8-K Current Report was filed, reporting a material event.
+    *   **November 21, 2025**: Form 4 Insider Trading Activity was reported, showing RSU tax withholding by the interim CFO.
+    *   **November 13, 2025**: The company reported its Q3 2025 financial results and filed a 424(b)(5) for an at-the-market offering of up to $75 million of common stock.
 
 **KULR (KULR Technology Group, Inc.)**
-*   **December 22, 2025**: KULR Technology Group Announces Six-Month Pause on At-the-Market Equity Offering Program.
-*   **December 17, 2025**: KULR Technology Group Enters Joint Development Collaboration for $100M AI Server Rack Battery Backup Unit Opportunity.
-*   **December 11, 2025**: KULR Deepens Commitment to AI Data Center Energy Storage Innovation with Open Compute Project Platinum Membership.
+*   **Announcements:**
+    *   **December 22, 2025**: KULR Technology Group announced a six-month pause on its at-the-market (ATM) equity offering program through **June 30, 2026**.
+    *   **December 17, 2025**: KULR Technology Group entered into a joint development collaboration for a $100 million AI server rack battery backup unit opportunity. The company also rapidly developed a new 400V battery system for a Counter-UAS Directed Energy System, with production planned for 2026.
+    *   **December 11, 2025**: KULR deepened its commitment to AI Data Center Energy Storage Innovation by becoming a Platinum Member of the Open Compute Project.
+    *   **December 9, 2025**: KULR was scheduled to showcase its AI Datacenter Battery Energy Storage Solution at Reuters Energy Live 2025.
+*   **SEC Filings:**
+    *   **December 22, 2025**: An 8-K Current Report was filed regarding Regulation FD Disclosure.
+    *   **December 17, 2025**: An 8-K Current Report was filed regarding Regulation FD Disclosure.
+    *   **December 11, 2025**: An 8-K Current Report was filed regarding Regulation FD Disclosure.
+    *   **December 9, 2025**: An 8-K Current Report was filed regarding Regulation FD Disclosure.
 
-**T1 Energy Inc (NYSE:TE)**
-*   **December 30, 2025**: T1 Executes First Sale of Section 45X Tax Credits.
-*   **December 30, 2025**: Update on T1 Energy FEOC Compliance Efforts.
-*   **SEC Filing - December 30, 2025**: Form 3, Initial Statement of Beneficial Ownership.
-*   **SEC Filing - December 30, 2025**: 8-K, Reports Material Event.
-*   **December 29, 2025**: T1 Energy Inc. reported that a director and Chief Strategy Officer settled 250,000 restricted stock units (RSUs) into common shares.
-*   **December 22, 2025**: T1 and Treaty Oak Execute Strategic Partnership.
-*   **December 17, 2025**: T1 Energy Starts Construction on Texas Solar Cell Fab.
-*   **December 5, 2025**: T1 Energy Inc. announced that in November 2025, the company and a board member received grand jury subpoenas from the U.S. Department of Justice and a voluntary document request from the U.S. Securities and Exchange Commission regarding the sale of company stock in the second half of 2023.
+**T1 Energy Inc TE (T1 Energy Inc.)**
+*   **Announcements:**
+    *   **January 6, 2026**: T1 Energy Inc. (TE) updated its 18.4% stake in Trina Solar following a 3-million-share debt deal. This involved issuing 3,000,000 new shares to Trina Solar (Schweiz) AG on **December 30, 2025**, as part of a debt settlement.
+    *   **December 30, 2025**: T1 Energy completed a $160 million sale of Section 45X production tax credits (PTCs) to an investment-grade U.S. buyer.
+    *   **December 30, 2025**: The company provided an update on its FEOC Compliance Efforts, aiming to deliver compliant solar modules in 2026 and beyond.
+    *   **December 22, 2025**: T1 Energy and Treaty Oak executed a strategic partnership for a three-year agreement for traceable, high-performance modules.
+    *   **December 17, 2025**: Construction began on its G2_Austin solar cell fab in Texas, a 2.1GW Phase One project.
+    *   **December 11, 2025**: T1 Energy announced the pricing of concurrent public offerings of convertible senior notes due 2030 and common stock.
+    *   **December 5, 2025**: Shareholders approved corporate governance changes, including the issuance of 17,918,460 shares for a convertible note conversion, limits on foreign ownership, increasing authorized shares from 355 million to 500 million, and removing &quot;only for cause&quot; for director removal. The company also disclosed receiving grand jury subpoenas from the U.S. Department of Justice and a voluntary document request from the SEC regarding stock sales in H2 2023.
+*   **SEC Filings:**
+    *   An SEC filing related to the **January 6, 2026**, Trina Solar stake update was noted. Other recent filings would be intertwined with the news releases mentioned above.
 
 **NRGV (Energy Vault Holdings, Inc.)**
-*   **January 5, 2026**: Energy Vault Holdings, Inc. announced the start of construction of the SOSA Energy Center, a 150 MW/300 MWh battery energy storage system in Madison County, Texas.
-*   **SEC Filing - January 2, 2026**: 8-K, Reports Material Event, likely related to the issuance of $15 million in new convertible debentures with installment payments beginning January 26, 2026.
-*   **SEC Filing - December 31, 2025**: S-3, Shelf Registration Statement.
-*   **December 4, 2025**: Energy Vault Secures Swiss Market Entry with Signed B-VAULT™ Deployment Contracts for Schindler and Energie Wettingen Projects, Launch of FlexGrid Product for Urban and Utility Applications.</div>
+*   **SEC Filings:**
+    *   **January 2, 2026**: Energy Vault Holdings (NYSE: NRGV) issued $15 million in new convertible debentures.
+    *   **December 23, 2025**: A holder filed to sell 50,000 common shares under Rule 144.
+    *   **December 16, 2025**: Energy Vault (NYSE: NRGV) detailed a 33.3-million-share resale linked to $50 million debentures.
+    *   **December 12, 2025**: An officer reported an 8,751-share RSU tax withholding.
+    *   The company is registering up to 4,500,000 shares of common stock for resale by Dorado Goose LLC, issuable upon the exercise of warrants issued on **August 18, 2025**.
+*   No additional news announcements dated January 7, 2026, or late December 2025/early January 2026, were found beyond what is covered in the SEC filings.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Tue, 06 Jan)</i></small></h3>
 <div class="charts-section">
     <canvas id="chart_batteries_storage_sw" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
@@ -1313,65 +1293,41 @@ te:&gt; 17M shares given to notes. $3B dilution($1.5B ATM) Dec 05</div>
 <h3 class="notes-section">Notes </h3>
 <div class="markdown-notes-block notes-section">atlx:&gt; $200M Offering Dec5 over time</div>
 <h3 class="news-section">Recent News </h3>
-<div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for the requested NYSE/NASDAQ stocks, as of January 6, 2026:
+<div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for the requested US NYSE/NASDAQ stocks, as of **January 7, 2026**:
 
-**Atlas Lithium Corporation (ATLX)**
+**ATL X**
+*   No relevant announcements or SEC filings were found for ATL X dated on or around January 7, 2026.
 
-*   **December 12, 2025:** Atlas Lithium Corp filed a prospectus supplement for an at-the-market (ATM) offering of its common stock, allowing the company to sell up to $40 million in additional shares through H.C. Wainwright &amp; Co., LLC. This offering is under an existing shelf registration statement that became effective on September 3, 2025.
+**ABAT (American Battery Technology Company)**
+*   **January 5, 2026**: An insider, Scott Jolcover, sold 17,500 shares of the company&#x27;s stock on **December 16, 2025**. This transaction was disclosed in a legal filing with the SEC.
+*   **December 18, 2025**: Form 4 - Insider Trading Activity was filed.
+*   **November 17, 2025**: An 8-K report was filed, detailing a material event.
 
-**American Battery Technology Company (ABAT)**
+**ALB (Albemarle Corporation)**
+*   **January 5, 2026**: Stanley Laman Group Ltd. purchased a new position in Albemarle during the 3rd quarter, acquiring 41,850 shares.
+*   **January 2, 2026**: A Form 4, Statement of Changes in Beneficial Ownership, was filed.
+*   **January 2, 2026**: A quarterly common stock dividend of $0.405 per share was paid. The dividend had an annualized rate of $1.62 and was payable to shareholders of record as of **December 12, 2025**.
 
-*   **November 7, 2025:** American Battery Technology Company announced its First Quarter Fiscal 2026 Financial Results.
-*   **November 6, 2025:** American Battery Technology Company was selected to recycle batteries from the largest lithium-ion battery cleanup in US history, a project estimated to generate $30 million in proceeds.
-*   **October 31, 2025:** American Battery Technology Company&#x27;s CEO, Ryan Melsert, was invited to present at the IEA Energy Innovation Forum 2025 to inform G7 Energy and Environment Ministry Leaders.
-*   **September 19, 2025:** The company filed a prospectus supplement to its registration statement on Form S-3 related to the offer and sale of shares with an aggregate offering price of up to $50,000,000.
-*   **September 19, 2025:** ABAT filed a Current Report on Form 8-K.
-*   **November 17, 2025:** American Battery Technology Company reported the results of its 2025 annual meeting of shareholders, where all resolutions were passed.
+**SQM (Sociedad Quimica y Minera de Chile S.A.)**
+*   **January 6, 2026**: The company paid a special dividend of $0.1236 on **January 5, 2026**.
+*   **November 19, 2025**: A Form 6-K was filed for the month of September 2025, reporting total revenues of US$3,252.4 million and net income of US$404.4 million for the nine months ended **September 30, 2025**. The filing also noted that China&#x27;s State Administration for Market Regulation (SAMR) approved the public-private partnership between SQM and Codelco to develop mining properties in the Salar de Atacama.
 
-**Albemarle Corporation (ALB)**
+**SGML (Sigma Lithium Corporation)**
+*   **January 4, 2026**: Financhill&#x27;s page for SGML SEC Filings &amp; Financial Reports was last updated on this date. No specific SEC filings for January 2026 were detailed. The latest specific filing date available in the search results is from **January 20, 2023**.
 
-*   No specific latest announcements or SEC filings for ALB were found within the provided search results as of today&#x27;s date.
+**ELVR (Elevra Lithium Limited)**
+*   **December 12, 2025**: The company reported the expiry of 14,897 unquoted options on **December 8, 2025**, which ceased without exercise.
+*   **November 6, 2025**: A Form 6-K was filed summarizing Q1 FY26 operations, including the production of 52,003 dmt of spodumene concentrate and sales of 25,975 dmt. The company&#x27;s cash stood at $149 million as of **September 30, 2025**.
 
-**Sociedad Química y Minera de Chile S.A. (SQM)**
+**LAC (Lithium Americas Corp.)**
+*   **January 7, 2026**: Institutional trading activity was reported. Harbour Investments Inc. increased its position in LAC by 86.1% in the 2nd quarter of 2025. Quarry LP and Walleye Capital LLC also acquired new positions in the 3rd and 2nd quarters of 2025, respectively.
+*   **November 14, 2025**: SVP Edward Grandy sold 6,183 shares of the company&#x27;s stock.
+*   **September 30, 2025**: The company filed its Quarterly Report on Form 10-Q for the three and nine months ended **September 30, 2025**.
 
-*   **December 27, 2025:** SQM announced the completion of its association agreement with Codelco, forming a new joint venture, Nova Andino Litio, which will oversee lithium production in Chile&#x27;s Salar de Atacama through 2060. SQM Salar has been renamed Nova Andino Litio.
-*   **December 4, 2025:** SQM announced the issuance and sale of a UF 10 million local hybrid bond.
-
-**Sigma Lithium Corporation (SGML)**
-
-*   **January 2, 2026:** An article was published on Seeking Alpha titled &quot;Sigma Lithium After The Rally: Execution Now Matters More Than Lithium Prices.&quot;
-*   **December 24, 2025:** News regarding Sigma Lithium being up 30.7% after tighter China supply lifted prices and investor optimism.
-*   **November 18, 2025:** Sigma Lithium was up 33.2% after strong Q3 results and EV partnership speculation.
-*   **November 14, 2025:** Sigma Lithium released its earnings results for the quarter, reporting ($0.10) earnings per share.
-
-**Elevra Lithium Limited (ELVR)**
-
-*   **December 12, 2025:** Elevra Lithium Limited (ELVR) reported the expiry of 14,897 unquoted options in a 6-K filing.
-*   **November 21, 2025:** All Elevra Lithium 2025 AGM resolutions were carried with strong support, as reported in a 6-K filing.
-*   **November 17, 2025:** Elevra Lithium updated its capital after 10,649 performance rights converted, detailed in a 6-K filing.
-*   **November 6, 2025:** ELVR outlined a 315 ktpa NAL expansion with US$270M capex in a 6-K filing.
-*   **November 4, 2025:** ELV added 582,770 quoted shares on ASX, with an estimated A$3.90, as reported in a 6-K filing.
-*   **September 30, 2025:** Elevra Lithium completed its transformational merger (Sayona Mining Limited and Piedmont Lithium Inc.) and a $69 million placement. The company also announced updated Mineral Resource and Ore Reserve estimates for North American Lithium and Moblan. Spodumene concentrate production was 52,003 dmt, and sales were 25,975 dmt for the September 2025 quarter. The balance of cash and cash equivalents was $148.8 million.
-
-**Lithium Americas Corporation (LAC)**
-
-*   **December 15, 2025:** Lithium Americas reached a non-binding agreement with the U.S. Department of Energy (DOE) for the first draw of $435 million from a previously announced $2.23 billion DOE loan for the Thacker Pass lithium project. The agreement includes the DOE receiving a 5% equity stake in LAC and the joint venture through warrants.
-*   **December 8, 2025:** Lithium Americas will be added to the S&amp;P/TSX Composite Index, effective prior to market open on December 22, 2025.
-*   **2024 (published 2025):** Lithium Americas published its 2024 ESG-S report, highlighting environmental, social, governance, and safety performance during the initial construction phase of the Thacker Pass project.
-
-**NioCorp Developments Ltd. (NB)**
-
-*   **Early Q1 2026 (expected start):** NioCorp&#x27;s Board of Directors approved the Mine Portal Project, a major initiative to advance the Elk Creek Critical Minerals Project, with an estimated capital cost of approximately $44.6 million.
-*   **December 22, 2025:** NioCorp announced Board approval of a Mine Portal Project at the Elk Creek critical minerals site to establish the main underground mine entrances.
-*   **December 15, 2025:** A Statement of changes in beneficial ownership of securities (Form 4) was filed.
-*   **November 25, 2025:** U.S. Senator Pete Ricketts was to attend NioCorp Developments&#x27; December 5 Town Hall Event.
-*   **November 12, 2025:** NioCorp was to participate in Morgan Stanley&#x27;s National Security &amp; Critical Materials Symposium.
-*   **November 5, 2025:** NioCorp reported positive assay results from the second completed diamond drill hole of its Elk Creek drilling program (NEC25-025).
-*   **September 30, 2025:** NioCorp provided its preliminary unaudited financial results for the three-month period ended September 30, 2025.
-*   **August 4, 2025:** NioCorp Developments Ltd. filed an 8-K reporting that its 92%-owned subsidiary, Elk Creek Resources Corp. (ECRC), executed a Project Sub-Agreement with Advanced Technology International on behalf of the U.S. Department of Defense (DoD). The DoD will reimburse ECRC for up to approximately US$10 million of eligible costs.
-*   **August 1, 2025:** NioCorp Developments Ltd. filed an 8-K announcing that its wholly-owned subsidiary, Elk Creek Resources Corp. (ECRC), closed on the purchase of three land parcels in Johnson County, Nebraska for approximately US$2.7 million, completing all land acquisition needed for the Elk Creek Critical Minerals Project.
-*   **August 18, 2025:** Director Nilsa Guerrero-Mahon and Director Dean C. Kehler were each granted stock options.
-*   NioCorp acquired Scandium Alloy Assets to support a potential first-ever vertically integrated U.S. Scandium Mine-to-Markets Supply Chain.</div>
+**NioCorp Developments Ltd NB**
+*   **December 22, 2025**: NioCorp announced that its Board of Directors approved the Company&#x27;s Mine Portal Project, a major initiative to advance the Elk Creek Critical Minerals Project. Work is expected to begin in Q1 of calendar year 2026.
+*   **December 4, 2025**: NioCorp acquired Scandium Alloy Assets to support a potential vertically integrated U.S. scandium mine-to-markets supply chain.
+*   **December 4, 2025**: Mark A. Smith, a reporting person, filed a Form 4.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Tue, 06 Jan)</i></small></h3>
 <div class="charts-section">
     <canvas id="chart_battery_materials_mining" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
@@ -1383,42 +1339,69 @@ te:&gt; 17M shares given to notes. $3B dilution($1.5B ATM) Dec 05</div>
 <h3 class="fundamentals-section">Fundamentals</h3>
 <div id="fundamentals-table-Hyperscalers" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="news-section">Recent News </h3>
-<div class="markdown-raw-content news-section">Here are the latest announcements, news, and SEC filings for the specified companies, dated as of today (January 6, 2026) or late December 2025, excluding standalone stock price changes and disclaimers:
+<div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for the requested companies, as of today, **January 7, 2026**:
 
-### **CoreWeave (CRWV)**
+### CRWV (CoreWeave Inc.)
 
-*   **January 5, 2026:** CoreWeave announced it would add NVIDIA Rubin technology to its AI cloud platform, expanding solutions for agentic AI, reasoning, and large-scale inference workloads. The company expects to be among the first cloud providers to deploy the NVIDIA Rubin platform in the second half of 2026.
-*   **January 5, 2026:** Kaplan Fox &amp; Kilsheimer LLP announced an investigation into CoreWeave, Inc. for potential securities law violations, referencing previously disclosed temporary delays related to a third-party data center developer and revisions to design plans for data centers.
-*   **January 5, 2026:** CoreWeave amended a credit agreement (DDTL 3.0 Credit Agreement) to ease liquidity tests, including reducing the minimum liquidity amount for monthly payment dates and postponing initial testing dates for certain financial covenants. This amendment aligns with timing of deliveries described in its Q3 2025 earnings call.
-*   **January 5, 2026:** Jefferies analyst Brent Thill adjusted the price target for CoreWeave while maintaining a &quot;Buy&quot; rating.
-*   **January 5, 2026:** Insider selling was reported from multiple executives on **December 31, 2025**. CEO and President Michael N. Intrator sold shares, Chief Development Officer Brannin McBee disposed of shares, and Chief Strategy Officer Brian M Venturo sold shares. McBee and Venturo also acquired shares through the exercise of Restricted Stock Units or options on the same date.
-*   **December 31, 2025:** Renaissance Capital LLC acquired shares of CoreWeave Inc.
+*   **News:**
+    *   CoreWeave is experiencing increased share activity due to a mix of product partnership news and analyst activity. The company plans to deploy NVIDIA Rubin in 2026, which is viewed by investors as a technology advantage that supports revenue growth. Analyst firm D.A. Davidson upgraded its rating to Hold from Sell on **January 6, 2026**, raising the price target from $36 to $68. Citi also resumed coverage with a Buy rating and a price target of $135.
+    *   On **January 5, 2026**, CoreWeave announced an amendment to a credit agreement to ease liquidity tests. This amendment aligns the facility for the timing of deliveries previously discussed in their Q3 2025 earnings call.
+*   **SEC Filings:**
+    *   **December 15, 2025:** An officer filed a Form 4 regarding Rule 10b5-1 stock sales.
+    *   **November 20, 2025:** The Chief Financial Officer reported an insider equity transaction involving restricted stock units vesting and a sale to cover tax withholding obligations.
+    *   CoreWeave also completed a private offering of $2.59 billion in 1.75% Convertible Senior Notes due 2031.
 
-### **Nebius Group (NBIS)**
+### NBIS (Nebius Group N.V.)
 
-*   **January 5, 2026:** Nebius announced it will deploy the NVIDIA Rubin platform through Nebius AI Cloud and Nebius Token Factory, offering NVIDIA Vera Rubin NVL72 in the US and Europe starting in H2 2026. This aims to unlock next-generation reasoning and agentic AI capabilities for customers.
+*   **News:**
+    *   No specific company news releases from NBIS dated **January 7, 2026**, or the immediate days prior.
+*   **SEC Filings:**
+    *   **December 30, 2025:** A Form 144 was filed for a proposed sale of securities under Rule 144.
+    *   **December 29, 2025:** Another Form 144 was filed for a proposed sale of securities under Rule 144.
+    *   **October 1, 2025:** A Form 144 showed a proposed sale of 38,099 Class A ordinary shares. Insider sales by Arkadiy Volozh occurred between July and September 2025.
+    *   **September 15, 2025:** Nebius Group filed a Form 6-K reporting the closings of a public offering of Class A ordinary shares and a concurrent private offering of convertible senior notes due 2030 and 2032.
 
-### **Core Scientific (CORZ)**
+### CORZ (Core Scientific, Inc.)
 
-*   **January 2, 2026:** A Form 4 Statement of changes in beneficial ownership of securities was filed for Core Scientific Inc.
+*   **News:**
+    *   **January 6, 2026:** Core Scientific is transitioning from crypto mining to AI and high-performance computing data centers, with plans to deliver 400 MW of capacity to new clients by 2026. Potential deals exceeding 100 MW are anticipated in the next 90 days.
+    *   **January 6, 2026:** BTIG upgraded Core Scientific&#x27;s stock to Buy from Neutral, setting a price target of $23.00, following the termination of a merger agreement with CoreWeave.
+    *   **January 6, 2026:** Bullish options activity has been observed, coinciding with an analyst upgrade to Market Outperform.
+*   **SEC Filings:**
+    *   **November 13, 2025:** An 8-K was filed furnishing a press release announcing financial results for the third quarter ended September 30, 2025.
+    *   **November 4, 2025:** A Form 4 reported a director&#x27;s purchase of 5,000 shares of common stock.
+    *   **October 30, 2025:** An 8-K was filed announcing an investor presentation.
 
-### **Applied Digital (APLD)**
+### APLD (Applied Digital Corporation)
 
-*   **January 7, 2026:** Applied Digital is expected to announce its fiscal second quarter 2026 results after market close. A conference call to discuss operations and financial results is scheduled for the same day at 5:00 p.m. Eastern Time.
-*   **December 29, 2025:** Applied Digital announced plans to spin out its cloud business and proposed a business combination with EKSO to launch ChronoScale, an AI/GPU-accelerated compute platform.
-*   **December 2, 2025:** Applied Digital completed a development loan facility with Macquarie Group to support new AI factory campuses.
+*   **News:**
+    *   No specific company news releases from APLD dated **January 7, 2026**, or the immediate days prior.
+*   **SEC Filings:**
+    *   **December 29, 2025:** An 8-K (Current report) was filed.
+    *   **December 22, 2025:** An 8-K (Current report) was filed.
+    *   **December 5, 2025:** An S-3 (Registration statement under Securities Act of 1933) was filed.
+    *   **December 2, 2025:** An 8-K (Current report) and a Form 4 (Statement of changes in beneficial ownership of securities) were filed.
 
-### **Cipher Mining (CIFR)**
+### CIFR (Cipher Mining Inc.)
 
-*   **January 5, 2026:** Cipher Mining Inc. acquired a 200-megawatt site in Ohio, aiming to double its current electricity market access and support future expansion by 2027.
-*   **December 30, 2025:** Cipher Mining signed 10- and 15-year AI/HPC hosting deals with Fluidstack and Amazon Web Services, locking in approximately $8.5 billion of AI/HPC lease payments, with revenues expected in 2026. The company grew its AI hosting from zero to 544 MW in one quarter, with a 3.2 GW pipeline.
+*   **News:**
+    *   **January 6, 2026:** Cipher Mining announced the appointments of Lee Bratcher as Head of Policy and Government Affairs and Drew Armstrong as Head of Strategic Initiatives to strengthen its leadership team.
+    *   **January 6, 2026:** The company&#x27;s shares traded down by -3.63% amidst anticipation of financial performance disclosure.
+*   **SEC Filings:**
+    *   **December 15, 2025:** A Co-President and Chief Legal Officer reported the exercise of restricted stock units (RSUs) and the disposal of common stock.
+    *   **December 15, 2025:** Co-President and COO Patrick Arthur Kelly reported sales of common stock under a pre-arranged Rule 10b5-1 trading plan and RSU conversions.
+    *   **November 17, 2025:** Co-President and COO Patrick Arthur Kelly reported an open-market sale of common stock under a Rule 10b5-1 trading plan.
+    *   **November 10, 2025:** CEO Tyler Page reported insider equity activity, including the settlement of performance stock units and disposal of shares.
 
-### **TeraWulf (WULF)**
+### WULF (TeraWulf Inc.)
 
-*   **January 2, 2026:** A Form 4 Statement of changes in beneficial ownership of securities was filed by Langlais Kerri M. for TeraWulf Inc.
-*   **December 31, 2025:** Keefe, Bruyette &amp; Woods upgraded TeraWulf to an &quot;outperform&quot; rating with a $24 price target.
-*   **December 18, 2025:** Multiple 8-K current reports were filed by TeraWulf Inc.
-*   **December 8, 2025:** A Schedule 13G was filed by certain investors to report beneficial ownership of more than 5% of a class of equity securities.</div>
+*   **News:**
+    *   **January 6, 2026:** TeraWulf announced it secured $1.3 billion in financing for its Abernathy AI data center project and received regulatory approval for industrial use of its Cayuga Lake site in New York.
+    *   **January 6, 2026:** TeraWulf received an upgrade to Outperform from Keefe Bruyette.
+*   **SEC Filings:**
+    *   **December 29, 2025:** An 8-K (Current report) was filed, detailing entry into a material definitive agreement and the creation of a direct financial obligation.
+    *   **December 18, 2025:** Several 8-K (Current report) filings were made, including one related to Regulation FD Disclosure.
+    *   **November 10, 2025:** A 10-Q (Quarterly report for the quarter ending September 30, 2025) was filed.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Tue, 06 Jan)</i></small></h3>
 <div class="charts-section">
     <canvas id="chart_Hyperscalers" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
@@ -1432,37 +1415,51 @@ te:&gt; 17M shares given to notes. $3B dilution($1.5B ATM) Dec 05</div>
 <h3 class="notes-section">Notes </h3>
 <div class="markdown-notes-block notes-section">iren:&gt; 40M shares at $41 CB on Dec 8</div>
 <h3 class="news-section">Recent News </h3>
-<div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for the requested companies as of today, **January 6, 2026**:
+<div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for the requested NYSE/NASDAQ stocks, as of January 7, 2026:
 
-**MARA (Marathon Digital Holdings Inc.)**
-*   **January 5, 2026:** On-chain data suggested that Marathon Holdings might be preparing to sell some of its Bitcoin holdings to fund its expanding AI and high-performance computing business, causing shares to rise in pre-market trade.
-*   **January 6, 2026:** Geode Capital Management LLC increased its stake in Marathon Digital by purchasing an additional 315,499 shares in the last quarter, bringing their total to 9,225,303 shares. American Century Companies Inc. also increased its holdings by 7.8% during the second quarter, acquiring an additional 491,245 shares, for a total of 6,781,198 shares.
+**MARA (Marathon Digital Holdings, Inc.)**
+*   **November 4, 2025**: Announced Third Quarter 2025 Results.
+*   **November 4, 2025**: Announced collaboration with MPLX on integrated power generation and data center campuses in West Texas.
 
 **CLSK (CleanSpark Inc.)**
-*   No specific announcements or SEC filings were found for CleanSpark Inc. as of January 6, 2026, in the provided search results.
+*   **December 5, 2025**: A director reported RSU vesting and share acquisition.
+*   **December 4, 2025**: Director Amanda Cavaleri sold 33,000 shares of the firm&#x27;s stock.
+*   **November 25, 2025**: Filed its annual report, detailing its fast-growing Bitcoin mining and data center platform, and diversification into AI and high-performance computing (HPC) hosting.
+*   **November 13, 2025**: Announced the upsize and pricing of a private offering of $1.15 billion aggregate principal amount of 0.00% convertible senior notes due 2032.
+*   **October 27, 2025**: Acquired rights to approximately 271 acres in Austin County, Texas, and executed long-term power supply agreements totaling 285 megawatts for a next-generation data center campus.
 
 **BITF (Bitfarms Ltd.)**
-*   **January 2, 2026:** Bitfarms announced the definitive share purchase agreement to sell its 70 MW Paso Pe, Paraguay site to Sympatheia Power Fund for up to $30 million, completing its exit from Latin America. The company anticipates receiving $9 million in cash upon closing in Q1 2026, which includes a $1 million non-refundable deposit already paid, and up to an additional $21 million over 10 months based on payment milestones. This strategic move aims to rebalance its energy portfolio to 100% North American operations and accelerate its expansion into high-performance computing (HPC) and artificial intelligence (AI) infrastructure in North America.
-*   **January 2, 2026:** A Form 6-K (Report of foreign issuer) was filed.
+*   **November 14, 2025**: Updated U.S. filings with its 2025 Annual General Meeting information circular.
+*   **October 24, 2025**: Closed an additional $50 million draw under its amended Loan and Security Agreement with Macquarie Equipment Capital, Inc. and issued Macquarie warrants exercisable into 2,197,127 common shares.
 
 **HIVE (HIVE Digital Technologies Ltd.)**
-*   No specific announcements or SEC filings were found for HIVE Digital Technologies Ltd. as of January 6, 2026, in the provided search results. The most recent relevant news found are from December 2025.
+*   **December 23, 2025**: Filed a Current Report (Form 6-K).
+*   **December 16, 2025**: Filed a Current Report (Form 6-K).
+*   **December 11, 2025**: Entered Colombia&#x27;s deep Andean capital markets with a Colombia Listing, aiming to advance its role as Latin America&#x27;s emerging leader in Green AI and Bitcoin Infrastructure.
+*   **December 10, 2025**: Reported November production of 290 BTC and achieved 25 EH/s, with Tier III+ AI Data Center growth accelerating into 2026.
+*   **November 25, 2025**: Announced an At-The-Market Equity Program for up to $300 million of common shares.
 
 **BTBT (Bit Digital Inc.)**
-*   **January 2, 2026:** Bit Digital Inc. announced the appointment of Amanda Cassatt, founder of Serotonin and former CMO of Consensys, to its Board of Directors, signaling an ambitious expansion into Ethereum and AI sectors.
-*   **January 5, 2026:** Bit Digital&#x27;s stock was trending up, with a reported increase of 8.09%, driven by positive sentiment surrounding regulatory approval and market expansion, notably linked to the strategic board appointment and expansion into Ethereum and AI.
+*   **December 12, 2025**: Director Brock Pierce reported equity compensation, with 20,000 Ordinary Shares issued upon vesting of restricted share units.
+*   **December 5, 2025**: Reported monthly Ethereum treasury and staking metrics for November 2025.
+*   **November 7, 2025**: Announced the date for its Third Quarter 2025 Financial Results and Conference Call.
+*   **October 15, 2025**: CFO and Director Erke Huang reported the issuance of 325,000 ordinary shares upon vesting of restricted stock units.
+*   **October 15, 2025**: CEO Samir Tabar reported insider equity activity, with 325,000 ordinary shares issued upon vesting of performance-based RSUs.
 
 **HUT (Hut 8 Corp.)**
-*   No specific announcements or SEC filings were found for Hut 8 Corp. as of January 6, 2026, in the provided search results.
+*   **December 31, 2025**: Amended its credit agreement with Coinbase Credit, Inc., increasing its total borrowing capacity to $200 million.
 
 **RIOT (Riot Platforms, Inc.)**
-*   **January 2, 2026:** Riot Platforms filed an 8-K Current Report.
-*   **December 31, 2025:** Riot Platforms entered into a sales agreement for an offering of common stock, which could be up to $500 million, according to an SEC filing.
+*   **January 6, 2026**: Released unaudited production and operations updates for December 2025, reporting 460 BTC produced and announcing a shift from monthly to quarterly production updates.
+*   **January 2, 2026**: Announced a planned transition in its chief financial officer position, with Jason Chung appointed as CFO effective March 1, 2026, and Colin Yee transitioning to a Senior Advisor role. The company also announced several executive compensation adjustments.
+*   **December 31, 2025**: Entered into a sales agreement for an offering of up to $500 million common stock.
 
-**IREN (IREN Limited)**
-*   **January 2, 2026:** IREN filed a Form S-8, which is a registration statement for securities offered to employees through benefit plans.
-*   **January 4, 2026:** IREN filed a $660.975 million shelf registration for up to 17,500,000 ordinary shares, an event that could influence future share supply and investor expectations regarding its growth strategies.
-*   **January 5, 2026:** IREN&#x27;s GPU footprint expansion is enhancing its revenue visibility and stock performance. The company advanced its strategy in Q1 fiscal 2026 through a multi-year AI Cloud contract with Microsoft. This partnership is solidifying IREN&#x27;s position as a leading AI Cloud Service Provider and expanding its reach into hyperscale customer segments. IREN plans to scale its GPU fleet from approximately 23,000 units to 140,000 GPUs by the end of 2026, targeting $3.4 billion in total AI Cloud annualized run-rate revenues. The company has secured a $9.7 billion contract with Microsoft for phased deployments at Childress through 2026.</div>
+**IREN (IREN Ltd.)**
+*   **December 8, 2025**: Closed a $2.3 billion convertible notes offering and repurchased existing convertible notes.
+*   **December 3, 2025**: Announced the pricing of an ordinary shares offering to fund the repurchase of convertible notes.
+*   **December 3, 2025**: Priced a $2 billion convertible notes offering.
+*   **December 1, 2025**: Announced a proposed convertible notes offering.
+*   **December 1, 2025**: Announced a proposed offering of ordinary shares to fund the repurchase of convertible notes.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Mon, 05 Jan)</i></small></h3>
 <div class="charts-section">
     <canvas id="chart_Mining" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
@@ -1478,45 +1475,59 @@ te:&gt; 17M shares given to notes. $3B dilution($1.5B ATM) Dec 05</div>
 
 oklo:&gt; $3.5B shelf registration,Dec 4 $1.5B ATM</div>
 <h3 class="news-section">Recent News </h3>
-<div class="markdown-raw-content news-section">Here&#x27;s a summary of the latest announcements and SEC filings for the requested companies, as of **January 6, 2026**:
+<div class="markdown-raw-content news-section">Here is a summary of the latest announcements and SEC filings for the specified NYSE/NASDAQ stocks as of January 7, 2026:
 
-*   **Oklo Inc. (OKLO)**
-    *   **December 29, 2025:** A Form 4, Statement of changes in beneficial ownership of securities, was filed.
-    *   **December 22, 2025:** A Form 144 was filed, indicating a proposed sale of 570,000 shares of Class A common stock by a shareholder. Also on this date, insider sales of Class A common stock by a co-founder, COO, director, and 10% owner were reported in a Form 4 filing.
-    *   **December 18, 2025:** Shareholder Richard C. Bealmear filed a Form 144 notice to sell 5,159 Class A shares.
-    *   **December 17, 2025:** Richard C. Bealmear filed a Form 144 notice to sell 69,841 Class A shares.
+**OKLO (OKLO)**
+*   **January 5, 2026**: A 10% shareholder, Jacob DeWitte, sold 200,000 shares of common stock for a total value of $18.06 million.
+*   **December 22, 2025**: A Form 144 notice was filed indicating a shareholder&#x27;s plan to sell 570,000 shares of Class A common stock.
+*   **December 22, 2025**: A co-founder, chief operating officer, director, and 10% owner filed a Form 4 disclosing multiple sales of Class A common stock made by grantor retained annuity trusts (GRATs).
+*   **December 17, 2025**: A Form 144 notice was filed to sell 69,841 Class A shares.
+*   **December 4, 2025**: An 8-K filing was submitted.
+*   **November 11, 2025**: Oklo Inc. published its financial results and business update for the quarter ended September 30, 2025. The company also posted an updated investor presentation and hosted a conference call.
 
-*   **NuScale Power Corporation (SMR)**
-    *   **January 5, 2026:** A Form 4 filing reported that Director Alan L. Boeckmann received a grant of 2,607 shares of Class A common stock on **December 31, 2025**, in lieu of quarterly director fees.
-    *   **January 5, 2026:** Another Form 4 filing indicated that Director Kent Kresa received 3,702 shares of Class A Common Stock on **December 31, 2025**, also in lieu of quarterly director fees.
-    *   **December 17, 2025:** A Form 8-K reported that stockholders approved an amendment to the Certificate of Incorporation to increase authorized Class A common stock from 332,000,000 to 662,000,000 shares. The amendment became effective on **December 16, 2025**.
+**NuScale Power Corporation (SMR)**
+*   **January 5, 2026**: A director reported a 2,607-share equity fee grant.
+*   **January 5, 2026**: A director was granted 3,702 Class A shares for board fees.
+*   **December 17, 2025**: Shareholders approved an increase in authorized Class A shares.
+*   **December 10, 2025**: The CFO sold 40,000 shares under a Rule 10b5-1 plan.
+*   **December 8, 2025**: SMR filed a Rule 144 to sell 40,000 Class A shares on NYSE.
+*   **November 6, 2025**: NuScale Power reported its Third Quarter 2025 results and announced an agreement between Fluor and NuScale regarding stake monetization.
 
-*   **NANO Nuclear Energy Inc. (NNE)**
-    *   No specific announcements or SEC filings dated today (**January 6, 2026**) or late December 2025 / early January 2026 were found in the provided search results.
+**NANO Nuclear Energy Inc. (NNE)**
+*   **January 2, 2026**: A SCHEDULE 13G/A filing was made.
+*   **December 30, 2025**: Multiple SEC filings were made, including a 10-K Annual Report.
 
-*   **Terrestrial Energy Inc. (IMSR)**
-    *   No specific announcements or SEC filings dated today (**January 6, 2026**) or late December 2025 / early January 2026 were found in the provided search results. The latest news identified was from November 2025.
+**Terrestrial Energy Inc. (IMSR)**
+*   There are no SEC filings found matching the current criteria for Terrestrial Energy Inc.
+*   **November 25, 2025**: Terrestrial Energy was scheduled to participate in upcoming investor conferences.
+*   **November 13, 2025**: Terrestrial Energy further strengthened its executive leadership to accelerate U.S. commercialization of its Integral Molten Salt Reactor.
+*   **November 5, 2025**: Terrestrial Energy and Westinghouse signed an expanded contract for the IMSR Advanced Nuclear Fuel Plant at Springfields.
+*   **November 4, 2025**: Terrestrial Energy Inc. appointed Sarfraz M. Taj as Vice President of Business Development.
 
-*   **Uranium Energy Corp (UEC)**
-    *   **October 31, 2025:** The company filed its Form 10-Q for the quarter ended October 31, 2025. This filing highlighted the launch of United States Uranium Refining &amp; Conversion Corp, a new wholly owned subsidiary intended to develop an American uranium refining and conversion facility. It also reported a net loss of $10.34 million for the three months ended October 31, 2025.
-    *   **September 30, 2025:** State Street Corporation filed a Schedule 13G reporting passive beneficial ownership of 4.1% of UEC common stock.
-    *   **September 30, 2025:** The Vanguard Group filed an amended Schedule 13G reporting passive ownership of 7.68% of UEC common stock.
+**Uranium Energy Corp. (UEC)**
+*   No SEC filings were found matching current filters for January 2026.
+*   **November 20, 2025**: An executive vice president exercised stock options to acquire 125,000 common shares.
+*   **November 2025**: Uranium Energy Corp. (UEC) filed its Form 10-Q for the quarter ended October 31, 2025, and released a detailed operational update, including the launch of United States Uranium Refining &amp; Conversion Corp.
+*   **September 30, 2025**: Vanguard Group reported beneficial ownership of 35,726,216 shares, representing a 7.68% stake in UEC.
+*   **September 30, 2025**: State Street Corporation filed a Schedule 13G reporting passive beneficial ownership of 4.1% of UEC common stock.
+*   **September 24, 2025**: Uranium Energy Corp. filed its Annual Report on Form 10-K for the fiscal year ended July 31, 2025, with the SEC.
 
-*   **Cameco Corporation (CCJ)**
-    *   **January 6, 2026:** A shareholder filed a Rule 144 notice to sell 1,000 common shares, with an approximate sale date of **January 5, 2026**.
-    *   **January 5, 2026:** A holder of CCJ common shares filed a Rule 144 notice to sell 4,000 common shares, with an approximate sale date of **January 5, 2026**.
-    *   **January 2, 2026:** A shareholder filed a notice of proposed sale of 50,000 common shares under Rule 144.
+**Cameco Corporation (CCJ)**
+*   **January 5, 2026**: A holder of CCJ common shares filed a Rule 144 notice to sell 4,000 common shares.
+*   **January 2, 2026**: A Form 144 filing for Cameco Corp was noted.
 
-*   **Centrus Energy Corp (LEU)**
-    *   **December 19, 2025:** A Form 8-K, Current report, was filed.
-    *   **December 11, 2025:** A Form 25, Notification of the removal from listing and registration of matured, redeemed or retired securities, was filed.
-    *   **December 8, 2025:** A Form 4, Statement of changes in beneficial ownership of securities, was filed by VEXLER AMIR VADIM.
-    *   **December 1, 2025:** A Form 8-K, Current report, was filed.
+**Centrus Energy Corp. (LEU)**
+*   No SEC filings were found matching current filters for January 2026.
+*   **December 4, 2025**: The President and CEO reported an insider equity transaction where 4,000 restricted stock units (RSUs) vested.
+*   **November 5, 2025**: Centrus Energy Corp. furnished a press release announcing financial results for the quarter ended September 30, 2025, as Exhibit 99.1 to an Item 2.02 Form 8-K.
+*   **September 30, 2025**: State Street Corporation filed a Schedule 13G disclosing beneficial ownership of 5.1% of Centrus Energy Corp. common stock.
 
-*   **BWX Technologies (BWXT)**
-    *   **January 5, 2026:** A Form 4 filing reported that Omar F. Meguid, SVP and Chief Digital Officer, acquired 2,931 shares of common stock through the vesting and settlement of previously granted restricted stock units, and disposed of 766 shares (typically for taxes) on **January 5, 2026**.
-    *   **December 2, 2025:** BWXT announced it delivered the full core of TRISO nuclear fuel for Project Pele Microreactor.
-    *   **December 2, 2025:** BWXT announced the expansion of its service offerings with an Owner&#x27;s Engineer Contract at Bulgaria&#x27;s New Kozloduy Nuclear Power Plant Units 7 &amp; 8.</div>
+**BWX Technologies, Inc. (BWXT)**
+*   No SEC filings were found matching current filters for January 2026.
+*   **August 11, 2025**: A Form 144 was submitted reporting a proposed sale of 600 common shares through Wells Fargo Clearing Services.
+*   **August 6, 2025**: Rex D. Geveden, President and CEO, reported sales of company common stock.
+*   **August 6, 2025**: A Form 4 disclosed a sale of 2,261 shares of common stock by an insider.
+*   **August 4, 2025**: An 8-K filing reported a material event.</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Mon, 05 Jan)</i></small></h3>
 <div class="charts-section">
     <canvas id="chart_new_nuclear_energy" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
@@ -1528,39 +1539,38 @@ oklo:&gt; $3.5B shelf registration,Dec 4 $1.5B ATM</div>
 <h3 class="fundamentals-section">Fundamentals</h3>
 <div id="fundamentals-table-Mag7" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="news-section">Recent News </h3>
-<div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for the requested companies, as of **January 6, 2026**:
+<div class="markdown-raw-content news-section">As of **Wednesday, January 7, 2026**, the following are the latest announcements and SEC filings for the specified companies:
 
 *   **Apple (AAPL)**
-    *   No specific announcements or SEC filings dated January 5 or 6, 2026, were found. Latest SEC filings referenced are general forms or from late 2025 related to insider activity.
-
+    *   No specific announcements or SEC filings dated **January 7, 2026**, were found. The most recent SEC filings for Apple shown in the search results are quarterly reports and earnings releases from 2025.
 *   **NVIDIA (NVDA)**
-    *   **January 6, 2026:** Nvidia unveiled its new Vera Rubin AI chip platform at the Consumer Electronics Show (CES) in Las Vegas, aiming to maintain leadership in AI chip supply. This platform, first announced in September, is expected to have Rubin-based products available from partners in the second half of 2026.
-    *   **January 6, 2026:** The company also debuted new AI tools for autonomous vehicles and robots, including a vehicle platform called Alpamayo, designed to help cars &quot;reason&quot; in the real world.
-    *   **January 5, 2026:** NVIDIA announced new open models, frameworks, and AI infrastructure for physical AI, and showcased next-generation robots from global partners built on NVIDIA technologies. This includes the NVIDIA Blackwell architecture-powered Jetson T4000 module, NVIDIA Cosmos and GR00T open models for robot learning and reasoning, and Isaac Lab-Arena for robot evaluation.
-    *   **January 2, 2026:** A Form 144 filing (Report of proposed sale of securities) was submitted.
-
+    *   No specific press releases or SEC filings dated **January 7, 2026**, were directly identified in the search results. However, news dated **January 7, 2026**, discusses NVIDIA&#x27;s product innovations touted at CES 2026 (which occurred on January 6, 2026), including its AI roadmap, Vera Rubin products coming in the second half of 2026, and a full-stack autonomous driving solution for Mercedes-Benz CLA in Q1 2026. This news also references NVIDIA&#x27;s recent licensing agreement with Groq.
+    *   NVIDIA&#x27;s official news page lists the following for earlier dates this week:
+        *   **January 6, 2026**: Siemens and NVIDIA Expand Partnership to Build the Industrial AI Operating System.
+        *   **January 5, 2026**: NVIDIA BlueField-4 Powers New Class of AI-Native Storage Infrastructure for the Next Frontier of AI.
+        *   **January 5, 2026**: NVIDIA Kicks Off the Next Generation of AI With Rubin — Six New Chips, One Incredible AI Supercomputer.
+    *   A &quot;Statement of Changes in Beneficial Ownership&quot; was filed on **January 6, 2026**.
+    *   An insider sale by Donald F Robertson Jr., Principal Accounting Officer, occurred on **January 2, 2026**, for 80,000 shares.
 *   **Meta Platforms (META)**
-    *   **January 5, 2026:** A Form 424B3 filing related to Welsbach Technology Metals Acquisition Corp. was submitted.
-    *   **January 5, 2026:** An SEC filing indicated that the Bank of Nova Scotia issued $2.9 million in Meta-linked autocallable notes.
-    *   **January 2026 (announced December 8, 2025):** Meta is expected to present new options to EU users.
-    *   **First Half of 2026 (reported December 28, 2025):** Meta is set to release two new AI developments: a large language model called Avocado and an image and video generation AI model called Mango.
-
+    *   No specific announcements or SEC filings dated **January 7, 2026**, were found.
+    *   **January 6, 2026**: Meta has paused the international expansion of its Ray-Ban Display smartglasses due to strong demand and limited supply in the United States. New features for the glasses and its Meta Neural Band wrist device were also announced at the annual Consumer Electronics Show (CES) in Las Vegas, including a teleprompter feature and expanded pedestrian navigation to four more cities.
+    *   **January 6, 2026**: Security National Bank lowered its stake in Meta Platforms by 32.0% during the third quarter, as per its most recent SEC filing.
 *   **Microsoft (MSFT)**
-    *   No specific announcements or SEC filings dated January 5 or 6, 2026, were found. Latest SEC filings referenced are general forms or from December 2025 related to insider activity.
-
+    *   No specific announcements or SEC filings dated **January 7, 2026**, were found.
+    *   **January 6, 2026**: Microsoft Corporation is reportedly planning another round of job cuts in January 2026, with estimates suggesting between 11,000 and 22,000 roles could be removed worldwide. This is attributed to heavy spending on AI systems and a stricter office policy starting February 23, 2026.
+    *   **January 6, 2026**: AMI Asset Management Corp reduced its holdings in Microsoft Corporation by 2.0% during the third quarter.
 *   **Broadcom (AVGO)**
-    *   **January 5, 2026:** Insider activity was reported.
-    *   **January 5, 2026:** Discussions and analyses regarding Broadcom&#x27;s valuation, AI/software growth, reported $73 billion AI order backlog, and earnings guidance were published.
-    *   **January 3, 2026:** Social media discussions focused on Broadcom&#x27;s role in the AI boom, its reported $73 billion AI order backlog, and some concerns regarding recent earnings guidance.
-
+    *   No specific announcements or SEC filings dated **January 7, 2026**, were found.
+    *   **January 6, 2026**: Salomon &amp; Ludwin LLC raised its stake in Broadcom Inc. by 73.7% during the third quarter.
+    *   **January 6, 2026**: Bank Pictet &amp; Cie Europe AG acquired an additional 1,751 shares of Broadcom during the third quarter.
+    *   **January 6, 2026**: Insider Kirsten M. Spears sold 30,000 shares, and Charlie B. Kawwas sold 1,928 shares on December 17.
 *   **Alphabet (GOOG)**
-    *   No specific announcements or SEC filings dated January 5 or 6, 2026, were found. Latest SEC filings referenced are general forms or from December 2025 related to insider activity.
-
+    *   No specific announcements or SEC filings dated **January 7, 2026**, were found.
+    *   **January 2, 2026**: Insider trading activity related to dividend equivalent units on existing Google Stock Units was reported.
+    *   **January 6, 2026**: Royal Bank of Canada detailed Alphabet-linked auto-callable barrier notes.
 *   **Amazon (AMZN)**
-    *   **January 6, 2026:** Amazon is rolling out Rufus AI, a new tool aimed at redefining e-commerce efficiency through personalized recommendations and streamlined operations.
-    *   **January 5, 2026:** Amazon announced upgrades to Fire TV, including a redesigned user interface and a transformed Fire TV mobile app, and debuted its first lifestyle TV, the Amazon Ember Artline.
-    *   **January 5, 2026:** AWS announced several updates, including new Amazon EC2 M8gn and M8gb instances powered by AWS Graviton4 processors, support for network conversion for hybrid data center migrations with AWS Transform, Availability Zone ID support across EC2 APIs, and resilience testing with AWS Fault Injection Service for Direct Connect.
-    *   **January 5, 2026:** Amazon has granted temporary remote work authorization to tech employees stuck in India due to H-1B visa delays until March 2, 2026, with certain restrictions on work activities.</div>
+    *   No specific announcements or SEC filings dated **January 7, 2026**, were found.
+    *   **January 2026**: An SEC filing (pricing supplement) was identified for &quot;Contingent Income Auto-Callable Securities due on or about January 12, 2029. Based on the Performance of the Common Stock of Amazon.com, Inc.&quot;</div>
 <h3 class="charts-section">Technicals & charts <small><i>(Mon, 05 Jan)</i></small></h3>
 <div class="charts-section">
     <canvas id="chart_Mag7" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
