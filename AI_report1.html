@@ -414,8 +414,9 @@
                         tableHtml += '</tr></thead><tbody>';
 
                         industryData.forEach(row => {
-                                let cellValue = row[header] || ''; // Default to sheets_df value
-
+                            tableHtml += '<tr>';
+                            actualHeaders.forEach(header => {
+                                let cellValue = row[header] || '';
                                 // Try to override with fundamentalsData if available and applicable
                                 const tickerUpper = row['Ticker'].toUpperCase();
                                 const fundData = fundamentalsLookup[tickerUpper];
@@ -432,9 +433,7 @@
                                     }
                                     // OrderBook_M is not in fundamentalsData, so it remains row[header]
                                 }
-                            tableHtml += '<tr>';
-                            actualHeaders.forEach(header => {
-                                let cellValue = row[header] || '';
+
                                 let style = '';
                                 if (header === 'price%') {
                                     style = colorPricePercent(cellValue);
