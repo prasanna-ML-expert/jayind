@@ -318,6 +318,18 @@
                                     }
                                 },
                                 plugins: {
+                                      datalabels: {
+                                        anchor: 'end',
+                                        align: 'top',
+                                        formatter: (value) => {
+                                            return parseFloat(value).toFixed(1) + '%';
+                                        },
+                                        color: '#333',
+                                        font: {
+                                            weight: 'bold',
+                                            size: 10
+                                        }
+                                    },
                                     title: {
                                         display: false,
                                         text: `Peer Comparison for ${industryKey.replace('_', ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}`
@@ -326,7 +338,8 @@
                                         display: false,
                                         position: 'bottom'
                                     }
-                                }
+                                },
+                                plugins: [ChartDataLabels]
                             }
                         });
 
