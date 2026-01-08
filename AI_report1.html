@@ -193,11 +193,13 @@
             const data = [];
 
             for (let i = 1; i < lines.length; i++) {
-                const values = lines[i].split(',').map(v => v.trim());
+                if (lines[i].trim() === '') continue; // Skip empty lines
+
+                const currentLine = lines[i].split(',');
                 let row = {};
-                headers.forEach((header, index) => {
-                    row[header] = values[index];
-                });
+                for (let j = 0; j < headers.length; j++) {
+                    row[headers[j]] = (currentLine[j] || '').trim();
+                }
                 data.push(row);
             }
             return data;
@@ -383,7 +385,7 @@
                 // Columns to display (must match Python list in sheets_df)
                 const columnsToDisplay = [
                     'Ticker', 'price%', 'Price', 'mcap',
-                    'QRev', 'QPL', 'Order Book','Pending Shelf'
+                    'Debt_M', 'Cash_M', 'QRevenue_M', 'QPL_M', 'OrderBook_M'
                 ];
 
                 for (const industryKey in tickerMap) {
@@ -412,6 +414,24 @@
                         tableHtml += '</tr></thead><tbody>';
 
                         industryData.forEach(row => {
+                                let cellValue = row[header] || ''; // Default to sheets_df value
+
+                                // Try to override with fundamentalsData if available and applicable
+                                const tickerUpper = row['Ticker'].toUpperCase();
+                                const fundData = fundamentalsLookup[tickerUpper];
+
+                                if (fundData) {
+                                    if (header === 'Debt_M') {
+                                        cellValue = fundData['debt'] !== undefined ? fundData['debt'] : cellValue;
+                                    } else if (header === 'Cash_M') {
+                                        cellValue = fundData['cash'] !== undefined ? fundData['cash'] : cellValue;
+                                    } else if (header === 'QRevenue_M') {
+                                        cellValue = fundData['rev'] !== undefined ? fundData['rev'] : cellValue;
+                                    } else if (header === 'QPL_M') { // Assuming QPL_M from sheets_df maps to 'burn' from fundamentalsData
+                                        cellValue = fundData['burn'] !== undefined ? fundData['burn'] : cellValue;
+                                    }
+                                    // OrderBook_M is not in fundamentalsData, so it remains row[header]
+                                }
                             tableHtml += '<tr>';
                             actualHeaders.forEach(header => {
                                 let cellValue = row[header] || '';
