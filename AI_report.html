@@ -8,7 +8,14 @@
         // Embed Python variables as JavaScript variables
         const csvExportUrl = 'https://docs.google.com/spreadsheets/d/1qwnwuUR6kOBMZqrZIX97sMetNKZyXjot-SmEWfI8LUg/export?format=csv&gid=445351489';
         const tickerMap = JSON.parse(`{"quantum": ["ionq", "qbts", "rgti", "qubt", "laes", "arqq"], "power_management_chips": ["nvts", "on", "aosl", "cohr", "mpwr", "powi", "alab", "indi"], "lidar_sensing": ["aeva", "invz", "mvis", "lidr", "oust", "arbe"], "autonomous_driving": ["mbly", "aur", "tsla", "xpev", "kdk"], "uas_defense_robotics": ["dpro", "rcat", "zena", "onds", "avav", "ktos", "umac", "spai"], "service_robotics": ["rr", "serv", "prct", "zbra", "irbt"], "space_launch_systems": ["rklb", "fly", "mnts", "spce", "lunr", "rdw"], "earth_observation": ["pl", "bksy", "spir", "satl", "asts", "irdm", "sats", "vsat"], "ev_charging_infrastructure": ["evgo", "blnk", "chpt", "beem", "adse"], "evtol_air_mobility": ["achr", "joby", "evex", "evtl"], "hydrogen_fuel_cells": ["fcel", "be", "plug", "hyln", "bw", "bldp"], "batteries_storage_tech": ["qs", "envx", "ses", "mvst", "ampx", "sldp"], "batteries_storage_sw": ["enph", "stem", "flnc", "eose", "gwh", "kulr", "te", "nrgv"], "battery_materials_mining": ["atlx", "abat", "alb", "sqm", "sgml", "elvr", "lac", "nb"], "Hyperscalers": ["crwv", "nbis", "corz", "apld", "cifr", "wulf"], "Mining": ["mara", "clsk", "bitf", "hive", "btbt", "hut", "riot", "iren"], "new_nuclear_energy": ["oklo", "smr", "nne", "imsr", "uec", "ccj", "leu", "bwxt"], "Mag7": ["aapl", "nvda", "meta", "msft", "avgo", "goog", "amzn"]}`); // Use backticks for template literal
+        const fundamentalsData = JSON.parse(`[{"ticker":"IONQ","debt":28.52,"cash":3500.0,"rev":108.56,"burn":-160.59},{"ticker":"QBTS","debt":39.79,"cash":836.2,"rev":24.14,"burn":-54.9},{"ticker":"RGTI","debt":7.6,"cash":600.0,"rev":7.49,"burn":-73.8},{"ticker":"QUBT","debt":2.58,"cash":1500.0,"rev":0.55,"burn":-68.36},{"ticker":"LAES","debt":7.83,"cash":430.0,"rev":10.98,"burn":-30.44},{"ticker":"ARQQ","debt":0.0,"cash":36.9,"rev":0.53,"burn":-35.34},{"ticker":"NVTS","debt":0.0,"cash":150.6,"rev":40.4,"burn":-64.6},{"ticker":"ON","debt":3633.0,"cash":2873.0,"rev":6264.4,"burn":1420.0},{"ticker":"AOSL","debt":23.0,"cash":223.5,"rev":696.2,"burn":-11.8},{"ticker":"MPWR","debt":0.0,"cash":1146.1,"rev":2012.1,"burn":494.0},{"ticker":"POWI","debt":0.0,"cash":48.65,"rev":471.2,"burn":-13.0},{"ticker":"WOLF","debt":5102.0,"cash":1300.0,"rev":792.0,"burn":-684.2},{"ticker":"COHR","debt":3506.0,"cash":1285.0,"rev":5810.0,"burn":437.0},{"ticker":"INDI","debt":353.5,"cash":160.9,"rev":228.4,"burn":-52.1},{"ticker":"DPRO","debt":0.23,"cash":16.6,"rev":5.3,"burn":-12.1},{"ticker":"RCAT","debt":13.35,"cash":206.43,"rev":21.8,"burn":-52.4},{"ticker":"ZENA","debt":31.33,"cash":19.53,"rev":5.2,"burn":-6.8},{"ticker":"ONDS","debt":39.77,"cash":432.81,"rev":22.2,"burn":-32.3},{"ticker":"AVAV","debt":726.79,"cash":4418.0,"rev":1370.0,"burn":-242.0},{"ticker":"KTOS","debt":488.0,"cash":305.0,"rev":1310.0,"burn":-54.2},{"ticker":"UMAC","debt":0.0,"cash":83.8,"rev":4.2,"burn":-11.39},{"ticker":"SPAI","debt":1752.0,"cash":1266.0,"rev":15000.0,"burn":766.0},{"ticker":"AEVA","debt":100.0,"cash":270.0,"rev":8.0,"burn":-74.0},{"ticker":"INVZ","debt":0.0,"cash":74.4,"rev":55.1,"burn":-61.0},{"ticker":"MVIS","debt":30.0,"cash":99.5,"rev":2.4,"burn":-62.0},{"ticker":"LIDR","debt":315.0,"cash":200.0,"rev":300.0,"burn":200.0},{"ticker":"OUST","debt":0.0,"cash":165.0,"rev":123.0,"burn":-64.0},{"ticker":"INDI","debt":658.0,"cash":102.4,"rev":228.4,"burn":-52.1},{"ticker":"ARBE","debt":9.3,"cash":52.6,"rev":1.4,"burn":-37.5},{"ticker":"COHR","debt":3259.0,"cash":1285.0,"rev":6124.0,"burn":482.0},{"ticker":"RR","debt":3500.0,"cash":8500.0,"rev":17800.0,"burn":3050.0},{"ticker":"SERV","debt":104.0,"cash":441.8,"rev":771.9,"burn":37.1},{"ticker":"PRCT","debt":51.6,"cash":297.3,"rev":285.4,"burn":-35.0},{"ticker":"ZBRA","debt":2183.0,"cash":872.0,"rev":4780.0,"burn":685.0},{"ticker":"IRBT","debt":205.3,"cash":29.8,"rev":725.2,"burn":-104.2},{"ticker":"MBLY","debt":0.0,"cash":1750.0,"rev":1865.0,"burn":489.0},{"ticker":"AUR","debt":0.0,"cash":1500.0,"rev":0.55,"burn":-540.0},{"ticker":"TSLA","debt":7818.0,"cash":26100.0,"rev":99600.0,"burn":13200.0},{"ticker":"XPEV","debt":4609.0,"cash":4347.0,"rev":5150.0,"burn":-147.0},{"ticker":"KDK","debt":39.6,"cash":146.2,"rev":14.9,"burn":-110.0},{"ticker":"RKLB","debt":455.0,"cash":976.7,"rev":508.4,"burn":-142.2},{"ticker":"FLY","debt":157.0,"cash":1138.4,"rev":142.0,"burn":-288.6},{"ticker":"MNTS","debt":4.1,"cash":0.13,"rev":0.9,"burn":-14.8},{"ticker":"SPCE","debt":421.3,"cash":507.8,"rev":1.4,"burn":-263.0},{"ticker":"LUNR","debt":334.8,"cash":373.3,"rev":218.4,"burn":-38.5},{"ticker":"RDW","debt":185.5,"cash":78.6,"rev":354.2,"burn":-26.2},{"ticker":"SIDU","debt":4.8,"cash":2.4,"rev":5.8,"burn":-12.3},{"ticker":"LHX","debt":11558.0,"cash":605.0,"rev":21400.0,"burn":2280.0},{"ticker":"PL","debt":0.0,"cash":226.1,"rev":260.4,"burn":17.3},{"ticker":"BKSY","debt":202.7,"cash":106.7,"rev":102.1,"burn":-6.4},{"ticker":"SPIR","debt":0.0,"cash":96.8,"rev":105.0,"burn":-14.2},{"ticker":"SATL","debt":152.0,"cash":28.3,"rev":13.2,"burn":-17.4},{"ticker":"ASTS","debt":711.4,"cash":1200.0,"rev":18.5,"burn":-274.0},{"ticker":"IRDM","debt":1810.0,"cash":88.5,"rev":805.0,"burn":302.0},{"ticker":"SATS","debt":26603.0,"cash":2400.0,"rev":15176.0,"burn":840.0},{"ticker":"VSAT","debt":6434.0,"cash":1230.0,"rev":4280.0,"burn":580.0},{"ticker":"EVGO","debt":157.3,"cash":181.3,"rev":334.3,"burn":-58.5},{"ticker":"BLNK","debt":0.0,"cash":42.1,"rev":84.6,"burn":-47.1},{"ticker":"CHPT","debt":168.0,"cash":180.9,"rev":417.1,"burn":-156.4},{"ticker":"BEEM","debt":0.0,"cash":3.4,"rev":26.4,"burn":-9.1},{"ticker":"ADSE","debt":3.2,"cash":1.1,"rev":1.5,"burn":-4.8},{"ticker":"ACHR","debt":64.1,"cash":1640.0,"rev":2.81,"burn":-530.0},{"ticker":"JOBY","debt":0.0,"cash":1550.0,"rev":22.5,"burn":-521.0},{"ticker":"EVEX","debt":168.1,"cash":411.7,"rev":0.0,"burn":-200.0},{"ticker":"EVTL","debt":0.0,"cash":117.0,"rev":0.0,"burn":-125.0},{"ticker":"FCEL","debt":15.8,"cash":341.8,"rev":158.2,"burn":-192.3},{"ticker":"BE","debt":1200.0,"cash":760.0,"rev":1540.0,"burn":45.0},{"ticker":"PLUG","debt":135.3,"cash":1080.0,"rev":620.0,"burn":-450.0},{"ticker":"HYLN","debt":0.0,"cash":165.0,"rev":4.0,"burn":-65.0},{"ticker":"BW","debt":416.4,"cash":201.1,"rev":598.0,"burn":-65.9},{"ticker":"BLDP","debt":0.0,"cash":525.7,"rev":98.0,"burn":-95.0},{"ticker":"UEC","debt":0.0,"cash":321.0,"rev":66.8,"burn":-61.2},{"ticker":"NNE","debt":0.0,"cash":580.0,"rev":0.0,"burn":-19.6},{"ticker":"CCJ","debt":1000.0,"cash":780.0,"rev":3460.0,"burn":1260.0},{"ticker":"SMR","debt":0.0,"cash":753.8,"rev":11.5,"burn":-212.0},{"ticker":"BWXT","debt":1532.0,"cash":37.0,"rev":3100.0,"burn":336.5},{"ticker":"OKLO","debt":0.0,"cash":683.0,"rev":0.0,"burn":-30.7},{"ticker":"LEU","debt":805.0,"cash":1600.0,"rev":284.0,"burn":-24.5},{"ticker":"IMSR","debt":0.0,"cash":0.0,"rev":0.0,"burn":0.0},{"ticker":"QS","debt":91.48,"cash":1004.0,"rev":0.0,"burn":-276.32},{"ticker":"ENVX","debt":528.5,"cash":648.0,"rev":24.6,"burn":-160.2},{"ticker":"SES","debt":0.0,"cash":13.2,"rev":0.0,"burn":0.0},{"ticker":"MVST","debt":411.2,"cash":142.6,"rev":444.5,"burn":2.81},{"ticker":"AMPX","debt":0.0,"cash":103.2,"rev":55.4,"burn":-112.5},{"ticker":"SLDP","debt":0.0,"cash":300.4,"rev":18.1,"burn":-75.6},{"ticker":"ENPH","debt":1202.7,"cash":1530.0,"rev":1479.5,"burn":274.5},{"ticker":"STEM","debt":411.0,"cash":43.1,"rev":131.2,"burn":16.5},{"ticker":"FLNC","debt":390.8,"cash":1300.0,"rev":2300.0,"burn":24.1},{"ticker":"EOSE","debt":123.5,"cash":126.8,"rev":45.7,"burn":-190.1},{"ticker":"GWH","debt":135.0,"cash":791.3,"rev":47.8,"burn":-114.8},{"ticker":"KULR","debt":3.8,"cash":20.6,"rev":22.4,"burn":-18.2},{"ticker":"TE","debt":5390.0,"cash":485.0,"rev":2100.0,"burn":850.0},{"ticker":"NRGV","debt":0.1,"cash":76.5,"rev":145.4,"burn":-78.2},{"ticker":"ATLX","debt":10.13,"cash":20.98,"rev":0.0,"burn":-32.0},{"ticker":"ABAT","debt":0.0,"cash":55.6,"rev":2.2,"burn":-38.4},{"ticker":"ALB","debt":3181.0,"cash":1931.8,"rev":5100.0,"burn":300.0},{"ticker":"SQM","debt":2480.0,"cash":1150.0,"rev":4100.0,"burn":950.0},{"ticker":"SGML","debt":37.0,"cash":29.0,"rev":75.4,"burn":-45.6},{"ticker":"ELVR","debt":528.5,"cash":648.0,"rev":24.6,"burn":-160.2},{"ticker":"LAC","debt":354.7,"cash":719.3,"rev":0.0,"burn":-152.0},{"ticker":"NB","debt":0.0,"cash":162.8,"rev":0.0,"burn":-33.2},{"ticker":"CRWV","debt":14036.0,"cash":1940.0,"rev":3140.0,"burn":1690.0},{"ticker":"NBIS","debt":4570.0,"cash":2639.0,"rev":1840.0,"burn":-524.0},{"ticker":"ALAB","debt":31.3,"cash":1134.4,"rev":410.2,"burn":136.7},{"ticker":"CORZ","debt":1200.0,"cash":500.0,"rev":510.7,"burn":42.9},{"ticker":"APLD","debt":430.5,"cash":140.4,"rev":219.0,"burn":-115.4},{"ticker":"CIFR","debt":1326.1,"cash":1221.2,"rev":211.4,"burn":-391.7},{"ticker":"WULF","debt":1500.0,"cash":688.8,"rev":167.6,"burn":-77.7},{"ticker":"MARA","debt":800.0,"cash":826.4,"rev":785.2,"burn":142.0},{"ticker":"CLSK","debt":821.2,"cash":43.0,"rev":766.3,"burn":-265.5},{"ticker":"BITF","debt":51.5,"cash":87.0,"rev":192.9,"burn":-178.4},{"ticker":"HIVE","debt":18.3,"cash":48.3,"rev":165.4,"burn":22.8},{"ticker":"BTBT","debt":14.0,"cash":57.6,"rev":120.4,"burn":25.3},{"ticker":"HUT","debt":315.0,"cash":72.4,"rev":162.4,"burn":115.4},{"ticker":"RIOT","debt":0.0,"cash":330.7,"rev":315.2,"burn":-180.0},{"ticker":"IREN","debt":965.0,"cash":425.0,"rev":501.0,"burn":86.9},{"ticker":"AAPL","debt":101700.0,"cash":55400.0,"rev":408625.0,"burn":109000.0},{"ticker":"NVDA","debt":11500.0,"cash":34800.0,"rev":242000.0,"burn":68400.0},{"ticker":"MSFT","debt":60560.0,"cash":79618.0,"rev":245000.0,"burn":147040.0},{"ticker":"META","debt":28800.0,"cash":44400.0,"rev":189457.0,"burn":107600.0},{"ticker":"AMZN","debt":133900.0,"cash":93200.0,"rev":670038.0,"burn":121000.0},{"ticker":"GOOG","debt":33700.0,"cash":98500.0,"rev":385477.0,"burn":105000.0},{"ticker":"AVGO","debt":65136.0,"cash":16180.0,"rev":51100.0,"burn":27540.0}]`); // Embedded fundamentals data
 
+        // Create a global lookup for fundamentals data
+        const fundamentalsLookup = {};
+        fundamentalsData.forEach(item => {
+            fundamentalsLookup[item.ticker.toUpperCase()] = item;
+        });
+        
         // Dynamically fetched dilution data
         let tickerDilutionMap = {};
         const GITHUB_RAW_URL_BASE = "https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/";
@@ -192,11 +199,13 @@
             const data = [];
 
             for (let i = 1; i < lines.length; i++) {
-                const values = lines[i].split(',').map(v => v.trim());
+                if (lines[i].trim() === '') continue; // Skip empty lines
+
+                const currentLine = lines[i].split(',');
                 let row = {};
-                headers.forEach((header, index) => {
-                    row[header] = values[index];
-                });
+                for (let j = 0; j < headers.length; j++) {
+                    row[headers[j]] = (currentLine[j] || '').trim();
+                }
                 data.push(row);
             }
             return data;
@@ -206,6 +215,7 @@
             try {
                 const chartingData = allCsvData;
                 console.log('Charting data received:', chartingData);
+
 
                 for (const industryKey in tickerMap) {
                     const industryTickers = tickerMap[industryKey].map(t => t.toUpperCase()); // Ensure ticker case matches
@@ -232,8 +242,17 @@
                         const siPercents = filteredChartingData.map(row => parseFloat(row['SI%']) || 0);
                         const institutesPercents = filteredChartingData.map(row => parseFloat(row['institutes%']) || 0);
 
-                        // Removed pendingShelfMcapRatios calculation as requested
-
+                        // Calculate Burn/Market Cap (%)
+                        const burnMcapRatios = filteredChartingData.map(row => {
+                            const mcap = parseFloat(row['mcap']);
+                            const tickerUpper = row['Ticker'].toUpperCase();
+                            const fundData = fundamentalsLookup[tickerUpper];
+                            if (fundData && mcap > 0) {
+                                const burn = parseFloat(fundData['burn']);
+                                return (burn / mcap * 100).toFixed(2);
+                            }
+                            return 0; // Default to 0 if data is missing or mcap is zero
+                        });
                         new Chart(chartCanvas, {
                             type: 'bar',
                             data: {
@@ -266,15 +285,23 @@
                                         backgroundColor: 'rgba(75, 192, 192, 0.6)',
                                         borderColor: 'rgba(75, 192, 192, 1)',
                                         borderWidth: 1
+                                    },
+                                    {
+                                        label: 'Burn%',
+                                        data: burnMcapRatios,
+                                        backgroundColor: 'rgba(153, 102, 255, 0.6)', // A new color
+                                        borderColor: 'rgba(153, 102, 255, 1)',
+                                        borderWidth: 1
                                     }
-                                    // Removed 'Pending Shelf/Market Cap (%)' dataset
-                                ]
+                                    ]
                             },
                             options: {
                                 responsive: false,
                                 animation: false,
                                 events: [],
                                 maintainAspectRatio: false,
+                                width: 800,
+                                height: 400,
                                 scales: {
                                     x: {
                                         stacked: false,
@@ -360,7 +387,7 @@
                 // Columns to display (must match Python list in sheets_df)
                 const columnsToDisplay = [
                     'Ticker', 'price%', 'Price', 'mcap',
-                    'QRev', 'QPL', 'Order Book','Pending Shelf'
+                    'Debt_M', 'Cash_M', 'QRevenue_M', 'QPL_M', 'OrderBook_M'
                 ];
 
                 for (const industryKey in tickerMap) {
@@ -392,6 +419,23 @@
                             tableHtml += '<tr>';
                             actualHeaders.forEach(header => {
                                 let cellValue = row[header] || '';
+                                // Try to override with fundamentalsData if available and applicable
+                                const tickerUpper = row['Ticker'].toUpperCase();
+                                const fundData = fundamentalsLookup[tickerUpper];
+
+                                if (fundData) {
+                                    if (header === 'Debt_M') {
+                                        cellValue = fundData['debt'] !== undefined ? fundData['debt'] : cellValue;
+                                    } else if (header === 'Cash_M') {
+                                        cellValue = fundData['cash'] !== undefined ? fundData['cash'] : cellValue;
+                                    } else if (header === 'QRevenue_M') {
+                                        cellValue = fundData['rev'] !== undefined ? fundData['rev'] : cellValue;
+                                    } else if (header === 'QPL_M') { // Assuming QPL_M from sheets_df maps to 'burn' from fundamentalsData
+                                        cellValue = fundData['burn'] !== undefined ? fundData['burn'] : cellValue;
+                                    }
+                                    // OrderBook_M is not in fundamentalsData, so it remains row[header]
+                                }
+
                                 let style = '';
                                 if (header === 'price%') {
                                     style = colorPricePercent(cellValue);
@@ -719,7 +763,7 @@
 *   **October 6, 2025**: A Form 144 filing reported an intended sale of 796 common shares acquired via restricted stock vesting on **October 3, 2025**.
 *   **October 2, 2025**: A Form 144 filing reported a proposed sale of 820 common shares acquired on **October 2, 2025**, through Restricted Stock Vesting, with an approximate sale date of **October 3, 2025**.</div>
 <h3 class="fundamentals-section">Fundamentals</h3>
-<div id="fundamentals-table-quantum" class="fundamentals-section" hidden>Loading Fundamentals...</div>
+<div id="fundamentals-table-quantum" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="notes-section hidden">Notes </h3>
 <div class="markdown-notes-block notes-section hidden">ionq:&gt; By March dilution may get over</div>
 
@@ -767,7 +811,7 @@
 **indie Semiconductor, Inc. (INDI)**
 *   No specific news or SEC filings were found for January 8, 2026, or for any recent dates in the provided search results.</div>
 <h3 class="fundamentals-section">Fundamentals</h3>
-<div id="fundamentals-table-power_management_chips" class="fundamentals-section" hidden>Loading Fundamentals...</div>
+<div id="fundamentals-table-power_management_chips" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="notes-section hidden">Notes </h3>
 <div class="markdown-notes-block notes-section hidden">on:&gt; 6B repurchage announced on Dec 2</div>
 
@@ -841,7 +885,7 @@
 *   **December 8, 2025**: Arbe Robotics outlined a bond deadline extension and lower coupon terms for its series A convertible bonds.
 *   **November 17, 2025**: Arbe announced its Q3 2025 financial results. Revenues for Q3 2025 were $0.3 million, compared to $0.1 million in Q3 2024. As of September 30, 2025, Arbe had $52.6 million in cash and cash equivalents and short-term bank deposits.</div>
 <h3 class="fundamentals-section">Fundamentals</h3>
-<div id="fundamentals-table-lidar_sensing" class="fundamentals-section" hidden>Loading Fundamentals...</div>
+<div id="fundamentals-table-lidar_sensing" class="fundamentals-section">Loading Fundamentals...</div>
 
 <div id="fundamentals-charts-lidar_sensing" class="fundamentals-section">
     <canvas id="chart_lidar_sensing" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
@@ -901,7 +945,7 @@
 *   **December 31, 2025:** Kodiak AI announced the refinancing of its senior debt facility.
 *   **December 18, 2025:** Kodiak AI and Verizon Business partnered to transform trucking with autonomous technology and IoT connectivity.</div>
 <h3 class="fundamentals-section">Fundamentals</h3>
-<div id="fundamentals-table-autonomous_driving" class="fundamentals-section" hidden>Loading Fundamentals...</div>
+<div id="fundamentals-table-autonomous_driving" class="fundamentals-section">Loading Fundamentals...</div>
 
 <div id="fundamentals-charts-autonomous_driving" class="fundamentals-section">
     <canvas id="chart_autonomous_driving" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
@@ -953,7 +997,7 @@
     *   **January 7, 2026:** Safe Pro Group Inc. has received an average &quot;Buy&quot; recommendation from five ratings firms.
     *   **December 18, 2025:** Safe Pro Group&#x27;s Board of Directors approved a share repurchase plan, authorizing the company to buy back up to $3.00 million in shares.</div>
 <h3 class="fundamentals-section">Fundamentals</h3>
-<div id="fundamentals-table-uas_defense_robotics" class="fundamentals-section" hidden>Loading Fundamentals...</div>
+<div id="fundamentals-table-uas_defense_robotics" class="fundamentals-section">Loading Fundamentals...</div>
 
 <div id="fundamentals-charts-uas_defense_robotics" class="fundamentals-section">
     <canvas id="chart_uas_defense_robotics" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
@@ -1016,7 +1060,7 @@
 *   **November 6, 2025**: iRobot released its financial results for the third quarter of 2025.
 *   **October 27, 2025**: An 8-K filing was made concerning the creation of a direct financial obligation or an off-balance sheet arrangement, and updates were provided to the company&#x27;s risk factors.</div>
 <h3 class="fundamentals-section">Fundamentals</h3>
-<div id="fundamentals-table-service_robotics" class="fundamentals-section" hidden>Loading Fundamentals...</div>
+<div id="fundamentals-table-service_robotics" class="fundamentals-section">Loading Fundamentals...</div>
 
 <div id="fundamentals-charts-service_robotics" class="fundamentals-section">
     <canvas id="chart_service_robotics" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
@@ -1062,7 +1106,7 @@
 *   **January 6, 2026**: AE Red Holdings, LLC sold 776,556 common shares for $8,110,291.85 and Edge Autonomy Ultimate Holdings, LP sold 1,085,507 common shares for $11,336,952.61.
 *   **January 5, 2026**: A Form 4 (Insider Trading Activity) for Redwire Corp was filed.</div>
 <h3 class="fundamentals-section">Fundamentals</h3>
-<div id="fundamentals-table-space_launch_systems" class="fundamentals-section" hidden>Loading Fundamentals...</div>
+<div id="fundamentals-table-space_launch_systems" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="notes-section hidden">Notes </h3>
 <div class="markdown-notes-block notes-section hidden">spce:&gt; $254M ATM on Dec9</div>
 
@@ -1173,7 +1217,7 @@
 *   **November 18, 2025**
     *   SVP Robert James Blair sold 2,269 shares of the stock.</div>
 <h3 class="fundamentals-section">Fundamentals</h3>
-<div id="fundamentals-table-earth_observation" class="fundamentals-section" hidden>Loading Fundamentals...</div>
+<div id="fundamentals-table-earth_observation" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="notes-section hidden">Notes </h3>
 <div class="markdown-notes-block notes-section hidden">bksy:&gt; 4M shares convertible at $27</div>
 
@@ -1199,7 +1243,7 @@
 
 There are no new announcements or SEC filings dated **January 8, 2026**, or other significant news from **January 7, 2026**, for EVgo (EVGO), Blink Charging Co. (BLNK), ChargePoint Holdings Inc. (CHPT), or ADS-TEC Energy PLC (ADSE) that are not related to stock price changes or previously announced events.</div>
 <h3 class="fundamentals-section">Fundamentals</h3>
-<div id="fundamentals-table-ev_charging_infrastructure" class="fundamentals-section" hidden>Loading Fundamentals...</div>
+<div id="fundamentals-table-ev_charging_infrastructure" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="notes-section hidden">Notes </h3>
 <div class="markdown-notes-block notes-section hidden">chpt:&gt; Dec12 S3 filed $400M total($150M ATM)</div>
 
@@ -1261,7 +1305,7 @@ There are no new announcements or SEC filings dated **January 8, 2026**, or othe
 *   **November 13, 2025:**
     *   Vertical Aerospace received a UK CAA Permit to Fly and has completed 10 flights with its full-scale prototype. Full piloted transition flight testing is expected in early 2026.</div>
 <h3 class="fundamentals-section">Fundamentals</h3>
-<div id="fundamentals-table-evtol_air_mobility" class="fundamentals-section" hidden>Loading Fundamentals...</div>
+<div id="fundamentals-table-evtol_air_mobility" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="notes-section hidden">Notes </h3>
 <div class="markdown-notes-block notes-section hidden">achr:&gt; SECTOR not great LL forming</div>
 
@@ -1323,7 +1367,7 @@ There are no new announcements or SEC filings dated **January 8, 2026**, or othe
 *   **September 17, 2025**: Ballard announced it would launch the FCmove®-SC fuel cell at Busworld, highlighting improved performance and lifecycle cost.
 *   **August 11, 2025**: Ballard Power Systems reported its Q2 2025 results.</div>
 <h3 class="fundamentals-section">Fundamentals</h3>
-<div id="fundamentals-table-hydrogen_fuel_cells" class="fundamentals-section" hidden>Loading Fundamentals...</div>
+<div id="fundamentals-table-hydrogen_fuel_cells" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="notes-section hidden">Notes </h3>
 <div class="markdown-notes-block notes-section hidden">plug:&gt; Jan 15 vote to double common shares from 1.5B to 3B shares
 
@@ -1410,7 +1454,7 @@ bw:&gt; announced the full redemption of all $26 million aggregate principal amo
 *   **September 23, 2025:**
     *   An Amendment No. 2 to a Schedule 13D for Solid Power, Inc. reported changes in beneficial ownership by David M. Leuschen and Pierre F. Lapeyre, Jr., with REL and REL US selling a combined 7,235,803 shares in the open market on September 19, 2025.</div>
 <h3 class="fundamentals-section">Fundamentals</h3>
-<div id="fundamentals-table-batteries_storage_tech" class="fundamentals-section" hidden>Loading Fundamentals...</div>
+<div id="fundamentals-table-batteries_storage_tech" class="fundamentals-section">Loading Fundamentals...</div>
 
 <div id="fundamentals-charts-batteries_storage_tech" class="fundamentals-section">
     <canvas id="chart_batteries_storage_tech" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
@@ -1481,7 +1525,7 @@ bw:&gt; announced the full redemption of all $26 million aggregate principal amo
 *   **January 5, 2026:** Energy Vault Holdings Inc. started construction of the SOSA Energy Center, a 150 MW/300 MWh battery energy storage system in Texas.
 *   **January 2, 2026:** Energy Vault Holdings, Inc. entered into an amendment to its existing Securities Purchase Agreement, adding a third closing for an additional $15.0 million of senior unsecured convertible debentures. Installment payments of principal and interest are set to begin on **January 26, 2026**.</div>
 <h3 class="fundamentals-section">Fundamentals</h3>
-<div id="fundamentals-table-batteries_storage_sw" class="fundamentals-section" hidden>Loading Fundamentals...</div>
+<div id="fundamentals-table-batteries_storage_sw" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="notes-section hidden">Notes </h3>
 <div class="markdown-notes-block notes-section hidden">stem:&gt; Nov 26 filed $200M s-3 shelf registration
 
@@ -1556,7 +1600,7 @@ te:&gt; 17M shares given to notes. $3B dilution($1.5B ATM) Dec 05</div>
 *   **November 5, 2025**: NioCorp announced positive assay results from the second completed diamond drill hole of its Elk Creek Drilling Program.
 *   **September 30, 2025**: NioCorp provided its preliminary unaudited financial results for the three-month period ended September 30, 2025.</div>
 <h3 class="fundamentals-section">Fundamentals</h3>
-<div id="fundamentals-table-battery_materials_mining" class="fundamentals-section" hidden>Loading Fundamentals...</div>
+<div id="fundamentals-table-battery_materials_mining" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="notes-section hidden">Notes </h3>
 <div class="markdown-notes-block notes-section hidden">atlx:&gt; $200M Offering Dec5 over time</div>
 
@@ -1606,7 +1650,7 @@ te:&gt; 17M shares given to notes. $3B dilution($1.5B ATM) Dec 05</div>
 *   **January 2, 2026**: TeraWulf Inc. filed a Form 4 Statement of changes in beneficial ownership of securities.
 *   **December 23, 2025**: TeraWulf Inc. filed a Form 4 Statement of changes in beneficial ownership of securities.</div>
 <h3 class="fundamentals-section">Fundamentals</h3>
-<div id="fundamentals-table-Hyperscalers" class="fundamentals-section" hidden>Loading Fundamentals...</div>
+<div id="fundamentals-table-Hyperscalers" class="fundamentals-section">Loading Fundamentals...</div>
 
 <div id="fundamentals-charts-Hyperscalers" class="fundamentals-section">
     <canvas id="chart_Hyperscalers" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
@@ -1673,7 +1717,7 @@ te:&gt; 17M shares given to notes. $3B dilution($1.5B ATM) Dec 05</div>
 *   **December 8, 2025**: Iren filed an 8-K with the SEC, reporting unscheduled material events or a corporate event.
 *   **December 4, 2025**: Iren filed a 424B5 with the SEC, a form of prospectus disclosing information, facts, and events covered in other prospectus forms.</div>
 <h3 class="fundamentals-section">Fundamentals</h3>
-<div id="fundamentals-table-Mining" class="fundamentals-section" hidden>Loading Fundamentals...</div>
+<div id="fundamentals-table-Mining" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="notes-section hidden">Notes </h3>
 <div class="markdown-notes-block notes-section hidden">iren:&gt; 40M shares at $41 CB on Dec 8</div>
 
@@ -1750,7 +1794,7 @@ te:&gt; 17M shares given to notes. $3B dilution($1.5B ATM) Dec 05</div>
 *   **SEC Filings:**
     *   **January 5, 2026**: A Form 4 filing reported that Omar F. Meguid, SVP and Chief Digital Officer, acquired 2,931 shares of common stock through the vesting of restricted stock units and disposed of 766 shares, likely for tax-related purposes, on the same date.</div>
 <h3 class="fundamentals-section">Fundamentals</h3>
-<div id="fundamentals-table-new_nuclear_energy" class="fundamentals-section" hidden>Loading Fundamentals...</div>
+<div id="fundamentals-table-new_nuclear_energy" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="notes-section hidden">Notes </h3>
 <div class="markdown-notes-block notes-section hidden">nne:&gt; cash will be $600 after offering Oct7
 
@@ -1815,7 +1859,7 @@ oklo:&gt; $3.5B shelf registration,Dec 4 $1.5B ATM</div>
 *   **January 8, 2026**: Amazon is currently running its Winter Sale, offering various discounts on home appliances.
 *   **January 7, 2026**: Amazon is issuing refund checks to eligible Prime members as part of a Federal Trade Commission settlement regarding deceptive sign-up and cancellation practices.</div>
 <h3 class="fundamentals-section">Fundamentals</h3>
-<div id="fundamentals-table-Mag7" class="fundamentals-section" hidden>Loading Fundamentals...</div>
+<div id="fundamentals-table-Mag7" class="fundamentals-section">Loading Fundamentals...</div>
 
 <div id="fundamentals-charts-Mag7" class="fundamentals-section">
     <canvas id="chart_Mag7" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
