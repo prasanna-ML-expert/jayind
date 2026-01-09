@@ -531,16 +531,16 @@
                                             <td colspan="${actualHeaders.length}" style="padding: 0px;">
                                                 <div style="position: relative; width: 100%; height: 2px; background-color: #ccc; border-radius: 5px;">
                                                     <!-- Put Wall Text -->
-                                                    <span style="position: absolute; left: 5%; top: -15px; font-size: 0.7em; transform: translateX(-50%); white-space: nowrap;">($${putwall.toFixed(2)})</span>
+                                                    <span style="position: absolute; left: 5%; top: -15px; font-size: 0.7em; transform: translateX(-50%); white-space: nowrap;">$${putwall.toFixed(2)}</span>
                                                     <!-- Call Wall Text -->
-                                                    <span style="position: absolute; right: 5%; top: -15px; font-size: 0.7em; transform: translateX(50%); white-space: nowrap;">($${callwall.toFixed(2)})</span>
+                                                    <span style="position: absolute; right: 5%; top: -15px; font-size: 0.7em; transform: translateX(50%); white-space: nowrap;">$${callwall.toFixed(2)}</span>
 
                                                     <!-- Current Price Dot (black) -->
-                                                    <div style="position: absolute; left: ${currentPricePos}%; top: -3px; width: 10px; height: 10px; background-color: black; border-radius: 50%; transform: translateX(-50%); box-shadow: 0 0 5px rgba(0,0,0,0.5);" title="Current Price: $${currentPrice.toFixed(2)}"></div>
-                                                    <!-- Gamma Flip Dot (blue) -->
-                                                    <div style="position: absolute; left: ${gammaflipPos}%; top: -3px; width: 10px; height: 10px; background-color: blue; border-radius: 50%; transform: translateX(-50%); box-shadow: 0 0 5px rgba(0,0,0,0.5);" title="Gamma Flip: $${gammaflip.toFixed(2)}"></div>
-                                                    <!-- Max Pain Dot (green) -->
-                                                    <div style="position: absolute; left: ${maxpainPos}%; top: -3px; width: 10px; height: 10px; background-color: green; border-radius: 50%; transform: translateX(-50%); box-shadow: 0 0 5px rgba(0,0,0,0.5);" title="Max Pain: $${maxpain.toFixed(2)}"></div>
+                                                    <div style="position: absolute; left: ${currentPricePos}%; top: -3px; width: 10px; height: 10px; background-color: black; border-radius: 50%; transform: translateX(-50%); box-shadow: 0 0 5px rgba(0,0,0,0.5);></div>
+                                                   <!-- Gamma Flip Character (blue) -->
+                                                    <span style="position: absolute; left: ${gammaflipPos}%; top: -12px; width: auto; height: auto; padding: 0 3px; background-color: blue; color: white; border-radius: 3px; transform: translateX(-50%); font-weight: bold; font-size: 0.8em;" title="$${gammaflip.toFixed(2)}">F</span>
+                                                    <!-- Max Pain Character (green) -->
+                                                    <span style="position: absolute; left: ${maxpainPos}%; top: -12px; width: auto; height: auto; padding: 0 3px; background-color: green; color: white; border-radius: 3px; transform: translateX(-50%); font-weight: bold; font-size: 0.8em;" title="$${maxpain.toFixed(2)}">P</span>
                                                 </div>
                                             </td>
                                         </tr>
