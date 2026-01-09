@@ -526,10 +526,15 @@
                                     const gammaflipPos = clampPosition(gammaflip);
                                     const maxpainPos = clampPosition(maxpain);
 
+                                    // Calculate background color for options line
+                                    let optionsPricePosition = ((currentPrice - putwall) / (callwall - putwall)) * 100;
+                                    optionsPricePosition = Math.max(0, Math.min(100, optionsPricePosition));
+                                    let optionsRowBacPkgroundColor = getColorAtGradientPosition(optionsPricePosition);
+
                                     optionsLineHtml = `
                                         <tr class="options-price-line-row">
                                             <td colspan="${actualHeaders.length}" style="padding: 0px;">
-                                                <div style="position: relative; width: 100%; height: 2px; background-color: #ccc; border-radius: 5px;">
+                                                <div style="position: relative; width: 100%; height: 2px; background-color: ${optionsRowBacPkgroundColor}; border-radius: 5px;">
                                                     <!-- Put Wall Text -->
                                                     <span style="position: absolute; left: 2%; top: -15px; font-size: 0.7em; transform: translateX(-50%); white-space: nowrap;">$${putwall.toFixed(2)}</span>
                                                     <!-- Call Wall Text -->
