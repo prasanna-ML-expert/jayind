@@ -521,8 +521,7 @@
                                     const range = callwall - putwall;
 
                                     // Helper to clamp positions between 0 and 100%
-                                    const clampPosition = (value) => Math.max(0, Math.min(100, ((value - putwall) / range) * 100)));
-
+                                    const clampPosition = (value) => Math.max(0, Math.min(100, (value - putwall) / range * 100));
                                     const currentPricePos = clampPosition(currentPrice);
                                     const gammaflipPos = clampPosition(gammaflip);
                                     const maxpainPos = clampPosition(maxpain);
