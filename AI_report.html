@@ -4,18 +4,28 @@
     <title>NASDAQ S&P Growth Stoks AI generated fundamentals technicals and Latest updates</title>
     <script src="https://cdn.jsdelivr.net/npm/marked@4.0.10/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script>
+        // Register the datalabels plugin globally, immediately after loading it
+        Chart.register(ChartDataLabels);
         // Embed Python variables as JavaScript variables
         const csvExportUrl = 'https://docs.google.com/spreadsheets/d/1qwnwuUR6kOBMZqrZIX97sMetNKZyXjot-SmEWfI8LUg/export?format=csv&gid=445351489';
         const tickerMap = JSON.parse(`{"quantum": ["ionq", "qbts", "rgti", "qubt", "laes", "arqq"], "power_management_chips": ["nvts", "on", "aosl", "cohr", "mpwr", "powi", "alab", "indi"], "lidar_sensing": ["aeva", "invz", "mvis", "lidr", "oust", "arbe"], "autonomous_driving": ["mbly", "aur", "tsla", "xpev", "kdk"], "uas_defense_robotics": ["dpro", "rcat", "zena", "onds", "avav", "ktos", "umac", "spai"], "service_robotics": ["rr", "serv", "prct", "zbra", "irbt"], "space_launch_systems": ["rklb", "fly", "mnts", "spce", "lunr", "rdw"], "earth_observation": ["pl", "bksy", "spir", "satl", "asts", "irdm", "sats", "vsat"], "ev_charging_infrastructure": ["evgo", "blnk", "chpt", "beem", "adse"], "evtol_air_mobility": ["achr", "joby", "evex", "evtl"], "hydrogen_fuel_cells": ["fcel", "be", "plug", "hyln", "bw", "bldp"], "batteries_storage_tech": ["qs", "envx", "ses", "mvst", "ampx", "sldp"], "batteries_storage_sw": ["enph", "stem", "flnc", "eose", "gwh", "kulr", "te", "nrgv"], "battery_materials_mining": ["atlx", "abat", "alb", "sqm", "sgml", "elvr", "lac", "nb"], "Hyperscalers": ["crwv", "nbis", "corz", "apld", "cifr", "wulf"], "Mining": ["mara", "clsk", "bitf", "hive", "btbt", "hut", "riot", "iren"], "new_nuclear_energy": ["oklo", "smr", "nne", "imsr", "uec", "ccj", "leu", "bwxt"], "Mag7": ["aapl", "nvda", "meta", "msft", "avgo", "goog", "amzn"]}`); // Use backticks for template literal
-        const fundamentalsData = JSON.parse(`[{"ticker":"IONQ","debt":28.52,"cash":3500.0,"rev":108.56,"burn":-160.59},{"ticker":"QBTS","debt":39.79,"cash":836.2,"rev":24.14,"burn":-54.9},{"ticker":"RGTI","debt":7.6,"cash":600.0,"rev":7.49,"burn":-73.8},{"ticker":"QUBT","debt":2.58,"cash":1500.0,"rev":0.55,"burn":-68.36},{"ticker":"LAES","debt":7.83,"cash":430.0,"rev":10.98,"burn":-30.44},{"ticker":"ARQQ","debt":0.0,"cash":36.9,"rev":0.53,"burn":-35.34},{"ticker":"NVTS","debt":0.0,"cash":150.6,"rev":40.4,"burn":-64.6},{"ticker":"ON","debt":3633.0,"cash":2873.0,"rev":6264.4,"burn":1420.0},{"ticker":"AOSL","debt":23.0,"cash":223.5,"rev":696.2,"burn":-11.8},{"ticker":"MPWR","debt":0.0,"cash":1146.1,"rev":2012.1,"burn":494.0},{"ticker":"POWI","debt":0.0,"cash":48.65,"rev":471.2,"burn":-13.0},{"ticker":"WOLF","debt":5102.0,"cash":1300.0,"rev":792.0,"burn":-684.2},{"ticker":"COHR","debt":3506.0,"cash":1285.0,"rev":5810.0,"burn":437.0},{"ticker":"INDI","debt":353.5,"cash":160.9,"rev":228.4,"burn":-52.1},{"ticker":"DPRO","debt":0.23,"cash":16.6,"rev":5.3,"burn":-12.1},{"ticker":"RCAT","debt":13.35,"cash":206.43,"rev":21.8,"burn":-52.4},{"ticker":"ZENA","debt":31.33,"cash":19.53,"rev":5.2,"burn":-6.8},{"ticker":"ONDS","debt":39.77,"cash":432.81,"rev":22.2,"burn":-32.3},{"ticker":"AVAV","debt":726.79,"cash":4418.0,"rev":1370.0,"burn":-242.0},{"ticker":"KTOS","debt":488.0,"cash":305.0,"rev":1310.0,"burn":-54.2},{"ticker":"UMAC","debt":0.0,"cash":83.8,"rev":4.2,"burn":-11.39},{"ticker":"SPAI","debt":1752.0,"cash":1266.0,"rev":15000.0,"burn":766.0},{"ticker":"AEVA","debt":100.0,"cash":270.0,"rev":8.0,"burn":-74.0},{"ticker":"INVZ","debt":0.0,"cash":74.4,"rev":55.1,"burn":-61.0},{"ticker":"MVIS","debt":30.0,"cash":99.5,"rev":2.4,"burn":-62.0},{"ticker":"LIDR","debt":315.0,"cash":200.0,"rev":300.0,"burn":200.0},{"ticker":"OUST","debt":0.0,"cash":165.0,"rev":123.0,"burn":-64.0},{"ticker":"INDI","debt":658.0,"cash":102.4,"rev":228.4,"burn":-52.1},{"ticker":"ARBE","debt":9.3,"cash":52.6,"rev":1.4,"burn":-37.5},{"ticker":"COHR","debt":3259.0,"cash":1285.0,"rev":6124.0,"burn":482.0},{"ticker":"RR","debt":3500.0,"cash":8500.0,"rev":17800.0,"burn":3050.0},{"ticker":"SERV","debt":104.0,"cash":441.8,"rev":771.9,"burn":37.1},{"ticker":"PRCT","debt":51.6,"cash":297.3,"rev":285.4,"burn":-35.0},{"ticker":"ZBRA","debt":2183.0,"cash":872.0,"rev":4780.0,"burn":685.0},{"ticker":"IRBT","debt":205.3,"cash":29.8,"rev":725.2,"burn":-104.2},{"ticker":"MBLY","debt":0.0,"cash":1750.0,"rev":1865.0,"burn":489.0},{"ticker":"AUR","debt":0.0,"cash":1500.0,"rev":0.55,"burn":-540.0},{"ticker":"TSLA","debt":7818.0,"cash":26100.0,"rev":99600.0,"burn":13200.0},{"ticker":"XPEV","debt":4609.0,"cash":4347.0,"rev":5150.0,"burn":-147.0},{"ticker":"KDK","debt":39.6,"cash":146.2,"rev":14.9,"burn":-110.0},{"ticker":"RKLB","debt":455.0,"cash":976.7,"rev":508.4,"burn":-142.2},{"ticker":"FLY","debt":157.0,"cash":1138.4,"rev":142.0,"burn":-288.6},{"ticker":"MNTS","debt":4.1,"cash":0.13,"rev":0.9,"burn":-14.8},{"ticker":"SPCE","debt":421.3,"cash":507.8,"rev":1.4,"burn":-263.0},{"ticker":"LUNR","debt":334.8,"cash":373.3,"rev":218.4,"burn":-38.5},{"ticker":"RDW","debt":185.5,"cash":78.6,"rev":354.2,"burn":-26.2},{"ticker":"SIDU","debt":4.8,"cash":2.4,"rev":5.8,"burn":-12.3},{"ticker":"LHX","debt":11558.0,"cash":605.0,"rev":21400.0,"burn":2280.0},{"ticker":"PL","debt":0.0,"cash":226.1,"rev":260.4,"burn":17.3},{"ticker":"BKSY","debt":202.7,"cash":106.7,"rev":102.1,"burn":-6.4},{"ticker":"SPIR","debt":0.0,"cash":96.8,"rev":105.0,"burn":-14.2},{"ticker":"SATL","debt":152.0,"cash":28.3,"rev":13.2,"burn":-17.4},{"ticker":"ASTS","debt":711.4,"cash":1200.0,"rev":18.5,"burn":-274.0},{"ticker":"IRDM","debt":1810.0,"cash":88.5,"rev":805.0,"burn":302.0},{"ticker":"SATS","debt":26603.0,"cash":2400.0,"rev":15176.0,"burn":840.0},{"ticker":"VSAT","debt":6434.0,"cash":1230.0,"rev":4280.0,"burn":580.0},{"ticker":"EVGO","debt":157.3,"cash":181.3,"rev":334.3,"burn":-58.5},{"ticker":"BLNK","debt":0.0,"cash":42.1,"rev":84.6,"burn":-47.1},{"ticker":"CHPT","debt":168.0,"cash":180.9,"rev":417.1,"burn":-156.4},{"ticker":"BEEM","debt":0.0,"cash":3.4,"rev":26.4,"burn":-9.1},{"ticker":"ADSE","debt":3.2,"cash":1.1,"rev":1.5,"burn":-4.8},{"ticker":"ACHR","debt":64.1,"cash":1640.0,"rev":2.81,"burn":-530.0},{"ticker":"JOBY","debt":0.0,"cash":1550.0,"rev":22.5,"burn":-521.0},{"ticker":"EVEX","debt":168.1,"cash":411.7,"rev":0.0,"burn":-200.0},{"ticker":"EVTL","debt":0.0,"cash":117.0,"rev":0.0,"burn":-125.0},{"ticker":"FCEL","debt":15.8,"cash":341.8,"rev":158.2,"burn":-192.3},{"ticker":"BE","debt":1200.0,"cash":760.0,"rev":1540.0,"burn":45.0},{"ticker":"PLUG","debt":135.3,"cash":1080.0,"rev":620.0,"burn":-450.0},{"ticker":"HYLN","debt":0.0,"cash":165.0,"rev":4.0,"burn":-65.0},{"ticker":"BW","debt":416.4,"cash":201.1,"rev":598.0,"burn":-65.9},{"ticker":"BLDP","debt":0.0,"cash":525.7,"rev":98.0,"burn":-95.0},{"ticker":"UEC","debt":0.0,"cash":321.0,"rev":66.8,"burn":-61.2},{"ticker":"NNE","debt":0.0,"cash":580.0,"rev":0.0,"burn":-19.6},{"ticker":"CCJ","debt":1000.0,"cash":780.0,"rev":3460.0,"burn":1260.0},{"ticker":"SMR","debt":0.0,"cash":753.8,"rev":11.5,"burn":-212.0},{"ticker":"BWXT","debt":1532.0,"cash":37.0,"rev":3100.0,"burn":336.5},{"ticker":"OKLO","debt":0.0,"cash":683.0,"rev":0.0,"burn":-30.7},{"ticker":"LEU","debt":805.0,"cash":1600.0,"rev":284.0,"burn":-24.5},{"ticker":"IMSR","debt":0.0,"cash":0.0,"rev":0.0,"burn":0.0},{"ticker":"QS","debt":91.48,"cash":1004.0,"rev":0.0,"burn":-276.32},{"ticker":"ENVX","debt":528.5,"cash":648.0,"rev":24.6,"burn":-160.2},{"ticker":"SES","debt":0.0,"cash":13.2,"rev":0.0,"burn":0.0},{"ticker":"MVST","debt":411.2,"cash":142.6,"rev":444.5,"burn":2.81},{"ticker":"AMPX","debt":0.0,"cash":103.2,"rev":55.4,"burn":-112.5},{"ticker":"SLDP","debt":0.0,"cash":300.4,"rev":18.1,"burn":-75.6},{"ticker":"ENPH","debt":1202.7,"cash":1530.0,"rev":1479.5,"burn":274.5},{"ticker":"STEM","debt":411.0,"cash":43.1,"rev":131.2,"burn":16.5},{"ticker":"FLNC","debt":390.8,"cash":1300.0,"rev":2300.0,"burn":24.1},{"ticker":"EOSE","debt":123.5,"cash":126.8,"rev":45.7,"burn":-190.1},{"ticker":"GWH","debt":135.0,"cash":791.3,"rev":47.8,"burn":-114.8},{"ticker":"KULR","debt":3.8,"cash":20.6,"rev":22.4,"burn":-18.2},{"ticker":"TE","debt":5390.0,"cash":485.0,"rev":2100.0,"burn":850.0},{"ticker":"NRGV","debt":0.1,"cash":76.5,"rev":145.4,"burn":-78.2},{"ticker":"ATLX","debt":10.13,"cash":20.98,"rev":0.0,"burn":-32.0},{"ticker":"ABAT","debt":0.0,"cash":55.6,"rev":2.2,"burn":-38.4},{"ticker":"ALB","debt":3181.0,"cash":1931.8,"rev":5100.0,"burn":300.0},{"ticker":"SQM","debt":2480.0,"cash":1150.0,"rev":4100.0,"burn":950.0},{"ticker":"SGML","debt":37.0,"cash":29.0,"rev":75.4,"burn":-45.6},{"ticker":"ELVR","debt":528.5,"cash":648.0,"rev":24.6,"burn":-160.2},{"ticker":"LAC","debt":354.7,"cash":719.3,"rev":0.0,"burn":-152.0},{"ticker":"NB","debt":0.0,"cash":162.8,"rev":0.0,"burn":-33.2},{"ticker":"CRWV","debt":14036.0,"cash":1940.0,"rev":3140.0,"burn":1690.0},{"ticker":"NBIS","debt":4570.0,"cash":2639.0,"rev":1840.0,"burn":-524.0},{"ticker":"ALAB","debt":31.3,"cash":1134.4,"rev":410.2,"burn":136.7},{"ticker":"CORZ","debt":1200.0,"cash":500.0,"rev":510.7,"burn":42.9},{"ticker":"APLD","debt":430.5,"cash":140.4,"rev":219.0,"burn":-115.4},{"ticker":"CIFR","debt":1326.1,"cash":1221.2,"rev":211.4,"burn":-391.7},{"ticker":"WULF","debt":1500.0,"cash":688.8,"rev":167.6,"burn":-77.7},{"ticker":"MARA","debt":800.0,"cash":826.4,"rev":785.2,"burn":142.0},{"ticker":"CLSK","debt":821.2,"cash":43.0,"rev":766.3,"burn":-265.5},{"ticker":"BITF","debt":51.5,"cash":87.0,"rev":192.9,"burn":-178.4},{"ticker":"HIVE","debt":18.3,"cash":48.3,"rev":165.4,"burn":22.8},{"ticker":"BTBT","debt":14.0,"cash":57.6,"rev":120.4,"burn":25.3},{"ticker":"HUT","debt":315.0,"cash":72.4,"rev":162.4,"burn":115.4},{"ticker":"RIOT","debt":0.0,"cash":330.7,"rev":315.2,"burn":-180.0},{"ticker":"IREN","debt":965.0,"cash":425.0,"rev":501.0,"burn":86.9},{"ticker":"AAPL","debt":101700.0,"cash":55400.0,"rev":408625.0,"burn":109000.0},{"ticker":"NVDA","debt":11500.0,"cash":34800.0,"rev":242000.0,"burn":68400.0},{"ticker":"MSFT","debt":60560.0,"cash":79618.0,"rev":245000.0,"burn":147040.0},{"ticker":"META","debt":28800.0,"cash":44400.0,"rev":189457.0,"burn":107600.0},{"ticker":"AMZN","debt":133900.0,"cash":93200.0,"rev":670038.0,"burn":121000.0},{"ticker":"GOOG","debt":33700.0,"cash":98500.0,"rev":385477.0,"burn":105000.0},{"ticker":"AVGO","debt":65136.0,"cash":16180.0,"rev":51100.0,"burn":27540.0}]`); // Embedded fundamentals data
+        const fundamentalsData = JSON.parse(`[{"ticker":"IONQ","debt":28.52,"cash":3500.0,"rev":108.56,"burn":-160.59},{"ticker":"QBTS","debt":39.79,"cash":836.2,"rev":24.14,"burn":-54.9},{"ticker":"RGTI","debt":7.6,"cash":600.0,"rev":7.49,"burn":-73.8},{"ticker":"QUBT","debt":2.58,"cash":1500.0,"rev":0.55,"burn":-68.36},{"ticker":"LAES","debt":7.83,"cash":430.0,"rev":10.98,"burn":-30.44},{"ticker":"ARQQ","debt":0.0,"cash":36.9,"rev":0.53,"burn":-35.34},{"ticker":"NVTS","debt":0.0,"cash":150.6,"rev":40.4,"burn":-64.6},{"ticker":"ON","debt":3633.0,"cash":2873.0,"rev":6264.4,"burn":1420.0},{"ticker":"AOSL","debt":23.0,"cash":223.5,"rev":696.2,"burn":-11.8},{"ticker":"MPWR","debt":0.0,"cash":1146.1,"rev":2012.1,"burn":494.0},{"ticker":"POWI","debt":0.0,"cash":48.65,"rev":471.2,"burn":-13.0},{"ticker":"WOLF","debt":5102.0,"cash":1300.0,"rev":792.0,"burn":-684.2},{"ticker":"COHR","debt":3506.0,"cash":1285.0,"rev":5810.0,"burn":437.0},{"ticker":"INDI","debt":353.5,"cash":160.9,"rev":228.4,"burn":-52.1},{"ticker":"DPRO","debt":0.23,"cash":16.6,"rev":5.3,"burn":-12.1},{"ticker":"RCAT","debt":13.35,"cash":206.43,"rev":21.8,"burn":-52.4},{"ticker":"ZENA","debt":31.33,"cash":19.53,"rev":5.2,"burn":-6.8},{"ticker":"ONDS","debt":39.77,"cash":432.81,"rev":22.2,"burn":-32.3},{"ticker":"AVAV","debt":726.79,"cash":4418.0,"rev":1370.0,"burn":-242.0},{"ticker":"KTOS","debt":488.0,"cash":305.0,"rev":1310.0,"burn":-54.2},{"ticker":"UMAC","debt":0.0,"cash":83.8,"rev":4.2,"burn":-11.39},{"ticker":"SPAI","debt":0.2,"cash":7.5,"rev":1.2,"burn":-4.5},{"ticker":"AEVA","debt":100.0,"cash":270.0,"rev":8.0,"burn":-74.0},{"ticker":"INVZ","debt":0.0,"cash":74.4,"rev":55.1,"burn":-61.0},{"ticker":"MVIS","debt":30.0,"cash":99.5,"rev":2.4,"burn":-62.0},{"ticker":"LIDR","debt":315.0,"cash":200.0,"rev":300.0,"burn":200.0},{"ticker":"OUST","debt":0.0,"cash":165.0,"rev":123.0,"burn":-64.0},{"ticker":"INDI","debt":658.0,"cash":102.4,"rev":228.4,"burn":-52.1},{"ticker":"ARBE","debt":9.3,"cash":52.6,"rev":1.4,"burn":-37.5},{"ticker":"COHR","debt":3259.0,"cash":1285.0,"rev":6124.0,"burn":482.0},{"ticker":"RR","debt":3500.0,"cash":8500.0,"rev":17800.0,"burn":3050.0},{"ticker":"SERV","debt":104.0,"cash":441.8,"rev":771.9,"burn":37.1},{"ticker":"PRCT","debt":51.6,"cash":297.3,"rev":285.4,"burn":-35.0},{"ticker":"ZBRA","debt":2183.0,"cash":872.0,"rev":4780.0,"burn":685.0},{"ticker":"IRBT","debt":205.3,"cash":29.8,"rev":725.2,"burn":-104.2},{"ticker":"MBLY","debt":0.0,"cash":1750.0,"rev":1865.0,"burn":489.0},{"ticker":"AUR","debt":0.0,"cash":1500.0,"rev":0.55,"burn":-540.0},{"ticker":"TSLA","debt":7818.0,"cash":26100.0,"rev":99600.0,"burn":13200.0},{"ticker":"XPEV","debt":4609.0,"cash":4347.0,"rev":5150.0,"burn":-147.0},{"ticker":"KDK","debt":39.6,"cash":146.2,"rev":14.9,"burn":-110.0},{"ticker":"RKLB","debt":455.0,"cash":976.7,"rev":508.4,"burn":-142.2},{"ticker":"FLY","debt":157.0,"cash":1138.4,"rev":142.0,"burn":-288.6},{"ticker":"MNTS","debt":4.1,"cash":0.13,"rev":0.9,"burn":-14.8},{"ticker":"SPCE","debt":421.3,"cash":507.8,"rev":1.4,"burn":-263.0},{"ticker":"LUNR","debt":334.8,"cash":373.3,"rev":218.4,"burn":-38.5},{"ticker":"RDW","debt":185.5,"cash":78.6,"rev":354.2,"burn":-26.2},{"ticker":"SIDU","debt":4.8,"cash":2.4,"rev":5.8,"burn":-12.3},{"ticker":"LHX","debt":11558.0,"cash":605.0,"rev":21400.0,"burn":2280.0},{"ticker":"PL","debt":0.0,"cash":226.1,"rev":260.4,"burn":17.3},{"ticker":"BKSY","debt":202.7,"cash":106.7,"rev":102.1,"burn":-6.4},{"ticker":"SPIR","debt":0.0,"cash":96.8,"rev":105.0,"burn":-14.2},{"ticker":"SATL","debt":152.0,"cash":28.3,"rev":13.2,"burn":-17.4},{"ticker":"ASTS","debt":711.4,"cash":1200.0,"rev":18.5,"burn":-274.0},{"ticker":"IRDM","debt":1810.0,"cash":88.5,"rev":805.0,"burn":302.0},{"ticker":"SATS","debt":26603.0,"cash":2400.0,"rev":15176.0,"burn":840.0},{"ticker":"VSAT","debt":6434.0,"cash":1230.0,"rev":4280.0,"burn":580.0},{"ticker":"EVGO","debt":157.3,"cash":181.3,"rev":334.3,"burn":-58.5},{"ticker":"BLNK","debt":0.0,"cash":42.1,"rev":84.6,"burn":-47.1},{"ticker":"CHPT","debt":168.0,"cash":180.9,"rev":417.1,"burn":-156.4},{"ticker":"BEEM","debt":0.0,"cash":3.4,"rev":26.4,"burn":-9.1},{"ticker":"ADSE","debt":3.2,"cash":1.1,"rev":1.5,"burn":-4.8},{"ticker":"ACHR","debt":64.1,"cash":1640.0,"rev":2.81,"burn":-530.0},{"ticker":"JOBY","debt":0.0,"cash":1550.0,"rev":22.5,"burn":-521.0},{"ticker":"EVEX","debt":168.1,"cash":411.7,"rev":0.0,"burn":-200.0},{"ticker":"EVTL","debt":0.0,"cash":117.0,"rev":0.0,"burn":-125.0},{"ticker":"FCEL","debt":15.8,"cash":341.8,"rev":158.2,"burn":-192.3},{"ticker":"BE","debt":1200.0,"cash":760.0,"rev":1540.0,"burn":45.0},{"ticker":"PLUG","debt":135.3,"cash":1080.0,"rev":620.0,"burn":-450.0},{"ticker":"HYLN","debt":0.0,"cash":165.0,"rev":4.0,"burn":-65.0},{"ticker":"BW","debt":416.4,"cash":201.1,"rev":598.0,"burn":-65.9},{"ticker":"BLDP","debt":0.0,"cash":525.7,"rev":98.0,"burn":-95.0},{"ticker":"UEC","debt":0.0,"cash":321.0,"rev":66.8,"burn":-61.2},{"ticker":"NNE","debt":0.0,"cash":580.0,"rev":0.0,"burn":-19.6},{"ticker":"CCJ","debt":1000.0,"cash":780.0,"rev":3460.0,"burn":1260.0},{"ticker":"SMR","debt":0.0,"cash":753.8,"rev":11.5,"burn":-212.0},{"ticker":"BWXT","debt":1532.0,"cash":37.0,"rev":3100.0,"burn":336.5},{"ticker":"OKLO","debt":0.0,"cash":683.0,"rev":0.0,"burn":-30.7},{"ticker":"LEU","debt":805.0,"cash":1600.0,"rev":284.0,"burn":-24.5},{"ticker":"IMSR","debt":0.0,"cash":0.0,"rev":0.0,"burn":0.0},{"ticker":"QS","debt":91.48,"cash":1004.0,"rev":0.0,"burn":-276.32},{"ticker":"ENVX","debt":528.5,"cash":648.0,"rev":24.6,"burn":-160.2},{"ticker":"SES","debt":0.0,"cash":13.2,"rev":0.0,"burn":0.0},{"ticker":"MVST","debt":411.2,"cash":142.6,"rev":444.5,"burn":2.81},{"ticker":"AMPX","debt":0.0,"cash":103.2,"rev":55.4,"burn":-112.5},{"ticker":"SLDP","debt":0.0,"cash":300.4,"rev":18.1,"burn":-75.6},{"ticker":"ENPH","debt":1202.7,"cash":1530.0,"rev":1479.5,"burn":274.5},{"ticker":"STEM","debt":411.0,"cash":43.1,"rev":131.2,"burn":16.5},{"ticker":"FLNC","debt":390.8,"cash":1300.0,"rev":2300.0,"burn":24.1},{"ticker":"EOSE","debt":123.5,"cash":126.8,"rev":45.7,"burn":-190.1},{"ticker":"GWH","debt":135.0,"cash":791.3,"rev":47.8,"burn":-114.8},{"ticker":"KULR","debt":3.8,"cash":20.6,"rev":22.4,"burn":-18.2},{"ticker":"TE","debt":5390.0,"cash":485.0,"rev":2100.0,"burn":850.0},{"ticker":"NRGV","debt":0.1,"cash":76.5,"rev":145.4,"burn":-78.2},{"ticker":"ATLX","debt":10.13,"cash":20.98,"rev":0.0,"burn":-32.0},{"ticker":"ABAT","debt":0.0,"cash":55.6,"rev":2.2,"burn":-38.4},{"ticker":"ALB","debt":3181.0,"cash":1931.8,"rev":5100.0,"burn":300.0},{"ticker":"SQM","debt":2480.0,"cash":1150.0,"rev":4100.0,"burn":950.0},{"ticker":"SGML","debt":37.0,"cash":29.0,"rev":75.4,"burn":-45.6},{"ticker":"ELVR","debt":528.5,"cash":648.0,"rev":24.6,"burn":-160.2},{"ticker":"LAC","debt":354.7,"cash":719.3,"rev":0.0,"burn":-152.0},{"ticker":"NB","debt":0.0,"cash":162.8,"rev":0.0,"burn":-33.2},{"ticker":"CRWV","debt":14036.0,"cash":1940.0,"rev":3140.0,"burn":1690.0},{"ticker":"NBIS","debt":4570.0,"cash":2639.0,"rev":1840.0,"burn":-524.0},{"ticker":"ALAB","debt":31.3,"cash":1134.4,"rev":410.2,"burn":136.7},{"ticker":"CORZ","debt":1200.0,"cash":500.0,"rev":510.7,"burn":42.9},{"ticker":"APLD","debt":430.5,"cash":140.4,"rev":219.0,"burn":-115.4},{"ticker":"CIFR","debt":1326.1,"cash":1221.2,"rev":211.4,"burn":-391.7},{"ticker":"WULF","debt":1500.0,"cash":688.8,"rev":167.6,"burn":-77.7},{"ticker":"MARA","debt":800.0,"cash":826.4,"rev":785.2,"burn":142.0},{"ticker":"CLSK","debt":821.2,"cash":43.0,"rev":766.3,"burn":-265.5},{"ticker":"BITF","debt":51.5,"cash":87.0,"rev":192.9,"burn":-178.4},{"ticker":"HIVE","debt":18.3,"cash":48.3,"rev":165.4,"burn":22.8},{"ticker":"BTBT","debt":14.0,"cash":57.6,"rev":120.4,"burn":25.3},{"ticker":"HUT","debt":315.0,"cash":72.4,"rev":162.4,"burn":115.4},{"ticker":"RIOT","debt":0.0,"cash":330.7,"rev":315.2,"burn":-180.0},{"ticker":"IREN","debt":965.0,"cash":425.0,"rev":501.0,"burn":86.9},{"ticker":"AAPL","debt":101700.0,"cash":55400.0,"rev":408625.0,"burn":109000.0},{"ticker":"NVDA","debt":11500.0,"cash":34800.0,"rev":242000.0,"burn":68400.0},{"ticker":"MSFT","debt":60560.0,"cash":79618.0,"rev":245000.0,"burn":147040.0},{"ticker":"META","debt":28800.0,"cash":44400.0,"rev":189457.0,"burn":107600.0},{"ticker":"AMZN","debt":133900.0,"cash":93200.0,"rev":670038.0,"burn":121000.0},{"ticker":"GOOG","debt":33700.0,"cash":98500.0,"rev":385477.0,"burn":105000.0},{"ticker":"AVGO","debt":65136.0,"cash":16180.0,"rev":51100.0,"burn":27540.0}]`); // Embedded fundamentals data
+        const optionsRangesMap = JSON.parse(`[{"ticker":"IONQ","callwall":70.0,"gammaflip":49.2,"maxpain":44.0,"putwall":48.0},{"ticker":"QBTS","callwall":35.0,"gammaflip":29.8,"maxpain":20.0,"putwall":27.0},{"ticker":"RGTI","callwall":30.5,"gammaflip":24.1,"maxpain":20.0,"putwall":23.5},{"ticker":"QUBT","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"LAES","callwall":8.0,"gammaflip":4.2,"maxpain":3.5,"putwall":4.0},{"ticker":"ARQQ","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"NNVTS","callwall":12.5,"gammaflip":9.8,"maxpain":7.5,"putwall":8.0},{"ticker":"ON","callwall":65.0,"gammaflip":60.5,"maxpain":55.0,"putwall":56.0},{"ticker":"AOSL","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"MPWR","callwall":980.0,"gammaflip":915.0,"maxpain":850.0,"putwall":860.0},{"ticker":"POWI","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"WOLF","callwall":15.0,"gammaflip":12.2,"maxpain":9.5,"putwall":12.5},{"ticker":"COHR","callwall":197.5,"gammaflip":182.0,"maxpain":170.0,"putwall":185.0},{"ticker":"INDI","callwall":5.0,"gammaflip":3.8,"maxpain":3.0,"putwall":3.0},{"ticker":"NDPRO","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"RCAT","callwall":15.0,"gammaflip":11.5,"maxpain":10.0,"putwall":11.0},{"ticker":"ZENA","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"ONDS","callwall":15.0,"gammaflip":12.5,"maxpain":10.0,"putwall":10.0},{"ticker":"AVAV","callwall":350.0,"gammaflip":312.0,"maxpain":290.0,"putwall":245.0},{"ticker":"KTOS","callwall":100.0,"gammaflip":91.0,"maxpain":80.0,"putwall":80.0},{"ticker":"UMAC","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"SPAI","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"NAEVA","callwall":20.0,"gammaflip":17.2,"maxpain":12.5,"putwall":15.0},{"ticker":"INVZ","callwall":5.0,"gammaflip":3.4,"maxpain":2.0,"putwall":2.5},{"ticker":"MVIS","callwall":2.5,"gammaflip":1.8,"maxpain":1.0,"putwall":1.5},{"ticker":"LIDR","callwall":10.0,"gammaflip":7.6,"maxpain":5.0,"putwall":7.5},{"ticker":"OUST","callwall":30.0,"gammaflip":24.8,"maxpain":20.0,"putwall":23.0},{"ticker":"INDI","callwall":5.0,"gammaflip":3.8,"maxpain":3.0,"putwall":3.0},{"ticker":"ARBE","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"COHR","callwall":197.5,"gammaflip":182.0,"maxpain":170.0,"putwall":185.0},{"ticker":"NRR","callwall":4.5,"gammaflip":3.4,"maxpain":2.0,"putwall":3.5},{"ticker":"SERV","callwall":15.0,"gammaflip":12.2,"maxpain":10.0,"putwall":11.0},{"ticker":"PRCT","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"ZBRA","callwall":260.0,"gammaflip":251.2,"maxpain":240.0,"putwall":250.0},{"ticker":"SYM","callwall":85.0,"gammaflip":78.2,"maxpain":55.0,"putwall":80.0},{"ticker":"RZLV","callwall":5.0,"gammaflip":3.2,"maxpain":2.0,"putwall":2.0},{"ticker":"AMBA","callwall":80.0,"gammaflip":74.5,"maxpain":65.0,"putwall":71.0},{"ticker":"BBAI","callwall":8.0,"gammaflip":6.2,"maxpain":5.0,"putwall":6.0},{"ticker":"NMBLY","callwall":15.0,"gammaflip":12.8,"maxpain":10.0,"putwall":12.0},{"ticker":"AUR","callwall":5.0,"gammaflip":3.6,"maxpain":3.0,"putwall":3.5},{"ticker":"TSLA","callwall":500.0,"gammaflip":475.0,"maxpain":430.0,"putwall":440.0},{"ticker":"XPEV","callwall":22.5,"gammaflip":20.4,"maxpain":18.0,"putwall":20.0},{"ticker":"KDK","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"NRKLB","callwall":90.0,"gammaflip":81.5,"maxpain":70.0,"putwall":65.0},{"ticker":"FLY","callwall":30.0,"gammaflip":22.8,"maxpain":15.0,"putwall":20.0},{"ticker":"MNTS","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"SPCE","callwall":5.0,"gammaflip":3.6,"maxpain":3.0,"putwall":3.5},{"ticker":"LUNR","callwall":25.0,"gammaflip":18.4,"maxpain":15.0,"putwall":15.0},{"ticker":"RDW","callwall":15.0,"gammaflip":11.2,"maxpain":8.5,"putwall":8.5},{"ticker":"SIDU","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"LHX","callwall":330.0,"gammaflip":318.5,"maxpain":300.0,"putwall":310.0},{"ticker":"NPL","callwall":24.0,"gammaflip":21.5,"maxpain":20.0,"putwall":18.0},{"ticker":"BKSY","callwall":25.0,"gammaflip":21.8,"maxpain":18.0,"putwall":21.0},{"ticker":"SPIR","callwall":12.0,"gammaflip":10.2,"maxpain":9.0,"putwall":10.0},{"ticker":"SATL","callwall":2.5,"gammaflip":1.8,"maxpain":1.5,"putwall":1.5},{"ticker":"ASTS","callwall":100.0,"gammaflip":84.5,"maxpain":75.0,"putwall":75.0},{"ticker":"IRDM","callwall":30.0,"gammaflip":22.4,"maxpain":17.5,"putwall":25.0},{"ticker":"SATS","callwall":125.0,"gammaflip":111.0,"maxpain":100.0,"putwall":105.0},{"ticker":"VSAT","callwall":42.0,"gammaflip":36.5,"maxpain":30.0,"putwall":35.0},{"ticker":"NEVGO","callwall":5.0,"gammaflip":3.2,"maxpain":3.0,"putwall":3.0},{"ticker":"BLNK","callwall":2.5,"gammaflip":1.2,"maxpain":1.0,"putwall":1.0},{"ticker":"CHPT","callwall":10.0,"gammaflip":7.2,"maxpain":6.0,"putwall":8.0},{"ticker":"BEEM","callwall":5.0,"gammaflip":3.4,"maxpain":2.5,"putwall":2.5},{"ticker":"ADSE","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"NACHR","callwall":12.5,"gammaflip":8.8,"maxpain":7.5,"putwall":8.0},{"ticker":"JOBY","callwall":20.5,"gammaflip":15.8,"maxpain":14.0,"putwall":15.0},{"ticker":"EVEX","callwall":10.0,"gammaflip":6.2,"maxpain":5.0,"putwall":8.0},{"ticker":"EVTL","callwall":7.5,"gammaflip":6.1,"maxpain":5.0,"putwall":5.0},{"ticker":"NFCEL","callwall":9.0,"gammaflip":7.9,"maxpain":7.5,"putwall":8.0},{"ticker":"BE","callwall":110.0,"gammaflip":98.5,"maxpain":90.0,"putwall":91.0},{"ticker":"PLUG","callwall":3.5,"gammaflip":2.4,"maxpain":2.0,"putwall":2.5},{"ticker":"HYLN","callwall":5.0,"gammaflip":3.8,"maxpain":3.0,"putwall":3.5},{"ticker":"BW","callwall":12.5,"gammaflip":10.2,"maxpain":8.0,"putwall":10.0},{"ticker":"BLDP","callwall":5.0,"gammaflip":3.1,"maxpain":2.0,"putwall":2.5},{"ticker":"NUEC","callwall":15.0,"gammaflip":13.2,"maxpain":11.5,"putwall":13.0},{"ticker":"NNE","callwall":45.0,"gammaflip":33.5,"maxpain":25.0,"putwall":28.0},{"ticker":"CCJ","callwall":110.0,"gammaflip":98.5,"maxpain":85.0,"putwall":90.0},{"ticker":"SMR","callwall":25.0,"gammaflip":19.2,"maxpain":16.0,"putwall":17.0},{"ticker":"BWXT","callwall":145.0,"gammaflip":132.0,"maxpain":120.0,"putwall":130.0},{"ticker":"OKLO","callwall":110.0,"gammaflip":96.8,"maxpain":85.0,"putwall":81.0},{"ticker":"LEU","callwall":100.0,"gammaflip":88.4,"maxpain":75.0,"putwall":82.0},{"ticker":"IMSR","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"NQS","callwall":15.0,"gammaflip":11.3,"maxpain":10.0,"putwall":11.0},{"ticker":"ENVX","callwall":10.0,"gammaflip":8.7,"maxpain":7.5,"putwall":8.0},{"ticker":"SES","callwall":2.5,"gammaflip":1.9,"maxpain":1.5,"putwall":1.5},{"ticker":"MVST","callwall":4.0,"gammaflip":3.2,"maxpain":2.5,"putwall":2.5},{"ticker":"AMPX","callwall":11.0,"gammaflip":9.0,"maxpain":7.0,"putwall":7.0},{"ticker":"SLDP","callwall":6.0,"gammaflip":4.8,"maxpain":4.0,"putwall":4.5},{"ticker":"NENPH","callwall":40.0,"gammaflip":34.8,"maxpain":30.0,"putwall":33.5},{"ticker":"STEM","callwall":20.0,"gammaflip":17.2,"maxpain":15.0,"putwall":17.0},{"ticker":"FLNC","callwall":35.0,"gammaflip":31.5,"maxpain":25.0,"putwall":28.0},{"ticker":"EOSE","callwall":16.0,"gammaflip":13.8,"maxpain":11.5,"putwall":13.0},{"ticker":"GWH","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"KULR","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"TE","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"NRGV","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"NATLX","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"ABAT","callwall":4.5,"gammaflip":3.9,"maxpain":3.5,"putwall":4.0},{"ticker":"ALB","callwall":165.0,"gammaflip":146.5,"maxpain":135.0,"putwall":140.0},{"ticker":"SQM","callwall":75.0,"gammaflip":66.4,"maxpain":60.0,"putwall":67.5},{"ticker":"SGML","callwall":18.0,"gammaflip":15.2,"maxpain":13.0,"putwall":15.0},{"ticker":"ELVR","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"LAC","callwall":6.0,"gammaflip":4.9,"maxpain":4.0,"putwall":5.0},{"ticker":"NB","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"NCRWV","callwall":90.0,"gammaflip":81.2,"maxpain":75.0,"putwall":79.0},{"ticker":"NBIS","callwall":110.0,"gammaflip":94.5,"maxpain":85.0,"putwall":88.0},{"ticker":"ALAB","callwall":185.0,"gammaflip":166.4,"maxpain":145.0,"putwall":170.0},{"ticker":"CORZ","callwall":18.5,"gammaflip":16.8,"maxpain":14.5,"putwall":15.5},{"ticker":"APLD","callwall":34.0,"gammaflip":30.2,"maxpain":26.0,"putwall":28.0},{"ticker":"CIFR","callwall":20.0,"gammaflip":17.4,"maxpain":15.0,"putwall":16.0},{"ticker":"WULF","callwall":15.0,"gammaflip":13.2,"maxpain":11.5,"putwall":12.5},{"ticker":"NMARA","callwall":14.5,"gammaflip":10.2,"maxpain":8.0,"putwall":9.5},{"ticker":"CLSK","callwall":13.5,"gammaflip":11.2,"maxpain":9.0,"putwall":11.0},{"ticker":"BITF","callwall":3.0,"gammaflip":2.6,"maxpain":2.0,"putwall":2.5},{"ticker":"HIVE","callwall":5.0,"gammaflip":4.2,"maxpain":3.0,"putwall":4.0},{"ticker":"BTBT","callwall":4.5,"gammaflip":3.1,"maxpain":2.5,"putwall":3.0},{"ticker":"HUT","callwall":18.0,"gammaflip":15.4,"maxpain":12.0,"putwall":14.5},{"ticker":"RIOT","callwall":16.5,"gammaflip":14.2,"maxpain":11.0,"putwall":13.5},{"ticker":"IREN","callwall":50.0,"gammaflip":45.8,"maxpain":38.0,"putwall":46.0},{"ticker":"NAAPL","callwall":280.0,"gammaflip":270.0,"maxpain":262.5,"putwall":270.0},{"ticker":"NVDA","callwall":205.0,"gammaflip":192.5,"maxpain":180.0,"putwall":185.0},{"ticker":"MSFT","callwall":480.0,"gammaflip":465.0,"maxpain":445.0,"putwall":455.0},{"ticker":"META","callwall":640.0,"gammaflip":618.5,"maxpain":595.0,"putwall":610.0},{"ticker":"AMZN","callwall":245.0,"gammaflip":228.4,"maxpain":215.0,"putwall":225.0},{"ticker":"GOOG","callwall":345.0,"gammaflip":328.5,"maxpain":310.0,"putwall":317.5},{"ticker":"AVGO","callwall":380.0,"gammaflip":358.5,"maxpain":335.0,"putwall":342.5},{"ticker":"NIONQ","callwall":70.0,"gammaflip":49.2,"maxpain":44.0,"putwall":48.0},{"ticker":"QBTS","callwall":35.0,"gammaflip":29.8,"maxpain":20.0,"putwall":27.0},{"ticker":"RGTI","callwall":30.5,"gammaflip":24.1,"maxpain":20.0,"putwall":23.5},{"ticker":"QUBT","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"LAES","callwall":8.0,"gammaflip":4.2,"maxpain":3.5,"putwall":4.0},{"ticker":"ARQQ","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"NNVTS","callwall":12.5,"gammaflip":9.8,"maxpain":7.5,"putwall":8.0},{"ticker":"ON","callwall":65.0,"gammaflip":60.5,"maxpain":55.0,"putwall":56.0},{"ticker":"AOSL","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"MPWR","callwall":980.0,"gammaflip":915.0,"maxpain":850.0,"putwall":860.0},{"ticker":"POWI","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"WOLF","callwall":15.0,"gammaflip":12.2,"maxpain":9.5,"putwall":12.5},{"ticker":"COHR","callwall":197.5,"gammaflip":182.0,"maxpain":170.0,"putwall":185.0},{"ticker":"INDI","callwall":5.0,"gammaflip":3.8,"maxpain":3.0,"putwall":3.0},{"ticker":"NDPRO","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"RCAT","callwall":15.0,"gammaflip":11.5,"maxpain":10.0,"putwall":11.0},{"ticker":"ZENA","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"ONDS","callwall":15.0,"gammaflip":12.5,"maxpain":10.0,"putwall":10.0},{"ticker":"AVAV","callwall":350.0,"gammaflip":312.0,"maxpain":290.0,"putwall":245.0},{"ticker":"KTOS","callwall":100.0,"gammaflip":91.0,"maxpain":80.0,"putwall":80.0},{"ticker":"UMAC","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"SPAI","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"NAEVA","callwall":20.0,"gammaflip":17.2,"maxpain":12.5,"putwall":15.0},{"ticker":"INVZ","callwall":5.0,"gammaflip":3.4,"maxpain":2.0,"putwall":2.5},{"ticker":"MVIS","callwall":2.5,"gammaflip":1.8,"maxpain":1.0,"putwall":1.5},{"ticker":"LIDR","callwall":10.0,"gammaflip":7.6,"maxpain":5.0,"putwall":7.5},{"ticker":"OUST","callwall":30.0,"gammaflip":24.8,"maxpain":20.0,"putwall":23.0},{"ticker":"INDI","callwall":5.0,"gammaflip":3.8,"maxpain":3.0,"putwall":3.0},{"ticker":"ARBE","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"COHR","callwall":197.5,"gammaflip":182.0,"maxpain":170.0,"putwall":185.0},{"ticker":"NRR","callwall":4.5,"gammaflip":3.4,"maxpain":2.0,"putwall":3.5},{"ticker":"SERV","callwall":15.0,"gammaflip":12.2,"maxpain":10.0,"putwall":11.0},{"ticker":"PRCT","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"ZBRA","callwall":260.0,"gammaflip":251.2,"maxpain":240.0,"putwall":250.0},{"ticker":"SYM","callwall":85.0,"gammaflip":78.2,"maxpain":55.0,"putwall":80.0},{"ticker":"RZLV","callwall":5.0,"gammaflip":3.2,"maxpain":2.0,"putwall":2.0},{"ticker":"AMBA","callwall":80.0,"gammaflip":74.5,"maxpain":65.0,"putwall":71.0},{"ticker":"BBAI","callwall":8.0,"gammaflip":6.2,"maxpain":5.0,"putwall":6.0},{"ticker":"NMBLY","callwall":15.0,"gammaflip":12.8,"maxpain":10.0,"putwall":12.0},{"ticker":"AUR","callwall":5.0,"gammaflip":3.6,"maxpain":3.0,"putwall":3.5},{"ticker":"TSLA","callwall":500.0,"gammaflip":475.0,"maxpain":430.0,"putwall":440.0},{"ticker":"XPEV","callwall":22.5,"gammaflip":20.4,"maxpain":18.0,"putwall":20.0},{"ticker":"KDK","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"NRKLB","callwall":90.0,"gammaflip":81.5,"maxpain":70.0,"putwall":65.0},{"ticker":"FLY","callwall":30.0,"gammaflip":22.8,"maxpain":15.0,"putwall":20.0},{"ticker":"MNTS","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"SPCE","callwall":5.0,"gammaflip":3.6,"maxpain":3.0,"putwall":3.5},{"ticker":"LUNR","callwall":25.0,"gammaflip":18.4,"maxpain":15.0,"putwall":15.0},{"ticker":"RDW","callwall":15.0,"gammaflip":11.2,"maxpain":8.5,"putwall":8.5},{"ticker":"SIDU","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"LHX","callwall":330.0,"gammaflip":318.5,"maxpain":300.0,"putwall":310.0},{"ticker":"NPL","callwall":24.0,"gammaflip":21.5,"maxpain":20.0,"putwall":18.0},{"ticker":"BKSY","callwall":25.0,"gammaflip":21.8,"maxpain":18.0,"putwall":21.0},{"ticker":"SPIR","callwall":12.0,"gammaflip":10.2,"maxpain":9.0,"putwall":10.0},{"ticker":"SATL","callwall":2.5,"gammaflip":1.8,"maxpain":1.5,"putwall":1.5},{"ticker":"ASTS","callwall":100.0,"gammaflip":84.5,"maxpain":75.0,"putwall":75.0},{"ticker":"IRDM","callwall":30.0,"gammaflip":22.4,"maxpain":17.5,"putwall":25.0},{"ticker":"SATS","callwall":125.0,"gammaflip":111.0,"maxpain":100.0,"putwall":105.0},{"ticker":"VSAT","callwall":42.0,"gammaflip":36.5,"maxpain":30.0,"putwall":35.0},{"ticker":"NEVGO","callwall":5.0,"gammaflip":3.2,"maxpain":3.0,"putwall":3.0},{"ticker":"BLNK","callwall":2.5,"gammaflip":1.2,"maxpain":1.0,"putwall":1.0},{"ticker":"CHPT","callwall":10.0,"gammaflip":7.2,"maxpain":6.0,"putwall":8.0},{"ticker":"BEEM","callwall":5.0,"gammaflip":3.4,"maxpain":2.5,"putwall":2.5},{"ticker":"ADSE","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"NACHR","callwall":12.5,"gammaflip":8.8,"maxpain":7.5,"putwall":8.0},{"ticker":"JOBY","callwall":20.5,"gammaflip":15.8,"maxpain":14.0,"putwall":15.0},{"ticker":"EVEX","callwall":10.0,"gammaflip":6.2,"maxpain":5.0,"putwall":8.0},{"ticker":"EVTL","callwall":7.5,"gammaflip":6.1,"maxpain":5.0,"putwall":5.0},{"ticker":"NFCEL","callwall":9.0,"gammaflip":7.9,"maxpain":7.5,"putwall":8.0},{"ticker":"BE","callwall":110.0,"gammaflip":98.5,"maxpain":90.0,"putwall":91.0},{"ticker":"PLUG","callwall":3.5,"gammaflip":2.4,"maxpain":2.0,"putwall":2.5},{"ticker":"HYLN","callwall":5.0,"gammaflip":3.8,"maxpain":3.0,"putwall":3.5},{"ticker":"BW","callwall":12.5,"gammaflip":10.2,"maxpain":8.0,"putwall":10.0},{"ticker":"BLDP","callwall":5.0,"gammaflip":3.1,"maxpain":2.0,"putwall":2.5},{"ticker":"NUEC","callwall":15.0,"gammaflip":13.2,"maxpain":11.5,"putwall":13.0},{"ticker":"NNE","callwall":45.0,"gammaflip":33.5,"maxpain":25.0,"putwall":28.0},{"ticker":"CCJ","callwall":110.0,"gammaflip":98.5,"maxpain":85.0,"putwall":90.0},{"ticker":"SMR","callwall":25.0,"gammaflip":19.2,"maxpain":16.0,"putwall":17.0},{"ticker":"BWXT","callwall":145.0,"gammaflip":132.0,"maxpain":120.0,"putwall":130.0},{"ticker":"OKLO","callwall":110.0,"gammaflip":96.8,"maxpain":85.0,"putwall":81.0},{"ticker":"LEU","callwall":100.0,"gammaflip":88.4,"maxpain":75.0,"putwall":82.0},{"ticker":"IMSR","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"NQS","callwall":15.0,"gammaflip":11.3,"maxpain":10.0,"putwall":11.0},{"ticker":"ENVX","callwall":10.0,"gammaflip":8.7,"maxpain":7.5,"putwall":8.0},{"ticker":"SES","callwall":2.5,"gammaflip":1.9,"maxpain":1.5,"putwall":1.5},{"ticker":"MVST","callwall":4.0,"gammaflip":3.2,"maxpain":2.5,"putwall":2.5},{"ticker":"AMPX","callwall":11.0,"gammaflip":9.0,"maxpain":7.0,"putwall":7.0},{"ticker":"SLDP","callwall":6.0,"gammaflip":4.8,"maxpain":4.0,"putwall":4.5},{"ticker":"NENPH","callwall":40.0,"gammaflip":34.8,"maxpain":30.0,"putwall":33.5},{"ticker":"STEM","callwall":20.0,"gammaflip":17.2,"maxpain":15.0,"putwall":17.0},{"ticker":"FLNC","callwall":35.0,"gammaflip":31.5,"maxpain":25.0,"putwall":28.0},{"ticker":"EOSE","callwall":16.0,"gammaflip":13.8,"maxpain":11.5,"putwall":13.0},{"ticker":"GWH","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"KULR","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"TE","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"NRGV","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"NATLX","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"ABAT","callwall":4.5,"gammaflip":3.9,"maxpain":3.5,"putwall":4.0},{"ticker":"ALB","callwall":165.0,"gammaflip":146.5,"maxpain":135.0,"putwall":140.0},{"ticker":"SQM","callwall":75.0,"gammaflip":66.4,"maxpain":60.0,"putwall":67.5},{"ticker":"SGML","callwall":18.0,"gammaflip":15.2,"maxpain":13.0,"putwall":15.0},{"ticker":"ELVR","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"LAC","callwall":6.0,"gammaflip":4.9,"maxpain":4.0,"putwall":5.0},{"ticker":"NB","callwall":0.0,"gammaflip":0.0,"maxpain":0.0,"putwall":0.0},{"ticker":"NCRWV","callwall":90.0,"gammaflip":81.2,"maxpain":75.0,"putwall":79.0},{"ticker":"NBIS","callwall":110.0,"gammaflip":94.5,"maxpain":85.0,"putwall":88.0},{"ticker":"ALAB","callwall":185.0,"gammaflip":166.4,"maxpain":145.0,"putwall":170.0},{"ticker":"CORZ","callwall":18.5,"gammaflip":16.8,"maxpain":14.5,"putwall":15.5},{"ticker":"APLD","callwall":34.0,"gammaflip":30.2,"maxpain":26.0,"putwall":28.0},{"ticker":"CIFR","callwall":20.0,"gammaflip":17.4,"maxpain":15.0,"putwall":16.0},{"ticker":"WULF","callwall":15.0,"gammaflip":13.2,"maxpain":11.5,"putwall":12.5},{"ticker":"NMARA","callwall":14.5,"gammaflip":10.2,"maxpain":8.0,"putwall":9.5},{"ticker":"CLSK","callwall":13.5,"gammaflip":11.2,"maxpain":9.0,"putwall":11.0},{"ticker":"BITF","callwall":3.0,"gammaflip":2.6,"maxpain":2.0,"putwall":2.5},{"ticker":"HIVE","callwall":5.0,"gammaflip":4.2,"maxpain":3.0,"putwall":4.0},{"ticker":"BTBT","callwall":4.5,"gammaflip":3.1,"maxpain":2.5,"putwall":3.0},{"ticker":"HUT","callwall":18.0,"gammaflip":15.4,"maxpain":12.0,"putwall":14.5},{"ticker":"RIOT","callwall":16.5,"gammaflip":14.2,"maxpain":11.0,"putwall":13.5},{"ticker":"IREN","callwall":50.0,"gammaflip":45.8,"maxpain":38.0,"putwall":46.0},{"ticker":"NAAPL","callwall":280.0,"gammaflip":270.0,"maxpain":262.5,"putwall":270.0},{"ticker":"NVDA","callwall":205.0,"gammaflip":192.5,"maxpain":180.0,"putwall":185.0},{"ticker":"MSFT","callwall":480.0,"gammaflip":465.0,"maxpain":445.0,"putwall":455.0},{"ticker":"META","callwall":640.0,"gammaflip":618.5,"maxpain":595.0,"putwall":610.0},{"ticker":"AMZN","callwall":245.0,"gammaflip":228.4,"maxpain":215.0,"putwall":225.0},{"ticker":"GOOG","callwall":345.0,"gammaflip":328.5,"maxpain":310.0,"putwall":317.5},{"ticker":"AVGO","callwall":380.0,"gammaflip":358.5,"maxpain":335.0,"putwall":342.5}]`); // Parse it into an array of objects
 
         // Create a global lookup for fundamentals data
         const fundamentalsLookup = {};
         fundamentalsData.forEach(item => {
             fundamentalsLookup[item.ticker.toUpperCase()] = item;
         });
-        
+
+        // Create a global lookup for options data
+        const optionsLookup = {};
+        optionsRangesMap.forEach(item => {
+            optionsLookup[item.ticker.toUpperCase()] = item;
+        });
+
         // Dynamically fetched dilution data
         let tickerDilutionMap = {};
         const GITHUB_RAW_URL_BASE = "https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/";
@@ -46,7 +56,7 @@
             // Clean the string by removing dollar signs and commas first
             const cleanStr = rangeStr.replace(/[$,]/g, '').trim();
 
-            // Attempt to match a range pattern: e.g., "X.XX - Y.YY" or "X.XX – Y.YY"
+            // Attempt to match a range pattern: e.g., "X.XX - Y.YY" or "X.YY – Y.YY"
             const rangeMatch = cleanStr.match(/(\d+(?:\.\d+)?)\s*[–-]\s*(\d+(?:\.\d+)?)/);
 
             if (rangeMatch && rangeMatch.length >= 3) { // group 0 is full match, 1 is first number, 2 is second number
@@ -296,12 +306,11 @@
                                     ]
                             },
                             options: {
-                                responsive: false,
+                                responsive: true,
                                 animation: false,
                                 events: [],
-                                maintainAspectRatio: false,
-                                width: 800,
-                                height: 400,
+                                aspectRatio: 4,
+                                maintainAspectRatio: true,
                                 scales: {
                                     x: {
                                         stacked: false,
@@ -319,6 +328,18 @@
                                     }
                                 },
                                 plugins: {
+                                      datalabels: {
+                                        anchor: 'end',
+                                        align: 'top',
+                                        formatter: (value) => {
+                                            return parseFloat(value).toFixed(1);
+                                        },
+                                        color: '#333',
+                                        font: {
+                                            weight: 'bold',
+                                            size: 10
+                                        }
+                                    },
                                     title: {
                                         display: false,
                                         text: `Peer Comparison for ${industryKey.replace('_', ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}`
@@ -463,7 +484,9 @@
                             const ceilingRange = parsePriceRange(row['Ceiling']);
                             const floorRange = parsePriceRange(row['Floor']);
 
-                            let lineHtml = '';
+                            let lineHtml = ''; // For dilution line
+                            let optionsLineHtml = ''; // For options line
+
                             if (!isNaN(currentPrice) && !isNaN(floorRange.min) && !isNaN(ceilingRange.max)) {
                                 const overallMin = floorRange.min;
                                 const overallMax = ceilingRange.max;
@@ -482,7 +505,55 @@
                                     </tr>
                                 `;
                             }
+
+                            // New Options Line based on Put Wall and Call Wall
+                            const tickerUpper = row['Ticker'].toUpperCase();
+                            const optionsData = optionsLookup[tickerUpper];
+
+                            if (optionsData) {
+                                const putwall = parseFloat(optionsData['putwall']);
+                                const callwall = parseFloat(optionsData['callwall']);
+                                const gammaflip = parseFloat(optionsData['gammaflip']);
+                                const maxpain = parseFloat(optionsData['maxpain']);
+
+                                // Check if values are valid and a meaningful range exists
+                                if (!isNaN(putwall) && !isNaN(callwall) && !isNaN(gammaflip) && !isNaN(maxpain) && putwall < callwall) {
+                                    const range = callwall - putwall;
+
+                                    // Helper to clamp positions between 0 and 100%
+                                    const clampPosition = (value) => Math.max(0, Math.min(100, (value - putwall) / range * 100));
+                                    const currentPricePos = clampPosition(currentPrice);
+                                    const gammaflipPos = clampPosition(gammaflip);
+                                    const maxpainPos = clampPosition(maxpain);
+
+                                    // Calculate background color for options line
+                                    let optionsPricePosition = ((currentPrice - putwall) / (callwall - putwall)) * 100;
+                                    optionsPricePosition = Math.max(0, Math.min(100, optionsPricePosition));
+                                    let optionsRowBacPkgroundColor = getColorAtGradientPosition(optionsPricePosition);
+
+                                    optionsLineHtml = `
+                                        <tr class="options-price-line-row">
+                                            <td colspan="${actualHeaders.length}" style="padding: 0px;">
+                                                <div style="position: relative; width: 100%; height: 2px; background-color: ${optionsRowBacPkgroundColor}; border-radius: 5px;">
+                                                    <!-- Put Wall Text -->
+                                                    <span style="position: absolute; left: 2%; top: -10px; font-size: 0.7em; transform: translateX(-50%); white-space: nowrap;">${putwall.toFixed(2)}</span>
+                                                    <!-- Call Wall Text -->
+                                                    <span style="position: absolute; right: 2%; top: -10px; font-size: 0.7em; transform: translateX(50%); white-space: nowrap;">${callwall.toFixed(2)}</span>
+
+                                                    <!-- Current Price Dot (black) -->
+                                                    <div style="position: absolute; left: ${currentPricePos}%; top: -3px; width: 10px; height: 10px; background-color: black; border-radius: 50%; transform: translateX(-50%); box-shadow: 0 0 5px rgba(0,0,0,0.5);title=""></div>
+                                                   <!-- Gamma Flip Character (blue) -->
+                                                    <span style="position: absolute; left: ${gammaflipPos}%; top: -12px; width: auto; height: auto; padding: 0 3px; background-color: blue; color: white; border-radius: 3px; transform: translateX(-50%); font-weight: bold; font-size: 0.8em;" title="$${gammaflip.toFixed(2)}">F</span>
+                                                    <!-- Max Pain Character (green) -->
+                                                    <span style="position: absolute; left: ${maxpainPos}%; top: -12px; width: auto; height: auto; padding: 0 3px; background-color: green; color: white; border-radius: 3px; transform: translateX(-50%); font-weight: bold; font-size: 0.8em;" title="$${maxpain.toFixed(2)}">P</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    `;
+                                }
+                            }
                             tableHtml += lineHtml;
+                            tableHtml += optionsLineHtml;
                         });
                         tableHtml += '</tbody></table>';
                         placeholderDiv.innerHTML = tableHtml;
@@ -708,69 +779,43 @@
 <div class="industry-section" id="quantum"><h2>1. Quantum <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Quantum computing and advanced quantum technologies, including hardware, software, and quantum information processing platforms</i></p>
 <h3 class="news-section">Recent News </h3>
-<div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for the specified companies as of **January 8, 2026**:
+<div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for the requested NYSE/NASDAQ stocks as of today, **January 9, 2026**:
 
-**IonQ (IONQ)**
+### IONQ (IONQ)
+*   **January 8, 2026**: IonQ announced new research on a Beam Search Decoder, which challenges the industry assumption that building a large-scale fault-tolerant quantum computer would require a supercomputer for decoding. This new decoder is simpler, faster, and more accurate, demonstrating that IonQ&#x27;s trapped-ion architecture can handle fault-tolerant decoding using standard CPUs.
+*   **January 5, 2026**: IonQ expanded strategic partnerships to drive real-world quantum use, including collaborations in healthcare, logistics, and academia. This involves a partnership with CCRM for therapeutics and the establishment of the IonQ Center for Engineering and Science at the University of Chicago.
+*   **January 8, 2026**: An SEC filing indicated that Strategic Planning Group LLC bought a new position of 101,369 shares in IonQ during the third quarter.
+*   **January 7, 2026**: Nasdaq&#x27;s SEC filings for IonQ show no new filings that match filters for recent dates.
 
-*   **December 23, 2025**: IonQ and KISTI finalized an agreement to deliver a 100-qubit quantum system in South Korea.
-*   **December 17, 2025**: IonQ and QuantumBasel expanded their long-term partnership in next-generation quantum systems.
-*   **December 8, 2025**: IonQ expanded in the EU with Slovakia&#x27;s first national quantum communication network.
-*   **December 1, 2025**: Heven AeroTech announced a $100M Series B raise, reaching a $1B valuation, as customer demand surged.
-*   **Undated (listed with December 2025 news)**: Einride and IonQ announced a partnership using quantum computing to optimize the logistics of electric and autonomous freight.
-*   **July 7, 2025**: IonQ announced the pricing of a $1.0 billion equity offering, consisting of common stock and pre-funded warrants.
+### D-Wave Quantum Inc. (QBTS)
+*   **January 7, 2026**: D-Wave announced an agreement to acquire Quantum Circuits Inc., aiming to establish the world&#x27;s leading quantum computing company. This was also disclosed in a Form 8-K filing.
+*   **January 6, 2026**: D-Wave demonstrated a significant technical milestone by achieving scalable, on-chip cryogenic control of gate-model qubits. This breakthrough reduces the wiring needed for controlling a large number of qubits without degrading fidelity.
 
-**D-Wave Quantum Inc. (QBTS)**
+### Rigetti Computing, Inc. (RGTI)
+*   **January 7, 2026**: Rigetti Computing Inc. filed a SCHEDULE 13G/A with the SEC.
+*   **January 5, 2026**: Rigetti Computing is scheduled to participate in a Fireside Chat at the 28th Annual Needham Growth Conference.
 
-*   **January 7, 2026**: D-Wave Quantum Inc. hosted a press conference discussing its previously announced agreement to acquire all outstanding equity of Quantum Circuits, Inc. A related investor presentation was furnished as Exhibit 99.1 in a current report on Form 8-K.
-*   **January 7, 2026**: An 8-K filing was made by D-Wave Quantum Inc. reporting a material event related to the Quantum Circuits acquisition briefing.
-*   **January 6, 2026**: D-Wave Quantum Inc. signed an Agreement and Plan of Merger to acquire all outstanding equity of Quantum Circuits. The deal includes $300 million of D-Wave common stock plus $250 million in cash.
-*   **January 6, 2026**: D-Wave Quantum announced it demonstrated the first scalable, on-chip cryogenic control of gate-model qubits.
-*   **December 23, 2025**: Form 4 filings indicated insider trading activity at D-Wave Quantum Inc.
-*   **December 16, 2025**: Form 4 filings indicated insider trading activity at D-Wave Quantum Inc.
-*   **December 15, 2025**: Form 144 filings indicated proposed sales of securities by insiders at D-Wave Quantum.
-*   **December 8, 2025**: Form 4 filings indicated insider trading activity at D-Wave Quantum Inc.
+### Quantum Computing Inc. (QUBT)
+*   **December 17, 2025**: Quantum Computing Inc. appointed Yuping Huang as chief executive officer, effective **January 1, 2026**.
+*   **December 16, 2025**: Quantum Computing Inc. filed an 8-K Current Report with the SEC.
+*   **December 15, 2025**: Quantum Computing Inc. announced plans for an $110M Luminar Semiconductor deal.
 
-**Rigetti Computing, Inc. (RGTI)**
+### SEALSQ Corp (LAES)
+*   **January 7, 2026**: SEALSQ Corp is set to demonstrate its post-quantum technology in robotics with WISeRobot.ch&#x27;s first Proof of Concept at a Davos Roundtable on **January 21, 2026**.
+*   **January 5, 2026**: SEALSQ&#x27;s executive leadership is conducting a strategic visit across India from **January 5-9, 2026**, to advance a post-quantum semiconductor personalization center, quantum investments, and sovereign space capabilities.
 
-*   **November 21, 2025**: Rigetti Computing provided technology roadmap updates for 2026 and 2027 in an 8-K filing.
-*   **November 21, 2025**: Rigetti and India&#x27;s Centre for Development of Advanced Computing announced an MoU to explore co-development of hybrid quantum computing systems in an 8-K filing.
-*   **September 17, 2025**: A Form 4 filing reported a director&#x27;s 100,000-warrant transaction under a 10b5-1 plan.
-*   **September 12, 2025**: A Form 4 filing disclosed 10b5-1 Plan Trades and large option holdings by a director.
-*   **Undated (reported in a filing dated Nov 21, 2025)**: Rigetti Computing&#x27;s CFO conducted a tax sell-to-cover of 3,702 shares.
-
-**Quantum Computing Inc. (QUBT)**
-
-*   **December 16, 2025**: Quantum Computing Inc. appointed Dr. Yuping Huang as its Chief Executive Officer, effective **January 1, 2026**. This formalized his leadership after serving as Interim CEO and President since April 11, 2025.
-*   **December 15, 2025**: Quantum Computing Inc. announced an agreement to acquire Luminar Semiconductor, Inc. for a cash purchase price of $110.0 million.
-*   **September 17, 2025**: A Form 4 filing reported Robert Fagenson&#x27;s disposal of his entire reported stake through multiple open-market sales on **September 9, 10, 11, 12, and 15, 2025**.
-*   **September 8, 2025**: A Form 4 filing indicated that director Javad Shabani exercised and sold company shares during **August-September 2025**.
-
-**SEALSQ Corp (LAES)**
-
-*   **January 7, 2026**: SEALSQ announced it will demonstrate its post-quantum cryptographic technology in robotics with WISeRobot.ch&#x27;s first Proof of Concept at a Davos Roundtable on **January 21, 2026**.
-*   **January 5, 2026**: SEALSQ C-Suite visited India to advance its Post-Quantum Semiconductor Personalization Center and quantum investments.
-*   **December 18, 2025**: A 6-K filing (Current report of foreign issuer) was made by SEALSQ Corp.
-*   **December 10, 2025**: A 6-K filing (Current report of foreign issuer) was made by SEALSQ Corp.
-*   **December 22, 2025**: SEALSQ issued a Year-End CEO Letter to Shareholders.
-*   **December 19, 2025**: SEALSQ unveiled a strategic plan for 2026-2030 to develop silicon-based quantum computing using CMOS-compatible semiconductor technologies.
-*   **December 17, 2025**: SEALSQ announced WECAN secured a grant from Hedera.
-*   **December 16, 2025**: SEALSQ reported accelerating market adoption of its Post-Quantum Secure Chip QS7001.
-
-**Arqit Quantum Inc. (ARQQ)**
-
-*   **October 21, 2025**: Arqit Quantum executed a term sheet to settle a previously disclosed U.S. federal putative class action for $7 million, pending approval by the United States District Court for the Eastern District of New York.
-*   **October 9, 2025**: Arqit Quantum provided preliminary unaudited results for the second half and full fiscal year ended **September 30, 2025**.
-*   **October 6, 2025**: A Form 144 filing reported an intended sale of 796 common shares acquired via restricted stock vesting on **October 3, 2025**.
-*   **October 2, 2025**: A Form 144 filing reported a proposed sale of 820 common shares acquired on **October 2, 2025**, through Restricted Stock Vesting, with an approximate sale date of **October 3, 2025**.</div>
+### Arqit Quantum Inc. (ARQQ)
+*   **January 6, 2026**: Arqit Quantum Inc. filed a Form 144: Report of proposed sale of securities with the SEC.
+*   **January 2, 2026**: Arqit Quantum Inc. filed multiple Form 144: Report of proposed sale of securities with the SEC.</div>
 <h3 class="fundamentals-section">Fundamentals</h3>
 <div id="fundamentals-table-quantum" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="notes-section hidden">Notes </h3>
 <div class="markdown-notes-block notes-section hidden">ionq:&gt; By March dilution may get over</div>
 
 <div id="fundamentals-charts-quantum" class="fundamentals-section">
-    <canvas id="chart_quantum" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
+    <canvas id="chart_quantum" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
     <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
-   <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'IONQ', event, '49.78'); return false;" style="margin-right: 10px;">IONQ</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'QBTS', event, '30.20'); return false;" style="margin-right: 10px;">QBTS</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'RGTI', event, '25.21'); return false;" style="margin-right: 10px;">RGTI</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'QUBT', event, '11.65'); return false;" style="margin-right: 10px;">QUBT</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'LAES', event, '4.13'); return false;" style="margin-right: 10px;">LAES</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'ARQQ', event, '27.00'); return false;" style="margin-right: 10px;">ARQQ</button></div>
+   <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'IONQ', event, '50.67'); return false;" style="margin-right: 10px;">IONQ</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'QBTS', event, '29.42'); return false;" style="margin-right: 10px;">QBTS</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'RGTI', event, '25.16'); return false;" style="margin-right: 10px;">RGTI</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'QUBT', event, '11.94'); return false;" style="margin-right: 10px;">QUBT</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'LAES', event, '4.21'); return false;" style="margin-right: 10px;">LAES</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'ARQQ', event, '27.81'); return false;" style="margin-right: 10px;">ARQQ</button></div>
 
 </div>
 
@@ -816,9 +861,9 @@
 <div class="markdown-notes-block notes-section hidden">on:&gt; 6B repurchage announced on Dec 2</div>
 
 <div id="fundamentals-charts-power_management_chips" class="fundamentals-section">
-    <canvas id="chart_power_management_chips" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
+    <canvas id="chart_power_management_chips" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
     <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
-   <strong>Buy/Sell Zone details:</strong><span style="margin-right: 10px; color: #666;">NVTS ($10.31)</span><span style="margin-right: 10px; color: #666;">ON ($61.89)</span><span style="margin-right: 10px; color: #666;">AOSL ($21.98)</span><button class="ticker-button" onclick="toggleDilutionInline(this, 'COHR', event, '191.62'); return false;" style="margin-right: 10px;">COHR</button><span style="margin-right: 10px; color: #666;">MPWR ($959.08)</span><span style="margin-right: 10px; color: #666;">POWI ($40.44)</span><button class="ticker-button" onclick="toggleDilutionInline(this, 'ALAB', event, '165.77'); return false;" style="margin-right: 10px;">ALAB</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'INDI', event, '4.05'); return false;" style="margin-right: 10px;">INDI</button></div>
+   <strong>Buy/Sell Zone details:</strong><span style="margin-right: 10px; color: #666;">NVTS ($9.92)</span><span style="margin-right: 10px; color: #666;">ON ($61.11)</span><span style="margin-right: 10px; color: #666;">AOSL ($22.20)</span><button class="ticker-button" onclick="toggleDilutionInline(this, 'COHR', event, '178.99'); return false;" style="margin-right: 10px;">COHR</button><span style="margin-right: 10px; color: #666;">MPWR ($967.11)</span><span style="margin-right: 10px; color: #666;">POWI ($41.03)</span><button class="ticker-button" onclick="toggleDilutionInline(this, 'ALAB', event, '158.79'); return false;" style="margin-right: 10px;">ALAB</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'INDI', event, '3.88'); return false;" style="margin-right: 10px;">INDI</button></div>
 
 </div>
 
@@ -830,67 +875,64 @@
 <div class="industry-section" id="lidar_sensing"><h2>3. Lidar Sensing <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Automotive LiDAR &amp; sensing hardware: aeva/oust/arbe; 3D sensing &amp; mapping technologies: lazr/mvis/lidr</i></p>
 <h3 class="news-section">Recent News </h3>
-<div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for the requested companies:
+<div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for the requested US NYSE/NASDAQ stocks, bulleted and with highlighted dates:
 
-**AEVA (Aeva Technologies, Inc.)**
-*   **January 6, 2026**: Chief Technology Officer Mina Rezk sold a total of 321,723 shares of common stock at a price of $12.9564, for a total value of $4,168,371.
-*   **January 1, 2026**: Mina Rezk acquired 150,602 shares of Aeva Technologies through a fully vested restricted stock unit award at no cost.
-*   **Recent News (undated)**: Aeva reported its Q3 2025 earnings, revealing a revenue of $3.6 million.
-*   **Recent News (undated)**: The company secured an exclusive contract to supply LiDAR technology to a top European automaker, extending into the mid-2030s, with production slated to begin in 2028. This multi-year agreement designates Aeva as the exclusive Tier-1 supplier for the automaker&#x27;s global vehicle platform, excluding China.
-*   **Recent News (undated)**: Aeva&#x27;s 4D LiDAR technology has been chosen for integration into NVIDIA&#x27;s DRIVE Hyperion autonomous vehicle platform.
-*   **Recent News (undated)**: Strategic initiatives received a boost from a $100 million investment by Apollo Global Management, increasing its liquidity to approximately $270 million.
+**AEVA (Aeva Inc.)**
 
-**LAZR (Luminar Technologies, Inc.)**
-*   **January 5, 2026**: Luminar Technologies, Inc. filed an 8-K (Current Report).
-*   **December 15, 2025**: Luminar Technologies filed an amendment to a previously issued report to add copies of key agreements and press releases related to Chapter 11 agreements.
-*   **December 8, 2025**: Luminar Technologies entered into new forbearance agreements with holders of its senior secured notes, extending the forbearance period related to missed interest payments through December 10, 2025, with an option for further extension through December 14, 2025.
-*   **December 3, 2025**: Luminar entered into executive retention agreements with Chief Executive Officer Paul Ricci, who received a lump sum retention cash bonus of $850,000, and Chief Financial Officer Thomas Beaudoin, who received $400,000.
-*   **November 24, 2025**: Luminar CFO Thomas Beaudoin disclosed no ownership in a Form 3 filing.
-*   **November 13, 2025**: Luminar Technologies filed its Q3 2025 10-Q, reporting ongoing liquidity stress and including a going concern warning. Preliminary Q3 2025 results indicated revenue in the range of $18.0–$19.0 million, total debt of approximately $429.2 million, and cash and marketable securities of approximately $74.0 million as of September 30, 2025.
-*   **October 29, 2025**: The company committed to a plan to reduce its workforce by approximately 25% to reduce operating costs, with completion expected by year-end 2025.
-*   **October 30, 2025**: Luminar secured forbearance through November 6, 2025, from noteholders after missing the October 15 interest payment on its second-lien notes.
-*   **Undated (related to SEC filings)**: The company received a subpoena from the SEC for documents in connection with an investigation.
+*   **January 6, 2026**: Aeva introduced Omni, the first compact wide-view short-range 4D LiDAR sensor for Physical AI Applications.
+*   **January 5, 2026**: Aeva and NVIDIA announced their collaboration to integrate Aeva&#x27;s 4D LiDAR as a reference sensor within the NVIDIA DRIVE Hyperion Platform Ecosystem.
+*   **January 5, 2026**: Multiple Form 4 SEC filings were made, reporting statements of changes in beneficial ownership of securities.
+*   **January 2, 2026**: CFO Saurabh Sinha sold 12,147 shares of Aeva Technologies stock.
+*   **December 3, 2025**: An 8-K SEC filing was made, reporting an unscheduled material event or corporate event.
+*   **November 5, 2025**: Aeva announced that funds managed by Apollo would invest $100 million in 4.375% Convertible Senior Notes to support Aeva&#x27;s commercial momentum.
+
+**LAZR (Luminar Technologies Inc.)**
+
+*   **January 5, 2026**: Luminar Technologies, Inc. filed a Current Report on Form 8-K.
+*   **December 15, 2025**: Luminar announced the sale of its Photonics Business to Quantum Computing Inc. for $110 million.
+*   **December 15, 2025**: Luminar Technologies, Inc. initiated voluntary Chapter 11 proceedings to facilitate a value-maximizing sale process.
+*   **December 8, 2025**: Luminar Technologies entered into its fifth forbearance agreements with noteholders, as detailed in an SEC filing.
+*   **December 1, 2025**: An Initial Statement of Beneficial Ownership of Securities (Form 3) was filed by Abrams Merrill Elizabeth.
+*   **November 26, 2025**: Luminar Technologies, Inc. filed a Current Report on Form 8-K.
+*   **November 24, 2025**: Initial Statements of Beneficial Ownership of Securities (Form 3) were filed by BEAUDOIN THOMAS L and Ferrari Patricia.
+*   **November 13, 2025**: Luminar reported its Q3&#x27;25 Financials and filed its 10-Q Quarterly Report.
 
 **MVIS (MicroVision, Inc.)**
-*   **December 16, 2025**: MicroVision reported commercial momentum in Industrial, Security &amp; Defense.
-*   **November 21, 2025**: MicroVision, Inc. filed an 8-K (Current Report).
-*   **November 12, 2025**: MicroVision, Inc. filed a 10-Q (Quarterly Report).
-*   **November 11, 2025**: MicroVision announced its Third Quarter 2025 Results and held its Q3 2025 Financial and Operating Results Call.
-*   **November 10, 2025**: MicroVision announced collaboration with a leading photonics ecosystem to acquire a FMCW Lidar Business.
-*   **November 6, 2025**: MicroVision established a new Aerial Systems Team and a Virginia Office to support Defense initiatives.
 
-**LIDR (AEye, Inc.)**
-*   **January 6, 2026**: AEye announced it will showcase its Apollo one-kilometer Lidar integrated with the NVIDIA AGX DRIVE Thor™ automotive AI compute platform at CES to enable next-generation physical AI for mobility.
-*   **December 30, 2025**: AEye, Inc. filed a prospectus supplement aimed at increasing the number of shares available for sale under its Sales Agreement with A.G.P./Alliance Global Partners, looking to offer up to $5.23 million worth of its common stock.
-*   **December 12, 2025**: AEye, Inc. reported that a director sold 32,000 shares of common stock.
-*   **December 10, 2025**: AEye, Inc. filed an 8-K (Current Report).
-*   **December 4, 2025**: AEye, Inc. filed an 8-K (Current Report).
-*   **November 17, 2025**: AEye CEO Husain reported RSU vesting and holds 316,979 LIDR shares.
-*   **November 15, 2025**: The CFO disposed of 2,788 shares to cover taxes on a restricted stock unit vesting.
-*   **November 6, 2025**: AEye reported its financial results for the third quarter ended September 30, 2025. Key financials included a GAAP net loss of $(9.3)M, non-GAAP net loss of $(5.4)M, Q3 revenue of $50K, and cash, cash equivalents, and marketable securities of $84.3M as of quarter-end. The company also provided guidance for an expected full-year 2025 cash burn of $27M–$29M.
-*   **Undated (but recent)**: AEye&#x27;s Apollo LiDAR system achieved an industry-first by detecting objects at a kilometer away with high resolution, while being half the size of competing systems, with samples delivered to partners.
+*   **December 16, 2025**: MicroVision reported commercial momentum in its Industrial, Security &amp; Defense sectors.
+*   **November 21, 2025**: MicroVision, Inc. filed a Current Report on Form 8-K.
+*   **November 12, 2025**: MicroVision, Inc. filed its 10-Q Quarterly Report.
+*   **November 11, 2025**: MicroVision announced its Third Quarter 2025 Results.
+*   **November 10, 2025**: MicroVision collaborated with a leading photonics ecosystem to acquire an FMCW Lidar Business.
+*   **November 6, 2025**: MicroVision established a new Aerial Systems Team and Virginia Office to support defense initiatives.
+
+**LIDR**
+
+*   There is no publicly traded company with the stock ticker &quot;LIDR&quot; on NYSE or NASDAQ.
 
 **OUST (Ouster, Inc.)**
-*   **December 11, 2025**: An SEC filing was made concerning Ouster (Subject) Pacala Charles Angus (Reporting).
+
+*   **January 6, 2026**: Multiple Form 4 SEC filings were made, reporting statements of changes in beneficial ownership of securities.
+*   **December 19, 2025**: Ouster, Inc. announced a fourth amendment to its headquarters lease agreement in San Francisco, extending the term to August 31, 2034, and initially decreasing the annual base rent starting **January 1, 2026**. This was filed as an 8-K SEC filing.
 *   **December 10, 2025**: Ouster appointed Phil Eyler to its Board of Directors.
 *   **December 9, 2025**: Ouster announced its participation in the Northland Growth Conference 2025.
 *   **November 4, 2025**: Ouster announced its results for the Third Quarter 2025.
-*   **August 15, 2025**: Director Susan Heystee reported the sale of common stock.
-*   **August 7, 2025**: Ouster announced its Q2 2025 earnings release via Exhibit 99.1 in an 8-K filing.
+*   **August 1, 2025**: Ouster announced upcoming investor events, including participation in the Oppenheimer 28th Annual Technology, Internet &amp; Communications Conference, J.P. Morgan 2025 Auto Conference, and Rosenblatt Age of AI Conference.
 
 **ARBE (Arbe Robotics Ltd.)**
-*   **January 5, 2026**: Arbe announced it is combining its market-leading radar solution with powerful NVIDIA AI computing, creating an advanced platform for AI-based driving.
-*   **December 30, 2025**: Arbe successfully completed a $15.7 Million Private Placement Follow-on Offering of its Series A Convertible Bonds.
+
+*   **January 5, 2026**: Arbe announced it combines its market-leading radar solution with powerful NVIDIA AI Computing, creating an advanced platform for AI-based driving.
+*   **December 30, 2025**: Arbe successfully completed a $15.7 million private placement follow-on offering of its Series A Convertible Bonds.
 *   **December 29, 2025**: A China-based state-owned automaker selected Hirain and Arbe&#x27;s Ultra High-Definition Radar for its L4 Vehicle Program.
-*   **December 8, 2025**: Arbe Robotics outlined a bond deadline extension and lower coupon terms for its series A convertible bonds.
-*   **November 17, 2025**: Arbe announced its Q3 2025 financial results. Revenues for Q3 2025 were $0.3 million, compared to $0.1 million in Q3 2024. As of September 30, 2025, Arbe had $52.6 million in cash and cash equivalents and short-term bank deposits.</div>
+*   **December 8, 2025**: Arbe Robotics outlined a bond deadline extension and lower coupon terms in an SEC Filing (Form 6-K).
+*   **December 1, 2025**: A Report of Proposed Sale of Securities (Form 144) was filed.</div>
 <h3 class="fundamentals-section">Fundamentals</h3>
 <div id="fundamentals-table-lidar_sensing" class="fundamentals-section">Loading Fundamentals...</div>
 
 <div id="fundamentals-charts-lidar_sensing" class="fundamentals-section">
-    <canvas id="chart_lidar_sensing" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
+    <canvas id="chart_lidar_sensing" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
     <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
-   <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'AEVA', event, '16.99'); return false;" style="margin-right: 10px;">AEVA</button><span style="margin-right: 10px; color: #666;">INVZ ($1.13)</span><button class="ticker-button" onclick="toggleDilutionInline(this, 'MVIS', event, '0.92'); return false;" style="margin-right: 10px;">MVIS</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'LIDR', event, '2.19'); return false;" style="margin-right: 10px;">LIDR</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'OUST', event, '25.70'); return false;" style="margin-right: 10px;">OUST</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'ARBE', event, '1.20'); return false;" style="margin-right: 10px;">ARBE</button></div>
+   <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'AEVA', event, '17.81'); return false;" style="margin-right: 10px;">AEVA</button><span style="margin-right: 10px; color: #666;">INVZ ($1.18)</span><button class="ticker-button" onclick="toggleDilutionInline(this, 'MVIS', event, '0.95'); return false;" style="margin-right: 10px;">MVIS</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'LIDR', event, '2.24'); return false;" style="margin-right: 10px;">LIDR</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'OUST', event, '29.36'); return false;" style="margin-right: 10px;">OUST</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'ARBE', event, '1.25'); return false;" style="margin-right: 10px;">ARBE</button></div>
 
 </div>
 
@@ -902,175 +944,134 @@
 <div class="industry-section" id="autonomous_driving"><h2>4. Autonomous Driving <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Autonomous driving / self-driving tech</i></p>
 <h3 class="news-section">Recent News </h3>
-<div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for the requested companies as of January 8, 2026:
+<div class="markdown-raw-content news-section">Please find below the latest announcements and news for MBLY, AUR, TSLA, XPEV, and KDK, as of today, **Friday, January 9, 2026**.
+
+**Important Note:** The SEC EDGAR system, the New York Stock Exchange (NYSE), and Nasdaq are all closed today, **January 9, 2026**, in observance of a federal holiday. Therefore, no new SEC filings would have been accepted on this date.
+
+Here are the recent announcements and news for each company:
 
 **Mobileye Global Inc. (MBLY)**
+*   **January 6, 2026**: Mobileye Global Inc. reported in a presentation at Mobileye Live at CES 2026 that its estimated revenue for the fiscal year ending December 27, 2025, was slightly below $2 billion. This is a general indication, with detailed results expected in an upcoming earnings call. Mobileye also announced its intention to acquire Mentee Robotics to accelerate its physical AI leadership.
+*   **January 5, 2026**: Mobileye announced it secured a major U.S.-based automaker as a customer for its EyeQ6H-powered advanced driver assistance systems (ADAS). This marks the second top-10 global automaker to adopt Mobileye&#x27;s EyeQ6H solution, with an estimated future delivery of over 19 million EyeQ6H-based Surround systems.
+*   **December 18, 2025**: Mobileye announced it would host Mobileye Live at CES 2026 on **January 6, 2026**, where President and CEO Prof. Amnon Shashua would present the company&#x27;s vision for physical AI, technology roadmap, and next-generation chip architecture.
+*   **December 9, 2025**: Several Form 4 filings (Statement of changes in beneficial ownership of securities) were made by Mobileye Global (Issuer) and various reporting individuals.
 
-*   **January 6, 2026:** Mobileye announced its entry into a definitive agreement to acquire Mentee Robotics Ltd., an AI-first humanoid robotics company, for a total consideration of $900 million. This acquisition aims to accelerate Mobileye&#x27;s leadership in physical AI across autonomous driving and humanoid robotics. Mobileye expects this transaction to modestly increase its operating expenses in 2026 by a low-single-digit percentage.
-*   **December 5, 2025:** A director of Mobileye Global Inc. reported receiving 20,300 shares of Class A common stock through a restricted stock unit (RSU) grant.
-*   **October 23, 2025:** Mobileye Global Inc. filed a Form 10-Q for its quarterly report and a Form 8-K current report.
-*   **September 4, 2025:** An initial statement of beneficial ownership (Form 3) was filed for Chandrasekaran Nagasubramaniyan, identified as a Director.
+**Aurora Innovation, Inc. (AUR)**
+*   **January 7, 2026**: There was unusually large options trading activity, with investors buying 21,273 call options on Aurora, coinciding with a stock rise of about 9%. Additionally, CEO Christopher Urmson purchased 258,000 shares for approximately $1.0 million, as disclosed in an SEC filing.
+*   **December 8, 2025**: Aurora announced a commercial agreement with Detmar Logistics to deploy an expanded fleet of Aurora Driver-powered trucks for autonomously hauling frac sand in the Permian Basin, starting with supervised runs in early 2026 and transitioning to driverless operations in Q2 2026. Detmar committed to 30 Aurora Driver-powered trucks in 2026.
 
-**Aurora Innovation Inc. (AUR)**
+**Tesla, Inc. (TSLA)**
+*   **January 8, 2026**: Active options trading for Tesla saw a total volume of 2 million options, with call options accounting for 54.69% and put options for 45.31%.
+*   **January 2, 2026**: Tesla announced its fourth-quarter and full-year 2025 production, deliveries, and deployments. In Q4, Tesla produced over 434,000 vehicles, delivered over 418,000 vehicles, and deployed 14.2 GWh of energy storage products, a record for deployments. Total energy storage deployments for 2025 were 46.7 GWh. Tesla also stated it would post its financial results for Q4 2025 after market close on **Wednesday, January 28, 2026**.
+*   **January 1, 2026**: An analyst downgrade by President Capital led to Tesla shares trading down 4.1%.
 
-*   **January 2, 2026:** A Statement of changes in beneficial ownership of securities (Form 4) was filed.
-*   **November 21, 2025:** Christopher Urmson, CEO of Aurora Innovation, purchased 258,000 shares at an average of $3.88, totaling approximately $1.0 million. This was disclosed in an SEC filing.
-*   **October 28, 2025:** Aurora announced it is expanding its driverless trucking service from Fort Worth to El Paso.
-*   **October 7, 2025:** Aurora announced it would host a Third Quarter 2025 Business Review Conference Call on October 28, 2025.
-*   **August 28, 2025:** Aurora and McLeod Software announced the industry&#x27;s first Transportation Management System for self-driving trucks.
-
-**Tesla Inc. (TSLA)**
-
-*   **January 6, 2026:** A statement of changes in beneficial ownership of securities (Form 4) was filed, with a report date of January 2, 2026.
-*   **January 2, 2026:** A filing for proposed sale of securities under Rule 144 was made.
-*   **January 2, 2026:** A Current Report (Form 8-K) was filed.
-*   **November 6, 2025:** Elon Musk acquired 423,743,904 shares of restricted stock pursuant to the company&#x27;s 2025 CEO Performance Award.
-*   **November 7, 2025:** An 8-K Current Report was filed.
-*   **November 10, 2025:** Tesla filed a Form S-8 to register equity under two plans, including 60,000,000 shares for eligible service providers and 423,743,904 shares for Elon Musk under the 2025 CEO Performance Award.
-
-**Xpeng Inc. (XPEV)**
-
-*   **January 2, 2026:** Xpeng Inc. filed a Current Report (Foreign Issuer) on Form 6-K.
-*   **January 1, 2026:** XPENG announced its vehicle delivery results for December and the full year 2025, with 429,445 vehicles delivered in 2025, a 126% increase year-over-year.
-*   **December 29, 2025:** XPENG-Peking University collaborative research on a novel visual token pruning framework for autonomous driving was accepted by AAAI 2026.
-*   **December 15, 2025:** XPENG initiated local EV production in Malaysia, marking a strategic milestone in its ASEAN expansion.
-*   **December 1, 2025:** XPENG announced vehicle delivery results for November 2025.
-*   **November 17, 2025:** XPENG reported its Third Quarter 2025 Unaudited Financial Results.
+**XPeng Inc. (XPEV)**
+*   **January 9, 2026**: XPeng P7+ made its global debut, launching simultaneously in China, Belgium, and Germany. This new electric vehicle model features advanced AI-powered driving assistance and intelligent cockpit technologies.
+*   **January 8, 2026**: XPeng Motors announced the global launch of the XPENG P7+, emphasizing its AI-driven intelligent mobility.
+*   **January 6, 2026**: Freedom Capital Markets upgraded its outlook for XPeng Inc. - Depositary Receipt (NYSE:XPEV) from Hold to Buy.
+*   **January 5, 2026**: XPeng completed trial production of the updated 2026 P7+ at its Austrian facility as it prepared for its European launch.
+*   **January 4, 2026**: XPeng announced the launch of updated versions of its P7+ sedan and extended-range G7 SUV in China on January 8 and in Europe on **January 9**.
+*   **January 1, 2026**: XPeng announced its vehicle delivery results for December and full year 2025. The company delivered 37,508 vehicles in December 2025, a 2% year-over-year increase, and total annual deliveries in 2025 reached 429,445 units, a 126% increase over the prior year. Overseas deliveries for 2025 were 45,008 vehicles, up 96% year-over-year.
 
 **Kodiak AI, Inc. (KDK)**
-
-*   **January 5, 2026:** Kodiak announced a strategic agreement with Bosch to scale autonomous trucking hardware and sensor solutions.
-*   **January 2, 2026:** A Statement of changes in beneficial ownership of securities (Form 4) was filed for Major Zsuzsanna.
-*   **December 31, 2025:** Kodiak AI, Inc. entered into a senior secured venture loan and security agreement with Horizon Technology Finance Corporation for a term loan facility of up to $30.0 million. A portion of the proceeds was used to repay existing indebtedness, and the remainder is for working capital and general corporate purposes.
-*   **December 31, 2025:** Kodiak AI announced the refinancing of its senior debt facility.
-*   **December 18, 2025:** Kodiak AI and Verizon Business partnered to transform trucking with autonomous technology and IoT connectivity.</div>
+*   **January 5, 2026**: Kodiak AI, Inc. announced an agreement with Bosch to collaborate on and scale the manufacturing of a production-grade, redundant autonomous platform for autonomous trucking hardware and sensor solutions. A Kodiak Driver-powered autonomous truck will be on display at CES 2026 from **January 6-9**.
+*   **December 31, 2025**: Kodiak AI, Inc. entered into a senior secured venture loan and security agreement with Horizon Technology Finance Corporation, providing a term loan facility of up to $30.0 million. The company borrowed $30.0 million on the closing date, with proceeds used to repay existing indebtedness and for working capital. The loan accrues interest at the prime rate plus 3.50% and is repayable in monthly interest-only payments from **February 1, 2026**, until **July 1, 2028**.</div>
 <h3 class="fundamentals-section">Fundamentals</h3>
 <div id="fundamentals-table-autonomous_driving" class="fundamentals-section">Loading Fundamentals...</div>
 
 <div id="fundamentals-charts-autonomous_driving" class="fundamentals-section">
-    <canvas id="chart_autonomous_driving" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
+    <canvas id="chart_autonomous_driving" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
     <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
-   <strong>Buy/Sell Zone details:</strong><span style="margin-right: 10px; color: #666;">MBLY ($12.24)</span><span style="margin-right: 10px; color: #666;">AUR ($4.59)</span><span style="margin-right: 10px; color: #666;">TSLA ($431.41)</span><span style="margin-right: 10px; color: #666;">XPEV ($19.88)</span><span style="margin-right: 10px; color: #666;">KDK ($9.61)</span></div>
+   <strong>Buy/Sell Zone details:</strong><span style="margin-right: 10px; color: #666;">MBLY ($11.31)</span><span style="margin-right: 10px; color: #666;">AUR ($4.71)</span><span style="margin-right: 10px; color: #666;">TSLA ($434.16)</span><span style="margin-right: 10px; color: #666;">XPEV ($19.99)</span><span style="margin-right: 10px; color: #666;">KDK ($10.04)</span></div>
 
 </div>
 
 <div class="charts-section">
-    <h3 class="charts-section">Technicals & charts <small><i>(Wed, 31 Dec)</i></small></h3>
+    <h3 class="charts-section">Technicals & charts <small><i>(Thu, 08 Jan)</i></small></h3>
     <img src="screenshots/autonomous_driving.png" alt="Autonomous Driving Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
 <div class="industry-section" id="uas_defense_robotics"><h2>5. Uas Defense Robotics <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Defense &amp; aerospace technology / military systems</i></p>
 <h3 class="news-section">Recent News </h3>
-<div class="markdown-raw-content news-section">Here are today&#x27;s/latest announcements and SEC filings for the requested NYSE/NASDAQ stocks, as of January 8, 2026:
+<div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for the specified companies as of January 9, 2026:
 
-*   **DPRO (Draganfly Inc.)**
-    *   **January 5, 2026:** Draganfly Inc. filed a 6-K - Report of Foreign Issuer.
+**ONDS (Ondas Holdings Inc.)**
+*   **January 7, 2026:** Ondas announced its CEO, Eric Brock, will participate in a fireside chat at the 28th Annual Needham Growth Conference on January 14, 2026.
+*   **January 5, 2026:** Ondas Holdings Inc. will host a virtual OAS Investor Day on January 16, 2026, to provide an updated 2026 business plan and financial outlook, focusing on its Ondas Autonomous Systems (OAS) business unit and Core+ Strategic Growth Program.
+*   **January 5, 2026:** Ondas Holdings Inc. filed multiple SEC documents, including a Form 144, an 8-K current report with exhibits, and a 424B7 prospectus.
+*   **January 2, 2026:** Ondas Holdings Inc. announced its plan to change its name to Ondas Inc. and establish West Palm Beach as its corporate headquarters.
+*   **January 2, 2026:** Ondas Holdings Inc. reported that its subsidiary, Ondas Networks Inc., amended the maturity dates of several outstanding notes to January 15, 2026.
 
-*   **RCAT (Red Cat Holdings, Inc.)**
-    *   **January 7, 2026:** Red Cat Holdings is highlighted as an innovator in counter-drone technology and AI-driven autonomy, focusing on military and security drones. Recent successes include selection for the U.S. Army&#x27;s Short Range Reconnaissance program, partnerships with Palantir for GPS-denied navigation, and the launch of its Blue Ops maritime division.
+**KTOS (Kratos Defense &amp; Security Solutions, Inc.)**
+*   **January 8, 2026:** Kratos Defense &amp; Security Solutions, Inc. announced strong support for policies prioritizing reinvestment in national defense capabilities over stock buybacks by defense contractors, reaffirming its capital allocation philosophy.
+*   **January 8, 2026:** Kratos Defense &amp; Security Solutions, Inc. announced that Northrop Grumman was competitively awarded the U.S. Marine Corps&#x27; Marine Air-Ground Task Force Uncrewed Expeditionary Tactical Aircraft (MUX TACAIR) Collaborative Combat Aircraft (CCA), which will integrate Kratos&#x27; Valkyrie uncrewed aerial system.
+*   **January 8, 2026:** Kratos increased its full-year 2025 revenue growth forecast to between 14% and 15% and provided a preliminary 2026 forecast of 15% to 20% organic revenue growth.
 
-*   **ZENA (ZenaTech, Inc.)**
-    *   **January 6, 2026:** ZenaTech, Inc. announced its strategic alignment with recent U.S. government restrictions on foreign-made drone equipment, potentially benefiting its ZenaDrone subsidiary&#x27;s position in U.S. defense and government markets. The company referenced a December 22, 2025, update from the FCC&#x27;s Public Safety and Homeland Security Bureau to its Covered List, which restricts authorization of new foreign-made unmanned aircraft systems. ZenaTech is also pursuing Blue UAS certification.
-    *   **January 6, 2026:** ZenaTech&#x27;s ZenaDrone Subsidiary is positioned for U.S. Defense and Government Demand for NDAA-Compliant Drones following the recent FCC Public Notice.
+**AVAV (AeroVironment, Inc.)**
+*   **January 2, 2026:** AeroVironment, Inc. filed a Form 4, a statement of changes in beneficial ownership of securities.
 
-*   **ONDS (Ondas Holdings Inc.)**
-    *   **January 7, 2026:** Ondas announced that CEO Eric Brock will participate in a fireside chat at the 28th Annual Needham Growth Conference on **January 14, 2026**.
-    *   **January 5, 2026:** Ondas Holdings filed a prospectus supplement with the U.S. Securities and Exchange Commission related to its existing registration statement on Form S-3ASR, covering the potential resale of common stock by certain stockholders.
-    *   **January 5, 2026:** Ondas Holdings is set to host an OAS Investor Day on **January 16, 2026**, where it will present an updated business plan, its Core+ Strategic Growth Program, and the 2026 Financial Outlook.
-    *   **January 5, 2026:** A portion of approximately 7.7 million shares of Ondas Holdings common stock, resulting from exchange agreements with holders of convertible promissory notes, warrants, and common stock of its subsidiary Ondas Autonomous Systems Inc. (OAS), were scheduled for issuance.
-    *   **January 2, 2026:** Ondas Holdings announced its plan to change its name to Ondas Inc. and establish West Palm Beach, Florida, as its new corporate headquarters.
+**DPRO (Draganfly Inc.)**
+*   No specific announcements, news, or SEC filings were found for Draganfly Inc. on or around January 9, 2026. The latest SEC filings available are from October 2025.
 
-*   **AVAV (AeroVironment, Inc.)**
-    *   **January 2, 2026:** AeroVironment filed a Form 4, Statement of changes in beneficial ownership of securities.
+**RCAT (Red Cat Holdings, Inc.)**
+*   No specific announcements, news, or SEC filings were found for Red Cat Holdings, Inc. on or around January 9, 2026.
 
-*   **KTOS (Kratos Defense &amp; Security Solutions, Inc.)**
-    *   **January 7, 2026:** Kratos Defense &amp; Security Solutions&#x27; President and CEO, Eric M. DeMarco, sold a total of $18,053,805 in company stock on **January 5 and 6, 2026**, as per a new SEC filing. The transactions involved 198,199 shares of common stock.
-    *   **January 7, 2026:** CEO Eric Demarco sold 8,301 shares of the company&#x27;s stock in a transaction on **January 5, 2026**.
-    *   **January 7, 2026:** Kratos Defense &amp; Security Solutions is noted for its high-performance unmanned systems, including tactical and target drones like the XQ-58 Valkyrie, and its provision of avionics and mission systems for edge operations.
+**ZENA (ZenaTech, Inc.)**
+*   No specific announcements, news, or SEC filings were found for ZenaTech, Inc. on or around January 9, 2026.
 
-*   **UMAC (Unusual Machines, Inc.)**
-    *   **January 5, 2026:** Unusual Machines promoted Stacy Wright to Chief Revenue Officer, effective **January 5, 2026**. In this role, Wright will report to CEO Allan Evans and oversee revenue strategy across consumer, enterprise, and defense markets, focusing on scaling U.S.-based manufacturing and managing inventory and capacity investments.
-    *   **December 31, 2025:** Unusual Machines, Inc. reported multiple Form 4 SEC filings detailing insider trading activity.
+**UMAC (Unusual Machines Inc.)**
+*   No specific announcements, news, or SEC filings were found for Unusual Machines Inc. on or around January 9, 2026. The most recent filings identified were insider transactions from August 2025.
 
-*   **SPAI (Safe Pro Group Inc.)**
-    *   **January 7, 2026:** Safe Pro Group Inc. has received an average &quot;Buy&quot; recommendation from five ratings firms.
-    *   **December 18, 2025:** Safe Pro Group&#x27;s Board of Directors approved a share repurchase plan, authorizing the company to buy back up to $3.00 million in shares.</div>
+**SPAI (Safe Pro Group Inc.)**
+*   No specific announcements, news, or SEC filings were found for Safe Pro Group Inc. on or around January 9, 2026. The latest press release was from December 23, 2025, and the latest SEC filing was from December 18, 2025.</div>
 <h3 class="fundamentals-section">Fundamentals</h3>
 <div id="fundamentals-table-uas_defense_robotics" class="fundamentals-section">Loading Fundamentals...</div>
 
 <div id="fundamentals-charts-uas_defense_robotics" class="fundamentals-section">
-    <canvas id="chart_uas_defense_robotics" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
+    <canvas id="chart_uas_defense_robotics" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
     <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
-   <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'DPRO', event, '8.29'); return false;" style="margin-right: 10px;">DPRO</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'RCAT', event, '10.45'); return false;" style="margin-right: 10px;">RCAT</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'ZENA', event, '3.35'); return false;" style="margin-right: 10px;">ZENA</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'ONDS', event, '12.18'); return false;" style="margin-right: 10px;">ONDS</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'AVAV', event, '318.48'); return false;" style="margin-right: 10px;">AVAV</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'KTOS', event, '91.44'); return false;" style="margin-right: 10px;">KTOS</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'UMAC', event, '14.68'); return false;" style="margin-right: 10px;">UMAC</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'SPAI', event, '4.66'); return false;" style="margin-right: 10px;">SPAI</button></div>
+   <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'DPRO', event, '9.44'); return false;" style="margin-right: 10px;">DPRO</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'RCAT', event, '11.56'); return false;" style="margin-right: 10px;">RCAT</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'ZENA', event, '3.92'); return false;" style="margin-right: 10px;">ZENA</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'ONDS', event, '14.15'); return false;" style="margin-right: 10px;">ONDS</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'AVAV', event, '347.75'); return false;" style="margin-right: 10px;">AVAV</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'KTOS', event, '107.15'); return false;" style="margin-right: 10px;">KTOS</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'UMAC', event, '14.65'); return false;" style="margin-right: 10px;">UMAC</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'SPAI', event, '5.52'); return false;" style="margin-right: 10px;">SPAI</button></div>
 
 </div>
 
 <div class="charts-section">
-    <h3 class="charts-section">Technicals & charts <small><i>(Wed, 07 Jan)</i></small></h3>
+    <h3 class="charts-section">Technicals & charts <small><i>(Thu, 08 Jan)</i></small></h3>
     <img src="screenshots/uas_defense_robotics.png" alt="Uas Defense Robotics Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
 <div class="industry-section" id="service_robotics"><h2>6. Service Robotics <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Industrial automation, robotics, and service automation technologies, including collaborative robots, warehouse automation, and consumer robotics</i></p>
 <h3 class="news-section">Recent News </h3>
-<div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for the requested NYSE/NASDAQ stocks, as of **January 8, 2026**, excluding stock price changes as standalone news items and disclaimers:
+<div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for the requested NYSE/NASDAQ stocks as of **January 8, 2026**:
 
-### RICHTECH ROBOTICS (RR)
+**Richtech Robotics (RR)**
+*   **January 8, 2026**: Simply Wall St. reported on Richtech Robotics Inc.&#x27;s 10-K filing delay, which was disclosed in December 2025. This delay introduces questions around controls and visibility amid speculation of large-scale contract opportunities and recent robotics innovations, and it complicates the company&#x27;s investment narrative.
+*   **January 8, 2026**: MarketBeat noted that Richtech Robotics Inc.&#x27;s stock price rose 8% during trading on Thursday. While this includes a stock price change, the article also references institutional investors increasing their positions in the company during the 3rd quarter, such as Vanguard Group Inc. and Raymond James Financial Inc.
 
-*   **January 6, 2026**: Richtech Robotics (RR) is anticipated to release its Q4 2025 financial results before the market opens on **January 13, 2026**, with an accompanying earnings call scheduled for **January 16, 2026**.
-*   **January 6, 2026**: MarketBeat has included Richtech Robotics in its preview of the top five stocks to consider in February.
-*   **January 6, 2026**: News reported that Richtech Robotics Inc.&#x27;s stocks were impacted by supply chain disruptions and a recent dip in earnings, though speculations are rising about a future uptick due to potential large-scale contracts.
-*   **December 29, 2025**: The company filed an NT 10-K, indicating a notification that its annual report on Form 10-K would be submitted late.
+**Serve Robotics (SERV)**
+*   No specific announcements or SEC filings for Serve Robotics (SERV) were found dated **January 8, 2026**. The most recent relevant SEC filings and news items identified were from late 2025 or earlier.
 
-### SERV
+**PROCEPT BioRobotics (PRCT)**
+*   **January 6, 2026**: Chicago Capital LLC boosted its stake in PROCEPT BioRobotics Corporation by 175.7% in the third quarter, according to its most recent disclosure with the SEC. The firm acquired an additional 999,873 shares, bringing its total to 1,568,845 shares.
 
-*   **January 7, 2026**: Serve Robotics (SERV) received a &quot;Moderate Buy&quot; consensus rating from analysts, with a price target of $18.80. The company&#x27;s quarterly EPS missed consensus estimates at -$0.54 (versus -$0.37 consensus).
-*   **January 7, 2026**: A Northland analyst issued an &quot;outperform&quot; rating for Serve Robotics, citing the successful deployment of over 2,000 autonomous delivery robots by 2025 and outlining potential growth drivers for 2026. Additionally, short interest in the stock has reportedly eased.
-*   **January 7, 2026**: Serve Robotics began 2026 positively, with plans to expand into additional U.S. cities early in the year, building on its 2025 market expansions.
-*   **December 31, 2025**: Serve Robotics Inc. had several SEC filings, though specific details beyond the filing type were not immediately available in the snippets.
-*   **December 15, 2025**: An insider, Anthony Armenta, sold 5,003 shares of Serve Robotics stock, as disclosed in an SEC filing.
+**Zebra Technologies (ZBRA)**
+*   **January 8, 2026**: MarketBeat reported that Lecap Asset Management Ltd. bought a new stake in shares of Zebra Technologies Corporation during the 3rd quarter, according to its most recent filing with the SEC. The firm purchased 6,374 shares valued at approximately $1,894,000.
 
-### PRCT
-
-*   **December 15, 2025**: PROCEPT BioRobotics (PRCT) was highlighted in an article titled &quot;3 Underrated Robotics Stocks Poised for Huge Gains&quot;.
-*   **December 12, 2025**: UBS initiated coverage on PROCEPT BioRobotics with a &quot;Buy&quot; rating and set a price target of $62.
-*   **December 12, 2025**: Truist Financial maintained a &quot;Buy&quot; rating for PROCEPT BioRobotics but adjusted its price target down to $47 from $50.
-*   **November 4, 2025**: PROCEPT BioRobotics reported its unaudited financial results for the quarter that ended on September 30, 2025, and provided revenue guidance for 2026. The Q3 revenue reached $83.3 million, marking a 43% increase year-over-year.
-*   **November 14, 2025**: A Schedule 13G Statement of Beneficial Ownership was filed by certain investors.
-*   **November 5, 2025**: A Form 10-Q Quarterly Report was filed.
-*   **October 14, 2025**: Aquablation therapy was assigned a Category I CPT code (52XX1), which became effective on **January 1, 2026**, replacing the previous Category III code.
-
-### ZBRA
-
-*   **January 2, 2026**: Forbes suggested Zebra Technologies (ZBRA) as a potentially attractive investment due to strong cash generation, solid fundamentals, and a compelling valuation. The company achieved 4.8% organic sales growth in Q3 2025, and its initial revenues from AI-related initiatives are anticipated in **2026**.
-*   **January 1, 2026**: Truist affirmed its &quot;Hold&quot; rating on Zebra Technologies but lowered its price target, citing closer examination of demand projections for 2026.
-*   **December 19, 2025**: Several Form 4 filings, detailing changes in beneficial ownership of securities, were reported.
-*   **November 11, 2025**: Zebra Technologies published the results of its 18th Annual Global Shopper Study, indicating that retailers consider Generative AI and automation crucial for loss prevention and operational efficiency.
-*   **November 3, 2025**: A Form 4 was filed by the Chief Revenue Officer of Zebra Technologies.
-*   **October 30, 2025**: Zebra Technologies filed an 8-K to report its Amended and Restated By-Laws.
-*   **Early 2026**: Zebra plans to implement Digimarc&#x27;s updated on-scanner software across its retail scanner product line, aiming for enhanced tamper detection and improved items per minute (IPM).
-
-### IRBT
-
-*   **December 15, 2025**: iRobot Corp. (IRBT) filed for Chapter 11 bankruptcy protection and entered into a Restructuring Support Agreement (RSA) to be acquired by its primary Chinese supplier, Shenzhen PICEA Robotics Co. Under this proposal, the company&#x27;s common stock will be nullified.
-*   **December 15, 2025**: iRobot announced that it intends to continue its operations throughout the pre-packaged Chapter 11 bankruptcy process.
-*   **December 15, 2025**: Multiple 8-K filings reported material events related to the company.
-*   **December 8, 2025**: A Form 4 filing indicated insider trading activity.
-*   **November 6, 2025**: iRobot released its financial results for the third quarter of 2025.
-*   **October 27, 2025**: An 8-K filing was made concerning the creation of a direct financial obligation or an off-balance sheet arrangement, and updates were provided to the company&#x27;s risk factors.</div>
+**iRobot (IRBT)**
+*   No specific announcements or SEC filings for iRobot (IRBT) were found dated **January 8, 2026**. The most recent relevant SEC filings and news items identified were from late 2025 or earlier.</div>
 <h3 class="fundamentals-section">Fundamentals</h3>
 <div id="fundamentals-table-service_robotics" class="fundamentals-section">Loading Fundamentals...</div>
 
 <div id="fundamentals-charts-service_robotics" class="fundamentals-section">
-    <canvas id="chart_service_robotics" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
+    <canvas id="chart_service_robotics" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
     <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
-   <strong>Buy/Sell Zone details:</strong><span style="margin-right: 10px; color: #666;">RR ($3.42)</span><span style="margin-right: 10px; color: #666;">SERV ($13.47)</span><span style="margin-right: 10px; color: #666;">PRCT ($33.92)</span><span style="margin-right: 10px; color: #666;">ZBRA ($246.96)</span><span style="margin-right: 10px; color: #666;">IRBT ($0.17)</span></div>
+   <strong>Buy/Sell Zone details:</strong><span style="margin-right: 10px; color: #666;">RR ($3.82)</span><span style="margin-right: 10px; color: #666;">SERV ($15.12)</span><span style="margin-right: 10px; color: #666;">PRCT ($34.23)</span><span style="margin-right: 10px; color: #666;">ZBRA ($255.65)</span><span style="margin-right: 10px; color: #666;">IRBT ($N/A)</span></div>
 
 </div>
 
 <div class="charts-section">
-    <h3 class="charts-section">Technicals & charts <small><i>(Thu, 11 Dec)</i></small></h3>
+    <h3 class="charts-section">Technicals & charts <small><i>(Thu, 08 Jan)</i></small></h3>
     <img src="screenshots/service_robotics.png" alt="Service Robotics Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
@@ -1111,9 +1112,9 @@
 <div class="markdown-notes-block notes-section hidden">spce:&gt; $254M ATM on Dec9</div>
 
 <div id="fundamentals-charts-space_launch_systems" class="fundamentals-section">
-    <canvas id="chart_space_launch_systems" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
+    <canvas id="chart_space_launch_systems" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
     <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
-   <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'RKLB', event, '84.07'); return false;" style="margin-right: 10px;">RKLB</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'FLY', event, '27.35'); return false;" style="margin-right: 10px;">FLY</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'MNTS', event, '13.90'); return false;" style="margin-right: 10px;">MNTS</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'SPCE', event, '3.17'); return false;" style="margin-right: 10px;">SPCE</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'LUNR', event, '18.62'); return false;" style="margin-right: 10px;">LUNR</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'RDW', event, '9.83'); return false;" style="margin-right: 10px;">RDW</button></div>
+   <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'RKLB', event, '83.05'); return false;" style="margin-right: 10px;">RKLB</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'FLY', event, '26.68'); return false;" style="margin-right: 10px;">FLY</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'MNTS', event, '11.07'); return false;" style="margin-right: 10px;">MNTS</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'SPCE', event, '3.20'); return false;" style="margin-right: 10px;">SPCE</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'LUNR', event, '18.06'); return false;" style="margin-right: 10px;">LUNR</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'RDW', event, '10.04'); return false;" style="margin-right: 10px;">RDW</button></div>
 
 </div>
 
@@ -1222,9 +1223,9 @@
 <div class="markdown-notes-block notes-section hidden">bksy:&gt; 4M shares convertible at $27</div>
 
 <div id="fundamentals-charts-earth_observation" class="fundamentals-section">
-    <canvas id="chart_earth_observation" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
+    <canvas id="chart_earth_observation" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
     <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
-   <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'PL', event, '22.61'); return false;" style="margin-right: 10px;">PL</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'BKSY', event, '24.26'); return false;" style="margin-right: 10px;">BKSY</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'SPIR', event, '9.61'); return false;" style="margin-right: 10px;">SPIR</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'SATL', event, '2.40'); return false;" style="margin-right: 10px;">SATL</button><span style="margin-right: 10px; color: #666;">ASTS ($85.73)</span><span style="margin-right: 10px; color: #666;">IRDM ($18.00)</span><span style="margin-right: 10px; color: #666;">SATS ($112.16)</span><span style="margin-right: 10px; color: #666;">VSAT ($37.72)</span></div>
+   <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'PL', event, '21.93'); return false;" style="margin-right: 10px;">PL</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'BKSY', event, '24.53'); return false;" style="margin-right: 10px;">BKSY</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'SPIR', event, '10.38'); return false;" style="margin-right: 10px;">SPIR</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'SATL', event, '2.98'); return false;" style="margin-right: 10px;">SATL</button><span style="margin-right: 10px; color: #666;">ASTS ($91.63)</span><span style="margin-right: 10px; color: #666;">IRDM ($18.79)</span><span style="margin-right: 10px; color: #666;">SATS ($118.99)</span><span style="margin-right: 10px; color: #666;">VSAT ($39.05)</span></div>
 
 </div>
 
@@ -1248,9 +1249,9 @@ There are no new announcements or SEC filings dated **January 8, 2026**, or othe
 <div class="markdown-notes-block notes-section hidden">chpt:&gt; Dec12 S3 filed $400M total($150M ATM)</div>
 
 <div id="fundamentals-charts-ev_charging_infrastructure" class="fundamentals-section">
-    <canvas id="chart_ev_charging_infrastructure" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
+    <canvas id="chart_ev_charging_infrastructure" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
     <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
-   <strong>Buy/Sell Zone details:</strong><span style="margin-right: 10px; color: #666;">EVGO ($3.11)</span><span style="margin-right: 10px; color: #666;">BLNK ($0.75)</span><span style="margin-right: 10px; color: #666;">CHPT ($7.00)</span><span style="margin-right: 10px; color: #666;">BEEM ($1.67)</span><span style="margin-right: 10px; color: #666;">ADSE ($11.53)</span></div>
+   <strong>Buy/Sell Zone details:</strong><span style="margin-right: 10px; color: #666;">EVGO ($3.10)</span><span style="margin-right: 10px; color: #666;">BLNK ($0.78)</span><span style="margin-right: 10px; color: #666;">CHPT ($7.07)</span><span style="margin-right: 10px; color: #666;">BEEM ($1.71)</span><span style="margin-right: 10px; color: #666;">ADSE ($11.71)</span></div>
 
 </div>
 
@@ -1310,9 +1311,9 @@ There are no new announcements or SEC filings dated **January 8, 2026**, or othe
 <div class="markdown-notes-block notes-section hidden">achr:&gt; SECTOR not great LL forming</div>
 
 <div id="fundamentals-charts-evtol_air_mobility" class="fundamentals-section">
-    <canvas id="chart_evtol_air_mobility" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
+    <canvas id="chart_evtol_air_mobility" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
     <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
-   <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'ACHR', event, '8.42'); return false;" style="margin-right: 10px;">ACHR</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'JOBY', event, '15.55'); return false;" style="margin-right: 10px;">JOBY</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'EVEX', event, '4.45'); return false;" style="margin-right: 10px;">EVEX</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'EVTL', event, '6.23'); return false;" style="margin-right: 10px;">EVTL</button></div>
+   <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'ACHR', event, '8.68'); return false;" style="margin-right: 10px;">ACHR</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'JOBY', event, '15.06'); return false;" style="margin-right: 10px;">JOBY</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'EVEX', event, '4.45'); return false;" style="margin-right: 10px;">EVEX</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'EVTL', event, '6.33'); return false;" style="margin-right: 10px;">EVTL</button></div>
 
 </div>
 
@@ -1324,48 +1325,28 @@ There are no new announcements or SEC filings dated **January 8, 2026**, or othe
 <div class="industry-section" id="hydrogen_fuel_cells"><h2>11. Hydrogen Fuel Cells <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Hydrogen &amp; fuel cell technology</i></p>
 <h3 class="news-section">Recent News </h3>
-<div class="markdown-raw-content news-section">Here are the latest announcements, news, and SEC filings for the requested companies, as of today, **January 8, 2026**:
+<div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for the requested NYSE/NASDAQ stocks:
 
-### FCEL (FuelCell Energy, Inc.)
+**FCEL (FuelCell Energy Inc.)**
+*   No announcements or SEC filings specifically dated **January 9, 2026**, were found in the search results. The most recent significant event found was a 1-for-10 reverse stock split effective **December 14, 2023**.
 
-*   **January 7, 2026**: FuelCell Energy, Inc. announced the termination of employment with Joshua Dolger, Executive Vice President, General Counsel, and Corporate Secretary, effective **January 6, 2026**. This was reported via an SEC 8-K filing.
-*   **January 2, 2026**: FuelCell Energy&#x27;s General Counsel reported RSU vesting and share withholding, as detailed in an SEC Form 4 filing.
-*   **December 18, 2025**: FuelCell Energy concluded its fiscal year 2025 with revenue growth and is focusing on opportunities within the data center sector. The company also announced its Fourth Quarter and Fiscal Year 2025 results conference call for the same date.
-*   **December 9, 2025**: The CEO and a director of FuelCell Energy acquired common stock through the vesting of equity awards, as per an SEC Form 4 filing.
-*   **December 1, 2025**: FuelCell Energy secured $25 million in repeat EXIM financing for the Gyeonggi Green Energy Fuel Cell Project in Korea.
+**BE (Bloom Energy Corporation)**
+*   No announcements or SEC filings specifically dated **January 9, 2026**, were found in the search results.
+*   **February 15, 2024**: Bloom Energy is scheduled to release its fourth quarter and full year 2023 financial results after market close. The company will also host a conference call and webcast to discuss these results.
 
-### BE (Bloom Energy Corp.)
+**PLUG (Plug Power Inc.)**
+*   **January 8, 2026**: Plug Power Inc. filed a Form S-3 with the U.S. Securities and Exchange Commission (SEC). This filing included a prospectus.
 
-*   There are no specific announcements or SEC filings for Bloom Energy (BE) dated **January 8, 2026**, or very close to it. The most recent significant news includes the company&#x27;s Q3 2025 financial results announced on **October 28, 2025**, and a $5 billion strategic AI infrastructure partnership with Brookfield announced on **October 13, 2025**.
+**HYLN (Hyliion Holdings Corp.)**
+*   No announcements or SEC filings specifically dated **January 9, 2026**, were found in the search results. The most recent significant SEC filing found was a Form 8-K from **December 13, 2023**, detailing a leadership change.
 
-### PLUG (Plug Power Inc.)
+**BW (Broadwind Energy Inc.)**
+*   No announcements or SEC filings specifically dated **January 9, 2026**, were found in the search results.
+*   **December 31, 2023**: A Schedule 13G filing related to beneficial ownership was made.
+*   **November 9, 2023**: The latest SEC filing was a Form 8-K.
 
-*   **January 6, 2026**: Plug Power announced its participation in the Goldman Sachs Energy, CleanTech &amp; Utilities Conference in Miami, Florida. President and CRO Jose Luis Crespo and VP Investor Relations Roberto Friedlander will hold one-on-one meetings with institutional investors.
-*   **December 5, 2025**: Plug Power announced a change in the record date for its special stockholders&#x27; meeting from **December 4, 2025**, to **December 12, 2025**, and rescheduled the meeting from **January 15, 2026**, to **January 29, 2026**. This change was made to provide shareholders additional time to recall shares and ensure broader participation in the voting process, as detailed in an SEC Form 8-K filing.
-*   **December 17, 2025**: Plug Power installed a 5MW GenEco Electrolyzer with Cleanergy Solutions Namibia, establishing Africa&#x27;s first fully integrated green hydrogen facility.
-*   **December 17, 2025 &amp; December 12, 2025**: SEC Form 4 filings indicated insider trading activity.
-*   **December 12, 2025**: Plug Power filed a Definitive Proxy Statement (DEF 14A).
-
-### HYLN (Hyliion Holdings Corp.)
-
-*   **January 7, 2026**: Hyliion Holdings Corp. announced its participation in the 2026 Annual Needham Growth Conference on **January 16, 2026**. Founder and CEO Thomas Healy and CFO Jon Panzer are scheduled to present.
-*   **January 6, 2026**: Hyliion successfully completed the first phase of extensive performance testing, evaluating the KARNO™ Power Module with a mission-representative U.S. Navy load profile.
-
-### BW (Babcock &amp; Wilcox Enterprises, Inc.)
-
-*   **December 19, 2025**: Babcock &amp; Wilcox was awarded a $40 million contract for advanced wet gas scrubbing technology at a Canadian petroleum refinery.
-*   **December 18, 2025**: Babcock &amp; Wilcox Canada was awarded the second portion of a $20 million boiler refurbishment project for a Canadian pulp &amp; paper mill.
-*   **December 8, 2025**: Babcock &amp; Wilcox Enterprises announced the full redemption of all $26 million aggregate principal amount outstanding of its 8.125% Senior Notes due 2026.
-*   **December 8, 2025**: Babcock &amp; Wilcox received a limited notice to proceed to supply CO2 capture technology for an existing power plant in the United States.
-*   **November 5, 2025**: Babcock &amp; Wilcox announced it had raised $67.5 million through its at-the-market (ATM) offering, which opened on **November 5, 2025**.
-
-### BLDP (Ballard Power Systems Inc.)
-
-*   **November 13, 2025**: Ballard Power Systems reported its Q3 2025 results.
-*   **October 15, 2025**: Ballard Power Systems announced a change of transfer agent.
-*   **October 9, 2025**: Ballard Power Systems announced its Q3-2025 Results Conference Call.
-*   **September 17, 2025**: Ballard announced it would launch the FCmove®-SC fuel cell at Busworld, highlighting improved performance and lifecycle cost.
-*   **August 11, 2025**: Ballard Power Systems reported its Q2 2025 results.</div>
+**BLDP (Ballard Power Systems Inc.)**
+*   **January 5, 2026**: Ballard Power Systems Inc. filed a Form F-3 with the SEC.</div>
 <h3 class="fundamentals-section">Fundamentals</h3>
 <div id="fundamentals-table-hydrogen_fuel_cells" class="fundamentals-section">Loading Fundamentals...</div>
 <h3 class="notes-section hidden">Notes </h3>
@@ -1374,9 +1355,9 @@ There are no new announcements or SEC filings dated **January 8, 2026**, or othe
 bw:&gt; announced the full redemption of all $26 million aggregate principal amount outstanding of its 8.125% Senior Notes due 2026 on Dec5</div>
 
 <div id="fundamentals-charts-hydrogen_fuel_cells" class="fundamentals-section">
-    <canvas id="chart_hydrogen_fuel_cells" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
+    <canvas id="chart_hydrogen_fuel_cells" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
     <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
-   <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'FCEL', event, '7.75'); return false;" style="margin-right: 10px;">FCEL</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'BE', event, '108.00'); return false;" style="margin-right: 10px;">BE</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'PLUG', event, '2.28'); return false;" style="margin-right: 10px;">PLUG</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'HYLN', event, '1.94'); return false;" style="margin-right: 10px;">HYLN</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'BW', event, '5.92'); return false;" style="margin-right: 10px;">BW</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'BLDP', event, 'N/A'); return false;" style="margin-right: 10px;">BLDP</button></div>
+   <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'FCEL', event, '7.76'); return false;" style="margin-right: 10px;">FCEL</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'BE', event, '125.80'); return false;" style="margin-right: 10px;">BE</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'PLUG', event, '2.27'); return false;" style="margin-right: 10px;">PLUG</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'HYLN', event, '1.99'); return false;" style="margin-right: 10px;">HYLN</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'BW', event, '7.25'); return false;" style="margin-right: 10px;">BW</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'BLDP', event, 'N/A'); return false;" style="margin-right: 10px;">BLDP</button></div>
 
 </div>
 
@@ -1457,9 +1438,9 @@ bw:&gt; announced the full redemption of all $26 million aggregate principal amo
 <div id="fundamentals-table-batteries_storage_tech" class="fundamentals-section">Loading Fundamentals...</div>
 
 <div id="fundamentals-charts-batteries_storage_tech" class="fundamentals-section">
-    <canvas id="chart_batteries_storage_tech" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
+    <canvas id="chart_batteries_storage_tech" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
     <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
-   <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'QS', event, '10.91'); return false;" style="margin-right: 10px;">QS</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'ENVX', event, '8.08'); return false;" style="margin-right: 10px;">ENVX</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'SES', event, '2.08'); return false;" style="margin-right: 10px;">SES</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'MVST', event, '3.15'); return false;" style="margin-right: 10px;">MVST</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'AMPX', event, '8.90'); return false;" style="margin-right: 10px;">AMPX</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'SLDP', event, '5.04'); return false;" style="margin-right: 10px;">SLDP</button></div>
+   <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'QS', event, '10.76'); return false;" style="margin-right: 10px;">QS</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'ENVX', event, '7.73'); return false;" style="margin-right: 10px;">ENVX</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'SES', event, '2.20'); return false;" style="margin-right: 10px;">SES</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'MVST', event, '3.59'); return false;" style="margin-right: 10px;">MVST</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'AMPX', event, '9.35'); return false;" style="margin-right: 10px;">AMPX</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'SLDP', event, '5.24'); return false;" style="margin-right: 10px;">SLDP</button></div>
 
 </div>
 
@@ -1532,9 +1513,9 @@ bw:&gt; announced the full redemption of all $26 million aggregate principal amo
 te:&gt; 17M shares given to notes. $3B dilution($1.5B ATM) Dec 05</div>
 
 <div id="fundamentals-charts-batteries_storage_sw" class="fundamentals-section">
-    <canvas id="chart_batteries_storage_sw" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
+    <canvas id="chart_batteries_storage_sw" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
     <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
-   <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'ENPH', event, '34.68'); return false;" style="margin-right: 10px;">ENPH</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'STEM', event, '17.96'); return false;" style="margin-right: 10px;">STEM</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'FLNC', event, '20.56'); return false;" style="margin-right: 10px;">FLNC</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'EOSE', event, '13.98'); return false;" style="margin-right: 10px;">EOSE</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'GWH', event, '1.81'); return false;" style="margin-right: 10px;">GWH</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'KULR', event, '3.40'); return false;" style="margin-right: 10px;">KULR</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'TE', event, '7.28'); return false;" style="margin-right: 10px;">TE</button><span style="margin-right: 10px; color: #666;">NRGV ($5.43)</span></div>
+   <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'ENPH', event, '35.78'); return false;" style="margin-right: 10px;">ENPH</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'STEM', event, '16.81'); return false;" style="margin-right: 10px;">STEM</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'FLNC', event, '21.89'); return false;" style="margin-right: 10px;">FLNC</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'EOSE', event, '14.27'); return false;" style="margin-right: 10px;">EOSE</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'GWH', event, '1.92'); return false;" style="margin-right: 10px;">GWH</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'KULR', event, '3.37'); return false;" style="margin-right: 10px;">KULR</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'TE', event, '6.83'); return false;" style="margin-right: 10px;">TE</button><span style="margin-right: 10px; color: #666;">NRGV ($5.19)</span></div>
 
 </div>
 
@@ -1605,14 +1586,14 @@ te:&gt; 17M shares given to notes. $3B dilution($1.5B ATM) Dec 05</div>
 <div class="markdown-notes-block notes-section hidden">atlx:&gt; $200M Offering Dec5 over time</div>
 
 <div id="fundamentals-charts-battery_materials_mining" class="fundamentals-section">
-    <canvas id="chart_battery_materials_mining" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
+    <canvas id="chart_battery_materials_mining" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
     <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
-   <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'ATLX', event, '4.95'); return false;" style="margin-right: 10px;">ATLX</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'ABAT', event, '4.72'); return false;" style="margin-right: 10px;">ABAT</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'ALB', event, '161.57'); return false;" style="margin-right: 10px;">ALB</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'SQM', event, '75.10'); return false;" style="margin-right: 10px;">SQM</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'SGML', event, '15.66'); return false;" style="margin-right: 10px;">SGML</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'ELVR', event, '59.97'); return false;" style="margin-right: 10px;">ELVR</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'LAC', event, '5.59'); return false;" style="margin-right: 10px;">LAC</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'NB', event, '6.62'); return false;" style="margin-right: 10px;">NB</button></div>
+   <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'ATLX', event, '5.16'); return false;" style="margin-right: 10px;">ATLX</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'ABAT', event, '4.41'); return false;" style="margin-right: 10px;">ABAT</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'ALB', event, '159.00'); return false;" style="margin-right: 10px;">ALB</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'SQM', event, '73.62'); return false;" style="margin-right: 10px;">SQM</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'SGML', event, '13.29'); return false;" style="margin-right: 10px;">SGML</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'ELVR', event, '57.49'); return false;" style="margin-right: 10px;">ELVR</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'LAC', event, '5.44'); return false;" style="margin-right: 10px;">LAC</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'NB', event, '6.35'); return false;" style="margin-right: 10px;">NB</button></div>
 
 </div>
 
 <div class="charts-section">
-    <h3 class="charts-section">Technicals & charts <small><i>(Wed, 07 Jan)</i></small></h3>
+    <h3 class="charts-section">Technicals & charts <small><i>(Thu, 08 Jan)</i></small></h3>
     <img src="screenshots/battery_materials_mining.png" alt="Battery Materials Mining Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
 </div>
 </div>
@@ -1653,9 +1634,9 @@ te:&gt; 17M shares given to notes. $3B dilution($1.5B ATM) Dec 05</div>
 <div id="fundamentals-table-Hyperscalers" class="fundamentals-section">Loading Fundamentals...</div>
 
 <div id="fundamentals-charts-Hyperscalers" class="fundamentals-section">
-    <canvas id="chart_Hyperscalers" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
+    <canvas id="chart_Hyperscalers" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
     <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
-   <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'CRWV', event, '77.18'); return false;" style="margin-right: 10px;">CRWV</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'NBIS', event, '96.21'); return false;" style="margin-right: 10px;">NBIS</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'CORZ', event, '16.24'); return false;" style="margin-right: 10px;">CORZ</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'APLD', event, '29.56'); return false;" style="margin-right: 10px;">APLD</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'CIFR', event, '16.08'); return false;" style="margin-right: 10px;">CIFR</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'WULF', event, '12.49'); return false;" style="margin-right: 10px;">WULF</button></div>
+   <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'CRWV', event, '78.36'); return false;" style="margin-right: 10px;">CRWV</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'NBIS', event, '97.99'); return false;" style="margin-right: 10px;">NBIS</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'CORZ', event, '16.62'); return false;" style="margin-right: 10px;">CORZ</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'APLD', event, '32.58'); return false;" style="margin-right: 10px;">APLD</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'CIFR', event, '16.71'); return false;" style="margin-right: 10px;">CIFR</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'WULF', event, '13.08'); return false;" style="margin-right: 10px;">WULF</button></div>
 
 </div>
 
@@ -1722,9 +1703,9 @@ te:&gt; 17M shares given to notes. $3B dilution($1.5B ATM) Dec 05</div>
 <div class="markdown-notes-block notes-section hidden">iren:&gt; 40M shares at $41 CB on Dec 8</div>
 
 <div id="fundamentals-charts-Mining" class="fundamentals-section">
-    <canvas id="chart_Mining" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
+    <canvas id="chart_Mining" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
     <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
-   <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'MARA', event, '10.09'); return false;" style="margin-right: 10px;">MARA</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'CLSK', event, '11.95'); return false;" style="margin-right: 10px;">CLSK</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'BITF', event, '2.79'); return false;" style="margin-right: 10px;">BITF</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'HIVE', event, '3.06'); return false;" style="margin-right: 10px;">HIVE</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'BTBT', event, '2.19'); return false;" style="margin-right: 10px;">BTBT</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'HUT', event, '57.88'); return false;" style="margin-right: 10px;">HUT</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'RIOT', event, '15.27'); return false;" style="margin-right: 10px;">RIOT</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'IREN', event, '43.63'); return false;" style="margin-right: 10px;">IREN</button></div>
+   <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'MARA', event, '10.23'); return false;" style="margin-right: 10px;">MARA</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'CLSK', event, '11.80'); return false;" style="margin-right: 10px;">CLSK</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'BITF', event, '2.87'); return false;" style="margin-right: 10px;">BITF</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'HIVE', event, '3.12'); return false;" style="margin-right: 10px;">HIVE</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'BTBT', event, '2.19'); return false;" style="margin-right: 10px;">BTBT</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'HUT', event, '59.32'); return false;" style="margin-right: 10px;">HUT</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'RIOT', event, '15.35'); return false;" style="margin-right: 10px;">RIOT</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'IREN', event, '45.76'); return false;" style="margin-right: 10px;">IREN</button></div>
 
 </div>
 
@@ -1801,9 +1782,9 @@ te:&gt; 17M shares given to notes. $3B dilution($1.5B ATM) Dec 05</div>
 oklo:&gt; $3.5B shelf registration,Dec 4 $1.5B ATM</div>
 
 <div id="fundamentals-charts-new_nuclear_energy" class="fundamentals-section">
-    <canvas id="chart_new_nuclear_energy" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
+    <canvas id="chart_new_nuclear_energy" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
     <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
-   <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'OKLO', event, '97.60'); return false;" style="margin-right: 10px;">OKLO</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'SMR', event, '19.47'); return false;" style="margin-right: 10px;">SMR</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'NNE', event, '31.36'); return false;" style="margin-right: 10px;">NNE</button><span style="margin-right: 10px; color: #666;">IMSR ($N/A)</span><span style="margin-right: 10px; color: #666;">UEC ($N/A)</span><button class="ticker-button" onclick="toggleDilutionInline(this, 'CCJ', event, '103.94'); return false;" style="margin-right: 10px;">CCJ</button><span style="margin-right: 10px; color: #666;">LEU ($322.97)</span><button class="ticker-button" onclick="toggleDilutionInline(this, 'BWXT', event, '192.24'); return false;" style="margin-right: 10px;">BWXT</button></div>
+   <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'OKLO', event, '109.44'); return false;" style="margin-right: 10px;">OKLO</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'SMR', event, '21.08'); return false;" style="margin-right: 10px;">SMR</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'NNE', event, '34.57'); return false;" style="margin-right: 10px;">NNE</button><span style="margin-right: 10px; color: #666;">IMSR ($N/A)</span><span style="margin-right: 10px; color: #666;">UEC ($N/A)</span><button class="ticker-button" onclick="toggleDilutionInline(this, 'CCJ', event, '111.22'); return false;" style="margin-right: 10px;">CCJ</button><span style="margin-right: 10px; color: #666;">LEU ($303.00)</span><button class="ticker-button" onclick="toggleDilutionInline(this, 'BWXT', event, '199.00'); return false;" style="margin-right: 10px;">BWXT</button></div>
 
 </div>
 
@@ -1815,56 +1796,82 @@ oklo:&gt; $3.5B shelf registration,Dec 4 $1.5B ATM</div>
 <div class="industry-section" id="Mag7"><h2>18. Mag7 <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Large-cap technology companies, including consumer electronics, cloud computing, social media, AI, semiconductor manufacturing, and e-commerce platforms</i></p>
 <h3 class="news-section">Recent News </h3>
-<div class="markdown-raw-content news-section">Here are the latest announcements and SEC filings for the requested companies, as of today, **January 8, 2026**:
+<div class="markdown-raw-content news-section">Here are today&#x27;s/latest dated announcements and SEC filings for the requested US NYSE/NASDAQ stocks, as of **January 9, 2026**, excluding stock price changes as standalone news items and disclaimers.
 
-### **AAPL (Apple Inc.)**
+### Apple Inc. (AAPL)
 
-*   **January 8, 2026**: JPMorgan Chase and Apple announced a deal for Chase to become the new issuer of the Apple Card, taking over from Goldman Sachs. The transition is expected to take approximately 24 months.
-*   **January 8, 2026**: Apple Arcade is set to release new games, including &quot;True Skate+&quot;, &quot;Cozy Caravan,&quot; and &quot;Potion Punch 2+&quot;.
+*   **January 8, 2026**
+    *   Apple announced its 2026 annual shareholder meeting will be held on February 24, as disclosed in an SEC filing. Shareholders are set to vote on the election of the Board of Directors, ratify the appointment of Apple&#x27;s independent registered public accounting firm for 2026, and consider Apple&#x27;s Non-Employee Director Stock Plan, executive compensation, and a shareholder proposal concerning Apple&#x27;s manufacturing operations in China.
+    *   In the accompanying letter to shareholders, CEO Tim Cook highlighted key achievements of 2025, including the launch of the AirPods Pro 3, the iPhone 17 range, and an upgraded M5 Apple Vision Pro. Apple also reported an all-time revenue record of $416.2 billion for the fiscal year 2025.
 
-### **NVDA (NVIDIA Corporation)**
+### NVIDIA Corporation (NVDA)
 
-*   **January 8, 2026**: Reports indicate that China has issued a leaked directive to halt orders for Nvidia&#x27;s H200 AI chips, a move that could significantly impact the market.
-*   **January 7, 2026**: Nvidia CEO Jensen Huang reiterated that the company&#x27;s $500 billion AI demand outlook will not be revised quarterly and has already increased since October 2025. He also stated that approval for H200 chip sales to China would be indicated by purchase orders rather than formal declarations.
-*   **January 7, 2026**: Lenovo and Nvidia unveiled the AI Cloud Gigafactory Programme at CES 2026, designed to accelerate the deployment of production-ready AI services.
-*   **January 6, 2026**: Nvidia&#x27;s CFO, Colette Kress, expressed increased optimism regarding the company&#x27;s 2026 revenue forecast, now more positive than the $500 billion initially projected in October 2025.
-*   **January 6, 2026**: A Form 4 (Statement of Changes in Beneficial Ownership) was filed.
-*   **January 2, 2026**: A Form 144 (Report of proposed sale of securities) was filed.
+*   **January 9, 2026**
+    *   NVIDIA CEO Jensen Huang expressed his acceptance of a proposed California wealth tax, which could entail an $8 billion tax payment for him.
+*   **January 8, 2026**
+    *   China intends to approve certain imports of Nvidia&#x27;s H200 chips for specific commercial applications as early as this quarter, though military, sensitive government agencies, critical infrastructure, and state-owned enterprises will be excluded from these approvals.
+    *   NVIDIA has accelerated the timeline for its &quot;Rubin&quot; AI supercomputer architecture, which is now slated for shipment in the second half of 2026. This architecture promises substantial performance improvements over its predecessor, Blackwell, and will be offered as a complete rack-scale system rather than individual components.
+*   **January 7, 2026**
+    *   UBS AG has introduced Trigger Autocallable Contingent Yield Notes linked to NVIDIA common stock, with a maturity date of January 9, 2029.
+*   **January 6, 2026**
+    *   A Form4 SEC filing was made by NVIDIA.
+*   **January 5, 2026**
+    *   NVIDIA unveiled the NVIDIA Rubin platform, featuring six new chips designed to create an AI supercomputer, aiming for a tenfold reduction in inference token cost and a fourfold reduction in GPUs required for Mixture-of-Experts (MoE) models. Microsoft&#x27;s upcoming Fairwater AI superfactories will integrate NVIDIA Vera Rubin NVL72 rack-scale systems. Additionally, major cloud providers like AWS, Google Cloud, Microsoft, OCI, and NVIDIA Cloud Partners are preparing to deploy Vera Rubin-based instances in 2026.
+*   **January 2, 2026**
+    *   A Form144 SEC filing was made by NVIDIA.
 
-### **META (Meta Platforms, Inc.)**
+### Meta Platforms, Inc. (META)
 
-*   **January 8, 2026**: Meta has paused the international expansion of its Ray-Ban Display glasses due to high demand and limited supply in the United States, prioritizing fulfilling US orders.
-*   **January 8, 2026**: New features for the Ray-Ban Display glasses include a teleprompter function and expanded pedestrian navigation to four additional cities.
-*   **January 8, 2026**: Chinese officials are reportedly reviewing Meta&#x27;s $2 billion acquisition of AI startup Manus for potential national security or technology export control violations.
-*   **January 8, 2026**: Meta launched Spatial Lingo, an open-source Unity application on GitHub, to assist in language learning through object recognition in the real world.
-*   **January 5, 2026**: COO Javier Olivan sold 517 shares of Class A Common Stock for a total value of $336,261.97, as disclosed in an SEC filing.
+*   **January 8, 2026**
+    *   Bank Pictet &amp; Cie Europe AG increased its stake in Meta Platforms by 5.0% during the third quarter, as detailed in its latest 13F filing with the SEC. SEC filings also reported insider sales of Meta Platforms stock.
+    *   A forecast for Meta Platforms&#x27; stock predicts a bullish trend in 2026, with shares potentially reaching $935.29 by year-end, driven by robust advertising revenue and enhanced efficiency, despite increased capital expenditures for AI initiatives.
+*   **January 7, 2026**
+    *   Meta&#x27;s Newsroom announced new features for WhatsApp group chats, including member tags, text stickers, and event reminders.
+*   **January 6, 2026**
+    *   Quintar announced its integration with the Meta Spatial SDK, aiming to deliver advanced XR (extended reality) experiences.
+*   **January 2, 2026**
+    *   Meta is anticipated to launch two new large language models (LLMs), internally codenamed &quot;Mango&quot; and &quot;Avocado,&quot; during the first half of 2026. These models are products of the company&#x27;s new &quot;Superintelligence&quot; team.
+*   **December 8, 2025**
+    *   The European Union announced that Meta will introduce new options for its users in the EU in January 2026.
 
-### **MSFT (Microsoft Corp.)**
+### Microsoft Corporation (MSFT)
 
-*   **January 7, 2026**: Microsoft announced that its fiscal year 2026 second-quarter financial results will be released after market close on **Wednesday, January 28, 2026**. A live webcast of the earnings conference call will follow at 2:30 p.m. Pacific Time.
-*   **January 7, 2026**: Microsoft acquired Osmos, an AI-based data engineering firm, to streamline data engineering processes within its Fabric platform.
-*   **January 7, 2026**: A Microsoft CCO debunked rumors of significant layoffs (11,000 to 22,000 positions) in January 2026, stating they were &quot;100 percent made up.&quot;
+*   **January 28, 2026**
+    *   Microsoft is scheduled to release its fiscal year 2026 second-quarter results after market close. A live webcast of the earnings conference call will be available at 2:30 p.m. Pacific Time. Microsoft reiterated its commitment to AI platforms and tools.
 
-### **AVGO (Broadcom Inc.)**
+### Broadcom Inc. (AVGO)
 
-*   **January 7, 2026**: Broadcom projects its first-quarter fiscal 2026 AI revenues to double year-over-year, reaching $8.2 billion, with overall Semiconductor revenues expected to be $12.3 billion.
-*   **January 6, 2026**: Broadcom introduced a new unified Wi-Fi 8 platform, featuring the BCM4918 accelerated processing unit (APU) and two dual-band Wi-Fi 8 devices (BCM6714 and BCM6719), designed to enable AI-ready homes with enhanced throughput and intelligence.
+*   **January 8, 2026**
+    *   An analysis suggests Broadcom is positioned to address an undervaluation gap in 2026, propelled by strong momentum in AI data center development and the company&#x27;s significant investments in research and development. Forecasts indicate that global AI infrastructure spending will exceed $2 trillion in 2026, providing a substantial advantage for Broadcom.
+    *   Morgan Stanley&#x27;s Form 424B2 filing mentioned Broadcom Inc. common stock as an underlying asset for Jump Securities with an Auto-Callable Feature due January 11, 2029.
+*   **January 7, 2026**
+    *   Broadcom&#x27;s performance in Q3 2025 was robust, driven by record earnings and escalating demand for its AI semiconductor solutions. Investor confidence was further bolstered by Broadcom&#x27;s leadership in custom AI accelerators and the successful integration of VMware.
+*   **January 6, 2026**
+    *   A report indicated that the hype surrounding AI might not sustain Broadcom&#x27;s current stock price, citing early indicators of margin pressure and increased sensitivity to the normalization of the AI cycle.
 
-### **GOOG (Alphabet Inc.)**
+### Alphabet Inc. (GOOG, GOOGL)
 
-*   No specific news announcements or SEC filings dated **January 8, 2026**, were found for Alphabet Inc.
+*   **January 7, 2026**
+    *   Morgan Stanley&#x27;s Form 424B2 filing included Alphabet Inc. class A common stock as an underlying asset for Jump Securities.
+*   **January 3, 2026**
+    *   An article discussed Google&#x27;s optimistic forecast for 2026, following a strong performance in 2025 with nearly 65% gains, attributed to its continued leadership in search and successful AI initiatives. Alphabet&#x27;s Tensor Processing Units (TPUs) were identified as a significant growth driver in 2025.
 
-### **AMZN (Amazon.com, Inc.)**
+### Amazon.com, Inc. (AMZN)
 
-*   **January 8, 2026**: Amazon is currently running its Winter Sale, offering various discounts on home appliances.
-*   **January 7, 2026**: Amazon is issuing refund checks to eligible Prime members as part of a Federal Trade Commission settlement regarding deceptive sign-up and cancellation practices.</div>
+*   **January 8, 2026**
+    *   Despite a general cryptocurrency sell-off, XRP (Ripple) experienced losses, even after establishing an agreement with Amazon Web Services (AWS) to enhance the XRP Ledger through Amazon Bedrock, its generative AI platform.
+*   **January 6, 2026**
+    *   Amazon.com Inc. was identified as the primary force propelling the S&amp;P 500 to unprecedented highs, thanks to its successful integration of artificial intelligence (AI) with strong consumer-facing ecosystems. The market&#x27;s focus in 2026 is shifting to companies that are profiting from AI, and Amazon is seen as a definitive leader in this area. Amazon is also expected to further invest in proprietary chip development.
+    *   At CES 2026, Amazon unveiled several new developments, including new Ring features, an enhanced Fire TV experience, the launch of Alexa.com, and an expanded suite of Alexa+ integrations, showcasing its ambient AI strategy. Alexa+ is slated for expansion to Samsung TVs and BMW cars in 2026.
+*   **January 5, 2026**
+    *   An article suggests that 2026 will be a transformative year for Amazon, deeming the company fairly valued with AWS serving as its primary profit driver and anticipating future margin expansion from automation and cost reductions in retail operations.</div>
 <h3 class="fundamentals-section">Fundamentals</h3>
 <div id="fundamentals-table-Mag7" class="fundamentals-section">Loading Fundamentals...</div>
 
 <div id="fundamentals-charts-Mag7" class="fundamentals-section">
-    <canvas id="chart_Mag7" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></canvas>
+    <canvas id="chart_Mag7" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
     <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
-   <strong>Buy/Sell Zone details:</strong><span style="margin-right: 10px; color: #666;">AAPL ($260.35)</span><span style="margin-right: 10px; color: #666;">NVDA ($189.18)</span><span style="margin-right: 10px; color: #666;">META ($648.69)</span><span style="margin-right: 10px; color: #666;">MSFT ($483.64)</span><span style="margin-right: 10px; color: #666;">AVGO ($343.50)</span><span style="margin-right: 10px; color: #666;">GOOG ($322.47)</span><span style="margin-right: 10px; color: #666;">AMZN ($241.62)</span></div>
+   <strong>Buy/Sell Zone details:</strong><span style="margin-right: 10px; color: #666;">AAPL ($258.68)</span><span style="margin-right: 10px; color: #666;">NVDA ($184.95)</span><span style="margin-right: 10px; color: #666;">META ($648.85)</span><span style="margin-right: 10px; color: #666;">MSFT ($475.55)</span><span style="margin-right: 10px; color: #666;">AVGO ($337.82)</span><span style="margin-right: 10px; color: #666;">GOOG ($328.19)</span><span style="margin-right: 10px; color: #666;">AMZN ($244.21)</span></div>
 
 </div>
 
@@ -1921,7 +1928,7 @@ oklo:&gt; $3.5B shelf registration,Dec 4 $1.5B ATM</div>
 
         //document.getElementById('toggleNotes').addEventListener('change', function() {{
         //    toggleVisibility('.notes-section', this.checked);
-        //    toggleVisibility('.markdown-notes-block', this.checked); // Also toggle the markdown notes block
+        //    toggleVisibility('.markdown-notes-block', this.checked);
         //}});
 
         // Close dilution popup when clicking outside
