@@ -584,15 +584,15 @@
                                             <div style="position: relative; width: 100%; height: 2px; border-radius: 5px; background-color: #ddd;"> <!-- Base grey line -->
                                                 ${
                                                     !isNaN(floorRange.min) && !isNaN(ceilingRange.max) && floorRange.min <= ceilingRange.max ?
-                                                    `<div style="position: absolute; left: ${clampPosition(floorRange.min)}%; width: ${Math.max(0, clampPosition(ceilingRange.max) - clampPosition(floorRange.min))}%; height: 100%; background-color: ${rowBackgroundColor}; border-radius: 5px;"></div>`
+                                                    `<div style="position: absolute; top:-2px; left: ${clampPosition(floorRange.min)}%; width: ${Math.max(0, clampPosition(ceilingRange.max) - clampPosition(floorRange.min))}%; height: 100%; background-color: ${rowBackgroundColor}; border-radius: 5px;"></div>`
                                                     : ''
                                                 }
                                                 <div style="position: absolute; left: ${pricePosition}%; top: -3px; width: 10px; height: 10px; background-color: #333; border-radius: 50%; transform: translateX(-50%); box-shadow: 0 0 5px rgba(0,0,0,0.5);" title="${currentPrice.toFixed(2)}"></div>
 
-                                                ${!isNaN(floorRange.min) ? `<span class="arrow-right-green" style="left: ${floorMinPos}%;" title="Floor Min: ${floorRange.min.toFixed(2)}"></span>` : ''}
-                                                ${!isNaN(floorRange.max) ? `<span class="arrow-right-green" style="left: ${floorMaxPos}%;" title="Floor Max: ${floorRange.max.toFixed(2)}"></span>` : ''}
-                                                ${!isNaN(ceilingRange.min) ? `<span class="arrow-left-red" style="left: ${ceilMinPos}%;" title="Ceiling Min: ${ceilingRange.min.toFixed(2)}"></span>` : ''}
-                                                ${!isNaN(ceilingRange.max) ? `<span class="arrow-left-red" style="left: ${ceilMaxPos}%;" title="Ceiling Max: ${ceilingRange.max.toFixed(2)}"></span>` : ''}
+                                                ${!isNaN(floorRange.min) ? `<span class="arrow-right-green" style="left: ${floorMinPos}%;" title="${floorRange.min.toFixed(2)}"></span>` : ''}
+                                                ${!isNaN(floorRange.max) ? `<span class="arrow-right-green" style="left: ${floorMaxPos}%;" title="${floorRange.max.toFixed(2)}"></span>` : ''}
+                                                ${!isNaN(ceilingRange.min) ? `<span class="arrow-left-red" style="left: ${ceilMinPos}%;" title="${ceilingRange.min.toFixed(2)}"></span>` : ''}
+                                                ${!isNaN(ceilingRange.max) ? `<span class="arrow-left-red" style="left: ${ceilMaxPos}%;" title="${ceilingRange.max.toFixed(2)}"></span>` : ''}
                                             </div>
                                         </td>
                                     </tr>
@@ -624,7 +624,7 @@
                                                 <div style="position: relative; width: 100%; height: 2px; border-radius: 5px; background-color: #ddd;"> <!-- Base grey line -->
                                                     ${
                                                         !isNaN(putwall) && !isNaN(callwall) && putwall <= callwall ?
-                                                        `<div style="position: absolute; left: ${clampPosition(putwall)}%; width: ${Math.max(0, clampPosition(callwall) - clampPosition(putwall))}%; height: 100%; background-color: ${optionsRowBacPkgroundColor}; border-radius: 5px;"></div>`
+                                                        `<div style="position: absolute; top:2px; left: ${clampPosition(putwall)}%; width: ${Math.max(0, clampPosition(callwall) - clampPosition(putwall))}%; height: 100%; background-color: ${optionsRowBacPkgroundColor}; border-radius: 5px;"></div>`
                                                         : ''
                                                     }
                                                     <!-- Put Wall Text -->
