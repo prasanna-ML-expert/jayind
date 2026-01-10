@@ -788,6 +788,27 @@
 
         .toggle-header { cursor: pointer; }
         .toggle-icon { margin-left: 10px; }
+
+        /* CSS for arrowheads */
+        .arrow-right-green,
+        .arrow-left-red {
+            position: absolute;
+            top: -6px; /* Adjust to align with the line */
+            width: 0; /* No width for the base of the arrow */
+            height: 0; /* No height for the base of the arrow */
+            border-top: 6px solid transparent;
+            border-bottom: 6px solid transparent;
+            transform: translateX(-50%); /* Center the arrow horizontally */
+            z-index: 2; /* Ensure arrows are above the colored line */
+        }
+
+        .arrow-right-green {
+            border-left: 8px solid green; /* Right-pointing arrow */
+        }
+
+        .arrow-left-red {
+            border-right: 8px solid red; /* Left-pointing arrow */
+        }
     </style>
 </head>
 <body id="top">
