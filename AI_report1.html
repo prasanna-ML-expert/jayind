@@ -572,6 +572,11 @@
                                 const clampPosition = (value) => Math.max(0, Math.min(100, (value - overallMin) / range * 100));
                                 const pricePosition = clampPosition(currentPrice);
                                 rowBackgroundColor = getColorAtGradientPosition(pricePosition);
+                                // Calculate positions for floor/ceiling range arrows
+                                const floorMinPos = clampPosition(floorRange.min);
+                                const floorMaxPos = clampPosition(floorRange.max);
+                                const ceilMinPos = clampPosition(ceilingRange.min);
+                                const ceilMaxPos = clampPosition(ceilingRange.max);
 
                                 lineHtml = `
                                     <tr class="price-line-row">
@@ -583,9 +588,12 @@
                                                     : ''
                                                 }
                                                 <div style="position: absolute; left: ${pricePosition}%; top: -3px; width: 10px; height: 10px; background-color: #333; border-radius: 50%; transform: translateX(-50%); box-shadow: 0 0 5px rgba(0,0,0,0.5);" title="${currentPrice.toFixed(2)}"></div>
-                                                ${!isNaN(floorRange.min) ? `<span style="position: absolute; left: ${clampPosition(floorRange.min)}%; top: 5px; font-size: 0.7em; transform: translateX(-50%); white-space: nowrap; color: #000;">${floorRange.min.toFixed(2)}</span>` : ''}
-                                                ${!isNaN(ceilingRange.max) ? `<span style="position: absolute; left: ${clampPosition(ceilingRange.max)}%; top: 5px; font-size: 0.7em; transform: translateX(-50%); white-space: nowrap; color: #000;">${ceilingRange.max.toFixed(2)}</span>` : ''}
-                                          </div>
+
+                                                ${!isNaN(floorRange.min) ? `<span class="arrow-right-green" style="left: ${floorMinPos}%;" title="Floor Min: ${floorRange.min.toFixed(2)}"></span>` : ''}
+                                                ${!isNaN(floorRange.max) ? `<span class="arrow-right-green" style="left: ${floorMaxPos}%;" title="Floor Max: ${floorRange.max.toFixed(2)}"></span>` : ''}
+                                                ${!isNaN(ceilingRange.min) ? `<span class="arrow-left-red" style="left: ${ceilMinPos}%;" title="Ceiling Min: ${ceilingRange.min.toFixed(2)}"></span>` : ''}
+                                                ${!isNaN(ceilingRange.max) ? `<span class="arrow-left-red" style="left: ${ceilMaxPos}%;" title="Ceiling Max: ${ceilingRange.max.toFixed(2)}"></span>` : ''}
+                                            </div>
                                         </td>
                                     </tr>
                                 `;
