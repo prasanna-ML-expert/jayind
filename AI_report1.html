@@ -534,6 +534,7 @@
                             if (optionsData) {
                                 // Check if values are valid and a meaningful range exists
                                 if (!isNaN(putwall) && !isNaN(callwall) && !isNaN(gammaflip) && !isNaN(maxpain) && putwall < callwall) {
+                                    const range = overallMax - overallMin;
                                     const clampPosition = (value) => Math.max(0, Math.min(100, (value - overallMin) / range * 100));
                                     const putwallPos = clampPosition(putwall);
                                     const callwallPos = clampPosition(callwall);
