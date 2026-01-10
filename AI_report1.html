@@ -479,9 +479,16 @@
                                 tableHtml += `<td style="${style}">${displayValue}</td>`;
                             });
                             tableHtml += '</tr>';
-
                             const currentPrice = parseFloat(row['Price']) || NaN;
-                            const ceilingRange = parsePriceRange(row['Ceiling']);
+                            let ceilingRange = {min: NaN, max: NaN};
+                            let floorRange = {min: NaN, max: NaN};
+
+                            const tickerUpper = row['Ticker'].toUpperCase();
+                            if (customDilutionRangesLookup[tickerUpper]) {
+                                const customRanges = customDilutionRangesLookup[tickerUpper];
+                                ceilingRange = customRanges.ceiling;
+                                floorRange = customRanges.floor;
+                            }
                             const floorRange = parsePriceRange(row['Floor']);
                             const tickerUpper = row['Ticker'].toUpperCase();
                             const optionsData = optionsLookup[tickerUpper];
@@ -1937,6 +1944,8 @@ oklo:&gt; $3.5B shelf registration,Dec 4 $1.5B ATM</div>
     document.addEventListener('DOMContentLoaded', async function() {{
         // Fetch dilution data first
         await fetchDilutionData();
+        // Parse custom dilution ranges from the embedded string
+        parseCustomDilutionRanges();
         // Then call the function to fetch and render fundamentals tables, which will then call renderCharts
         fetchAndRenderTables();
         // Configure marked.js if needed (e.g., to sanitize HTML)
