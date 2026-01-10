@@ -595,16 +595,18 @@
                             if (optionsData) {
                                 // Check if values are valid and a meaningful range exists
                                 if (!isNaN(putwall) && !isNaN(callwall) && !isNaN(gammaflip) && !isNaN(maxpain) && putwall < callwall) {
+                                    const range = overallMax - overallMin;
+                                    const clampPosition = (value) => Math.max(0, Math.min(100, (value - overallMin) / range * 100));
                                     const optionsRange = callwall - putwall;
                                     const optionsClampPosition = (value) => Math.max(0, Math.min(100, (value - putwall) / optionsRange * 100));
 
                                     const optionsPricePosition = optionsClampPosition(currentPrice);
                                     const optionsRowBacPkgroundColor = getColorAtGradientPosition(optionsPricePosition);
-
                                     const putwallPos = clampPosition(putwall);
                                     const callwallPos = clampPosition(callwall);
                                     const gammaflipPos = clampPosition(gammaflip);
                                     const maxpainPos = clampPosition(maxpain);
+
 
                                     optionsLineHtml = `
                                         <tr class="options-price-line-row">
