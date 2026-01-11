@@ -277,12 +277,10 @@
                 console.log('Processing image:', img.alt);
                 console.log('Current img.src:', img.src);
                 console.log('Current img.dataset.src:', img.dataset.src);
-                if (!img.src) { // Only load if not already loaded
+                //if (!img.src) { // Only load if not already loaded
                     img.src = img.dataset.src;
-                    console.log('Image src set to:', img.src);
-                } else {
-                    console.log('Image src already populated, not setting.');
-                }
+                    //console.log('Image src set to:', img.src);
+                //}
             });
         }
         // Function to render charts from provided data
