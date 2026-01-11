@@ -7,7 +7,7 @@ lidar_sensing,AEVA,1193.79,6.12,48.9
 power_management_chips,ALAB,27465.41,0.0,0.0
 battery_materials_mining,ALB,18983.43,3760.0,1930.0
 batteries_storage_tech,AMPX,1236.99,0.0,0.0
-Mag7,AMZN,2644084.53,160400.0,101200.0
+Mag7,AMZN,2644546.0,160400.0,101200.0
 power_management_chips,AOSL,663.76,0.0,169.57
 Hyperscalers,APLD,10538.56,703.0,286.0
 lidar_sensing,ARBE,148.05,0.0,36.7
@@ -52,7 +52,7 @@ space_launch_systems,FLY,4795.05,0.0,0.0
 cybersecurity,FTNT,58911.8,,
 Mag7,GOOG,3967334.98,21607.0,98490.0
 batteries_storage_sw,GWH,37.47,8.29,0.0
-Mining,HIVE,1057.2,73.684,637.0
+Mining,HIVE,1057.21,73.684,637.0
 Mining,HUT,6564.59,150.0,179.1
 hydrogen_fuel_cells,HYLN,341.39,,
 new_nuclear_energy,IMSR,,0.0,0.0
@@ -88,7 +88,7 @@ battery_materials_mining,NB,751.97,0.0,0.0
 Hyperscalers,NBIS,24659.47,4510.0,4790.0
 new_nuclear_energy,NNE,1615.68,0.0,0.0
 batteries_storage_sw,NRGV,887.61,62.46,32.7
-Mag7,NVDA,4491247.43,14770.0,43210.0
+Mag7,NVDA,4492098.0,14770.0,43210.0
 power_management_chips,NVTS,2321.1,0.0,0.0
 new_nuclear_energy,OKLO,16454.37,1.94,410.0
 power_management_chips,ON,25011.84,3350.0,2870.0
@@ -104,9 +104,9 @@ batteries_storage_tech,QS,6379.9,0.0,225.826
 quantum,QUBT,2626.72,2.58,352.0
 uas_defense_robotics,RCAT,1395.45,21.91,206.43
 space_launch_systems,RDW,1813.35,220.0,52.3
-quantum,RGTI,8158.24,7.59,446.9
+quantum,RGTI,8158.25,7.59,446.9
 Mining,RIOT,6265.37,390.0,33.49
-space_launch_systems,RKLB,45317.81,510.0,807.9
+space_launch_systems,RKLB,45323.15,510.0,807.9
 service_robotics,RR,751.7,6740.0,7500.0
 earth_observation,SATL,407.76,0.0,0.0
 earth_observation,SATS,34545.16,0.0,0.0
@@ -130,6 +130,6 @@ earth_observation,VSAT,5520.12,5660.0,1560.0
 power_management_chips,WOLF,481.6,,
 Hyperscalers,WULF,5484.73,0.0,0.0
 autonomous_driving,XPEV,19292.92,2666.0,6790.0
-service_robotics,ZBRA,13145.31,2183.0,1053.0
+service_robotics,ZBRA,13145.32,2183.0,1053.0
 uas_defense_robotics,ZENA,160.48,0.0,0.0
-,ZS,34562.17,,
+,ZS,34562.2,,
