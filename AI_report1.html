@@ -107,9 +107,9 @@
             const cleanStr = rangeStr.replace(/[$,]/g, '').trim();
 
             // Attempt to match a range pattern: e.g., "X.XX - Y.YY" or "X.YY – Y.YY"
-            const rangeMatch = cleanStr.match(/(\d+(?:\.\d+)?)\s*[–-]\s*(\d+(?:\.\d+)?)/); // Corrected \d and \s
+            const rangeMatch = cleanStr.match(/(\d+(?:\.\d+)?)\s*[–-]\s*(\d+(?:\.\d+)?)/);
 
-            if (rangeMatch && rangeMatch.length >= 3) {
+            if (rangeMatch && rangeMatch.length >= 3) { // group 0 is full match, 1 is first number, 2 is second number
                 const num1 = parseFloat(rangeMatch[1]);
                 const num2 = parseFloat(rangeMatch[2]); // Corrected from rangeMatch[3]
                 if (!isNaN(num1) && !isNaN(num2)) {
@@ -118,8 +118,8 @@
             }
 
             // If no range pattern is found, try to extract a single number
-            const singleNumberMatch = cleanStr.match(/(\d+(?:\.\d+)?)/); // Corrected \d
-            if (singleNumberMatch && singleNumberMatch.length >= 2) {
+            const singleNumberMatch = cleanStr.match(/(\d+(?:\.\d+)?)/); // Use capturing group here
+            if (singleNumberMatch && singleNumberMatch.length >= 2) { // group 0 is full match, 1 is the number
                 const num = parseFloat(singleNumberMatch[1]); // Corrected to singleNumberMatch[1]
                 if (!isNaN(num)) {
                     return { min: num, max: num };
@@ -175,19 +175,19 @@
                 return 'background-color: #8B0000; color: white;'; // Dark Red
             } else if (val >= 10) {
                 return 'background-color: #006400; color: white;'; // Dark Green
-            } else if (val < 0) {
+            } else if (val < 0) { // Between -10 and 0, scale from white to dark red
                 let ratio = Math.abs(val) / 10.0;
                 let r = parseInt(255 - (255 - 139) * ratio);
                 let g = parseInt(255 - (255 - 0) * ratio);
                 let b = parseInt(255 - (255 - 0) * ratio);
                 return `background-color: rgb(${r}, ${g}, ${b});`;
-            } else if (val > 0) {
+            } else if (val > 0) { // Between 0 and 10, scale from white to dark green
                 let ratio = val / 10.0;
                 let r = parseInt(255 - (255 - 0) * ratio);
                 let g = parseInt(255 - (255 - 100) * ratio);
                 let b = parseInt(255 - (255 - 0) * ratio);
                 return `background-color: rgb(${r}, ${g}, ${b});`;
-            } else {
+            } else { // val == 0
                 return 'background-color: white;';
             }
         }
@@ -252,8 +252,7 @@
 
         // Helper to parse CSV data into an array of objects
         function parseCsv(csvText) {
-            const lines = csvText.split('
-').map(line => line.trim()).filter(line => line !== '');
+            const lines = csvText.split('\n').map(line => line.trim()).filter(line => line !== '');
             if (lines.length === 0) return [];
 
             const headers = lines[0].split(',').map(h => h.trim());
@@ -271,7 +270,6 @@
             }
             return data;
         }
-
         // Function to load actual image sources for lazy loading
         function loadChartsImages() {
             document.querySelectorAll('.chart-image').forEach(img => {
@@ -280,7 +278,6 @@
                 }
             });
         }
-
         // Function to render charts from provided data
         async function renderCharts(allCsvData) {
             try {
@@ -435,9 +432,7 @@
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const csvText = await response.text();
-                const lines = csvText.split('
-').map(line => line.endsWith('
-') ? line.slice(0, -1) : line);
+                const lines = csvText.split('\n').map(line => line.endsWith('\r') ? line.slice(0, -1) : line);
                 console.log('Parsed CSV lines:', lines);
 
                 if (lines.length < 2 || lines.every(line => line.trim() === '')) {
@@ -491,7 +486,7 @@
                     }
 
                     if (industryData.length > 0) {
-                        let tableHtml = '<table class="dataframe"><thead><tr>';
+                        let tableHtml = '<table class="\dataframe"><thead><tr>';
                         const actualHeaders = headers.filter(h => columnsToDisplay.includes(h) && industryData[0].hasOwnProperty(h));
 
                         actualHeaders.forEach(header => {
@@ -514,19 +509,23 @@
                                         cellValue = fundData['cash'] !== undefined ? fundData['cash'] : cellValue;
                                     } else if (header === 'QRevenue_M') {
                                         cellValue = fundData['rev'] !== undefined ? fundData['rev'] : cellValue;
-                                    } else if (header === 'QPL_M') {
+                                    } else if (header === 'QPL_M') { // Assuming QPL_M from sheets_df maps to 'burn' from fundamentalsData
                                         cellValue = fundData['burn'] !== undefined ? fundData['burn'] : cellValue;
                                     }
+                                    // OrderBook_M is not in fundamentalsData, so it remains row[header]
                                 }
 
                                 let style = '';
+                                //if (header === 'price%') {
+                                //    style = colorPricePercent(cellValue);
+                                //}
                                 if (!isNaN(parseFloat(cellValue)) && isFinite(cellValue)) {
                                     cellValue = parseFloat(cellValue).toString();
                                 }
                                 let displayValue = cellValue;
                                 if (header === 'Ticker') {
                                     const ticker = cellValue.toUpperCase();
-                                    const price = row['Price'] || 'N/A';
+                                    const price = row['Price'] || 'N/A'; // Get the price
                                     if (tickerDilutionMap[ticker]) {
                                         displayValue = `
                                             <button class="ticker-button" onclick="toggleDilutionInline(this, '${ticker}', event, '${price}')">
@@ -642,6 +641,8 @@
                                                     <!-- Call Wall Text -->
                                                     <span style="position: absolute; left: ${callwallPos}%; top: -12px; width: auto; height: auto; padding: 0 3px; background-color: red; color: white; border-radius: 3px; transform: translateX(-50%); font-weight: bold; font-size: 0.8em;" title="$${callwall.toFixed(2)}">W</span>
 
+                                                    <!-- Current Price Dot (black) -->
+                                                    <!--div style="position: absolute; left: ${pricePosition}%; top: -3px; width: 10px; height: 10px; background-color: black; border-radius: 50%; transform: translateX(-50%); box-shadow: 0 0 5px rgba(0,0,0,0.5);title=""></div-->
                                                    <!-- Gamma Flip Character (blue) -->
                                                     <span style="position: absolute; left: ${gammaflipPos}%; top: -12px; width: auto; height: auto; padding: 0 3px; background-color: blue; color: white; border-radius: 3px; transform: translateX(-50%); font-weight: bold; font-size: 0.8em;" title="$${gammaflip.toFixed(2)}">F</span>
                                                     <!-- Max Pain Character (green) -->
@@ -944,17 +945,16 @@
 <h3 class="notes-section hidden">Notes </h3>
 <div class="markdown-notes-block notes-section hidden">ionq:&gt; By March dilution may get over</div>
 
-<div id="fundamentals-charts-quantum" class="fundamentals-section hidden">
+<div id="fundamentals-charts-quantum" class="fundamentals-section">
     <canvas id="chart_quantum" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
-    <div class="ticker-hyperlinks-row hidden" style="margin-top: 10px;">
+    <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
    <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'IONQ', event, '49.45'); return false;" style="margin-right: 10px;">IONQ</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'QBTS', event, '28.11'); return false;" style="margin-right: 10px;">QBTS</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'RGTI', event, '24.72'); return false;" style="margin-right: 10px;">RGTI</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'QUBT', event, '11.72'); return false;" style="margin-right: 10px;">QUBT</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'LAES', event, '4.16'); return false;" style="margin-right: 10px;">LAES</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'ARQQ', event, '26.87'); return false;" style="margin-right: 10px;">ARQQ</button></div>
 
 </div>
 
 <div class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Fri, 09 Jan)</i></small></h3>
-    <img src="" data-src="screenshots/quantum.png" alt="Quantum Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-</div>
+<img src="" data-src="screenshots/quantum.png" alt="Quantum Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
 <div class="industry-section" id="power_management_chips"><h2>2. Power Management Chips <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Semiconductor manufacturing &amp; wafers: nvts/on/aosl/cohr; Power electronics &amp; battery management / modules: mpwr/powi; Advanced materials &amp; coatings: alab; Electronics components / industrial semiconductors: indi</i></p>
@@ -998,17 +998,16 @@
 <h3 class="notes-section hidden">Notes </h3>
 <div class="markdown-notes-block notes-section hidden">on:&gt; 6B repurchage announced on Dec 2</div>
 
-<div id="fundamentals-charts-power_management_chips" class="fundamentals-section hidden">
+<div id="fundamentals-charts-power_management_chips" class="fundamentals-section">
     <canvas id="chart_power_management_chips" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
-    <div class="ticker-hyperlinks-row hidden" style="margin-top: 10px;">
+    <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
    <strong>Buy/Sell Zone details:</strong><span style="margin-right: 10px; color: #666;">NVTS ($10.07)</span><span style="margin-right: 10px; color: #666;">ON ($62.16)</span><span style="margin-right: 10px; color: #666;">AOSL ($22.08)</span><button class="ticker-button" onclick="toggleDilutionInline(this, 'COHR', event, '178.06'); return false;" style="margin-right: 10px;">COHR</button><span style="margin-right: 10px; color: #666;">MPWR ($958.97)</span><span style="margin-right: 10px; color: #666;">POWI ($41.51)</span><button class="ticker-button" onclick="toggleDilutionInline(this, 'ALAB', event, '162.61'); return false;" style="margin-right: 10px;">ALAB</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'INDI', event, '3.96'); return false;" style="margin-right: 10px;">INDI</button></div>
 
 </div>
 
 <div class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Tue, 06 Jan)</i></small></h3>
-    <img src="" data-src="screenshots/power_management_chips.png" alt="Power Management Chips Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-</div>
+<img src="" data-src="screenshots/power_management_chips.png" alt="Power Management Chips Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
 <div class="industry-section" id="lidar_sensing"><h2>3. Lidar Sensing <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Automotive LiDAR &amp; sensing hardware: aeva/oust/arbe; 3D sensing &amp; mapping technologies: lazr/mvis/lidr</i></p>
@@ -1068,17 +1067,16 @@
 <h3 class="fundamentals-section">Fundamentals</h3>
 <div id="fundamentals-table-lidar_sensing" class="fundamentals-section">Loading Fundamentals...</div>
 
-<div id="fundamentals-charts-lidar_sensing" class="fundamentals-section hidden">
+<div id="fundamentals-charts-lidar_sensing" class="fundamentals-section">
     <canvas id="chart_lidar_sensing" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
-    <div class="ticker-hyperlinks-row hidden" style="margin-top: 10px;">
+    <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
    <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'AEVA', event, '19.87'); return false;" style="margin-right: 10px;">AEVA</button><span style="margin-right: 10px; color: #666;">INVZ ($1.21)</span><button class="ticker-button" onclick="toggleDilutionInline(this, 'MVIS', event, '0.92'); return false;" style="margin-right: 10px;">MVIS</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'LIDR', event, '2.17'); return false;" style="margin-right: 10px;">LIDR</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'OUST', event, '27.87'); return false;" style="margin-right: 10px;">OUST</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'ARBE', event, '1.36'); return false;" style="margin-right: 10px;">ARBE</button></div>
 
 </div>
 
 <div class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Tue, 06 Jan)</i></small></h3>
-    <img src="" data-src="screenshots/lidar_sensing.png" alt="Lidar Sensing Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-</div>
+<img src="" data-src="screenshots/lidar_sensing.png" alt="Lidar Sensing Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
 <div class="industry-section" id="autonomous_driving"><h2>4. Autonomous Driving <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Autonomous driving / self-driving tech</i></p>
@@ -1121,17 +1119,16 @@
 <h3 class="fundamentals-section">Fundamentals</h3>
 <div id="fundamentals-table-autonomous_driving" class="fundamentals-section">Loading Fundamentals...</div>
 
-<div id="fundamentals-charts-autonomous_driving" class="fundamentals-section hidden">
+<div id="fundamentals-charts-autonomous_driving" class="fundamentals-section">
     <canvas id="chart_autonomous_driving" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
-    <div class="ticker-hyperlinks-row hidden" style="margin-top: 10px;">
+    <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
    <strong>Buy/Sell Zone details:</strong><span style="margin-right: 10px; color: #666;">MBLY ($11.55)</span><span style="margin-right: 10px; color: #666;">AUR ($4.79)</span><span style="margin-right: 10px; color: #666;">TSLA ($445.01)</span><span style="margin-right: 10px; color: #666;">XPEV ($20.02)</span><span style="margin-right: 10px; color: #666;">KDK ($9.42)</span></div>
 
 </div>
 
 <div class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Thu, 08 Jan)</i></small></h3>
-    <img src="" data-src="screenshots/autonomous_driving.png" alt="Autonomous Driving Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-</div>
+<img src="" data-src="screenshots/autonomous_driving.png" alt="Autonomous Driving Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
 <div class="industry-section" id="uas_defense_robotics"><h2>5. Uas Defense Robotics <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Defense &amp; aerospace technology / military systems</i></p>
@@ -1214,17 +1211,16 @@
 <h3 class="fundamentals-section">Fundamentals</h3>
 <div id="fundamentals-table-uas_defense_robotics" class="fundamentals-section">Loading Fundamentals...</div>
 
-<div id="fundamentals-charts-uas_defense_robotics" class="fundamentals-section hidden">
+<div id="fundamentals-charts-uas_defense_robotics" class="fundamentals-section">
     <canvas id="chart_uas_defense_robotics" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
-    <div class="ticker-hyperlinks-row hidden" style="margin-top: 10px;">
+    <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
    <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'DPRO', event, '9.49'); return false;" style="margin-right: 10px;">DPRO</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'RCAT', event, '11.69'); return false;" style="margin-right: 10px;">RCAT</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'ZENA', event, '3.94'); return false;" style="margin-right: 10px;">ZENA</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'ONDS', event, '13.69'); return false;" style="margin-right: 10px;">ONDS</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'AVAV', event, '364.99'); return false;" style="margin-right: 10px;">AVAV</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'KTOS', event, '113.70'); return false;" style="margin-right: 10px;">KTOS</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'UMAC', event, '14.17'); return false;" style="margin-right: 10px;">UMAC</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'SPAI', event, '5.70'); return false;" style="margin-right: 10px;">SPAI</button></div>
 
 </div>
 
 <div class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Fri, 09 Jan)</i></small></h3>
-    <img src="" data-src="screenshots/uas_defense_robotics.png" alt="Uas Defense Robotics Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-</div>
+<img src="" data-src="screenshots/uas_defense_robotics.png" alt="Uas Defense Robotics Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
 <div class="industry-section" id="service_robotics"><h2>6. Service Robotics <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Industrial automation, robotics, and service automation technologies, including collaborative robots, warehouse automation, and consumer robotics</i></p>
@@ -1289,17 +1285,16 @@
 <h3 class="fundamentals-section">Fundamentals</h3>
 <div id="fundamentals-table-service_robotics" class="fundamentals-section">Loading Fundamentals...</div>
 
-<div id="fundamentals-charts-service_robotics" class="fundamentals-section hidden">
+<div id="fundamentals-charts-service_robotics" class="fundamentals-section">
     <canvas id="chart_service_robotics" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
-    <div class="ticker-hyperlinks-row hidden" style="margin-top: 10px;">
+    <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
    <strong>Buy/Sell Zone details:</strong><span style="margin-right: 10px; color: #666;">RR ($3.79)</span><span style="margin-right: 10px; color: #666;">SERV ($14.71)</span><span style="margin-right: 10px; color: #666;">PRCT ($32.83)</span><span style="margin-right: 10px; color: #666;">ZBRA ($259.48)</span><span style="margin-right: 10px; color: #666;">IRBT ($N/A)</span></div>
 
 </div>
 
 <div class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Thu, 08 Jan)</i></small></h3>
-    <img src="" data-src="screenshots/service_robotics.png" alt="Service Robotics Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-</div>
+<img src="" data-src="screenshots/service_robotics.png" alt="Service Robotics Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
 <div class="industry-section" id="space_launch_systems"><h2>7. Space Launch Systems <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Space technology and services companies, including satellite operators, launch service providers, space infrastructure, and space-based data analytics</i></p>
@@ -1365,17 +1360,16 @@
 <h3 class="notes-section hidden">Notes </h3>
 <div class="markdown-notes-block notes-section hidden">spce:&gt; $254M ATM on Dec9</div>
 
-<div id="fundamentals-charts-space_launch_systems" class="fundamentals-section hidden">
+<div id="fundamentals-charts-space_launch_systems" class="fundamentals-section">
     <canvas id="chart_space_launch_systems" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
-    <div class="ticker-hyperlinks-row hidden" style="margin-top: 10px;">
+    <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
    <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'RKLB', event, '84.84'); return false;" style="margin-right: 10px;">RKLB</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'FLY', event, '30.11'); return false;" style="margin-right: 10px;">FLY</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'MNTS', event, '12.46'); return false;" style="margin-right: 10px;">MNTS</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'SPCE', event, '3.18'); return false;" style="margin-right: 10px;">SPCE</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'LUNR', event, '18.56'); return false;" style="margin-right: 10px;">LUNR</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'RDW', event, '10.98'); return false;" style="margin-right: 10px;">RDW</button></div>
 
 </div>
 
 <div class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Wed, 07 Jan)</i></small></h3>
-    <img src="" data-src="screenshots/space_launch_systems.png" alt="Space Launch Systems Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-</div>
+<img src="" data-src="screenshots/space_launch_systems.png" alt="Space Launch Systems Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
 <div class="industry-section" id="earth_observation"><h2>8. Earth Observation <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Satellite communications, space technology, and related infrastructure companies, including satellite operators, ground station providers, and satellite communication services</i></p>
@@ -1443,17 +1437,16 @@
 <h3 class="notes-section hidden">Notes </h3>
 <div class="markdown-notes-block notes-section hidden">bksy:&gt; 4M shares convertible at $27</div>
 
-<div id="fundamentals-charts-earth_observation" class="fundamentals-section hidden">
+<div id="fundamentals-charts-earth_observation" class="fundamentals-section">
     <canvas id="chart_earth_observation" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
-    <div class="ticker-hyperlinks-row hidden" style="margin-top: 10px;">
+    <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
    <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'PL', event, '22.71'); return false;" style="margin-right: 10px;">PL</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'BKSY', event, '25.52'); return false;" style="margin-right: 10px;">BKSY</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'SPIR', event, '10.48'); return false;" style="margin-right: 10px;">SPIR</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'SATL', event, '3.01'); return false;" style="margin-right: 10px;">SATL</button><span style="margin-right: 10px; color: #666;">ASTS ($97.67)</span><span style="margin-right: 10px; color: #666;">IRDM ($19.34)</span><span style="margin-right: 10px; color: #666;">SATS ($120.00)</span><span style="margin-right: 10px; color: #666;">VSAT ($40.81)</span></div>
 
 </div>
 
 <div class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Wed, 07 Jan)</i></small></h3>
-    <img src="" data-src="screenshots/earth_observation.png" alt="Earth Observation Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-</div>
+<img src="" data-src="screenshots/earth_observation.png" alt="Earth Observation Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
 <div class="industry-section" id="ev_charging_infrastructure"><h2>9. Ev Charging Infrastructure <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>EV charging infrastructure &amp; solutions</i></p>
@@ -1503,17 +1496,16 @@
 <h3 class="notes-section hidden">Notes </h3>
 <div class="markdown-notes-block notes-section hidden">chpt:&gt; Dec12 S3 filed $400M total($150M ATM)</div>
 
-<div id="fundamentals-charts-ev_charging_infrastructure" class="fundamentals-section hidden">
+<div id="fundamentals-charts-ev_charging_infrastructure" class="fundamentals-section">
     <canvas id="chart_ev_charging_infrastructure" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
-    <div class="ticker-hyperlinks-row hidden" style="margin-top: 10px;">
+    <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
    <strong>Buy/Sell Zone details:</strong><span style="margin-right: 10px; color: #666;">EVGO ($3.06)</span><span style="margin-right: 10px; color: #666;">BLNK ($0.75)</span><span style="margin-right: 10px; color: #666;">CHPT ($6.90)</span><span style="margin-right: 10px; color: #666;">BEEM ($1.65)</span><span style="margin-right: 10px; color: #666;">ADSE ($11.87)</span></div>
 
 </div>
 
 <div class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Thu, 11 Dec)</i></small></h3>
-    <img src="" data-src="screenshots/ev_charging_infrastructure.png" alt="Ev Charging Infrastructure Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-</div>
+<img src="" data-src="screenshots/ev_charging_infrastructure.png" alt="Ev Charging Infrastructure Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
 <div class="industry-section" id="evtol_air_mobility"><h2>10. Evtol Air Mobility <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Urban air mobility and eVTOL aircraft companies focused on electric vertical takeoff and landing transportation solutions</i></p>
@@ -1555,17 +1547,16 @@
 <h3 class="notes-section hidden">Notes </h3>
 <div class="markdown-notes-block notes-section hidden">achr:&gt; SECTOR not great LL forming</div>
 
-<div id="fundamentals-charts-evtol_air_mobility" class="fundamentals-section hidden">
+<div id="fundamentals-charts-evtol_air_mobility" class="fundamentals-section">
     <canvas id="chart_evtol_air_mobility" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
-    <div class="ticker-hyperlinks-row hidden" style="margin-top: 10px;">
+    <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
    <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'ACHR', event, '8.81'); return false;" style="margin-right: 10px;">ACHR</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'JOBY', event, '15.39'); return false;" style="margin-right: 10px;">JOBY</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'EVEX', event, '4.54'); return false;" style="margin-right: 10px;">EVEX</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'EVTL', event, '6.60'); return false;" style="margin-right: 10px;">EVTL</button></div>
 
 </div>
 
 <div class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Wed, 07 Jan)</i></small></h3>
-    <img src="" data-src="screenshots/evtol_air_mobility.png" alt="Evtol Air Mobility Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-</div>
+<img src="" data-src="screenshots/evtol_air_mobility.png" alt="Evtol Air Mobility Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
 <div class="industry-section" id="hydrogen_fuel_cells"><h2>11. Hydrogen Fuel Cells <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Hydrogen &amp; fuel cell technology</i></p>
@@ -1628,17 +1619,16 @@
 
 bw:&gt; announced the full redemption of all $26 million aggregate principal amount outstanding of its 8.125% Senior Notes due 2026 on Dec5</div>
 
-<div id="fundamentals-charts-hydrogen_fuel_cells" class="fundamentals-section hidden">
+<div id="fundamentals-charts-hydrogen_fuel_cells" class="fundamentals-section">
     <canvas id="chart_hydrogen_fuel_cells" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
-    <div class="ticker-hyperlinks-row hidden" style="margin-top: 10px;">
+    <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
    <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'FCEL', event, '7.58'); return false;" style="margin-right: 10px;">FCEL</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'BE', event, '134.07'); return false;" style="margin-right: 10px;">BE</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'PLUG', event, '2.19'); return false;" style="margin-right: 10px;">PLUG</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'HYLN', event, '1.94'); return false;" style="margin-right: 10px;">HYLN</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'BW', event, '7.95'); return false;" style="margin-right: 10px;">BW</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'BLDP', event, 'N/A'); return false;" style="margin-right: 10px;">BLDP</button></div>
 
 </div>
 
 <div class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Wed, 07 Jan)</i></small></h3>
-    <img src="" data-src="screenshots/hydrogen_fuel_cells.png" alt="Hydrogen Fuel Cells Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-</div>
+<img src="" data-src="screenshots/hydrogen_fuel_cells.png" alt="Hydrogen Fuel Cells Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
 <div class="industry-section" id="batteries_storage_tech"><h2>12. Batteries Storage Tech <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>EV battery technology</i></p>
@@ -1665,17 +1655,16 @@ bw:&gt; announced the full redemption of all $26 million aggregate principal amo
 <h3 class="fundamentals-section">Fundamentals</h3>
 <div id="fundamentals-table-batteries_storage_tech" class="fundamentals-section">Loading Fundamentals...</div>
 
-<div id="fundamentals-charts-batteries_storage_tech" class="fundamentals-section hidden">
+<div id="fundamentals-charts-batteries_storage_tech" class="fundamentals-section">
     <canvas id="chart_batteries_storage_tech" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
-    <div class="ticker-hyperlinks-row hidden" style="margin-top: 10px;">
+    <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
    <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'QS', event, '10.61'); return false;" style="margin-right: 10px;">QS</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'ENVX', event, '7.92'); return false;" style="margin-right: 10px;">ENVX</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'SES', event, '2.13'); return false;" style="margin-right: 10px;">SES</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'MVST', event, '3.50'); return false;" style="margin-right: 10px;">MVST</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'AMPX', event, '9.48'); return false;" style="margin-right: 10px;">AMPX</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'SLDP', event, '5.33'); return false;" style="margin-right: 10px;">SLDP</button></div>
 
 </div>
 
 <div class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Wed, 07 Jan)</i></small></h3>
-    <img src="" data-src="screenshots/batteries_storage_tech.png" alt="Batteries Storage Tech Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-</div>
+<img src="" data-src="screenshots/batteries_storage_tech.png" alt="Batteries Storage Tech Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
 <div class="industry-section" id="batteries_storage_sw"><h2>13. Batteries Storage Sw <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Energy storage &amp; battery tech</i></p>
@@ -1767,17 +1756,16 @@ No specific recent announcements or SEC filings for a NYSE/NASDAQ listed company
 
 te:&gt; 17M shares given to notes. $3B dilution($1.5B ATM) Dec 05</div>
 
-<div id="fundamentals-charts-batteries_storage_sw" class="fundamentals-section hidden">
+<div id="fundamentals-charts-batteries_storage_sw" class="fundamentals-section">
     <canvas id="chart_batteries_storage_sw" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
-    <div class="ticker-hyperlinks-row hidden" style="margin-top: 10px;">
+    <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
    <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'ENPH', event, '35.22'); return false;" style="margin-right: 10px;">ENPH</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'STEM', event, '17.68'); return false;" style="margin-right: 10px;">STEM</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'FLNC', event, '23.20'); return false;" style="margin-right: 10px;">FLNC</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'EOSE', event, '15.28'); return false;" style="margin-right: 10px;">EOSE</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'GWH', event, '1.91'); return false;" style="margin-right: 10px;">GWH</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'KULR', event, '3.34'); return false;" style="margin-right: 10px;">KULR</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'TE', event, '6.94'); return false;" style="margin-right: 10px;">TE</button><span style="margin-right: 10px; color: #666;">NRGV ($5.29)</span></div>
 
 </div>
 
 <div class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Wed, 07 Jan)</i></small></h3>
-    <img src="" data-src="screenshots/batteries_storage_sw.png" alt="Batteries Storage Sw Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-</div>
+<img src="" data-src="screenshots/batteries_storage_sw.png" alt="Batteries Storage Sw Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
 <div class="industry-section" id="battery_materials_mining"><h2>14. Battery Materials Mining <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Lithium &amp; battery metals / mining</i></p>
@@ -1858,17 +1846,16 @@ te:&gt; 17M shares given to notes. $3B dilution($1.5B ATM) Dec 05</div>
 <h3 class="notes-section hidden">Notes </h3>
 <div class="markdown-notes-block notes-section hidden">atlx:&gt; $200M Offering Dec5 over time</div>
 
-<div id="fundamentals-charts-battery_materials_mining" class="fundamentals-section hidden">
+<div id="fundamentals-charts-battery_materials_mining" class="fundamentals-section">
     <canvas id="chart_battery_materials_mining" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
-    <div class="ticker-hyperlinks-row hidden" style="margin-top: 10px;">
+    <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
    <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'ATLX', event, '5.26'); return false;" style="margin-right: 10px;">ATLX</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'ABAT', event, '4.80'); return false;" style="margin-right: 10px;">ABAT</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'ALB', event, '161.29'); return false;" style="margin-right: 10px;">ALB</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'SQM', event, '74.40'); return false;" style="margin-right: 10px;">SQM</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'SGML', event, '13.51'); return false;" style="margin-right: 10px;">SGML</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'ELVR', event, '57.86'); return false;" style="margin-right: 10px;">ELVR</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'LAC', event, '5.39'); return false;" style="margin-right: 10px;">LAC</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'NB', event, '6.30'); return false;" style="margin-right: 10px;">NB</button></div>
 
 </div>
 
 <div class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Thu, 08 Jan)</i></small></h3>
-    <img src="" data-src="screenshots/battery_materials_mining.png" alt="Battery Materials Mining Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-</div>
+<img src="" data-src="screenshots/battery_materials_mining.png" alt="Battery Materials Mining Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
 <div class="industry-section" id="Hyperscalers"><h2>15. Hyperscalers <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>HPC/NeoCloud: building data centers for AI workloads and renting out GPU capacity to hyperscalers and AI companies</i></p>
@@ -1912,17 +1899,16 @@ te:&gt; 17M shares given to notes. $3B dilution($1.5B ATM) Dec 05</div>
 <h3 class="fundamentals-section">Fundamentals</h3>
 <div id="fundamentals-table-Hyperscalers" class="fundamentals-section">Loading Fundamentals...</div>
 
-<div id="fundamentals-charts-Hyperscalers" class="fundamentals-section hidden">
+<div id="fundamentals-charts-Hyperscalers" class="fundamentals-section">
     <canvas id="chart_Hyperscalers" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
-    <div class="ticker-hyperlinks-row hidden" style="margin-top: 10px;">
+    <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
    <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'CRWV', event, '80.14'); return false;" style="margin-right: 10px;">CRWV</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'NBIS', event, '97.93'); return false;" style="margin-right: 10px;">NBIS</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'CORZ', event, '17.14'); return false;" style="margin-right: 10px;">CORZ</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'APLD', event, '37.68'); return false;" style="margin-right: 10px;">APLD</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'CIFR', event, '16.63'); return false;" style="margin-right: 10px;">CIFR</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'WULF', event, '13.10'); return false;" style="margin-right: 10px;">WULF</button></div>
 
 </div>
 
 <div class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Wed, 07 Jan)</i></small></h3>
-    <img src="" data-src="screenshots/Hyperscalers.png" alt="Hyperscalers Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-</div>
+<img src="" data-src="screenshots/Hyperscalers.png" alt="Hyperscalers Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
 <div class="industry-section" id="Mining"><h2>16. Mining <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Cryptocurrency mining and blockchain infrastructure companies</i></p>
@@ -1959,17 +1945,16 @@ te:&gt; 17M shares given to notes. $3B dilution($1.5B ATM) Dec 05</div>
 <h3 class="notes-section hidden">Notes </h3>
 <div class="markdown-notes-block notes-section hidden">iren:&gt; 40M shares at $41 CB on Dec 8</div>
 
-<div id="fundamentals-charts-Mining" class="fundamentals-section hidden">
+<div id="fundamentals-charts-Mining" class="fundamentals-section">
     <canvas id="chart_Mining" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
-    <div class="ticker-hyperlinks-row hidden" style="margin-top: 10px;">
+    <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
    <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'MARA', event, '10.22'); return false;" style="margin-right: 10px;">MARA</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'CLSK', event, '11.61'); return false;" style="margin-right: 10px;">CLSK</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'BITF', event, '2.80'); return false;" style="margin-right: 10px;">BITF</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'HIVE', event, '3.11'); return false;" style="margin-right: 10px;">HIVE</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'BTBT', event, '2.19'); return false;" style="margin-right: 10px;">BTBT</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'HUT', event, '60.04'); return false;" style="margin-right: 10px;">HUT</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'RIOT', event, '15.32'); return false;" style="margin-right: 10px;">RIOT</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'IREN', event, '46.03'); return false;" style="margin-right: 10px;">IREN</button></div>
 
 </div>
 
 <div class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Wed, 07 Jan)</i></small></h3>
-    <img src="" data-src="screenshots/Mining.png" alt="Mining Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-</div>
+<img src="" data-src="screenshots/Mining.png" alt="Mining Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
 <div class="industry-section" id="new_nuclear_energy"><h2>17. New Nuclear Energy <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>OKLO/SMR/nne new advanced nuclear tech reactors; UEC/nxe/CCJ/leu uranium mining/exploration/enrichment; bwxt eng services; ceg/nee/exc/etr/d/duk/uuuu power generation utility not covered here</i></p>
@@ -2020,17 +2005,16 @@ te:&gt; 17M shares given to notes. $3B dilution($1.5B ATM) Dec 05</div>
 
 oklo:&gt; $3.5B shelf registration,Dec 4 $1.5B ATM</div>
 
-<div id="fundamentals-charts-new_nuclear_energy" class="fundamentals-section hidden">
+<div id="fundamentals-charts-new_nuclear_energy" class="fundamentals-section">
     <canvas id="chart_new_nuclear_energy" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
-    <div class="ticker-hyperlinks-row hidden" style="margin-top: 10px;">
+    <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
    <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'OKLO', event, '105.31'); return false;" style="margin-right: 10px;">OKLO</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'SMR', event, '20.51'); return false;" style="margin-right: 10px;">SMR</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'NNE', event, '32.01'); return false;" style="margin-right: 10px;">NNE</button><span style="margin-right: 10px; color: #666;">IMSR ($N/A)</span><span style="margin-right: 10px; color: #666;">UEC ($N/A)</span><button class="ticker-button" onclick="toggleDilutionInline(this, 'CCJ', event, '107.56'); return false;" style="margin-right: 10px;">CCJ</button><span style="margin-right: 10px; color: #666;">LEU ($306.19)</span><button class="ticker-button" onclick="toggleDilutionInline(this, 'BWXT', event, '201.46'); return false;" style="margin-right: 10px;">BWXT</button></div>
 
 </div>
 
 <div class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Wed, 07 Jan)</i></small></h3>
-    <img src="" data-src="screenshots/new_nuclear_energy.png" alt="New Nuclear Energy Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-</div>
+<img src="" data-src="screenshots/new_nuclear_energy.png" alt="New Nuclear Energy Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
 <div class="industry-section" id="Mag7"><h2>18. Mag7 <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Large-cap technology companies, including consumer electronics, cloud computing, social media, AI, semiconductor manufacturing, and e-commerce platforms</i></p>
@@ -2126,17 +2110,16 @@ oklo:&gt; $3.5B shelf registration,Dec 4 $1.5B ATM</div>
 <h3 class="fundamentals-section">Fundamentals</h3>
 <div id="fundamentals-table-Mag7" class="fundamentals-section">Loading Fundamentals...</div>
 
-<div id="fundamentals-charts-Mag7" class="fundamentals-section hidden">
+<div id="fundamentals-charts-Mag7" class="fundamentals-section">
     <canvas id="chart_Mag7" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
-    <div class="ticker-hyperlinks-row hidden" style="margin-top: 10px;">
+    <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
    <strong>Buy/Sell Zone details:</strong><span style="margin-right: 10px; color: #666;">AAPL ($259.37)</span><span style="margin-right: 10px; color: #666;">NVDA ($184.83)</span><span style="margin-right: 10px; color: #666;">META ($653.06)</span><span style="margin-right: 10px; color: #666;">MSFT ($479.28)</span><span style="margin-right: 10px; color: #666;">AVGO ($344.97)</span><span style="margin-right: 10px; color: #666;">GOOG ($329.15)</span><span style="margin-right: 10px; color: #666;">AMZN ($247.34)</span></div>
 
 </div>
 
 <div class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Wed, 07 Jan)</i></small></h3>
-    <img src="" data-src="screenshots/Mag7.png" alt="Mag7 Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-</div>
+<img src="" data-src="screenshots/Mag7.png" alt="Mag7 Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
 
 <script>
@@ -2184,7 +2167,6 @@ oklo:&gt; $3.5B shelf registration,Dec 4 $1.5B ATM</div>
         document.getElementById('toggleCharts').addEventListener('change', function() {{
             const isChecked = this.checked;
             toggleVisibility('.charts-section', isChecked);
-            toggleVisibility('.ticker-hyperlinks-row', isChecked); // Also toggle the new ticker row
             if (isChecked) {
                 loadChartsImages(); // Load images when charts are shown
             }
