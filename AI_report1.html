@@ -588,7 +588,7 @@
                                                     : ''
                                                 }
                                                 <!--div style="position: absolute; left: ${pricePosition}%; top: -3px; width: 10px; height: 10px; background-color: #333; border-radius: 50%; transform: translateX(-50%); box-shadow: 0 0 5px rgba(0,0,0,0.5);" title="${currentPrice.toFixed(2)}"></div-->
-                                                <span style="position: absolute; left: ${pricePosition}%; top: -7px; transform: translateX(-50%); font-weight: bold; font-size: 1.5em; color: black;">$&nbsp;</span>
+                                                <span style="position: absolute; left: ${pricePosition}%; top: -10px; transform: translateX(-50%); font-weight: bold; font-size: 1.5em; color: black;">$&nbsp;</span>
 
                                                 ${!isNaN(floorRange.min) ? `<span class="arrow-right-green" style="left: ${floorMinPos}%;" title="${floorRange.min.toFixed(2)}"></span>` : ''}
                                                 ${!isNaN(floorRange.max) ? `<span class="arrow-right-green" style="left: ${floorMaxPos}%;" title="${floorRange.max.toFixed(2)}"></span>` : ''}
@@ -645,8 +645,8 @@
                                     `;
                                 }
                             }
-                            tableHtml += lineHtml;
                             tableHtml += optionsLineHtml;
+                            tableHtml += lineHtml;
                         });
                         tableHtml += '</tbody></table>';
                         placeholderDiv.innerHTML = tableHtml;
