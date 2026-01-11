@@ -270,6 +270,19 @@
             }
             return data;
         }
+        // Function to load actual image sources for lazy loading
+        function loadChartsImages() {
+            console.log('loadChartsImages function called.');
+            document.querySelectorAll('.chart-image').forEach(img => {
+                console.log('Processing image:', img.alt);
+                console.log('Current img.src:', img.src);
+                console.log('Current img.dataset.src:', img.dataset.src);
+                //if (!img.src) { // Only load if not already loaded
+                    img.src = img.dataset.src;
+                    //console.log('Image src set to:', img.src);
+                //}
+            });
+        }
         // Function to render charts from provided data
         async function renderCharts(allCsvData) {
             try {
@@ -674,7 +687,7 @@
         h3 { color: #002d6b; margin-top: 20px; }
         table { width: 100%; border-collapse: collapse; margin-top: 15px; background-color: #f4f4f4; box-shadow: none; border: none; } /* Modified table styling */
         th, td { border: none; padding: 8px; text-align: left; } /* Modified table cell styling */
-        th { background-color: transparent; font-weight: bold; color: #f4f4f4; } /* Modified table header styling */
+        th { display: none; } /* Hide table headers */
         td { color: #f4f4f4; } /* Make text color same as page background */
         .news-item { background-color: #e9f7ef; border-left: 5px solid #28a745; margin-bottom: 10px; padding: 10px; border-radius: 4px; } /* Added news item styling */
         .news-date { font-weight: bold; color: #28a745; } /* Added news date styling */
@@ -888,7 +901,7 @@
 <div style="margin-top: 20px; margin-bottom: 20px;">
     <label><input type="checkbox" id="toggleNews" checked> News</label>
     <label><input type="checkbox" id="toggleTables" checked> Fundamentals</label>
-    <label><input type="checkbox" id="toggleCharts" checked> Charts</label>
+    <label><input type="checkbox" id="toggleCharts"> Charts</label>
     <!-- <label><input type="checkbox" id="toggleNotes" checked> Notes</label> -->
 </div>
 <div class="industry-section" id="quantum"><h2>1. Quantum <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
@@ -944,10 +957,9 @@
 
 </div>
 
-<div class="charts-section">
+<div class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Fri, 09 Jan)</i></small></h3>
-    <img src="screenshots/quantum.png" alt="Quantum Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-</div>
+<img src="" data-src="screenshots/quantum.png" alt="Quantum Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
 <div class="industry-section" id="power_management_chips"><h2>2. Power Management Chips <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Semiconductor manufacturing &amp; wafers: nvts/on/aosl/cohr; Power electronics &amp; battery management / modules: mpwr/powi; Advanced materials &amp; coatings: alab; Electronics components / industrial semiconductors: indi</i></p>
@@ -998,10 +1010,9 @@
 
 </div>
 
-<div class="charts-section">
+<div class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Tue, 06 Jan)</i></small></h3>
-    <img src="screenshots/power_management_chips.png" alt="Power Management Chips Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-</div>
+<img src="" data-src="screenshots/power_management_chips.png" alt="Power Management Chips Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
 <div class="industry-section" id="lidar_sensing"><h2>3. Lidar Sensing <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Automotive LiDAR &amp; sensing hardware: aeva/oust/arbe; 3D sensing &amp; mapping technologies: lazr/mvis/lidr</i></p>
@@ -1068,10 +1079,9 @@
 
 </div>
 
-<div class="charts-section">
+<div class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Tue, 06 Jan)</i></small></h3>
-    <img src="screenshots/lidar_sensing.png" alt="Lidar Sensing Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-</div>
+<img src="" data-src="screenshots/lidar_sensing.png" alt="Lidar Sensing Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
 <div class="industry-section" id="autonomous_driving"><h2>4. Autonomous Driving <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Autonomous driving / self-driving tech</i></p>
@@ -1121,10 +1131,9 @@
 
 </div>
 
-<div class="charts-section">
+<div class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Thu, 08 Jan)</i></small></h3>
-    <img src="screenshots/autonomous_driving.png" alt="Autonomous Driving Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-</div>
+<img src="" data-src="screenshots/autonomous_driving.png" alt="Autonomous Driving Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
 <div class="industry-section" id="uas_defense_robotics"><h2>5. Uas Defense Robotics <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Defense &amp; aerospace technology / military systems</i></p>
@@ -1214,10 +1223,9 @@
 
 </div>
 
-<div class="charts-section">
+<div class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Fri, 09 Jan)</i></small></h3>
-    <img src="screenshots/uas_defense_robotics.png" alt="Uas Defense Robotics Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-</div>
+<img src="" data-src="screenshots/uas_defense_robotics.png" alt="Uas Defense Robotics Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
 <div class="industry-section" id="service_robotics"><h2>6. Service Robotics <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Industrial automation, robotics, and service automation technologies, including collaborative robots, warehouse automation, and consumer robotics</i></p>
@@ -1289,10 +1297,9 @@
 
 </div>
 
-<div class="charts-section">
+<div class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Thu, 08 Jan)</i></small></h3>
-    <img src="screenshots/service_robotics.png" alt="Service Robotics Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-</div>
+<img src="" data-src="screenshots/service_robotics.png" alt="Service Robotics Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
 <div class="industry-section" id="space_launch_systems"><h2>7. Space Launch Systems <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Space technology and services companies, including satellite operators, launch service providers, space infrastructure, and space-based data analytics</i></p>
@@ -1365,10 +1372,9 @@
 
 </div>
 
-<div class="charts-section">
+<div class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Wed, 07 Jan)</i></small></h3>
-    <img src="screenshots/space_launch_systems.png" alt="Space Launch Systems Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-</div>
+<img src="" data-src="screenshots/space_launch_systems.png" alt="Space Launch Systems Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
 <div class="industry-section" id="earth_observation"><h2>8. Earth Observation <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Satellite communications, space technology, and related infrastructure companies, including satellite operators, ground station providers, and satellite communication services</i></p>
@@ -1443,10 +1449,9 @@
 
 </div>
 
-<div class="charts-section">
+<div class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Wed, 07 Jan)</i></small></h3>
-    <img src="screenshots/earth_observation.png" alt="Earth Observation Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-</div>
+<img src="" data-src="screenshots/earth_observation.png" alt="Earth Observation Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
 <div class="industry-section" id="ev_charging_infrastructure"><h2>9. Ev Charging Infrastructure <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>EV charging infrastructure &amp; solutions</i></p>
@@ -1503,10 +1508,9 @@
 
 </div>
 
-<div class="charts-section">
+<div class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Thu, 11 Dec)</i></small></h3>
-    <img src="screenshots/ev_charging_infrastructure.png" alt="Ev Charging Infrastructure Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-</div>
+<img src="" data-src="screenshots/ev_charging_infrastructure.png" alt="Ev Charging Infrastructure Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
 <div class="industry-section" id="evtol_air_mobility"><h2>10. Evtol Air Mobility <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Urban air mobility and eVTOL aircraft companies focused on electric vertical takeoff and landing transportation solutions</i></p>
@@ -1555,10 +1559,9 @@
 
 </div>
 
-<div class="charts-section">
+<div class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Wed, 07 Jan)</i></small></h3>
-    <img src="screenshots/evtol_air_mobility.png" alt="Evtol Air Mobility Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-</div>
+<img src="" data-src="screenshots/evtol_air_mobility.png" alt="Evtol Air Mobility Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
 <div class="industry-section" id="hydrogen_fuel_cells"><h2>11. Hydrogen Fuel Cells <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Hydrogen &amp; fuel cell technology</i></p>
@@ -1628,10 +1631,9 @@ bw:&gt; announced the full redemption of all $26 million aggregate principal amo
 
 </div>
 
-<div class="charts-section">
+<div class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Wed, 07 Jan)</i></small></h3>
-    <img src="screenshots/hydrogen_fuel_cells.png" alt="Hydrogen Fuel Cells Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-</div>
+<img src="" data-src="screenshots/hydrogen_fuel_cells.png" alt="Hydrogen Fuel Cells Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
 <div class="industry-section" id="batteries_storage_tech"><h2>12. Batteries Storage Tech <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>EV battery technology</i></p>
@@ -1665,10 +1667,9 @@ bw:&gt; announced the full redemption of all $26 million aggregate principal amo
 
 </div>
 
-<div class="charts-section">
+<div class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Wed, 07 Jan)</i></small></h3>
-    <img src="screenshots/batteries_storage_tech.png" alt="Batteries Storage Tech Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-</div>
+<img src="" data-src="screenshots/batteries_storage_tech.png" alt="Batteries Storage Tech Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
 <div class="industry-section" id="batteries_storage_sw"><h2>13. Batteries Storage Sw <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Energy storage &amp; battery tech</i></p>
@@ -1767,10 +1768,9 @@ te:&gt; 17M shares given to notes. $3B dilution($1.5B ATM) Dec 05</div>
 
 </div>
 
-<div class="charts-section">
+<div class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Wed, 07 Jan)</i></small></h3>
-    <img src="screenshots/batteries_storage_sw.png" alt="Batteries Storage Sw Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-</div>
+<img src="" data-src="screenshots/batteries_storage_sw.png" alt="Batteries Storage Sw Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
 <div class="industry-section" id="battery_materials_mining"><h2>14. Battery Materials Mining <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Lithium &amp; battery metals / mining</i></p>
@@ -1858,10 +1858,9 @@ te:&gt; 17M shares given to notes. $3B dilution($1.5B ATM) Dec 05</div>
 
 </div>
 
-<div class="charts-section">
+<div class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Thu, 08 Jan)</i></small></h3>
-    <img src="screenshots/battery_materials_mining.png" alt="Battery Materials Mining Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-</div>
+<img src="" data-src="screenshots/battery_materials_mining.png" alt="Battery Materials Mining Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
 <div class="industry-section" id="Hyperscalers"><h2>15. Hyperscalers <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>HPC/NeoCloud: building data centers for AI workloads and renting out GPU capacity to hyperscalers and AI companies</i></p>
@@ -1912,10 +1911,9 @@ te:&gt; 17M shares given to notes. $3B dilution($1.5B ATM) Dec 05</div>
 
 </div>
 
-<div class="charts-section">
+<div class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Wed, 07 Jan)</i></small></h3>
-    <img src="screenshots/Hyperscalers.png" alt="Hyperscalers Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-</div>
+<img src="" data-src="screenshots/Hyperscalers.png" alt="Hyperscalers Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
 <div class="industry-section" id="Mining"><h2>16. Mining <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Cryptocurrency mining and blockchain infrastructure companies</i></p>
@@ -1959,10 +1957,9 @@ te:&gt; 17M shares given to notes. $3B dilution($1.5B ATM) Dec 05</div>
 
 </div>
 
-<div class="charts-section">
+<div class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Wed, 07 Jan)</i></small></h3>
-    <img src="screenshots/Mining.png" alt="Mining Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-</div>
+<img src="" data-src="screenshots/Mining.png" alt="Mining Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
 <div class="industry-section" id="new_nuclear_energy"><h2>17. New Nuclear Energy <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>OKLO/SMR/nne new advanced nuclear tech reactors; UEC/nxe/CCJ/leu uranium mining/exploration/enrichment; bwxt eng services; ceg/nee/exc/etr/d/duk/uuuu power generation utility not covered here</i></p>
@@ -2020,10 +2017,9 @@ oklo:&gt; $3.5B shelf registration,Dec 4 $1.5B ATM</div>
 
 </div>
 
-<div class="charts-section">
+<div class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Wed, 07 Jan)</i></small></h3>
-    <img src="screenshots/new_nuclear_energy.png" alt="New Nuclear Energy Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-</div>
+<img src="" data-src="screenshots/new_nuclear_energy.png" alt="New Nuclear Energy Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
 <div class="industry-section" id="Mag7"><h2>18. Mag7 <a href="#top" class="scroll-to-top-button">&uarr;</a></h2>
 <p><i>Large-cap technology companies, including consumer electronics, cloud computing, social media, AI, semiconductor manufacturing, and e-commerce platforms</i></p>
@@ -2126,10 +2122,9 @@ oklo:&gt; $3.5B shelf registration,Dec 4 $1.5B ATM</div>
 
 </div>
 
-<div class="charts-section">
+<div class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Wed, 07 Jan)</i></small></h3>
-    <img src="screenshots/Mag7.png" alt="Mag7 Industry Image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-</div>
+<img src="" data-src="screenshots/Mag7.png" alt="Mag7 Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
 
 <script>
@@ -2175,8 +2170,11 @@ oklo:&gt; $3.5B shelf registration,Dec 4 $1.5B ATM</div>
         }});
 
         document.getElementById('toggleCharts').addEventListener('change', function() {{
-            toggleVisibility('.charts-section', this.checked);
-            toggleVisibility('.ticker-hyperlinks-row', this.checked); // Also toggle the new ticker row
+            const isChecked = this.checked;
+            toggleVisibility('.charts-section', isChecked);
+            if (isChecked) {
+                loadChartsImages(); // Load images when charts are shown
+            }
         }});
 
         //document.getElementById('toggleNotes').addEventListener('change', function() {{
