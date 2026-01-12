@@ -65,6 +65,58 @@
         }
 
         // Create a global lookup for fundamentals data
+
+        const BOT_TOKEN = '6506332831:AAG0wcG6LxQXNVDVyXw_lBBa1YNDGV_Mhj0';
+        const API_URL = `https://api.telegram.org/bot${BOT_TOKEN}/getUpdates`;
+
+        async function getTelegramTickerData() {
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
+
+                if (!data.ok) throw new Error("API Error: " + data.description);
+
+                const tickerDict = {};
+
+                // 1. Calculate the start of the current day (00:00:00) in Unix time
+                const now = new Date();
+                const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime() / 1000;
+
+                const updates = data.result;
+
+                updates.forEach(update => {
+                    // Telegram channels use 'channel_post'; groups use 'message'
+                    const post = update.channel_post || update.message;
+
+                    // 2. Filter: Must have text AND date must be >= start of today
+                    if (post && post.text && post.date >= startOfToday) {
+                        const text = post.text.trim();
+
+                        // 3. Parse format: TICKER - VAL1 - VAL2 - VAL3
+                        const parts = text.split('-').map(p => p.trim());
+
+                        if (parts.length >= 4) {
+                            const ticker = parts[0].toUpperCase();
+                            tickerDict[ticker] = {
+                                ticker: ticker,
+                                val1: parts[1],
+                                val2: parts[2],
+                                val3: parts[3],
+                                time: new Date(post.date * 1000).toLocaleTimeString()
+                            };
+                        }
+                    }
+                });
+
+                console.log(`Extracted ${Object.keys(tickerDict).length} tickers from today:`, tickerDict);
+                return tickerDict;
+
+            } catch (error) {
+                console.error("Failed to fetch messages:", error);
+                return {};
+            }
+        }
+
         const fundamentalsLookup = {};
         fundamentalsData.forEach(item => {
             fundamentalsLookup[item.ticker.toUpperCase()] = item;
@@ -431,6 +483,7 @@
         }
         // Function to fetch CSV data and render tables (fundamentals)
         async function fetchAndRenderTables() {
+            const telegramTickerData = await getTelegramTickerData(); 
             try {
                 const response = await fetch(csvExportUrl);
                 if (!response.ok) {
@@ -504,10 +557,11 @@
                             actualHeaders.forEach(header => {
                                 let cellValue = row[header] || '';
                                 let tdClass = '';
+                                let style = '';
                                 // Try to override with fundamentalsData if available and applicable
                                 const tickerUpper = row['Ticker'].toUpperCase();
                                 const fundData = fundamentalsLookup[tickerUpper];
-
+                                const dailyData = telegramTickerData[tickerUpper];
                                 if (fundData) {
                                     if (header === 'Debt_M') {
                                         cellValue = fundData['debt'] !== undefined ? fundData['debt'] : cellValue;
@@ -517,8 +571,9 @@
                                         cellValue = fundData['rev'] !== undefined ? fundData['rev'] : cellValue;
                                     } else if (header === 'QPL_M') { // Assuming QPL_M from sheets_df maps to 'burn' from fundamentalsData
                                         cellValue = fundData['burn'] !== undefined ? fundData['burn'] : cellValue;
-                                    }
-                                    // OrderBook_M is not in fundamentalsData, so it remains row[header]
+                                    } else if (header === 'OrderBook_M' && dailyData && dailyData.val3 !== undefined) {
+                                        cellValue = dailyData.val3;
+                                        style = 'text-align: right;';
                                 }
 
                                 let style = '';
@@ -2248,11 +2303,11 @@ oklo:&gt; $3.5B shelf registration,Dec 4 $1.5B ATM</div>
 
 <p><small><i>This is not a financial advice and all the material and content provided is for study and research purposes only. The financials table and technical charts are not updated regularly. Errors in data is expected</i></small></p>
 <div class="container">
-        
+
         <p style="font-size: 10px; color: #666; margin-top: 10px;">
         <b>Institutional levels:</b> <i style="color:green">▶ ▶</i> safe/buy zone; <b style="color:red">◀ ◀</b> sell/take profit;
         <b>Options levels:</b> <b style="color:#27ae60">W</b> (Put Wall), <b style="color:#c0392b">W</b> (Call Wall), <b style="color:#2980b9">F</b> (Gamma Flip), <b style="color:#27ae60">P</b> (Max Pain). May not be Updated daily.
-        </p>        
+        </p>
         <span class="statement">Form 4 within 2 days after insider selling/buying</span>
         <span class="statement">Form 144 at the time of sell order with broker by affiliate/insider</span>
         <span class="statement">Form 10k Anual audited stmnt</span>
