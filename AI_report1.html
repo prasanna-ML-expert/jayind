@@ -304,8 +304,7 @@
 
             if (optionsDetailedDict[industryKey]) {
                 contentHtml += `<h4>${industryKey}</h4>`;
-                contentHtml += `<pre>${optionsDetailedDict[industryKey]}</pre>`; // Display raw content
-            } else {
+                contentHtml += `<div class="popup-markdown-content">${optionsDetailedDict[industryKey]}</div>`;            } else {
                 contentHtml += `<h4>${industryKey}</h4><p>No detailed options data found.</p>`;
             }
 
@@ -2315,6 +2314,13 @@ oklo:&gt; $3.5B shelf registration,Dec 4 $1.5B ATM</div>
             block.classList.add('markdown-output'); // Add a class for styled output
         }});
 
+        // Process markdown content within the popup for options details
+        const popupMarkdownBlocks = document.querySelectorAll('.popup-markdown-content');
+        popupMarkdownBlocks.forEach(block => {{
+            const rawMarkdown = block.innerHTML;
+            const decodedMarkdown = new DOMParser().parseFromString(rawMarkdown, 'text/html').documentElement.textContent;
+            block.innerHTML = marked.parse(decodedMarkdown);
+        }});
         // Toggle functionality
         const toggleVisibility = (selector, isChecked) => {{
             document.querySelectorAll(selector).forEach(element => {{
