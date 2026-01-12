@@ -470,7 +470,7 @@
 
                 // Columns to display (must match Python list in sheets_df)
                 const columnsToDisplay = [
-                    'Ticker', 'price%', 'Price', 'mcap',
+                    'price%', 'Ticker', 'Price', 'mcap',
                     'Debt_M', 'Cash_M', 'QRevenue_M', 'QPL_M', 'OrderBook_M'
                 ];
 
@@ -503,6 +503,7 @@
                             tableHtml += '<tr>';
                             actualHeaders.forEach(header => {
                                 let cellValue = row[header] || '';
+                                let tdClass = '';
                                 // Try to override with fundamentalsData if available and applicable
                                 const tickerUpper = row['Ticker'].toUpperCase();
                                 const fundData = fundamentalsLookup[tickerUpper];
@@ -521,13 +522,15 @@
                                 }
 
                                 let style = '';
-                                //if (header === 'price%') {
-                                //    style = colorPricePercent(cellValue);
-                                //}
                                 if (!isNaN(parseFloat(cellValue)) && isFinite(cellValue)) {
                                     cellValue = parseFloat(cellValue).toString();
                                 }
                                 let displayValue = cellValue;
+                                if (header === 'price%') {
+                                    displayValue = '';
+                                    style = colorPricePercent(cellValue);
+                                    tdClass = 'price-percent-col';
+                                }
                                 if (header === 'Ticker') {
                                     const ticker = cellValue.toUpperCase();
                                     const price = row['Price'] || 'N/A'; // Get the price
@@ -539,7 +542,7 @@
                                         `;
                                     }
                                 }
-                                tableHtml += `<td style="${style}">${displayValue}</td>`;
+                                tableHtml += `<td class="${tdClass}" style="${style}">${displayValue}</td>`;
                             });
                             tableHtml += '</tr>';
                             const currentPrice = parseFloat(row['Price']) || NaN;
@@ -803,7 +806,10 @@
 
         .toggle-header { cursor: pointer; }
         .toggle-icon { margin-left: 10px; }
-
+        .price-percent-col {
+            width: 5px;
+            padding: 0;
+        }
         /* CSS for arrowheads */
         .arrow-right-green,
         .arrow-left-red {
