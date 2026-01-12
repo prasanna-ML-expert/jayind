@@ -522,15 +522,15 @@
                                 }
 
                                 let style = '';
+                                if (!isNaN(parseFloat(cellValue)) && isFinite(cellValue)) {
+                                    cellValue = parseFloat(cellValue).toString();
+                                }
+                                let displayValue = cellValue;
                                 if (header === 'price%') {
                                     displayValue = '';
                                     style = colorPricePercent(cellValue);
                                     tdClass = 'price-percent-col';
                                 }
-                                if (!isNaN(parseFloat(cellValue)) && isFinite(cellValue)) {
-                                    cellValue = parseFloat(cellValue).toString();
-                                }
-                                let displayValue = cellValue;
                                 if (header === 'Ticker') {
                                     const ticker = cellValue.toUpperCase();
                                     const price = row['Price'] || 'N/A'; // Get the price
