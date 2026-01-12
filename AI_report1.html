@@ -68,7 +68,7 @@
 
         async function loadAndCleanIndustryData() {
           try {
-              const response = await fetch('options_detailed.json');
+              const response = await fetch(GITHUB_RAW_URL_BASE + 'options_detailed.json');
               const rawData = await response.json();
 
 
@@ -114,6 +114,9 @@
 
         const BOT_TOKEN = '6506332831:AAG0wcG6LxQXNVDVyXw_lBBa1YNDGV_Mhj0';
         const API_URL = `https://api.telegram.org/bot${BOT_TOKEN}/getUpdates`;
+        const GITHUB_RAW_URL_BASE = "https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/";
+        const DILUTION_DATA_FILENAME = "all_industries_detailed_dilution_results.json";
+        const DATA_URL = GITHUB_RAW_URL_BASE + DILUTION_DATA_FILENAME;
 
         async function getTelegramTickerData() {
             try {
@@ -176,9 +179,7 @@
 
         // Dynamically fetched dilution data
         let tickerDilutionMap = {};
-        const GITHUB_RAW_URL_BASE = "https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/";
-        const DILUTION_DATA_FILENAME = "all_industries_detailed_dilution_results.json";
-        const DATA_URL = GITHUB_RAW_URL_BASE + DILUTION_DATA_FILENAME;
+
 
         async function fetchDilutionData() {
             try {
