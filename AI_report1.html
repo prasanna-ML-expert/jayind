@@ -368,7 +368,12 @@
             if (chartSection) {
                 chartSection.classList.toggle('hidden');
                 if (!chartSection.classList.contains('hidden')) {
-                    loadChartsImages(); // Load images when shown
+                    // Find the specific image within this chartSection and load it
+                    const img = chartSection.querySelector('.chart-image');
+                    if (img) {
+                        img.src = img.dataset.src;
+                        console.log(`Loaded image for ${industryKey}:`, img.src);
+                    }
                 }
             }
         }
