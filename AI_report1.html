@@ -745,7 +745,7 @@
                                                 }
                                                 <!--div style="position: absolute; left: ${pricePosition}%; top: -3px; width: 10px; height: 10px; background-color: #333; border-radius: 50%; transform: translateX(-50%); box-shadow: 0 0 5px rgba(0,0,0,0.5);" title="${currentPrice.toFixed(2)}"></div-->
                                                 <span style="position: absolute; left: ${pricePosition}%; top: -12px; transform: translateX(-50%); font-weight: bold; font-size: 1.5em; color: black;">$&nbsp;</span>
-                                                <span style="position: absolute; left: ${pricePosition}%; top: -26px; transform: translateX(-50%); font-size: 0.8em; color: black;">${currentPrice.toFixed(2)}</span>
+                                                <span style="position: absolute; left: ${pricePosition}%; top: -26px; transform: translateX(-50%); font-size: 0.8em; color: dimgrey;">${currentPrice.toFixed(2)}</span>
 
                                                 ${!isNaN(floorRange.min) ? `<span class="arrow-right-green" style="left: ${floorMinPos}%;" title="${floorRange.min.toFixed(2)}"></span>` : ''}
                                                 ${!isNaN(floorRange.max) ? `<span class="arrow-right-green" style="left: ${floorMaxPos}%;" title="${floorRange.max.toFixed(2)}"></span>` : ''}
@@ -788,11 +788,11 @@
                                                     }
                                                     <!-- Put Wall Text -->
                                                     <span style="position: absolute; left: ${putwallPos}%; top: -12px; width: auto; height: auto; padding: 0 3px; background-color: green; color: white; border-radius: 3px; transform: translateX(-50%); font-weight: bold; font-size: 0.8em;" title="$${putwall.toFixed(2)}">W</span>
-                                                    <span style="position: absolute; left: ${putwallPos}%; top: -26px; transform: translateX(-50%); font-size: 0.8em; color: black;">${distToPutWall.toFixed(1)}</span>
+                                                    <span style="position: absolute; left: ${putwallPos}%; top: -26px; transform: translateX(-50%); font-size: 0.8em; color: dimgrey;">${distToPutWall.toFixed(1)}</span>
 
                                                     <!-- Call Wall Text -->
                                                     <span style="position: absolute; left: ${callwallPos}%; top: -12px; width: auto; height: auto; padding: 0 3px; background-color: red; color: white; border-radius: 3px; transform: translateX(-50%); font-weight: bold; font-size: 0.8em;" title="$${callwall.toFixed(2)}">W</span>
-                                                    <span style="position: absolute; left: ${callwallPos}%; top: -26px; transform: translateX(-50%); font-size: 0.8em; color: black;">${distToCallWall.toFixed(1)}</span>
+                                                    <span style="position: absolute; left: ${callwallPos}%; top: -26px; transform: translateX(-50%); font-size: 0.8em; color: dimgrey;">${distToCallWall.toFixed(1)}</span>
 
                                                     <!-- Current Price Dot (black) -->
                                                     <!--div style="position: absolute; left: ${pricePosition}%; top: -3px; width: 10px; height: 10px; background-color: black; border-radius: 50%; transform: translateX(-50%); box-shadow: 0 0 5px rgba(0,0,0,0.5);title=""></div-->
