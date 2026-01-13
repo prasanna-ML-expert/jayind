@@ -720,7 +720,7 @@
                             let optionsLineHtml = ''; // For options line
                             const getPctDist = (targetValue) => {
                                 if (!currentPrice || currentPrice === 0 || targetValue === 0) return 0;
-                                return Math.round((targetValue - currentPrice) / currentPrice) * 100);
+                                return Math.round(((targetValue - currentPrice) / currentPrice) * 100);
                             };
                             if (!isNaN(overallMin) && !isNaN(overallMax) && overallMin < overallMax) {
                                 const range = overallMax - overallMin;
