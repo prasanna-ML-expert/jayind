@@ -363,6 +363,21 @@
             backdrop.classList.add('active');
         }
 
+        function toggleImageChart(industryKey) {
+            const chartSection = document.getElementById(`charts-image-section-${industryKey}`);
+            if (chartSection) {
+                chartSection.classList.toggle('hidden');
+                if (!chartSection.classList.contains('hidden')) {
+                    // Find the specific image within this chartSection and load it
+                    const img = chartSection.querySelector('.chart-image');
+                    if (img) {
+                        img.src = img.dataset.src;
+                        console.log(`Loaded image for ${industryKey}:`, img.src);
+                    }
+                }
+            }
+        }
+
         function closeDilutionInline() {
             document.getElementById('dilution-inline-popup').classList.remove('active');
             document.getElementById('dilution-backdrop').classList.remove('active');
@@ -1125,9 +1140,10 @@
 
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'quantum', 'ionq(49.15) qbts(28.79) rgti(24.80) qubt(11.74) laes(4.29) arqq(26.00) ',event); return false;" style="margin-right: 10px;">quantum</button>
+    <button class="ticker-button" onclick="toggleImageChart('quantum');" style="margin-right: 10px;">Show Technical Charts</button>
 </div>
 
-<div class="charts-section hidden">
+<div id="charts-image-section-quantum" class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Mon, 12 Jan)</i></small></h3>
 <img src="" data-src="screenshots/quantum.png" alt="Quantum Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
@@ -1202,9 +1218,10 @@ No specific announcements or SEC filings directly from Indie Semiconductor were 
 
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'power_management_chips', 'nvts(9.35) on(59.61) aosl(22.22) cohr(190.34) mpwr(981.72) powi(41.10) alab(180.46) indi(4.05) ',event); return false;" style="margin-right: 10px;">power_management_chips</button>
+    <button class="ticker-button" onclick="toggleImageChart('power_management_chips');" style="margin-right: 10px;">Show Technical Charts</button>
 </div>
 
-<div class="charts-section hidden">
+<div id="charts-image-section-power_management_chips" class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Tue, 06 Jan)</i></small></h3>
 <img src="" data-src="screenshots/power_management_chips.png" alt="Power Management Chips Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
@@ -1269,9 +1286,10 @@ A search for &quot;LIDR latest news and SEC filings January 13 2026&quot; and &q
 
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'lidar_sensing', 'aeva(20.12) invz(1.08) mvis(0.96) lidr(2.12) oust(27.80) arbe(1.28) ',event); return false;" style="margin-right: 10px;">lidar_sensing</button>
+    <button class="ticker-button" onclick="toggleImageChart('lidar_sensing');" style="margin-right: 10px;">Show Technical Charts</button>
 </div>
 
-<div class="charts-section hidden">
+<div id="charts-image-section-lidar_sensing" class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Tue, 06 Jan)</i></small></h3>
 <img src="" data-src="screenshots/lidar_sensing.png" alt="Lidar Sensing Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
@@ -1336,9 +1354,10 @@ A search for &quot;LIDR latest news and SEC filings January 13 2026&quot; and &q
 
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'autonomous_driving', 'mbly(10.78) aur(4.65) tsla(445.91) xpev(21.14) kdk(9.38) ',event); return false;" style="margin-right: 10px;">autonomous_driving</button>
+    <button class="ticker-button" onclick="toggleImageChart('autonomous_driving');" style="margin-right: 10px;">Show Technical Charts</button>
 </div>
 
-<div class="charts-section hidden">
+<div id="charts-image-section-autonomous_driving" class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Thu, 08 Jan)</i></small></h3>
 <img src="" data-src="screenshots/autonomous_driving.png" alt="Autonomous Driving Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
@@ -1408,9 +1427,10 @@ A search for &quot;LIDR latest news and SEC filings January 13 2026&quot; and &q
 
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'uas_defense_robotics', 'dpro(10.05) rcat(13.30) zena(3.89) onds(14.04) avav(364.43) ktos(120.03) umac(15.25) spai(5.82) ',event); return false;" style="margin-right: 10px;">uas_defense_robotics</button>
+    <button class="ticker-button" onclick="toggleImageChart('uas_defense_robotics');" style="margin-right: 10px;">Show Technical Charts</button>
 </div>
 
-<div class="charts-section hidden">
+<div id="charts-image-section-uas_defense_robotics" class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Fri, 09 Jan)</i></small></h3>
 <img src="" data-src="screenshots/uas_defense_robotics.png" alt="Uas Defense Robotics Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
@@ -1469,9 +1489,10 @@ A search for &quot;LIDR latest news and SEC filings January 13 2026&quot; and &q
 
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'service_robotics', 'rr(3.95) serv(14.34) prct(30.89) zbra(265.30) irbt(N/A) ',event); return false;" style="margin-right: 10px;">service_robotics</button>
+    <button class="ticker-button" onclick="toggleImageChart('service_robotics');" style="margin-right: 10px;">Show Technical Charts</button>
 </div>
 
-<div class="charts-section hidden">
+<div id="charts-image-section-service_robotics" class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Thu, 08 Jan)</i></small></h3>
 <img src="" data-src="screenshots/service_robotics.png" alt="Service Robotics Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
@@ -1543,9 +1564,10 @@ A search for &quot;LIDR latest news and SEC filings January 13 2026&quot; and &q
 
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'space_launch_systems', 'rklb(88.32) fly(28.06) mnts(9.79) spce(3.10) lunr(17.76) rdw(10.26) ',event); return false;" style="margin-right: 10px;">space_launch_systems</button>
+    <button class="ticker-button" onclick="toggleImageChart('space_launch_systems');" style="margin-right: 10px;">Show Technical Charts</button>
 </div>
 
-<div class="charts-section hidden">
+<div id="charts-image-section-space_launch_systems" class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Wed, 07 Jan)</i></small></h3>
 <img src="" data-src="screenshots/space_launch_systems.png" alt="Space Launch Systems Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
@@ -1616,9 +1638,10 @@ A search for &quot;LIDR latest news and SEC filings January 13 2026&quot; and &q
 
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'earth_observation', 'pl(25.77) bksy(26.46) spir(10.75) satl(3.66) asts(93.50) irdm(19.67) sats(122.07) vsat(41.27) ',event); return false;" style="margin-right: 10px;">earth_observation</button>
+    <button class="ticker-button" onclick="toggleImageChart('earth_observation');" style="margin-right: 10px;">Show Technical Charts</button>
 </div>
 
-<div class="charts-section hidden">
+<div id="charts-image-section-earth_observation" class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Wed, 07 Jan)</i></small></h3>
 <img src="" data-src="screenshots/earth_observation.png" alt="Earth Observation Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
@@ -1680,9 +1703,10 @@ A search for &quot;LIDR latest news and SEC filings January 13 2026&quot; and &q
 
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'ev_charging_infrastructure', 'evgo(3.00) blnk(0.91) chpt(6.96) beem(1.73) adse(12.29) ',event); return false;" style="margin-right: 10px;">ev_charging_infrastructure</button>
+    <button class="ticker-button" onclick="toggleImageChart('ev_charging_infrastructure');" style="margin-right: 10px;">Show Technical Charts</button>
 </div>
 
-<div class="charts-section hidden">
+<div id="charts-image-section-ev_charging_infrastructure" class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Thu, 11 Dec)</i></small></h3>
 <img src="" data-src="screenshots/ev_charging_infrastructure.png" alt="Ev Charging Infrastructure Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
@@ -1737,9 +1761,10 @@ A search for &quot;LIDR latest news and SEC filings January 13 2026&quot; and &q
 
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'evtol_air_mobility', 'achr(8.56) joby(14.86) evex(4.43) evtl(6.32) ',event); return false;" style="margin-right: 10px;">evtol_air_mobility</button>
+    <button class="ticker-button" onclick="toggleImageChart('evtol_air_mobility');" style="margin-right: 10px;">Show Technical Charts</button>
 </div>
 
-<div class="charts-section hidden">
+<div id="charts-image-section-evtol_air_mobility" class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Wed, 07 Jan)</i></small></h3>
 <img src="" data-src="screenshots/evtol_air_mobility.png" alt="Evtol Air Mobility Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
@@ -1796,9 +1821,10 @@ bw:&gt; announced the full redemption of all $26 million aggregate principal amo
 
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'hydrogen_fuel_cells', 'fcel(7.62) be(144.60) plug(2.31) hyln(2.10) bw(8.54) bldp(N/A) ',event); return false;" style="margin-right: 10px;">hydrogen_fuel_cells</button>
+    <button class="ticker-button" onclick="toggleImageChart('hydrogen_fuel_cells');" style="margin-right: 10px;">Show Technical Charts</button>
 </div>
 
-<div class="charts-section hidden">
+<div id="charts-image-section-hydrogen_fuel_cells" class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Wed, 07 Jan)</i></small></h3>
 <img src="" data-src="screenshots/hydrogen_fuel_cells.png" alt="Hydrogen Fuel Cells Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
@@ -1854,9 +1880,10 @@ bw:&gt; announced the full redemption of all $26 million aggregate principal amo
 
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'batteries_storage_tech', 'qs(10.65) envx(7.96) ses(2.19) mvst(3.28) ampx(9.77) sldp(5.56) ',event); return false;" style="margin-right: 10px;">batteries_storage_tech</button>
+    <button class="ticker-button" onclick="toggleImageChart('batteries_storage_tech');" style="margin-right: 10px;">Show Technical Charts</button>
 </div>
 
-<div class="charts-section hidden">
+<div id="charts-image-section-batteries_storage_tech" class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Wed, 07 Jan)</i></small></h3>
 <img src="" data-src="screenshots/batteries_storage_tech.png" alt="Batteries Storage Tech Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
@@ -1911,9 +1938,10 @@ te:&gt; 17M shares given to notes. $3B dilution($1.5B ATM) Dec 05</div>
 
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'batteries_storage_sw', 'enph(36.24) stem(19.39) flnc(24.36) eose(16.86) gwh(1.78) kulr(3.44) te(8.08) nrgv(5.64) ',event); return false;" style="margin-right: 10px;">batteries_storage_sw</button>
+    <button class="ticker-button" onclick="toggleImageChart('batteries_storage_sw');" style="margin-right: 10px;">Show Technical Charts</button>
 </div>
 
-<div class="charts-section hidden">
+<div id="charts-image-section-batteries_storage_sw" class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Wed, 07 Jan)</i></small></h3>
 <img src="" data-src="screenshots/batteries_storage_sw.png" alt="Batteries Storage Sw Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
@@ -1977,9 +2005,10 @@ te:&gt; 17M shares given to notes. $3B dilution($1.5B ATM) Dec 05</div>
 
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'battery_materials_mining', 'atlx(5.72) abat(4.92) alb(176.45) sqm(81.11) sgml(15.59) elvr(67.78) lac(5.88) nb(6.73) ',event); return false;" style="margin-right: 10px;">battery_materials_mining</button>
+    <button class="ticker-button" onclick="toggleImageChart('battery_materials_mining');" style="margin-right: 10px;">Show Technical Charts</button>
 </div>
 
-<div class="charts-section hidden">
+<div id="charts-image-section-battery_materials_mining" class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Thu, 08 Jan)</i></small></h3>
 <img src="" data-src="screenshots/battery_materials_mining.png" alt="Battery Materials Mining Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
@@ -2056,9 +2085,10 @@ te:&gt; 17M shares given to notes. $3B dilution($1.5B ATM) Dec 05</div>
 
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'Hyperscalers', 'crwv(88.10) nbis(106.06) corz(17.70) apld(37.13) cifr(18.13) wulf(13.98) ',event); return false;" style="margin-right: 10px;">Hyperscalers</button>
+    <button class="ticker-button" onclick="toggleImageChart('Hyperscalers');" style="margin-right: 10px;">Show Technical Charts</button>
 </div>
 
-<div class="charts-section hidden">
+<div id="charts-image-section-Hyperscalers" class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Tue, 13 Jan)</i></small></h3>
 <img src="" data-src="screenshots/Hyperscalers.png" alt="Hyperscalers Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
@@ -2132,9 +2162,10 @@ te:&gt; 17M shares given to notes. $3B dilution($1.5B ATM) Dec 05</div>
 
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'Mining', 'mara(10.83) clsk(12.32) bitf(3.13) hive(3.51) btbt(2.34) hut(60.75) riot(16.34) iren(51.46) ',event); return false;" style="margin-right: 10px;">Mining</button>
+    <button class="ticker-button" onclick="toggleImageChart('Mining');" style="margin-right: 10px;">Show Technical Charts</button>
 </div>
 
-<div class="charts-section hidden">
+<div id="charts-image-section-Mining" class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Tue, 13 Jan)</i></small></h3>
 <img src="" data-src="screenshots/Mining.png" alt="Mining Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
@@ -2218,9 +2249,10 @@ oklo:&gt; $3.5B shelf registration,Dec 4 $1.5B ATM</div>
 
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'new_nuclear_energy', 'oklo(98.77) smr(19.43) nne(32.56) imsr(N/A) uec(N/A) ccj(109.52) leu(304.40) bwxt(211.06) ',event); return false;" style="margin-right: 10px;">new_nuclear_energy</button>
+    <button class="ticker-button" onclick="toggleImageChart('new_nuclear_energy');" style="margin-right: 10px;">Show Technical Charts</button>
 </div>
 
-<div class="charts-section hidden">
+<div id="charts-image-section-new_nuclear_energy" class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Mon, 12 Jan)</i></small></h3>
 <img src="" data-src="screenshots/new_nuclear_energy.png" alt="New Nuclear Energy Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
@@ -2285,9 +2317,10 @@ oklo:&gt; $3.5B shelf registration,Dec 4 $1.5B ATM</div>
 
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'Mag7', 'spy(692.61) aapl(259.48) nvda(184.34) meta(628.12) msft(466.60) avgo(356.67) goog(337.40) amzn(241.94) ',event); return false;" style="margin-right: 10px;">Mag7</button>
+    <button class="ticker-button" onclick="toggleImageChart('Mag7');" style="margin-right: 10px;">Show Technical Charts</button>
 </div>
 
-<div class="charts-section hidden">
+<div id="charts-image-section-Mag7" class="charts-section hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Tue, 13 Jan)</i></small></h3>
 <img src="" data-src="screenshots/Mag7.png" alt="Mag7 Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;"></div>
 </div>
@@ -2342,9 +2375,17 @@ oklo:&gt; $3.5B shelf registration,Dec 4 $1.5B ATM</div>
             toggleVisibility('.markdown-output', this.checked); // Also toggle the rendered markdown news
         }});
 
+
         document.getElementById('toggleCharts').addEventListener('change', function() {{
             const isChecked = this.checked;
-            toggleVisibility('.charts-section', isChecked);
+            // Toggle all charts-image-section elements based on the global checkbox
+            document.querySelectorAll('[id^="charts-image-section-"]').forEach(element => {
+                if (isChecked) {
+                    element.classList.remove('hidden');
+                } else {
+                    element.classList.add('hidden');
+                }
+            });
             if (isChecked) {
                 loadChartsImages(); // Load images when charts are shown
             }
