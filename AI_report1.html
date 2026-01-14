@@ -82,7 +82,7 @@
               for (const [industry, content] of Object.entries(rawData)) {
                   // 1. Remove control characters (non-printable ASCII)
                   // 2. HTML Escape the resulting clean string
-                  industryDict[industry] = htmlEscapeAndClean(content);
+                  industryDict[industry] = cleanControlChars(content);
               }
 
               //console.log("Cleaned Industry Dictionary:", industryDict);
@@ -93,6 +93,12 @@
           }
       }
 
+      function cleanControlChars(str) {
+          if (typeof str !== 'string') return str;
+          // Remove control characters (Hex 00-08, 0B, 0C, 0E-1F, 7F-9F)
+          const cleanStr = str.replace(/[ ---]/g, "");
+          return cleanStr;
+      }
       /**
       * Strips control characters and encodes HTML entities
       */
@@ -350,7 +356,7 @@
 
             if (industryDict[industryKey]) {
                 contentHtml += `<h4>${tickerpricestr}</h4>`;
-                contentHtml += `<div class="popup-markdown-content">${industryDict[industryKey]}</div>`;
+                contentHtml += `<div class="popup-markdown-content">${marked.parse(industryDict[industryKey])}</div>`;
             } else {
                 contentHtml += `<h4>${industryKey}</h4><p>No detailed options data found.</p>`;
             }
