@@ -114,7 +114,7 @@
           };
 
           let escaped = cleanStr.replace(/[&<>"']/g, function(m) { return map[m]; });
-          return escaped.replace(/
+          return escaped;//.replace(/
 /g, "<br/>");
       }
 
@@ -994,6 +994,16 @@
         .arrow-left-red {
             border-right: 8px solid red; /* Left-pointing arrow */
         }
+        .industry-header-container {
+            display: flex;
+            align-items: baseline; /* Aligns the text baselines of h2 and buttons */
+            flex-wrap: wrap; /* Allows items to wrap on smaller screens */
+            gap: 10px; /* Space between items */
+        }
+        .section-toggles-inline .ticker-button {
+            font-size: 0.8em; /* Smaller font for inline buttons */
+            padding: 2px 5px;
+        }       
     </style>
 </head>
 <body id="top">
@@ -1173,12 +1183,6 @@
 
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'quantum', 'ionq(48.94) qbts(28.82) rgti(24.47) qubt(11.69) laes(4.31) arqq(26.18) ',event); return false;" style="margin-right: 10px;">quantum</button>
-    <strong>Section Toggles:</strong>
-    <button class="ticker-button" onclick="toggleSection('news-container-quantum', this);" style="margin-right: 10px;">News</button>
-    <button class="ticker-button" onclick="toggleSection('fundamentals-table-container-quantum', this);" style="margin-right: 10px;">Fundamentals Table</button>
-    <button class="ticker-button" onclick="toggleSection('canvas-chart-container-quantum', this);" style="margin-right: 10px;">Canvas Chart</button>
-    <button class="ticker-button" onclick="toggleSection('charts-image-section-quantum', this);" style="margin-right: 10px;">Technical Charts</button>
-    
     </div>
 
     <div id="charts-image-section-quantum" class="charts-image-content hidden">
@@ -1252,12 +1256,6 @@ For the following companies, no specific announcements or SEC filings dated **Ja
 
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'power_management_chips', 'nvts(9.46) on(59.41) aosl(22.16) cohr(190.03) mpwr(983.28) powi(40.90) alab(180.56) indi(4.11) ',event); return false;" style="margin-right: 10px;">power_management_chips</button>
-    <strong>Section Toggles:</strong>
-    <button class="ticker-button" onclick="toggleSection('news-container-power_management_chips', this);" style="margin-right: 10px;">News</button>
-    <button class="ticker-button" onclick="toggleSection('fundamentals-table-container-power_management_chips', this);" style="margin-right: 10px;">Fundamentals Table</button>
-    <button class="ticker-button" onclick="toggleSection('canvas-chart-container-power_management_chips', this);" style="margin-right: 10px;">Canvas Chart</button>
-    <button class="ticker-button" onclick="toggleSection('charts-image-section-power_management_chips', this);" style="margin-right: 10px;">Technical Charts</button>
-    
     </div>
 
     <div id="charts-image-section-power_management_chips" class="charts-image-content hidden">
@@ -1401,12 +1399,6 @@ For the following companies, no specific announcements or SEC filings dated **Ja
 
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'lidar_sensing', 'aeva(19.90) invz(1.08) mvis(0.95) lidr(2.08) oust(27.11) arbe(1.25) ',event); return false;" style="margin-right: 10px;">lidar_sensing</button>
-    <strong>Section Toggles:</strong>
-    <button class="ticker-button" onclick="toggleSection('news-container-lidar_sensing', this);" style="margin-right: 10px;">News</button>
-    <button class="ticker-button" onclick="toggleSection('fundamentals-table-container-lidar_sensing', this);" style="margin-right: 10px;">Fundamentals Table</button>
-    <button class="ticker-button" onclick="toggleSection('canvas-chart-container-lidar_sensing', this);" style="margin-right: 10px;">Canvas Chart</button>
-    <button class="ticker-button" onclick="toggleSection('charts-image-section-lidar_sensing', this);" style="margin-right: 10px;">Technical Charts</button>
-    
     </div>
 
     <div id="charts-image-section-lidar_sensing" class="charts-image-content hidden">
@@ -1542,12 +1534,6 @@ For the following companies, no specific announcements or SEC filings dated **Ja
 
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'autonomous_driving', 'mbly(10.75) aur(4.59) tsla(447.20) xpev(21.05) kdk(9.39) ',event); return false;" style="margin-right: 10px;">autonomous_driving</button>
-    <strong>Section Toggles:</strong>
-    <button class="ticker-button" onclick="toggleSection('news-container-autonomous_driving', this);" style="margin-right: 10px;">News</button>
-    <button class="ticker-button" onclick="toggleSection('fundamentals-table-container-autonomous_driving', this);" style="margin-right: 10px;">Fundamentals Table</button>
-    <button class="ticker-button" onclick="toggleSection('canvas-chart-container-autonomous_driving', this);" style="margin-right: 10px;">Canvas Chart</button>
-    <button class="ticker-button" onclick="toggleSection('charts-image-section-autonomous_driving', this);" style="margin-right: 10px;">Technical Charts</button>
-    
     </div>
 
     <div id="charts-image-section-autonomous_driving" class="charts-image-content hidden">
@@ -1661,12 +1647,6 @@ For the following companies, no specific announcements or SEC filings dated **Ja
 
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'uas_defense_robotics', 'dpro(9.82) rcat(13.06) zena(3.91) onds(13.89) avav(363.86) ktos(119.72) umac(14.99) spai(5.80) ',event); return false;" style="margin-right: 10px;">uas_defense_robotics</button>
-    <strong>Section Toggles:</strong>
-    <button class="ticker-button" onclick="toggleSection('news-container-uas_defense_robotics', this);" style="margin-right: 10px;">News</button>
-    <button class="ticker-button" onclick="toggleSection('fundamentals-table-container-uas_defense_robotics', this);" style="margin-right: 10px;">Fundamentals Table</button>
-    <button class="ticker-button" onclick="toggleSection('canvas-chart-container-uas_defense_robotics', this);" style="margin-right: 10px;">Canvas Chart</button>
-    <button class="ticker-button" onclick="toggleSection('charts-image-section-uas_defense_robotics', this);" style="margin-right: 10px;">Technical Charts</button>
-    
     </div>
 
     <div id="charts-image-section-uas_defense_robotics" class="charts-image-content hidden">
@@ -1804,12 +1784,6 @@ For the following companies, no specific announcements or SEC filings dated **Ja
 
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'service_robotics', 'rr(3.91) serv(14.42) prct(30.58) zbra(261.44) irbt(N/A) ',event); return false;" style="margin-right: 10px;">service_robotics</button>
-    <strong>Section Toggles:</strong>
-    <button class="ticker-button" onclick="toggleSection('news-container-service_robotics', this);" style="margin-right: 10px;">News</button>
-    <button class="ticker-button" onclick="toggleSection('fundamentals-table-container-service_robotics', this);" style="margin-right: 10px;">Fundamentals Table</button>
-    <button class="ticker-button" onclick="toggleSection('canvas-chart-container-service_robotics', this);" style="margin-right: 10px;">Canvas Chart</button>
-    <button class="ticker-button" onclick="toggleSection('charts-image-section-service_robotics', this);" style="margin-right: 10px;">Technical Charts</button>
-    
     </div>
 
     <div id="charts-image-section-service_robotics" class="charts-image-content hidden">
@@ -1921,12 +1895,6 @@ For the following companies, no specific announcements or SEC filings dated **Ja
 
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'space_launch_systems', 'rklb(86.58) fly(27.97) mnts(9.50) spce(3.07) lunr(17.57) rdw(10.14) ',event); return false;" style="margin-right: 10px;">space_launch_systems</button>
-    <strong>Section Toggles:</strong>
-    <button class="ticker-button" onclick="toggleSection('news-container-space_launch_systems', this);" style="margin-right: 10px;">News</button>
-    <button class="ticker-button" onclick="toggleSection('fundamentals-table-container-space_launch_systems', this);" style="margin-right: 10px;">Fundamentals Table</button>
-    <button class="ticker-button" onclick="toggleSection('canvas-chart-container-space_launch_systems', this);" style="margin-right: 10px;">Canvas Chart</button>
-    <button class="ticker-button" onclick="toggleSection('charts-image-section-space_launch_systems', this);" style="margin-right: 10px;">Technical Charts</button>
-    
     </div>
 
     <div id="charts-image-section-space_launch_systems" class="charts-image-content hidden">
@@ -2048,12 +2016,6 @@ For the following companies, no specific announcements or SEC filings dated **Ja
 
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'earth_observation', 'pl(25.32) bksy(25.61) spir(10.59) satl(3.57) asts(92.72) irdm(19.58) sats(123.74) vsat(41.62) ',event); return false;" style="margin-right: 10px;">earth_observation</button>
-    <strong>Section Toggles:</strong>
-    <button class="ticker-button" onclick="toggleSection('news-container-earth_observation', this);" style="margin-right: 10px;">News</button>
-    <button class="ticker-button" onclick="toggleSection('fundamentals-table-container-earth_observation', this);" style="margin-right: 10px;">Fundamentals Table</button>
-    <button class="ticker-button" onclick="toggleSection('canvas-chart-container-earth_observation', this);" style="margin-right: 10px;">Canvas Chart</button>
-    <button class="ticker-button" onclick="toggleSection('charts-image-section-earth_observation', this);" style="margin-right: 10px;">Technical Charts</button>
-    
     </div>
 
     <div id="charts-image-section-earth_observation" class="charts-image-content hidden">
@@ -2157,12 +2119,6 @@ For the following companies, no specific announcements or SEC filings dated **Ja
 
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'ev_charging_infrastructure', 'evgo(2.97) blnk(0.89) chpt(6.93) beem(1.77) adse(12.48) ',event); return false;" style="margin-right: 10px;">ev_charging_infrastructure</button>
-    <strong>Section Toggles:</strong>
-    <button class="ticker-button" onclick="toggleSection('news-container-ev_charging_infrastructure', this);" style="margin-right: 10px;">News</button>
-    <button class="ticker-button" onclick="toggleSection('fundamentals-table-container-ev_charging_infrastructure', this);" style="margin-right: 10px;">Fundamentals Table</button>
-    <button class="ticker-button" onclick="toggleSection('canvas-chart-container-ev_charging_infrastructure', this);" style="margin-right: 10px;">Canvas Chart</button>
-    <button class="ticker-button" onclick="toggleSection('charts-image-section-ev_charging_infrastructure', this);" style="margin-right: 10px;">Technical Charts</button>
-    
     </div>
 
     <div id="charts-image-section-ev_charging_infrastructure" class="charts-image-content hidden">
@@ -2320,12 +2276,6 @@ For the following companies, no specific announcements or SEC filings dated **Ja
 
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'evtol_air_mobility', 'achr(8.47) joby(14.81) evex(4.40) evtl(6.16) ',event); return false;" style="margin-right: 10px;">evtol_air_mobility</button>
-    <strong>Section Toggles:</strong>
-    <button class="ticker-button" onclick="toggleSection('news-container-evtol_air_mobility', this);" style="margin-right: 10px;">News</button>
-    <button class="ticker-button" onclick="toggleSection('fundamentals-table-container-evtol_air_mobility', this);" style="margin-right: 10px;">Fundamentals Table</button>
-    <button class="ticker-button" onclick="toggleSection('canvas-chart-container-evtol_air_mobility', this);" style="margin-right: 10px;">Canvas Chart</button>
-    <button class="ticker-button" onclick="toggleSection('charts-image-section-evtol_air_mobility', this);" style="margin-right: 10px;">Technical Charts</button>
-    
     </div>
 
     <div id="charts-image-section-evtol_air_mobility" class="charts-image-content hidden">
@@ -2439,12 +2389,6 @@ For the following companies, no specific announcements or SEC filings dated **Ja
 
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'hydrogen_fuel_cells', 'fcel(7.52) be(139.77) plug(2.28) hyln(2.08) bw(8.49) bldp(N/A) ',event); return false;" style="margin-right: 10px;">hydrogen_fuel_cells</button>
-    <strong>Section Toggles:</strong>
-    <button class="ticker-button" onclick="toggleSection('news-container-hydrogen_fuel_cells', this);" style="margin-right: 10px;">News</button>
-    <button class="ticker-button" onclick="toggleSection('fundamentals-table-container-hydrogen_fuel_cells', this);" style="margin-right: 10px;">Fundamentals Table</button>
-    <button class="ticker-button" onclick="toggleSection('canvas-chart-container-hydrogen_fuel_cells', this);" style="margin-right: 10px;">Canvas Chart</button>
-    <button class="ticker-button" onclick="toggleSection('charts-image-section-hydrogen_fuel_cells', this);" style="margin-right: 10px;">Technical Charts</button>
-    
     </div>
 
     <div id="charts-image-section-hydrogen_fuel_cells" class="charts-image-content hidden">
@@ -2558,12 +2502,6 @@ For the following companies, no specific announcements or SEC filings dated **Ja
 
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'batteries_storage_tech', 'qs(10.61) envx(8.02) ses(2.13) mvst(3.28) ampx(9.67) sldp(5.60) ',event); return false;" style="margin-right: 10px;">batteries_storage_tech</button>
-    <strong>Section Toggles:</strong>
-    <button class="ticker-button" onclick="toggleSection('news-container-batteries_storage_tech', this);" style="margin-right: 10px;">News</button>
-    <button class="ticker-button" onclick="toggleSection('fundamentals-table-container-batteries_storage_tech', this);" style="margin-right: 10px;">Fundamentals Table</button>
-    <button class="ticker-button" onclick="toggleSection('canvas-chart-container-batteries_storage_tech', this);" style="margin-right: 10px;">Canvas Chart</button>
-    <button class="ticker-button" onclick="toggleSection('charts-image-section-batteries_storage_tech', this);" style="margin-right: 10px;">Technical Charts</button>
-    
     </div>
 
     <div id="charts-image-section-batteries_storage_tech" class="charts-image-content hidden">
@@ -2715,12 +2653,6 @@ For the following companies, no specific announcements or SEC filings dated **Ja
 
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'batteries_storage_sw', 'enph(36.37) stem(18.88) flnc(23.82) eose(16.82) gwh(1.81) kulr(3.45) te(7.86) nrgv(5.62) ',event); return false;" style="margin-right: 10px;">batteries_storage_sw</button>
-    <strong>Section Toggles:</strong>
-    <button class="ticker-button" onclick="toggleSection('news-container-batteries_storage_sw', this);" style="margin-right: 10px;">News</button>
-    <button class="ticker-button" onclick="toggleSection('fundamentals-table-container-batteries_storage_sw', this);" style="margin-right: 10px;">Fundamentals Table</button>
-    <button class="ticker-button" onclick="toggleSection('canvas-chart-container-batteries_storage_sw', this);" style="margin-right: 10px;">Canvas Chart</button>
-    <button class="ticker-button" onclick="toggleSection('charts-image-section-batteries_storage_sw', this);" style="margin-right: 10px;">Technical Charts</button>
-    
     </div>
 
     <div id="charts-image-section-batteries_storage_sw" class="charts-image-content hidden">
@@ -2822,12 +2754,6 @@ For the following companies, no specific announcements or SEC filings dated **Ja
 
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'battery_materials_mining', 'atlx(5.56) abat(4.90) alb(176.88) sqm(80.98) sgml(15.55) elvr(67.85) lac(5.84) nb(6.66) ',event); return false;" style="margin-right: 10px;">battery_materials_mining</button>
-    <strong>Section Toggles:</strong>
-    <button class="ticker-button" onclick="toggleSection('news-container-battery_materials_mining', this);" style="margin-right: 10px;">News</button>
-    <button class="ticker-button" onclick="toggleSection('fundamentals-table-container-battery_materials_mining', this);" style="margin-right: 10px;">Fundamentals Table</button>
-    <button class="ticker-button" onclick="toggleSection('canvas-chart-container-battery_materials_mining', this);" style="margin-right: 10px;">Canvas Chart</button>
-    <button class="ticker-button" onclick="toggleSection('charts-image-section-battery_materials_mining', this);" style="margin-right: 10px;">Technical Charts</button>
-    
     </div>
 
     <div id="charts-image-section-battery_materials_mining" class="charts-image-content hidden">
@@ -2937,12 +2863,6 @@ For the following companies, no specific announcements or SEC filings dated **Ja
 
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'Hyperscalers', 'crwv(87.48) nbis(105.43) corz(18.03) apld(36.71) cifr(18.25) wulf(14.14) ',event); return false;" style="margin-right: 10px;">Hyperscalers</button>
-    <strong>Section Toggles:</strong>
-    <button class="ticker-button" onclick="toggleSection('news-container-Hyperscalers', this);" style="margin-right: 10px;">News</button>
-    <button class="ticker-button" onclick="toggleSection('fundamentals-table-container-Hyperscalers', this);" style="margin-right: 10px;">Fundamentals Table</button>
-    <button class="ticker-button" onclick="toggleSection('canvas-chart-container-Hyperscalers', this);" style="margin-right: 10px;">Canvas Chart</button>
-    <button class="ticker-button" onclick="toggleSection('charts-image-section-Hyperscalers', this);" style="margin-right: 10px;">Technical Charts</button>
-    
     </div>
 
     <div id="charts-image-section-Hyperscalers" class="charts-image-content hidden">
@@ -3092,12 +3012,6 @@ For the following companies, no specific announcements or SEC filings dated **Ja
 
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'Mining', 'mara(10.95) clsk(12.55) bitf(3.11) hive(3.54) btbt(2.35) hut(61.48) riot(16.75) iren(52.99) ',event); return false;" style="margin-right: 10px;">Mining</button>
-    <strong>Section Toggles:</strong>
-    <button class="ticker-button" onclick="toggleSection('news-container-Mining', this);" style="margin-right: 10px;">News</button>
-    <button class="ticker-button" onclick="toggleSection('fundamentals-table-container-Mining', this);" style="margin-right: 10px;">Fundamentals Table</button>
-    <button class="ticker-button" onclick="toggleSection('canvas-chart-container-Mining', this);" style="margin-right: 10px;">Canvas Chart</button>
-    <button class="ticker-button" onclick="toggleSection('charts-image-section-Mining', this);" style="margin-right: 10px;">Technical Charts</button>
-    
     </div>
 
     <div id="charts-image-section-Mining" class="charts-image-content hidden">
@@ -3221,12 +3135,6 @@ For the following companies, no specific announcements or SEC filings dated **Ja
 
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'new_nuclear_energy', 'oklo(97.09) smr(19.23) nne(32.42) imsr(N/A) uec(N/A) ccj(108.92) leu(298.27) bwxt(210.54) ',event); return false;" style="margin-right: 10px;">new_nuclear_energy</button>
-    <strong>Section Toggles:</strong>
-    <button class="ticker-button" onclick="toggleSection('news-container-new_nuclear_energy', this);" style="margin-right: 10px;">News</button>
-    <button class="ticker-button" onclick="toggleSection('fundamentals-table-container-new_nuclear_energy', this);" style="margin-right: 10px;">Fundamentals Table</button>
-    <button class="ticker-button" onclick="toggleSection('canvas-chart-container-new_nuclear_energy', this);" style="margin-right: 10px;">Canvas Chart</button>
-    <button class="ticker-button" onclick="toggleSection('charts-image-section-new_nuclear_energy', this);" style="margin-right: 10px;">Technical Charts</button>
-    
     </div>
 
     <div id="charts-image-section-new_nuclear_energy" class="charts-image-content hidden">
@@ -3326,12 +3234,6 @@ For the following companies, no specific announcements or SEC filings dated **Ja
 
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'Mag7', 'spy(693.77) aapl(261.05) nvda(185.81) meta(631.09) msft(470.67) avgo(354.61) goog(336.41) amzn(242.60) ',event); return false;" style="margin-right: 10px;">Mag7</button>
-    <strong>Section Toggles:</strong>
-    <button class="ticker-button" onclick="toggleSection('news-container-Mag7', this);" style="margin-right: 10px;">News</button>
-    <button class="ticker-button" onclick="toggleSection('fundamentals-table-container-Mag7', this);" style="margin-right: 10px;">Fundamentals Table</button>
-    <button class="ticker-button" onclick="toggleSection('canvas-chart-container-Mag7', this);" style="margin-right: 10px;">Canvas Chart</button>
-    <button class="ticker-button" onclick="toggleSection('charts-image-section-Mag7', this);" style="margin-right: 10px;">Technical Charts</button>
-    
     </div>
 
     <div id="charts-image-section-Mag7" class="charts-image-content hidden">
