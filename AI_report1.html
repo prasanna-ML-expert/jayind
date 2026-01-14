@@ -99,9 +99,11 @@
       function htmlEscapeAndClean(str) {
           if (typeof str !== 'string') return str;
 
-          // Remove control characters (Hex 00-1F and 7F-9F)
-          // This removes hidden characters that break UI displays
-          const cleanStr = str.replace(/[\x00-\x1F\x7F\x80-\x9F]/g, "");
+          // Remove control characters (Hex 00-08, 0B, 0C, 0E-1F, and 7F-9F)
+          // This specifically EXCLUDES 	 (tab), 
+ (newline), 
+ (carriage return)
+          const cleanStr = str.replace(/[ ---]/g, "");
 
           // Standard HTML Entity Encoding
           const map = {
