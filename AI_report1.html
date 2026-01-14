@@ -113,7 +113,9 @@
               "'": '&#039;'
           };
 
-          return cleanStr.replace(/[&<>"']/g, function(m) { return map[m]; });
+          let escaped = cleanStr.replace(/[&<>"']/g, function(m) { return map[m]; });
+          return escaped.replace(/
+/g, "<br/>");
       }
 
 
