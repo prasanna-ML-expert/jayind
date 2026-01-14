@@ -103,7 +103,7 @@
           // This specifically EXCLUDES 	 (tab), 
  (newline), 
  (carriage return)
-          const cleanStr = str.replace(/[ ---]/g, "");
+          const cleanStr = str.replace(/[\x00-\x08\x0b\x0c\x0e-\x1f\x7F\x80-\x9F]/g, "");
 
           // Standard HTML Entity Encoding
           const map = {
