@@ -99,11 +99,10 @@
       function htmlEscapeAndClean(str) {
           if (typeof str !== 'string') return str;
 
-          // Remove control characters (Hex 00-08, 0B, 0C, 0E-1F, and 7F-9F)
-          // This specifically EXCLUDES 	 (tab), 
- (newline), 
- (carriage return)
-          const cleanStr = str.replace(/[\x00-\x08\x0b\x0c\x0e-\x1f\x7F\x80-\x9F]/g, "");
+          // Remove control characters (Hex 00-1F and 7F-9F)
+          // This removes hidden characters that break UI displays
+          //const cleanStr = str.replace(/[\x00-\x1F\x7F\x80-\x9F]/g, "");
+          const cleanStr = str.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x9F]/g, "");
 
           // Standard HTML Entity Encoding
           const map = {
@@ -3001,10 +3000,10 @@ For the following companies, no specific announcements or SEC filings dated **Ja
     <div class="button-row" style="margin-top: 10px; margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
     <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
 
-   <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'SPY', event, '693.77'); return false;" style="margin-right: 10px;">SPY</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'AAPL', event, '261.05'); return false;" style="margin-right: 10px;">AAPL</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'NVDA', event, '185.81'); return false;" style="margin-right: 10px;">NVDA</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'META', event, '631.09'); return false;" style="margin-right: 10px;">META</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'MSFT', event, '470.67'); return false;" style="margin-right: 10px;">MSFT</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'AVGO', event, '354.61'); return false;" style="margin-right: 10px;">AVGO</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'GOOG', event, '336.43'); return false;" style="margin-right: 10px;">GOOG</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'AMZN', event, '242.60'); return false;" style="margin-right: 10px;">AMZN</button></div>
+   <strong>Buy/Sell Zone details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'SPY', event, '693.77'); return false;" style="margin-right: 10px;">SPY</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'AAPL', event, '261.05'); return false;" style="margin-right: 10px;">AAPL</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'NVDA', event, '185.81'); return false;" style="margin-right: 10px;">NVDA</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'META', event, '631.09'); return false;" style="margin-right: 10px;">META</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'MSFT', event, '470.67'); return false;" style="margin-right: 10px;">MSFT</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'AVGO', event, '354.61'); return false;" style="margin-right: 10px;">AVGO</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'GOOG', event, '336.41'); return false;" style="margin-right: 10px;">GOOG</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'AMZN', event, '242.60'); return false;" style="margin-right: 10px;">AMZN</button></div>
 
     <strong>Options levels details:</strong>
-    <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'Mag7', 'spy(693.77) aapl(261.05) nvda(185.81) meta(631.09) msft(470.67) avgo(354.61) goog(336.43) amzn(242.60) ',event); return false;" style="margin-right: 10px;">Mag7</button>
+    <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'Mag7', 'spy(693.77) aapl(261.05) nvda(185.81) meta(631.09) msft(470.67) avgo(354.61) goog(336.41) amzn(242.60) ',event); return false;" style="margin-right: 10px;">Mag7</button>
     <strong>Section Toggles:</strong>
     <button class="ticker-button" onclick="toggleSection('news-container-Mag7', this);" style="margin-right: 10px;">News</button>
     <button class="ticker-button" onclick="toggleSection('fundamentals-table-container-Mag7', this);" style="margin-right: 10px;">Fundamentals Table</button>
