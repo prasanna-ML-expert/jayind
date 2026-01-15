@@ -198,6 +198,37 @@
             }
         }
 
+        /************************
+            govt news
+        *********************************/
+        const GOVT_NEWS_FILENAME = "all_govt_news_results.json";
+        const GOVT_NEWS_URL = GITHUB_RAW_URL_BASE + GOVT_NEWS_FILENAME;
+        let govtNewsContent = ""; // Global variable to store parsed government news
+
+        async function fetchAndParseGovtNews() {
+            try {
+                const response = await fetch(GOVT_NEWS_URL);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const rawData = await response.json({});
+                const updates = rawData.updates || {};
+                govtNewsContent = updates.news || "No government and prominent investor news available.";
+
+                // Render the fetched content into the designated div
+                const govtNewsDiv = document.getElementById('govt-news-markdown-output');
+                if (govtNewsDiv) {
+                    govtNewsDiv.innerHTML = marked.parse(htmlEscapeAndClean(govtNewsContent));
+                }
+                console.log("Government news fetched and rendered successfully.");
+            } catch (error) {
+                console.error('Error fetching or parsing government news:', error);
+                const govtNewsDiv = document.getElementById('govt-news-markdown-output');
+                if (govtNewsDiv) {
+                    govtNewsDiv.innerHTML = '<p>Error loading government and prominent investor news.</p>';
+                }
+            }
+        }
 
 
         const BOT_TOKEN = '6506332831:AAG0wcG6LxQXNVDVyXw_lBBa1YNDGV_Mhj0';
@@ -1079,45 +1110,10 @@
 <h2 class="toggle-header" onclick="toggleSection('govt-news-content', this)">
     Government and Prominent Investor News <span class="toggle-icon">&darr;</span>
 </h2>
-
 <div id="govt-news-content" class="hidden">
-<div class="markdown-raw-content govt-news-section">As an ETF analyst, I&#x27;ve compiled recent activities in advanced technology sectors by prominent U.S. government entities and influential private sector figures, alongside a table of single-stock leveraged ETF filings.
-
-### Government and Industry Engagements in Advanced Technologies
-
-**Satellite Communication**
-The Federal Communications Commission (FCC) has approved a significant expansion for SpaceX&#x27;s Starlink service, authorizing an additional 7,500 Gen2 Starlink satellites. This expansion will nearly double SpaceX&#x27;s current satellite network to a total of 15,000, aiming to enhance low-latency, high-speed internet globally. It will also support both fixed and mobile satellite services and enable direct-to-cell connectivity. In a recent geopolitical development, SpaceX also activated its Starlink satellite internet service in Iran free of charge, following a national internet blackout and high-level discussions with the Trump administration.
-
-**Nuclear Energy**
-The U.S. Department of Energy (DoE) announced a substantial $2.7 billion investment over the next decade to bolster domestic uranium enrichment capabilities. This initiative aims to strengthen energy security, reduce reliance on foreign suppliers, and support the growth of advanced nuclear power. As part of this, the DoE awarded task orders of $900 million each to American Centrifuge Operating, General Matter, and Orano Federal Services to establish and expand High-Assay, Low-Enriched Uranium (HALEU) and Low-Enriched Uranium (LEU) production. The DoE also selected Tennessee Valley Authority and Holtec Government Services to facilitate the early deployment of advanced light-water small modular reactors in the United States. Additionally, the DoE is collaborating with the Idaho National Laboratory to address technical and licensing challenges specific to small modular reactor (SMR) technology.
-
-**Robotics**
-NASA&#x27;s Perseverance rover has received certification to continue its exploration of Mars until at least 2031, leveraging its advanced autonomous navigation system. NASA is actively involved in several robotics initiatives, including the Space Robotics Challenge to prepare robots for Martian missions, the development of autonomous robots (IceNode) to monitor polar ice shelf melt, and soliciting input for its Astrobee free-flying space robots. Separately, the CEO of Standard Bots testified before the U.S. Congress Joint Economic Committee, advocating for a national robotics strategy. Furthermore, Amazon is significantly integrating AI into its operations, utilizing over 1 million robots in its supply chain, a move anticipated to enhance margin expansion.
-
-**Drone Technology**
-Elon Musk has hinted at the possibility of Tesla venturing into drone production. Morgan Stanley analysts are reportedly enthusiastic about this potential move, considering Tesla&#x27;s established expertise in robotics and artificial intelligence. The U.S. military is also actively investing in various drone technologies, underscoring their critical role in modern warfare.
-
-**Artificial Intelligence (AI)**
-The &quot;Magnificent Seven&quot; companies—Apple, Microsoft, Amazon, Alphabet, Nvidia, Meta, and Tesla—are making substantial investments and advancements in AI. Microsoft&#x27;s significant AI service advantage is largely attributed to its strategic investment in OpenAI, including a 27% equity stake and commercial licenses for all OpenAI models through 2032.
-
-Prominent investor Peter Thiel&#x27;s hedge fund, Thiel Macro, executed notable portfolio adjustments in the third quarter of 2025. The fund liquidated its entire position in Nvidia and substantially reduced its holdings in Tesla, while establishing new positions in Apple and Microsoft. Thiel&#x27;s investments in Apple and Microsoft are seen as a strategic focus on the &quot;core infrastructure&quot; driving the AI era. Alongside Sam Altman, Bill Gates, and Jeff Bezos, Peter Thiel is heavily investing in AI-driven mining for rare earth elements in Greenland through KoBold Metals.
-
-### Single-Stock Leveraged ETFs: Recent Filings in U.S. Markets
-
-As an ETF analyst, I note the dynamic nature of single-stock leveraged ETF launches and filings. While pinpointing precise launch or effective dates within the strict &quot;last 30 days or next 3 weeks&quot; (approximately December 15, 2025, to February 4, 2026) through general searches is challenging, recent SEC filings indicate continued interest in these products, particularly for 3x leverage.
-
-Several issuers, including Direxion, T-REX (REX Shares/Tuttle Capital Management), Defiance ETFs, and Themes ETFs, filed for 3x leveraged single-stock ETFs in October 2025. These filings suggest a pipeline of high-leverage products that could become effective in late 2025 or early 2026, though specific launch dates for individual products within the precise requested window are not yet publicly detailed in the available search results. The underlying assets for some of these proposed ETFs include high-profile tech stocks and cryptocurrencies.
-
-Below is a summary of recent single-stock 2x or 3x leveraged ETF filings that are most pertinent to your request, based on information available as of today, January 14, 2026. Please note that &quot;Filed Date&quot; is provided where a confirmed &quot;Launch/Effective Date&quot; within the specified narrow window is not explicitly stated in the search results.
-
-| Underlying Ticker (Examples) | New ETF Ticker (Examples) | Leverage Ratio | Issuer | Filed Date (Closest Available) |
-| :--------------------------- | :------------------------ | :------------- | :----- | :----------------------------- |
-| Various Single Stocks (e.g., Amazon, Nvidia, Cryptocurrencies) | *Not specified in results for each filing* | 3x | Direxion | October 2025 |
-| Various Single Stocks (e.g., Amazon, Nvidia, Cryptocurrencies) | *Not specified in results for each filing* | 3x | T-REX (REX Shares/Tuttle Capital Management) | October 2025 |
-| Various Single Stocks (e.g., Amazon, Nvidia, Cryptocurrencies) | *Not specified in results for each filing* | 3x | Defiance ETFs | October 2025 |
-| Various Single Stocks (e.g., Amazon, Nvidia, Cryptocurrencies) | *Not specified in results for each filing* | 3x | Themes ETFs | October 2025 |
-
-This table represents the most aggressive recent filings for single-stock leveraged ETFs. Investors should be aware that leveraged ETFs are complex products designed for short-term trading and are not suitable for all investors.</div>
+    <div id="govt-news-markdown-output" class="markdown-output govt-news-section">
+        Loading government and prominent investor news...
+    </div>
 </div>
 <h2>Industry Index</h2><nav><ul>
 <li><a href="#quantum">1. Quantum (ionq, qbts, rgti, qubt, laes, arqq)</a></li>
@@ -3312,7 +3308,8 @@ No announcements or SEC filings dated **January 15, 2026**, were found.
         await fetchDilutionData();
         // Parse custom dilution ranges from the embedded string
         await parseCustomDilutionRanges();
-        loadAndCleanIndustryData();
+        await loadAndCleanIndustryData();
+        await fetchAndParseGovtNews();
         // Then call the function to fetch and render fundamentals tables, which will then call renderCharts
         fetchAndRenderTables();
         await fetchAndParseOptionsData()
