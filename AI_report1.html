@@ -42,6 +42,32 @@
             return { min: NaN, max: NaN };
         }
 
+        /***********************
+              institutional details for popup
+        ***********************************/
+
+        // Dynamically fetched dilution data
+        let tickerDilutionMap = {};
+        async function fetchDilutionData() {
+            try {
+                const response = await fetch(DATA_URL);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const rawData = await response.json();
+                // Assuming rawData is already in the { "TICKER": "dilution_string" } format
+                // Convert all keys to uppercase for consistent lookup
+                tickerDilutionMap = Object.fromEntries(
+                    Object.entries(rawData).map(([key, value]) => [key.toUpperCase(), value])
+                );
+                console.log("Dilution data fetched successfully:", Object.keys(tickerDilutionMap).length, "tickers.");
+            } catch (error) {
+                console.error('Error fetching dilution data:', error);
+            }
+        }
+        /************************
+                institutional levels
+        **********************************/
         // Function to parse the rawProcessedDilutionRanges string into customDilutionRangesLookup
         let industryDict = {};
         async function parseCustomDilutionRanges() {
@@ -76,7 +102,9 @@
                 console.error('Error fetching or parsing custom dilution ranges:', error);
             }
         }
-
+        /***************
+                options details for popup
+       *******************/
         async function loadAndCleanIndustryData() {
           try {
               const response = await fetch(GITHUB_RAW_URL_BASE + 'options_detailed.json');
@@ -126,6 +154,10 @@
 
           return cleanStr.replace(/[&<>"']/g, function(m) { return map[m]; });
       }
+
+      /*********************
+              options levels
+      ************************/
         const OPTIONS_DATA_FILENAME = "gemini_options.txt";
         const OPTIONS_DATA_URL = GITHUB_RAW_URL_BASE + OPTIONS_DATA_FILENAME;
 
@@ -170,7 +202,6 @@
 
         const BOT_TOKEN = '6506332831:AAG0wcG6LxQXNVDVyXw_lBBa1YNDGV_Mhj0';
         const API_URL = `https://api.telegram.org/bot${BOT_TOKEN}/getUpdates`;
-        // const GITHUB_RAW_URL_BASE = "https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/";
         const DILUTION_DATA_FILENAME = "all_industries_detailed_dilution_results.json";
         const DATA_URL = GITHUB_RAW_URL_BASE + DILUTION_DATA_FILENAME;
 
@@ -233,27 +264,7 @@
         //    optionsLookup[item.ticker.toUpperCase()] = item;
         //});
 
-        // Dynamically fetched dilution data
-        let tickerDilutionMap = {};
 
-
-        async function fetchDilutionData() {
-            try {
-                const response = await fetch(DATA_URL);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const rawData = await response.json();
-                // Assuming rawData is already in the { "TICKER": "dilution_string" } format
-                // Convert all keys to uppercase for consistent lookup
-                tickerDilutionMap = Object.fromEntries(
-                    Object.entries(rawData).map(([key, value]) => [key.toUpperCase(), value])
-                );
-                console.log("Dilution data fetched successfully:", Object.keys(tickerDilutionMap).length, "tickers.");
-            } catch (error) {
-                console.error('Error fetching dilution data:', error);
-            }
-        }
         // Function to parse price ranges like "$185.00 – $205.00" or single values "$93.00"
         function parsePriceRange(rangeStr) {
             if (!rangeStr || typeof rangeStr !== 'string') return { min: NaN, max: NaN };
