@@ -257,9 +257,11 @@
             let indexCounter = 1;
             for (const key in tickerMap) {
                 if (tickerMap.hasOwnProperty(key)) {
-                    const formattedIndustryName = key.replace(/_/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+                    //const formattedIndustryName = key.replace(/_/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
                     const tickersStr = tickerMap[key].join(', ');
-                    navigationHtml += `<li><a href="#${key}">${indexCounter}. ${formattedIndustryName} (${tickersStr})</a></li>
+                    //navigationHtml += `<li><a href="#${key}">${indexCounter}. ${formattedIndustryName} (${tickersStr})</a></li>
+`;
+                    navigationHtml += `<li>hi/li>
 `;
                     indexCounter++;
                 }
