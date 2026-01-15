@@ -34,7 +34,7 @@
             'Hyperscalers': ['crwv', 'nbis', 'corz', 'apld', 'cifr', 'wulf'],
             'Mining': [ 'mara', 'clsk', 'bitf', 'hive', 'btbt', 'hut', 'riot', 'iren'],
             'new_nuclear_energy': ['oklo', 'smr', 'nne', 'imsr','uec','ccj','leu', 'bwxt'],
-            'Mag7': ['spy','aapl', 'nvda', 'meta', 'msft', 'avgo', 'goog', 'amzn']
+            'Mag7': ['spy','aapl', 'nvda', 'meta', 'msft', 'avgo', 'goog', 'amzn'],
         };
 
 
@@ -3327,8 +3327,8 @@ No announcements or SEC filings dated **January 15, 2026**, were found.
         // Parse custom dilution ranges from the embedded string
         await parseCustomDilutionRanges();
         await loadAndCleanIndustryData();
-        //await fetchAndParseGovtNews();
-        //generateIndustryIndex();
+        await fetchAndParseGovtNews();
+        generateIndustryIndex();
         // Then call the function to fetch and render fundamentals tables, which will then call renderCharts
         fetchAndRenderTables();
         await fetchAndParseOptionsData()
