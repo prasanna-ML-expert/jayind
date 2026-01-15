@@ -16,8 +16,26 @@
         const GITHUB_RAW_URL_BASE = "https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/";
         const PROCESSED_DILUTION_RANGES_FILENAME = "processed_dilution_ranges.csv";
         const PROCESSED_DILUTION_RANGES_URL = GITHUB_RAW_URL_BASE + PROCESSED_DILUTION_RANGES_FILENAME;
-        const tickerMap = JSON.parse(`{"quantum": ["ionq", "qbts", "rgti", "qubt", "laes", "arqq"], "power_management_chips": ["nvts", "on", "aosl", "cohr", "mpwr", "powi", "alab", "indi"], "lidar_sensing": ["aeva", "invz", "mvis", "lidr", "oust", "arbe"], "autonomous_driving": ["mbly", "aur", "tsla", "xpev", "kdk"], "uas_defense_robotics": ["dpro", "rcat", "zena", "onds", "avav", "ktos", "umac", "spai"], "service_robotics": ["rr", "serv", "prct", "zbra", "irbt"], "space_launch_systems": ["rklb", "fly", "mnts", "spce", "lunr", "rdw"], "earth_observation": ["pl", "bksy", "spir", "satl", "asts", "irdm", "sats", "vsat"], "ev_charging_infrastructure": ["evgo", "blnk", "chpt", "beem", "adse"], "evtol_air_mobility": ["achr", "joby", "evex", "evtl"], "hydrogen_fuel_cells": ["fcel", "be", "plug", "hyln", "bw", "bldp"], "batteries_storage_tech": ["qs", "envx", "ses", "mvst", "ampx", "sldp"], "batteries_storage_sw": ["enph", "stem", "flnc", "eose", "gwh", "kulr", "te", "nrgv"], "battery_materials_mining": ["atlx", "abat", "alb", "sqm", "sgml", "elvr", "lac", "nb"], "Hyperscalers": ["crwv", "nbis", "corz", "apld", "cifr", "wulf"], "Mining": ["mara", "clsk", "bitf", "hive", "btbt", "hut", "riot", "iren"], "new_nuclear_energy": ["oklo", "smr", "nne", "imsr", "uec", "ccj", "leu", "bwxt"], "Mag7": ["spy", "aapl", "nvda", "meta", "msft", "avgo", "goog", "amzn"]}`); // Use backticks for template literal
-
+        const tickerMap = {
+            'quantum': ['ionq', 'qbts', 'rgti', 'qubt', 'laes', 'arqq'],
+            'power_management_chips': ['nvts', 'on', 'aosl', 'cohr', 'mpwr', 'powi', 'alab', 'indi'],
+            'lidar_sensing': ['aeva', 'invz', 'mvis', 'lidr', 'oust', 'arbe'],
+            'autonomous_driving': ['mbly', 'aur', 'tsla', 'xpev', 'kdk'],
+            'uas_defense_robotics': ['dpro', 'rcat', 'zena', 'onds', 'avav', 'ktos', 'umac', 'spai'],
+            'service_robotics': ['rr', 'serv', 'prct', 'zbra', 'irbt'],
+            'space_launch_systems': ['rklb', 'fly', 'mnts', 'spce', 'lunr', 'rdw'],
+            'earth_observation': ['pl', 'bksy', 'spir', 'satl','asts', 'irdm', 'sats', 'vsat'],
+            'ev_charging_infrastructure': ['evgo', 'blnk', 'chpt', 'beem', 'adse'],
+            'evtol_air_mobility': ['achr', 'joby', 'evex', 'evtl'],
+            'hydrogen_fuel_cells': ['fcel', 'be', 'plug', 'hyln', 'bw','bldp'],
+            'batteries_storage_tech': ['qs', 'envx', 'ses', 'mvst', 'ampx', 'sldp'],
+            'batteries_storage_sw': ['enph', 'stem', 'flnc', 'eose', 'gwh', 'kulr','te','nrgv'],
+            'battery_materials_mining': ['atlx', 'abat', 'alb', 'sqm', 'sgml', 'elvr', 'lac', 'nb'],
+            'Hyperscalers': ['crwv', 'nbis', 'corz', 'apld', 'cifr', 'wulf'],
+            'Mining': [ 'mara', 'clsk', 'bitf', 'hive', 'btbt', 'hut', 'riot', 'iren'],
+            'new_nuclear_energy': ['oklo', 'smr', 'nne', 'imsr','uec','ccj','leu', 'bwxt'],
+            'Mag7': ['spy','aapl', 'nvda', 'meta', 'msft', 'avgo', 'goog', 'amzn']
+        }
 
 
         // Lookup object for custom dilution ranges
@@ -1137,13 +1155,12 @@
         </div>
     </div>
     <div id="industry-index-placeholder"></div>
-
-<div style="margin-top: 20px; margin-bottom: 20px;">
-    <label><input type="checkbox" id="toggleNews"> News</label>
-    <label><input type="checkbox" id="toggleFundamentalsTable" checked> Price levels </label>
-    <label><input type="checkbox" id="toggleCanvasChart"> Fundamentals </label>
-    <label><input type="checkbox" id="toggleCharts"> Technicals </label>
-</div>
+    <div style="margin-top: 20px; margin-bottom: 20px;">
+        <label><input type="checkbox" id="toggleNews"> News</label>
+        <label><input type="checkbox" id="toggleFundamentalsTable" checked> Price levels </label>
+        <label><input type="checkbox" id="toggleCanvasChart"> Fundamentals </label>
+        <label><input type="checkbox" id="toggleCharts"> Technicals </label>
+    </div>
 
     <div class="industry-section" id="quantum">
         <div class="industry-header-container">
@@ -1256,7 +1273,7 @@
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'quantum', 'ionq(49.10) qbts(30.01) rgti(25.37) qubt(12.74) laes(4.36) arqq(26.66) ',event); return false;" style="margin-right: 10px;">quantum</button>
     </div>
-
+    
     <div id="charts-image-section-quantum" class="charts-image-content hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Mon, 12 Jan)</i></small></h3>
     <img src="" data-src="https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/screenshots/quantum.png" alt="Quantum Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
@@ -1366,7 +1383,7 @@
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'power_management_chips', 'nvts(10.15) on(61.57) aosl(22.65) cohr(208.34) mpwr(1024.18) powi(42.47) alab(171.78) indi(4.33) ',event); return false;" style="margin-right: 10px;">power_management_chips</button>
     </div>
-
+    
     <div id="charts-image-section-power_management_chips" class="charts-image-content hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Tue, 06 Jan)</i></small></h3>
     <img src="" data-src="https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/screenshots/power_management_chips.png" alt="Power Management Chips Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
@@ -1536,7 +1553,7 @@
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'lidar_sensing', 'aeva(20.53) invz(1.10) mvis(0.94) lidr(2.08) oust(27.24) arbe(1.25) ',event); return false;" style="margin-right: 10px;">lidar_sensing</button>
     </div>
-
+    
     <div id="charts-image-section-lidar_sensing" class="charts-image-content hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Tue, 06 Jan)</i></small></h3>
     <img src="" data-src="https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/screenshots/lidar_sensing.png" alt="Lidar Sensing Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
@@ -1646,7 +1663,7 @@
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'autonomous_driving', 'mbly(10.88) aur(4.61) tsla(443.35) xpev(20.65) kdk(9.45) ',event); return false;" style="margin-right: 10px;">autonomous_driving</button>
     </div>
-
+    
     <div id="charts-image-section-autonomous_driving" class="charts-image-content hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Thu, 08 Jan)</i></small></h3>
     <img src="" data-src="https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/screenshots/autonomous_driving.png" alt="Autonomous Driving Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
@@ -1750,7 +1767,7 @@
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'uas_defense_robotics', 'dpro(9.51) rcat(13.69) zena(3.87) onds(13.05) avav(369.97) ktos(120.65) umac(15.75) spai(5.95) ',event); return false;" style="margin-right: 10px;">uas_defense_robotics</button>
     </div>
-
+    
     <div id="charts-image-section-uas_defense_robotics" class="charts-image-content hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Wed, 14 Jan)</i></small></h3>
     <img src="" data-src="https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/screenshots/uas_defense_robotics.png" alt="Uas Defense Robotics Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
@@ -1854,7 +1871,7 @@
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'service_robotics', 'rr(3.90) serv(14.39) prct(31.08) zbra(259.84) irbt(N/A) ',event); return false;" style="margin-right: 10px;">service_robotics</button>
     </div>
-
+    
     <div id="charts-image-section-service_robotics" class="charts-image-content hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Thu, 08 Jan)</i></small></h3>
     <img src="" data-src="https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/screenshots/service_robotics.png" alt="Service Robotics Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
@@ -1970,7 +1987,7 @@
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'space_launch_systems', 'rklb(88.25) fly(29.79) mnts(10.00) spce(3.04) lunr(20.06) rdw(10.96) ',event); return false;" style="margin-right: 10px;">space_launch_systems</button>
     </div>
-
+    
     <div id="charts-image-section-space_launch_systems" class="charts-image-content hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Wed, 14 Jan)</i></small></h3>
     <img src="" data-src="https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/screenshots/space_launch_systems.png" alt="Space Launch Systems Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
@@ -2110,7 +2127,7 @@
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'earth_observation', 'pl(27.75) bksy(27.32) spir(10.67) satl(3.56) asts(96.74) irdm(19.24) sats(128.02) vsat(44.44) ',event); return false;" style="margin-right: 10px;">earth_observation</button>
     </div>
-
+    
     <div id="charts-image-section-earth_observation" class="charts-image-content hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Wed, 07 Jan)</i></small></h3>
     <img src="" data-src="https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/screenshots/earth_observation.png" alt="Earth Observation Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
@@ -2208,7 +2225,7 @@ There were no specific announcements or SEC filings found for ADS-TEC Energy dat
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'ev_charging_infrastructure', 'evgo(3.11) blnk(0.88) chpt(7.05) beem(1.65) adse(11.47) ',event); return false;" style="margin-right: 10px;">ev_charging_infrastructure</button>
     </div>
-
+    
     <div id="charts-image-section-ev_charging_infrastructure" class="charts-image-content hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Thu, 11 Dec)</i></small></h3>
     <img src="" data-src="https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/screenshots/ev_charging_infrastructure.png" alt="Ev Charging Infrastructure Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
@@ -2308,7 +2325,7 @@ There were no specific announcements or SEC filings found for ADS-TEC Energy dat
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'evtol_air_mobility', 'achr(8.99) joby(15.28) evex(4.51) evtl(6.07) ',event); return false;" style="margin-right: 10px;">evtol_air_mobility</button>
     </div>
-
+    
     <div id="charts-image-section-evtol_air_mobility" class="charts-image-content hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Wed, 07 Jan)</i></small></h3>
     <img src="" data-src="https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/screenshots/evtol_air_mobility.png" alt="Evtol Air Mobility Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
@@ -2416,7 +2433,7 @@ There were no specific announcements or SEC filings found for ADS-TEC Energy dat
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'hydrogen_fuel_cells', 'fcel(7.29) be(137.55) plug(2.36) hyln(2.15) bw(8.22) bldp(N/A) ',event); return false;" style="margin-right: 10px;">hydrogen_fuel_cells</button>
     </div>
-
+    
     <div id="charts-image-section-hydrogen_fuel_cells" class="charts-image-content hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Wed, 14 Jan)</i></small></h3>
     <img src="" data-src="https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/screenshots/hydrogen_fuel_cells.png" alt="Hydrogen Fuel Cells Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
@@ -2496,7 +2513,7 @@ There were no specific announcements or SEC filings found for ADS-TEC Energy dat
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'batteries_storage_tech', 'qs(10.66) envx(8.12) ses(2.17) mvst(3.11) ampx(10.40) sldp(5.73) ',event); return false;" style="margin-right: 10px;">batteries_storage_tech</button>
     </div>
-
+    
     <div id="charts-image-section-batteries_storage_tech" class="charts-image-content hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Wed, 07 Jan)</i></small></h3>
     <img src="" data-src="https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/screenshots/batteries_storage_tech.png" alt="Batteries Storage Tech Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
@@ -2646,7 +2663,7 @@ There were no specific announcements or SEC filings found for ADS-TEC Energy dat
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'batteries_storage_sw', 'enph(35.70) stem(19.57) flnc(25.15) eose(17.61) gwh(1.80) kulr(4.47) te(7.56) nrgv(6.15) ',event); return false;" style="margin-right: 10px;">batteries_storage_sw</button>
     </div>
-
+    
     <div id="charts-image-section-batteries_storage_sw" class="charts-image-content hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Wed, 07 Jan)</i></small></h3>
     <img src="" data-src="https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/screenshots/batteries_storage_sw.png" alt="Batteries Storage Sw Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
@@ -2750,7 +2767,7 @@ No announcements or SEC filings dated **January 15, 2026**, were found.
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'battery_materials_mining', 'atlx(5.80) abat(4.95) alb(177.50) sqm(81.71) sgml(16.14) elvr(63.90) lac(5.87) nb(6.55) ',event); return false;" style="margin-right: 10px;">battery_materials_mining</button>
     </div>
-
+    
     <div id="charts-image-section-battery_materials_mining" class="charts-image-content hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Thu, 08 Jan)</i></small></h3>
     <img src="" data-src="https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/screenshots/battery_materials_mining.png" alt="Battery Materials Mining Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
@@ -2890,7 +2907,7 @@ No announcements or SEC filings dated **January 15, 2026**, were found.
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'Hyperscalers', 'crwv(97.04) nbis(102.59) corz(18.10) apld(35.31) cifr(17.44) wulf(13.97) ',event); return false;" style="margin-right: 10px;">Hyperscalers</button>
     </div>
-
+    
     <div id="charts-image-section-Hyperscalers" class="charts-image-content hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Wed, 14 Jan)</i></small></h3>
     <img src="" data-src="https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/screenshots/Hyperscalers.png" alt="Hyperscalers Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
@@ -3000,7 +3017,7 @@ No announcements or SEC filings dated **January 15, 2026**, were found.
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'Mining', 'mara(10.85) clsk(12.97) bitf(2.87) hive(3.36) btbt(2.33) hut(56.99) riot(16.60) iren(51.19) ',event); return false;" style="margin-right: 10px;">Mining</button>
     </div>
-
+    
     <div id="charts-image-section-Mining" class="charts-image-content hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Wed, 14 Jan)</i></small></h3>
     <img src="" data-src="https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/screenshots/Mining.png" alt="Mining Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
@@ -3128,7 +3145,7 @@ No announcements or SEC filings dated **January 15, 2026**, were found.
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'new_nuclear_energy', 'oklo(96.17) smr(19.15) nne(34.39) imsr(N/A) uec(N/A) ccj(112.05) leu(318.40) bwxt(214.09) ',event); return false;" style="margin-right: 10px;">new_nuclear_energy</button>
     </div>
-
+    
     <div id="charts-image-section-new_nuclear_energy" class="charts-image-content hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Mon, 12 Jan)</i></small></h3>
     <img src="" data-src="https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/screenshots/new_nuclear_energy.png" alt="New Nuclear Energy Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
@@ -3296,7 +3313,7 @@ No announcements or SEC filings dated **January 15, 2026**, were found.
     <strong>Options levels details:</strong>
     <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'Mag7', 'spy(694.19) aapl(260.38) nvda(187.86) meta(619.43) msft(459.23) avgo(347.11) goog(333.79) amzn(238.12) ',event); return false;" style="margin-right: 10px;">Mag7</button>
     </div>
-
+    
     <div id="charts-image-section-Mag7" class="charts-image-content hidden">
     <h3 class="charts-section">Technicals & charts <small><i>(Wed, 14 Jan)</i></small></h3>
     <img src="" data-src="https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/screenshots/Mag7.png" alt="Mag7 Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
