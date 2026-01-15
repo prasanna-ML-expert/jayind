@@ -229,6 +229,25 @@
                 }
             }
         }
+        // Function to generate the industry navigation index dynamically
+        function generateIndustryIndex() {
+            let navigationHtml = '<h2>Industry Index</h2><nav><ul>
+';
+            let indexCounter = 1;
+            for (const key in tickerMap) {
+                if (tickerMap.hasOwnProperty(key)) {
+                    const formattedIndustryName = key.replace(/_/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+                    const tickersStr = tickerMap[key].join(', ');
+                    navigationHtml += `<li><a href="#${key}">${indexCounter}. ${formattedIndustryName} (${tickersStr})</a></li>
+`;
+                    indexCounter++;
+                }
+            }
+            navigationHtml += '</ul></nav><hr/>
+';
+            document.getElementById('industry-index-placeholder').innerHTML = navigationHtml;
+        }
+
 
 
         const BOT_TOKEN = '6506332831:AAG0wcG6LxQXNVDVyXw_lBBa1YNDGV_Mhj0';
@@ -1106,36 +1125,15 @@
     <div id="dilution-backdrop" class="dilution-backdrop"></div>
     <div id="dilution-inline-popup" class="dilution-inline-popup"></div>
     <h1>NASDAQ S&P Growth Stoks AI generated fundamentals technicals and Latest updates</h1>
-    
-<h2 class="toggle-header" onclick="toggleSection('govt-news-content', this)">
-    Government and Prominent Investor News <span class="toggle-icon">&darr;</span>
-</h2>
-<div id="govt-news-content" class="hidden">
-    <div id="govt-news-markdown-output" class="markdown-output govt-news-section">
-        Loading government and prominent investor news...
+    <h2 class="toggle-header" onclick="toggleSection('govt-news-content', this)">
+        Government and Prominent Investor News <span class="toggle-icon">&darr;</span>
+    </h2>
+    <div id="govt-news-content" class="hidden">
+        <div id="govt-news-markdown-output" class="markdown-output govt-news-section">
+            Loading government and prominent investor news...
+        </div>
     </div>
-</div>
-<h2>Industry Index</h2><nav><ul>
-<li><a href="#quantum">1. Quantum (ionq, qbts, rgti, qubt, laes, arqq)</a></li>
-<li><a href="#power_management_chips">2. Power Management Chips (nvts, on, aosl, cohr, mpwr, powi, alab, indi)</a></li>
-<li><a href="#lidar_sensing">3. Lidar Sensing (aeva, invz, mvis, lidr, oust, arbe)</a></li>
-<li><a href="#autonomous_driving">4. Autonomous Driving (mbly, aur, tsla, xpev, kdk)</a></li>
-<li><a href="#uas_defense_robotics">5. Uas Defense Robotics (dpro, rcat, zena, onds, avav, ktos, umac, spai)</a></li>
-<li><a href="#service_robotics">6. Service Robotics (rr, serv, prct, zbra, irbt)</a></li>
-<li><a href="#space_launch_systems">7. Space Launch Systems (rklb, fly, mnts, spce, lunr, rdw)</a></li>
-<li><a href="#earth_observation">8. Earth Observation (pl, bksy, spir, satl, asts, irdm, sats, vsat)</a></li>
-<li><a href="#ev_charging_infrastructure">9. Ev Charging Infrastructure (evgo, blnk, chpt, beem, adse)</a></li>
-<li><a href="#evtol_air_mobility">10. Evtol Air Mobility (achr, joby, evex, evtl)</a></li>
-<li><a href="#hydrogen_fuel_cells">11. Hydrogen Fuel Cells (fcel, be, plug, hyln, bw, bldp)</a></li>
-<li><a href="#batteries_storage_tech">12. Batteries Storage Tech (qs, envx, ses, mvst, ampx, sldp)</a></li>
-<li><a href="#batteries_storage_sw">13. Batteries Storage Sw (enph, stem, flnc, eose, gwh, kulr, te, nrgv)</a></li>
-<li><a href="#battery_materials_mining">14. Battery Materials Mining (atlx, abat, alb, sqm, sgml, elvr, lac, nb)</a></li>
-<li><a href="#Hyperscalers">15. Hyperscalers (crwv, nbis, corz, apld, cifr, wulf)</a></li>
-<li><a href="#Mining">16. Mining (mara, clsk, bitf, hive, btbt, hut, riot, iren)</a></li>
-<li><a href="#new_nuclear_energy">17. New Nuclear Energy (oklo, smr, nne, imsr, uec, ccj, leu, bwxt)</a></li>
-<li><a href="#Mag7">18. Mag7 (spy, aapl, nvda, meta, msft, avgo, goog, amzn)</a></li>
-</ul></nav><hr/>
-
+    <div id="industry-index-placeholder"></div>
 
 <div style="margin-top: 20px; margin-bottom: 20px;">
     <label><input type="checkbox" id="toggleNews"> News</label>
@@ -3310,6 +3308,7 @@ No announcements or SEC filings dated **January 15, 2026**, were found.
         await parseCustomDilutionRanges();
         await loadAndCleanIndustryData();
         await fetchAndParseGovtNews();
+        generateIndustryIndex();
         // Then call the function to fetch and render fundamentals tables, which will then call renderCharts
         fetchAndRenderTables();
         await fetchAndParseOptionsData()
