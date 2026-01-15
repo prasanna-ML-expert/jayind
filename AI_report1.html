@@ -16,26 +16,7 @@
         const GITHUB_RAW_URL_BASE = "https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/";
         const PROCESSED_DILUTION_RANGES_FILENAME = "processed_dilution_ranges.csv";
         const PROCESSED_DILUTION_RANGES_URL = GITHUB_RAW_URL_BASE + PROCESSED_DILUTION_RANGES_FILENAME;
-        const tickerMap = {
-            'quantum': ['ionq', 'qbts', 'rgti', 'qubt', 'laes', 'arqq'],
-            'power_management_chips': ['nvts', 'on', 'aosl', 'cohr', 'mpwr', 'powi', 'alab', 'indi'],
-            'lidar_sensing': ['aeva', 'invz', 'mvis', 'lidr', 'oust', 'arbe'],
-            'autonomous_driving': ['mbly', 'aur', 'tsla', 'xpev', 'kdk'],
-            'uas_defense_robotics': ['dpro', 'rcat', 'zena', 'onds', 'avav', 'ktos', 'umac', 'spai'],
-            'service_robotics': ['rr', 'serv', 'prct', 'zbra', 'irbt'],
-            'space_launch_systems': ['rklb', 'fly', 'mnts', 'spce', 'lunr', 'rdw'],
-            'earth_observation': ['pl', 'bksy', 'spir', 'satl','asts', 'irdm', 'sats', 'vsat'],
-            'ev_charging_infrastructure': ['evgo', 'blnk', 'chpt', 'beem', 'adse'],
-            'evtol_air_mobility': ['achr', 'joby', 'evex', 'evtl'],
-            'hydrogen_fuel_cells': ['fcel', 'be', 'plug', 'hyln', 'bw','bldp'],
-            'batteries_storage_tech': ['qs', 'envx', 'ses', 'mvst', 'ampx', 'sldp'],
-            'batteries_storage_sw': ['enph', 'stem', 'flnc', 'eose', 'gwh', 'kulr','te','nrgv'],
-            'battery_materials_mining': ['atlx', 'abat', 'alb', 'sqm', 'sgml', 'elvr', 'lac', 'nb'],
-            'Hyperscalers': ['crwv', 'nbis', 'corz', 'apld', 'cifr', 'wulf'],
-            'Mining': [ 'mara', 'clsk', 'bitf', 'hive', 'btbt', 'hut', 'riot', 'iren'],
-            'new_nuclear_energy': ['oklo', 'smr', 'nne', 'imsr','uec','ccj','leu', 'bwxt'],
-            'Mag7': ['spy','aapl', 'nvda', 'meta', 'msft', 'avgo', 'goog', 'amzn'],
-        };
+        const tickerMap = {};
 
 
         // Lookup object for custom dilution ranges
@@ -257,11 +238,9 @@
             let indexCounter = 1;
             for (const key in tickerMap) {
                 if (tickerMap.hasOwnProperty(key)) {
-                    //const formattedIndustryName = key.replace(/_/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+                    const formattedIndustryName = key.replace(/_/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
                     const tickersStr = tickerMap[key].join(', ');
-                    //navigationHtml += `<li><a href="#${key}">${indexCounter}. ${formattedIndustryName} (${tickersStr})</a></li>
-`;
-                    navigationHtml += `<li>hi/li>
+                    navigationHtml += `<li><a href="#${key}">${indexCounter}. ${formattedIndustryName} (${tickersStr})</a></li>
 `;
                     indexCounter++;
                 }
