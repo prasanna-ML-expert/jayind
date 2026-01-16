@@ -425,6 +425,7 @@
         // Helper to parse CSV data into an array of objects
         const csvdataLookup = {};
         const csvdata = [];
+        const headers = [];
         async function parseCsv() {
             try {
                 const response = await fetch(csvExportUrl);
@@ -979,7 +980,6 @@
         async function fetchAndRenderTables() {
             const telegramTickerData = await getTelegramTickerData();
             try {
-                parseCsv();
                 // Call renderCharts with the parsed data
                 renderCharts(csvdata);
 
