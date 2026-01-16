@@ -1032,7 +1032,7 @@
                                         cellValue = fundData['rev'] !== undefined ? fundData['rev'] : cellValue;
                                     } else if (header === 'QPL_M') { // Assuming QPL_M from sheets_df maps to 'burn' from fundamentalsData
                                         cellValue = fundData['burn'] !== undefined ? fundData['burn'] : cellValue;
-                                    } else if (header === 'mcap') { 
+                                    } else if (header === 'mcap' || header === 'Price') { 
                                         cellValue = '';
                                     } else if (header === 'OrderBook' && dailyData && dailyData.val3 !== undefined) {
                                         cellValue = dailyData.val3;
@@ -1217,7 +1217,7 @@
         table { width: 100%; border-collapse: collapse; margin-top: 15px; background-color: #f4f4f4; box-shadow: none; border: none; } /* Modified table styling */
         th, td { border: none; padding: 8px; text-align: left; } /* Modified table cell styling */
         th { display: none; } /* Hide table headers */
-        td { color: #f4f4f4; } /* Make text color same as page background */
+        td { color: #002d6b; } /* Make text color same as page background */
         .news-item { background-color: #e9f7ef; border-left: 5px solid #28a745; margin-bottom: 10px; padding: 10px; border-radius: 4px; } /* Added news item styling */
         .news-date { font-weight: bold; color: #28a745; } /* Added news date styling */
         .ticker-header { background-color: #d1ecf1; padding: 8px; margin-top: 15px; margin-bottom: 5px; border-radius: 4px; border-left: 5px solid #17a2b8; } /* Added ticker header styling */
