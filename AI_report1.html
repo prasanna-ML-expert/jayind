@@ -1032,6 +1032,8 @@
                                         cellValue = fundData['rev'] !== undefined ? fundData['rev'] : cellValue;
                                     } else if (header === 'QPL_M') { // Assuming QPL_M from sheets_df maps to 'burn' from fundamentalsData
                                         cellValue = fundData['burn'] !== undefined ? fundData['burn'] : cellValue;
+                                    } else if (header === 'mcap') { 
+                                        cellValue = '';
                                     } else if (header === 'OrderBook' && dailyData && dailyData.val3 !== undefined) {
                                         cellValue = dailyData.val3;
                                         style = 'text-align: right;color: brown;';
