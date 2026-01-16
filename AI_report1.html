@@ -417,6 +417,150 @@
             }
         }
 
+        /********************
+              Parse CSV data
+        ************************/
+        // Helper to parse CSV data into an array of objects
+        const csvdataLookup = {};
+        const csvdata = [];
+        async function parseCsv() {
+            try {
+                const response = await fetch(csvExportUrl);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const csvText = await response.text();
+                const lines = csvText.split('\n').map(line => line.endsWith('\r') ? line.slice(0, -1) : line);
+                //console.log('Parsed CSV lines:', lines);
+                //if (lines.length < 2 || lines.every(line => line.trim() === '')) {
+                //    console.warn('CSV data is empty or contains only headers.');
+                //    for (const industryKey in tickerMap) {
+                //        const placeholderDiv = document.getElementById(`fundamentals-table-${industryKey}`);
+                //        if (placeholderDiv) {
+                //            placeholderDiv.innerHTML = '<p>No CSV data loaded or only headers found.</p>';
+                //        }
+                //    }
+                //    return;
+                //}
+
+                const headers = lines[0].split(',').map(h => h.trim());
+
+                for (let i = 1; i < lines.length; i++) {
+                    if (lines[i].trim() === '') continue; // Skip empty lines
+
+                    const currentLine = lines[i].split(',');
+                    let row = {};
+                    for (let j = 0; j < headers.length; j++) {
+                        row[headers[j]] = (currentLine[j] || '').trim();
+                    }
+                    csvdata.push(row);
+                    if (row['Ticker']) {
+                        csvdataLookup[row['Ticker'].toUpperCase()] = row;
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching or parsing csv data:', error);
+            }
+        }
+        // populate ticker and options buttons for all industries
+        function renderDashboard() {
+            for (const industryKey in tickerMap) {
+                if (tickerMap.hasOwnProperty(industryKey)) {
+                    let ticker_hyperlinks_html = '<div class="ticker-hyperlinks-row" style="margin-top: 10px;">
+' +
+                                                 '
+   <strong>Institutional price level details:</strong>';
+                    let tickerpricestr = ""; // For options levels
+                    const industryTickers = tickerMap[industryKey];
+
+                    industryTickers.forEach(ticker_symbol => {
+                        const upperTicker = ticker_symbol.toUpperCase();
+                        const tickerRow = csvdataLookup[upperTicker];
+                        let current_price_str = 'N/A';
+                        if (tickerRow && tickerRow['Price']) {
+                            const price = parseFloat(tickerRow['Price']);
+                            current_price_str = !isNaN(price) ? price.toFixed(2) : 'N/A';
+                        }
+                        tickerpricestr += `${ticker_symbol}(${current_price_str}) `;
+                        ticker_hyperlinks_html += `<button class="ticker-button" onclick="toggleDilutionInline(this, '${upperTicker}', event, '${current_price_str}'); return false;" style="margin-right: 10px;">${upperTicker}</button>`;                        
+                    });
+
+                    ticker_hyperlinks_html += '</div>
+'; // Close ticker-hyperlinks-row
+
+                    let options_levels_html = `<div style="margin-top: 10px; margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">` +
+                                              `<strong>Options levels details:</strong> ` +
+                                              `<button class="ticker-button" onclick="toggleOptionsLevelsInline(this, '${industryKey}', '${tickerpricestr}', event); return false;" style="margin-right: 10px;">${industryKey}</button>` +
+                                              `</div>`;
+
+                    const buttonContainer = document.getElementById(`buttons-container-${industryKey}`);
+                    if (buttonContainer) {
+                        buttonContainer.innerHTML = ticker_hyperlinks_html + options_levels_html;
+                    }
+                }
+            }
+            console.log("Dashboard buttons populated.");
+        }
+
+
+    function generateIndustrySections() {
+        const container = document.getElementById('industry-sections-placeholder');
+        if (!container) return;
+        let sectionsHtml = '';
+        industry_counter = 1
+        for (const industry_key in tickerMap) {
+          formatted_industry_name = industry_key.replace('_', ' ')
+          sectionsHtml += `
+          <div class="industry-section" id="${industry_key}">
+              <div class="industry-header-container">
+                  <h2>${industry_counter}. ${formatted_industry_name}</h2>
+                  <span class="section-toggles-inline">
+                      <button class="ticker-button" onclick="toggleSection('news-container-${industry_key}', this);">(News</button>
+                      <button class="ticker-button" onclick="toggleSection('fundamentals-table-container-${industry_key}', this);">Price levels</button>
+                      <button class="ticker-button" onclick="toggleSection('canvas-chart-container-${industry_key}', this);">Fundamentals</button>
+                      <button class="ticker-button" onclick="toggleSection('charts-image-section-${industry_key}', this);">Technicals)</button>
+                  </span>
+                  <a href="#top" class="scroll-to-top-button">&uarr;</a>
+              </div>
+              <div id="news-container-${industry_key}" class="news-content hidden">
+
+                <h3>Recent News</h3>
+
+                <div  id="news-content-text-${industry_key}" class="markdown-output news-section">Loading news ...</div>
+
+              </div>
+
+              <div id="fundamentals-table-container-${industry_key}" class="fundamentals-table-content">
+
+                <h3>Price levels</h3>
+
+                <div id="fundamentals-table-${industry_key}">Loading Price levels...</div>
+
+              </div>
+
+              <div id="canvas-chart-container-${industry_key}" class="canvas-chart-content hidden">
+
+                <h3>Peer Fundamentals Comparison</h3>
+
+                <canvas id="chart_${industry_key}" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
+
+              </div>
+
+              <div id="buttons-container-${industryKey}" class="button-row" style="margin-top: 10px; margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 10px;"
+              </div>
+              // Add the Chart.js canvas and the ticker hyperlinks row within the fundamentals sectio
+              <div id="charts-image-section-${industry_key}" class="charts-image-content hidden">
+                <h3 class="charts-section">Technicals & charts <small><span id="chart-date-${industry_key}">Loading date...</span></small></h3>
+                <img src="" data-src="https://raw.githubusercontent.com/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/main/screenshots/${industry_key}.png" alt="${formatted_industry_name} Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
+              </div>
+            </div>
+`
+    
+          industry_counter += 1 # Increment counter
+        }
+        container.innerHTML = sectionsHtml;
+      }
+
 
         const BOT_TOKEN = '6506332831:AAG0wcG6LxQXNVDVyXw_lBBa1YNDGV_Mhj0';
         const API_URL = `https://api.telegram.org/bot${BOT_TOKEN}/getUpdates`;
@@ -686,27 +830,7 @@
                 }
             }
         }
-        // Helper to parse CSV data into an array of objects
-        function parseCsv(csvText) {
-            const lines = csvText.split('\n').map(line => line.trim()).filter(line => line !== '');
-            if (lines.length === 0) return [];
-
-            const headers = lines[0].split(',').map(h => h.trim());
-            const data = [];
-
-            for (let i = 1; i < lines.length; i++) {
-                if (lines[i].trim() === '') continue; // Skip empty lines
-
-                const currentLine = lines[i].split(',');
-                let row = {};
-                for (let j = 0; j < headers.length; j++) {
-                    row[headers[j]] = (currentLine[j] || '').trim();
-                }
-                data.push(row);
-            }
-            return data;
-        }
-        // Function to load actual image sources for lazy loading
+         // Function to load actual image sources for lazy loading
         function loadChartsImages() {
             console.log('loadChartsImages function called.');
             document.querySelectorAll('.chart-image').forEach(img => {
@@ -869,41 +993,9 @@
         async function fetchAndRenderTables() {
             const telegramTickerData = await getTelegramTickerData();
             try {
-                const response = await fetch(csvExportUrl);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const csvText = await response.text();
-                const lines = csvText.split('\n').map(line => line.endsWith('\r') ? line.slice(0, -1) : line);
-                console.log('Parsed CSV lines:', lines);
-
-                if (lines.length < 2 || lines.every(line => line.trim() === '')) {
-                    console.warn('CSV data is empty or contains only headers.');
-                    for (const industryKey in tickerMap) {
-                        const placeholderDiv = document.getElementById(`fundamentals-table-${industryKey}`);
-                        if (placeholderDiv) {
-                            placeholderDiv.innerHTML = '<p>No CSV data loaded or only headers found.</p>';
-                        }
-                    }
-                    return;
-                }
-
-                const headers = lines[0].split(',').map(h => h.trim());
-                const data = [];
-
-                for (let i = 1; i < lines.length; i++) {
-                    if (lines[i].trim() === '') continue; // Skip empty lines
-
-                    const currentLine = lines[i].split(',');
-                    let row = {};
-                    for (let j = 0; j < headers.length; j++) {
-                        row[headers[j]] = (currentLine[j] || '').trim();
-                    }
-                    data.push(row);
-                }
-
+                parseCsv();
                 // Call renderCharts with the parsed data
-                renderCharts(data);
+                renderCharts(csvdata);
 
                 // Columns to display (must match Python list in sheets_df)
                 const columnsToDisplay = [
@@ -913,7 +1005,7 @@
 
                 for (const industryKey in tickerMap) {
                     const industryTickers = tickerMap[industryKey];
-                    const industryData = data.filter(row => industryTickers.includes(row['Ticker'].toLowerCase()));
+                    const industryData = csvdata.filter(row => industryTickers.includes(row['Ticker'].toLowerCase()));
 
                     industryData.sort((a, b) => {
                         const mcapA = parseFloat(a['mcap']) || 0;
@@ -1308,910 +1400,13 @@
         <label><input type="checkbox" id="toggleCanvasChart"> Fundamentals </label>
         <label><input type="checkbox" id="toggleCharts"> Technicals </label>
     </div>
+    <div id='industry-sections-placeholder'></div>
 
-    <div class="industry-section" id="quantum">
-        <div class="industry-header-container">
-            <h2>1. Quantum</h2>
-            <span class="section-toggles-inline">
-                <button class="ticker-button" onclick="toggleSection('news-container-quantum', this);">(News</button>
-                <button class="ticker-button" onclick="toggleSection('fundamentals-table-container-quantum', this);">Price levels</button>
-                <button class="ticker-button" onclick="toggleSection('canvas-chart-container-quantum', this);">Fundamentals</button>
-                <button class="ticker-button" onclick="toggleSection('charts-image-section-quantum', this);">Technicals)</button>
-            </span>
-            <a href="#top" class="scroll-to-top-button">&uarr;</a>
-        </div>
-        <div id="news-container-quantum" class="news-content hidden">
-
-        <h3>Recent News</h3>
-
-        <div  id="news-content-text-quantum" class="markdown-output news-section">Loading news ...</div>
-
-        </div>
-
-        <div id="fundamentals-table-container-quantum" class="fundamentals-table-content">
-
-        <h3>Price levels</h3>
-
-        <div id="fundamentals-table-quantum">Loading Price levels...</div>
-
-        </div>
-
-        <div id="canvas-chart-container-quantum" class="canvas-chart-content hidden">
-
-        <h3>Peer Fundamentals Comparison</h3>
-
-        <canvas id="chart_quantum" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
-
-        </div>
-
-    
-    <div class="button-row" style="margin-top: 10px; margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
-      <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
-
-   <strong>Institutional price level details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'IONQ', event, '47.56'); return false;" style="margin-right: 10px;">IONQ</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'QBTS', event, '28.72'); return false;" style="margin-right: 10px;">QBTS</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'RGTI', event, '24.70'); return false;" style="margin-right: 10px;">RGTI</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'QUBT', event, '12.18'); return false;" style="margin-right: 10px;">QUBT</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'LAES', event, '4.65'); return false;" style="margin-right: 10px;">LAES</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'ARQQ', event, '26.97'); return false;" style="margin-right: 10px;">ARQQ</button></div>
-
-      <strong>Options levels details:</strong>
-      <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'quantum', 'ionq(47.56) qbts(28.72) rgti(24.70) qubt(12.18) laes(4.65) arqq(26.97) ',event); return false;" style="margin-right: 10px;">quantum</button>
-    </div>
-    <div id="charts-image-section-quantum" class="charts-image-content hidden">
-      <h3 class="charts-section">Technicals & charts <small><span id="chart-date-quantum">Loading date...</span></small></h3>
-      <img src="" data-src="https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/screenshots/quantum.png" alt="Quantum Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-    </div>
-    </div>
-
-    <div class="industry-section" id="power_management_chips">
-        <div class="industry-header-container">
-            <h2>2. Power Management Chips</h2>
-            <span class="section-toggles-inline">
-                <button class="ticker-button" onclick="toggleSection('news-container-power_management_chips', this);">(News</button>
-                <button class="ticker-button" onclick="toggleSection('fundamentals-table-container-power_management_chips', this);">Price levels</button>
-                <button class="ticker-button" onclick="toggleSection('canvas-chart-container-power_management_chips', this);">Fundamentals</button>
-                <button class="ticker-button" onclick="toggleSection('charts-image-section-power_management_chips', this);">Technicals)</button>
-            </span>
-            <a href="#top" class="scroll-to-top-button">&uarr;</a>
-        </div>
-        <div id="news-container-power_management_chips" class="news-content hidden">
-
-        <h3>Recent News</h3>
-
-        <div  id="news-content-text-power_management_chips" class="markdown-output news-section">Loading news ...</div>
-
-        </div>
-
-        <div id="fundamentals-table-container-power_management_chips" class="fundamentals-table-content">
-
-        <h3>Price levels</h3>
-
-        <div id="fundamentals-table-power_management_chips">Loading Price levels...</div>
-
-        </div>
-
-        <div id="canvas-chart-container-power_management_chips" class="canvas-chart-content hidden">
-
-        <h3>Peer Fundamentals Comparison</h3>
-
-        <canvas id="chart_power_management_chips" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
-
-        </div>
-
-    
-    <div class="button-row" style="margin-top: 10px; margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
-      <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
-
-   <strong>Institutional price level details:</strong><span style="margin-right: 10px; color: #666;">NVTS ($10.00)</span><span style="margin-right: 10px; color: #666;">ON ($60.28)</span><span style="margin-right: 10px; color: #666;">AOSL ($22.49)</span><button class="ticker-button" onclick="toggleDilutionInline(this, 'COHR', event, '195.96'); return false;" style="margin-right: 10px;">COHR</button><span style="margin-right: 10px; color: #666;">MPWR ($1009.54)</span><span style="margin-right: 10px; color: #666;">POWI ($43.48)</span><button class="ticker-button" onclick="toggleDilutionInline(this, 'ALAB', event, '174.45'); return false;" style="margin-right: 10px;">ALAB</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'INDI', event, '4.23'); return false;" style="margin-right: 10px;">INDI</button></div>
-
-      <strong>Options levels details:</strong>
-      <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'power_management_chips', 'nvts(10.00) on(60.28) aosl(22.49) cohr(195.96) mpwr(1009.54) powi(43.48) alab(174.45) indi(4.23) ',event); return false;" style="margin-right: 10px;">power_management_chips</button>
-    </div>
-    <div id="charts-image-section-power_management_chips" class="charts-image-content hidden">
-      <h3 class="charts-section">Technicals & charts <small><span id="chart-date-power_management_chips">Loading date...</span></small></h3>
-      <img src="" data-src="https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/screenshots/power_management_chips.png" alt="Power Management Chips Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-    </div>
-    </div>
-
-    <div class="industry-section" id="lidar_sensing">
-        <div class="industry-header-container">
-            <h2>3. Lidar Sensing</h2>
-            <span class="section-toggles-inline">
-                <button class="ticker-button" onclick="toggleSection('news-container-lidar_sensing', this);">(News</button>
-                <button class="ticker-button" onclick="toggleSection('fundamentals-table-container-lidar_sensing', this);">Price levels</button>
-                <button class="ticker-button" onclick="toggleSection('canvas-chart-container-lidar_sensing', this);">Fundamentals</button>
-                <button class="ticker-button" onclick="toggleSection('charts-image-section-lidar_sensing', this);">Technicals)</button>
-            </span>
-            <a href="#top" class="scroll-to-top-button">&uarr;</a>
-        </div>
-        <div id="news-container-lidar_sensing" class="news-content hidden">
-
-        <h3>Recent News</h3>
-
-        <div  id="news-content-text-lidar_sensing" class="markdown-output news-section">Loading news ...</div>
-
-        </div>
-
-        <div id="fundamentals-table-container-lidar_sensing" class="fundamentals-table-content">
-
-        <h3>Price levels</h3>
-
-        <div id="fundamentals-table-lidar_sensing">Loading Price levels...</div>
-
-        </div>
-
-        <div id="canvas-chart-container-lidar_sensing" class="canvas-chart-content hidden">
-
-        <h3>Peer Fundamentals Comparison</h3>
-
-        <canvas id="chart_lidar_sensing" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
-
-        </div>
-
-    
-    <div class="button-row" style="margin-top: 10px; margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
-      <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
-
-   <strong>Institutional price level details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'AEVA', event, '19.82'); return false;" style="margin-right: 10px;">AEVA</button><span style="margin-right: 10px; color: #666;">INVZ ($1.12)</span><button class="ticker-button" onclick="toggleDilutionInline(this, 'MVIS', event, '0.91'); return false;" style="margin-right: 10px;">MVIS</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'LIDR', event, '2.04'); return false;" style="margin-right: 10px;">LIDR</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'OUST', event, '27.40'); return false;" style="margin-right: 10px;">OUST</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'ARBE', event, '1.19'); return false;" style="margin-right: 10px;">ARBE</button></div>
-
-      <strong>Options levels details:</strong>
-      <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'lidar_sensing', 'aeva(19.82) invz(1.12) mvis(0.91) lidr(2.04) oust(27.40) arbe(1.19) ',event); return false;" style="margin-right: 10px;">lidar_sensing</button>
-    </div>
-    <div id="charts-image-section-lidar_sensing" class="charts-image-content hidden">
-      <h3 class="charts-section">Technicals & charts <small><span id="chart-date-lidar_sensing">Loading date...</span></small></h3>
-      <img src="" data-src="https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/screenshots/lidar_sensing.png" alt="Lidar Sensing Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-    </div>
-    </div>
-
-    <div class="industry-section" id="autonomous_driving">
-        <div class="industry-header-container">
-            <h2>4. Autonomous Driving</h2>
-            <span class="section-toggles-inline">
-                <button class="ticker-button" onclick="toggleSection('news-container-autonomous_driving', this);">(News</button>
-                <button class="ticker-button" onclick="toggleSection('fundamentals-table-container-autonomous_driving', this);">Price levels</button>
-                <button class="ticker-button" onclick="toggleSection('canvas-chart-container-autonomous_driving', this);">Fundamentals</button>
-                <button class="ticker-button" onclick="toggleSection('charts-image-section-autonomous_driving', this);">Technicals)</button>
-            </span>
-            <a href="#top" class="scroll-to-top-button">&uarr;</a>
-        </div>
-        <div id="news-container-autonomous_driving" class="news-content hidden">
-
-        <h3>Recent News</h3>
-
-        <div  id="news-content-text-autonomous_driving" class="markdown-output news-section">Loading news ...</div>
-
-        </div>
-
-        <div id="fundamentals-table-container-autonomous_driving" class="fundamentals-table-content">
-
-        <h3>Price levels</h3>
-
-        <div id="fundamentals-table-autonomous_driving">Loading Price levels...</div>
-
-        </div>
-
-        <div id="canvas-chart-container-autonomous_driving" class="canvas-chart-content hidden">
-
-        <h3>Peer Fundamentals Comparison</h3>
-
-        <canvas id="chart_autonomous_driving" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
-
-        </div>
-
-    
-    <div class="button-row" style="margin-top: 10px; margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
-      <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
-
-   <strong>Institutional price level details:</strong><span style="margin-right: 10px; color: #666;">MBLY ($11.08)</span><span style="margin-right: 10px; color: #666;">AUR ($4.57)</span><span style="margin-right: 10px; color: #666;">TSLA ($438.57)</span><span style="margin-right: 10px; color: #666;">XPEV ($20.88)</span><span style="margin-right: 10px; color: #666;">KDK ($9.48)</span></div>
-
-      <strong>Options levels details:</strong>
-      <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'autonomous_driving', 'mbly(11.08) aur(4.57) tsla(438.57) xpev(20.88) kdk(9.48) ',event); return false;" style="margin-right: 10px;">autonomous_driving</button>
-    </div>
-    <div id="charts-image-section-autonomous_driving" class="charts-image-content hidden">
-      <h3 class="charts-section">Technicals & charts <small><span id="chart-date-autonomous_driving">Loading date...</span></small></h3>
-      <img src="" data-src="https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/screenshots/autonomous_driving.png" alt="Autonomous Driving Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-    </div>
-    </div>
-
-    <div class="industry-section" id="uas_defense_robotics">
-        <div class="industry-header-container">
-            <h2>5. Uas Defense Robotics</h2>
-            <span class="section-toggles-inline">
-                <button class="ticker-button" onclick="toggleSection('news-container-uas_defense_robotics', this);">(News</button>
-                <button class="ticker-button" onclick="toggleSection('fundamentals-table-container-uas_defense_robotics', this);">Price levels</button>
-                <button class="ticker-button" onclick="toggleSection('canvas-chart-container-uas_defense_robotics', this);">Fundamentals</button>
-                <button class="ticker-button" onclick="toggleSection('charts-image-section-uas_defense_robotics', this);">Technicals)</button>
-            </span>
-            <a href="#top" class="scroll-to-top-button">&uarr;</a>
-        </div>
-        <div id="news-container-uas_defense_robotics" class="news-content hidden">
-
-        <h3>Recent News</h3>
-
-        <div  id="news-content-text-uas_defense_robotics" class="markdown-output news-section">Loading news ...</div>
-
-        </div>
-
-        <div id="fundamentals-table-container-uas_defense_robotics" class="fundamentals-table-content">
-
-        <h3>Price levels</h3>
-
-        <div id="fundamentals-table-uas_defense_robotics">Loading Price levels...</div>
-
-        </div>
-
-        <div id="canvas-chart-container-uas_defense_robotics" class="canvas-chart-content hidden">
-
-        <h3>Peer Fundamentals Comparison</h3>
-
-        <canvas id="chart_uas_defense_robotics" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
-
-        </div>
-
-    
-    <div class="button-row" style="margin-top: 10px; margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
-      <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
-
-   <strong>Institutional price level details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'DPRO', event, '9.34'); return false;" style="margin-right: 10px;">DPRO</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'RCAT', event, '14.03'); return false;" style="margin-right: 10px;">RCAT</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'ZENA', event, '4.13'); return false;" style="margin-right: 10px;">ZENA</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'ONDS', event, '12.82'); return false;" style="margin-right: 10px;">ONDS</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'AVAV', event, '378.57'); return false;" style="margin-right: 10px;">AVAV</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'KTOS', event, '124.56'); return false;" style="margin-right: 10px;">KTOS</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'UMAC', event, '17.46'); return false;" style="margin-right: 10px;">UMAC</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'SPAI', event, '6.24'); return false;" style="margin-right: 10px;">SPAI</button></div>
-
-      <strong>Options levels details:</strong>
-      <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'uas_defense_robotics', 'dpro(9.34) rcat(14.03) zena(4.13) onds(12.82) avav(378.57) ktos(124.56) umac(17.46) spai(6.24) ',event); return false;" style="margin-right: 10px;">uas_defense_robotics</button>
-    </div>
-    <div id="charts-image-section-uas_defense_robotics" class="charts-image-content hidden">
-      <h3 class="charts-section">Technicals & charts <small><span id="chart-date-uas_defense_robotics">Loading date...</span></small></h3>
-      <img src="" data-src="https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/screenshots/uas_defense_robotics.png" alt="Uas Defense Robotics Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-    </div>
-    </div>
-
-    <div class="industry-section" id="service_robotics">
-        <div class="industry-header-container">
-            <h2>6. Service Robotics</h2>
-            <span class="section-toggles-inline">
-                <button class="ticker-button" onclick="toggleSection('news-container-service_robotics', this);">(News</button>
-                <button class="ticker-button" onclick="toggleSection('fundamentals-table-container-service_robotics', this);">Price levels</button>
-                <button class="ticker-button" onclick="toggleSection('canvas-chart-container-service_robotics', this);">Fundamentals</button>
-                <button class="ticker-button" onclick="toggleSection('charts-image-section-service_robotics', this);">Technicals)</button>
-            </span>
-            <a href="#top" class="scroll-to-top-button">&uarr;</a>
-        </div>
-        <div id="news-container-service_robotics" class="news-content hidden">
-
-        <h3>Recent News</h3>
-
-        <div  id="news-content-text-service_robotics" class="markdown-output news-section">Loading news ...</div>
-
-        </div>
-
-        <div id="fundamentals-table-container-service_robotics" class="fundamentals-table-content">
-
-        <h3>Price levels</h3>
-
-        <div id="fundamentals-table-service_robotics">Loading Price levels...</div>
-
-        </div>
-
-        <div id="canvas-chart-container-service_robotics" class="canvas-chart-content hidden">
-
-        <h3>Peer Fundamentals Comparison</h3>
-
-        <canvas id="chart_service_robotics" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
-
-        </div>
-
-    
-    <div class="button-row" style="margin-top: 10px; margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
-      <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
-
-   <strong>Institutional price level details:</strong><span style="margin-right: 10px; color: #666;">RR ($3.79)</span><span style="margin-right: 10px; color: #666;">SERV ($14.58)</span><span style="margin-right: 10px; color: #666;">PRCT ($30.50)</span><span style="margin-right: 10px; color: #666;">ZBRA ($258.85)</span><span style="margin-right: 10px; color: #666;">IRBT ($N/A)</span></div>
-
-      <strong>Options levels details:</strong>
-      <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'service_robotics', 'rr(3.79) serv(14.58) prct(30.50) zbra(258.85) irbt(N/A) ',event); return false;" style="margin-right: 10px;">service_robotics</button>
-    </div>
-    <div id="charts-image-section-service_robotics" class="charts-image-content hidden">
-      <h3 class="charts-section">Technicals & charts <small><span id="chart-date-service_robotics">Loading date...</span></small></h3>
-      <img src="" data-src="https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/screenshots/service_robotics.png" alt="Service Robotics Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-    </div>
-    </div>
-
-    <div class="industry-section" id="space_launch_systems">
-        <div class="industry-header-container">
-            <h2>7. Space Launch Systems</h2>
-            <span class="section-toggles-inline">
-                <button class="ticker-button" onclick="toggleSection('news-container-space_launch_systems', this);">(News</button>
-                <button class="ticker-button" onclick="toggleSection('fundamentals-table-container-space_launch_systems', this);">Price levels</button>
-                <button class="ticker-button" onclick="toggleSection('canvas-chart-container-space_launch_systems', this);">Fundamentals</button>
-                <button class="ticker-button" onclick="toggleSection('charts-image-section-space_launch_systems', this);">Technicals)</button>
-            </span>
-            <a href="#top" class="scroll-to-top-button">&uarr;</a>
-        </div>
-        <div id="news-container-space_launch_systems" class="news-content hidden">
-
-        <h3>Recent News</h3>
-
-        <div  id="news-content-text-space_launch_systems" class="markdown-output news-section">Loading news ...</div>
-
-        </div>
-
-        <div id="fundamentals-table-container-space_launch_systems" class="fundamentals-table-content">
-
-        <h3>Price levels</h3>
-
-        <div id="fundamentals-table-space_launch_systems">Loading Price levels...</div>
-
-        </div>
-
-        <div id="canvas-chart-container-space_launch_systems" class="canvas-chart-content hidden">
-
-        <h3>Peer Fundamentals Comparison</h3>
-
-        <canvas id="chart_space_launch_systems" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
-
-        </div>
-
-    
-    <div class="button-row" style="margin-top: 10px; margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
-      <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
-
-   <strong>Institutional price level details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'RKLB', event, '90.76'); return false;" style="margin-right: 10px;">RKLB</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'FLY', event, '29.75'); return false;" style="margin-right: 10px;">FLY</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'MNTS', event, '9.11'); return false;" style="margin-right: 10px;">MNTS</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'SPCE', event, '3.03'); return false;" style="margin-right: 10px;">SPCE</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'LUNR', event, '19.50'); return false;" style="margin-right: 10px;">LUNR</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'RDW', event, '10.86'); return false;" style="margin-right: 10px;">RDW</button></div>
-
-      <strong>Options levels details:</strong>
-      <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'space_launch_systems', 'rklb(90.76) fly(29.75) mnts(9.11) spce(3.03) lunr(19.50) rdw(10.86) ',event); return false;" style="margin-right: 10px;">space_launch_systems</button>
-    </div>
-    <div id="charts-image-section-space_launch_systems" class="charts-image-content hidden">
-      <h3 class="charts-section">Technicals & charts <small><span id="chart-date-space_launch_systems">Loading date...</span></small></h3>
-      <img src="" data-src="https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/screenshots/space_launch_systems.png" alt="Space Launch Systems Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-    </div>
-    </div>
-
-    <div class="industry-section" id="earth_observation">
-        <div class="industry-header-container">
-            <h2>8. Earth Observation</h2>
-            <span class="section-toggles-inline">
-                <button class="ticker-button" onclick="toggleSection('news-container-earth_observation', this);">(News</button>
-                <button class="ticker-button" onclick="toggleSection('fundamentals-table-container-earth_observation', this);">Price levels</button>
-                <button class="ticker-button" onclick="toggleSection('canvas-chart-container-earth_observation', this);">Fundamentals</button>
-                <button class="ticker-button" onclick="toggleSection('charts-image-section-earth_observation', this);">Technicals)</button>
-            </span>
-            <a href="#top" class="scroll-to-top-button">&uarr;</a>
-        </div>
-        <div id="news-container-earth_observation" class="news-content hidden">
-
-        <h3>Recent News</h3>
-
-        <div  id="news-content-text-earth_observation" class="markdown-output news-section">Loading news ...</div>
-
-        </div>
-
-        <div id="fundamentals-table-container-earth_observation" class="fundamentals-table-content">
-
-        <h3>Price levels</h3>
-
-        <div id="fundamentals-table-earth_observation">Loading Price levels...</div>
-
-        </div>
-
-        <div id="canvas-chart-container-earth_observation" class="canvas-chart-content hidden">
-
-        <h3>Peer Fundamentals Comparison</h3>
-
-        <canvas id="chart_earth_observation" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
-
-        </div>
-
-    
-    <div class="button-row" style="margin-top: 10px; margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
-      <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
-
-   <strong>Institutional price level details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'PL', event, '28.28'); return false;" style="margin-right: 10px;">PL</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'BKSY', event, '28.30'); return false;" style="margin-right: 10px;">BKSY</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'SPIR', event, '10.90'); return false;" style="margin-right: 10px;">SPIR</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'SATL', event, '3.49'); return false;" style="margin-right: 10px;">SATL</button><span style="margin-right: 10px; color: #666;">ASTS ($101.25)</span><span style="margin-right: 10px; color: #666;">IRDM ($19.27)</span><span style="margin-right: 10px; color: #666;">SATS ($123.55)</span><span style="margin-right: 10px; color: #666;">VSAT ($44.11)</span></div>
-
-      <strong>Options levels details:</strong>
-      <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'earth_observation', 'pl(28.28) bksy(28.30) spir(10.90) satl(3.49) asts(101.25) irdm(19.27) sats(123.55) vsat(44.11) ',event); return false;" style="margin-right: 10px;">earth_observation</button>
-    </div>
-    <div id="charts-image-section-earth_observation" class="charts-image-content hidden">
-      <h3 class="charts-section">Technicals & charts <small><span id="chart-date-earth_observation">Loading date...</span></small></h3>
-      <img src="" data-src="https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/screenshots/earth_observation.png" alt="Earth Observation Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-    </div>
-    </div>
-
-    <div class="industry-section" id="ev_charging_infrastructure">
-        <div class="industry-header-container">
-            <h2>9. Ev Charging Infrastructure</h2>
-            <span class="section-toggles-inline">
-                <button class="ticker-button" onclick="toggleSection('news-container-ev_charging_infrastructure', this);">(News</button>
-                <button class="ticker-button" onclick="toggleSection('fundamentals-table-container-ev_charging_infrastructure', this);">Price levels</button>
-                <button class="ticker-button" onclick="toggleSection('canvas-chart-container-ev_charging_infrastructure', this);">Fundamentals</button>
-                <button class="ticker-button" onclick="toggleSection('charts-image-section-ev_charging_infrastructure', this);">Technicals)</button>
-            </span>
-            <a href="#top" class="scroll-to-top-button">&uarr;</a>
-        </div>
-        <div id="news-container-ev_charging_infrastructure" class="news-content hidden">
-
-        <h3>Recent News</h3>
-
-        <div  id="news-content-text-ev_charging_infrastructure" class="markdown-output news-section">Loading news ...</div>
-
-        </div>
-
-        <div id="fundamentals-table-container-ev_charging_infrastructure" class="fundamentals-table-content">
-
-        <h3>Price levels</h3>
-
-        <div id="fundamentals-table-ev_charging_infrastructure">Loading Price levels...</div>
-
-        </div>
-
-        <div id="canvas-chart-container-ev_charging_infrastructure" class="canvas-chart-content hidden">
-
-        <h3>Peer Fundamentals Comparison</h3>
-
-        <canvas id="chart_ev_charging_infrastructure" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
-
-        </div>
-
-    
-    <div class="button-row" style="margin-top: 10px; margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
-      <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
-
-   <strong>Institutional price level details:</strong><span style="margin-right: 10px; color: #666;">EVGO ($3.00)</span><span style="margin-right: 10px; color: #666;">BLNK ($0.87)</span><span style="margin-right: 10px; color: #666;">CHPT ($6.89)</span><span style="margin-right: 10px; color: #666;">BEEM ($1.65)</span><span style="margin-right: 10px; color: #666;">ADSE ($11.59)</span></div>
-
-      <strong>Options levels details:</strong>
-      <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'ev_charging_infrastructure', 'evgo(3.00) blnk(0.87) chpt(6.89) beem(1.65) adse(11.59) ',event); return false;" style="margin-right: 10px;">ev_charging_infrastructure</button>
-    </div>
-    <div id="charts-image-section-ev_charging_infrastructure" class="charts-image-content hidden">
-      <h3 class="charts-section">Technicals & charts <small><span id="chart-date-ev_charging_infrastructure">Loading date...</span></small></h3>
-      <img src="" data-src="https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/screenshots/ev_charging_infrastructure.png" alt="Ev Charging Infrastructure Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-    </div>
-    </div>
-
-    <div class="industry-section" id="evtol_air_mobility">
-        <div class="industry-header-container">
-            <h2>10. Evtol Air Mobility</h2>
-            <span class="section-toggles-inline">
-                <button class="ticker-button" onclick="toggleSection('news-container-evtol_air_mobility', this);">(News</button>
-                <button class="ticker-button" onclick="toggleSection('fundamentals-table-container-evtol_air_mobility', this);">Price levels</button>
-                <button class="ticker-button" onclick="toggleSection('canvas-chart-container-evtol_air_mobility', this);">Fundamentals</button>
-                <button class="ticker-button" onclick="toggleSection('charts-image-section-evtol_air_mobility', this);">Technicals)</button>
-            </span>
-            <a href="#top" class="scroll-to-top-button">&uarr;</a>
-        </div>
-        <div id="news-container-evtol_air_mobility" class="news-content hidden">
-
-        <h3>Recent News</h3>
-
-        <div  id="news-content-text-evtol_air_mobility" class="markdown-output news-section">Loading news ...</div>
-
-        </div>
-
-        <div id="fundamentals-table-container-evtol_air_mobility" class="fundamentals-table-content">
-
-        <h3>Price levels</h3>
-
-        <div id="fundamentals-table-evtol_air_mobility">Loading Price levels...</div>
-
-        </div>
-
-        <div id="canvas-chart-container-evtol_air_mobility" class="canvas-chart-content hidden">
-
-        <h3>Peer Fundamentals Comparison</h3>
-
-        <canvas id="chart_evtol_air_mobility" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
-
-        </div>
-
-    
-    <div class="button-row" style="margin-top: 10px; margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
-      <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
-
-   <strong>Institutional price level details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'ACHR', event, '8.86'); return false;" style="margin-right: 10px;">ACHR</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'JOBY', event, '15.28'); return false;" style="margin-right: 10px;">JOBY</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'EVEX', event, '4.66'); return false;" style="margin-right: 10px;">EVEX</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'EVTL', event, '6.02'); return false;" style="margin-right: 10px;">EVTL</button></div>
-
-      <strong>Options levels details:</strong>
-      <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'evtol_air_mobility', 'achr(8.86) joby(15.28) evex(4.66) evtl(6.02) ',event); return false;" style="margin-right: 10px;">evtol_air_mobility</button>
-    </div>
-    <div id="charts-image-section-evtol_air_mobility" class="charts-image-content hidden">
-      <h3 class="charts-section">Technicals & charts <small><span id="chart-date-evtol_air_mobility">Loading date...</span></small></h3>
-      <img src="" data-src="https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/screenshots/evtol_air_mobility.png" alt="Evtol Air Mobility Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-    </div>
-    </div>
-
-    <div class="industry-section" id="hydrogen_fuel_cells">
-        <div class="industry-header-container">
-            <h2>11. Hydrogen Fuel Cells</h2>
-            <span class="section-toggles-inline">
-                <button class="ticker-button" onclick="toggleSection('news-container-hydrogen_fuel_cells', this);">(News</button>
-                <button class="ticker-button" onclick="toggleSection('fundamentals-table-container-hydrogen_fuel_cells', this);">Price levels</button>
-                <button class="ticker-button" onclick="toggleSection('canvas-chart-container-hydrogen_fuel_cells', this);">Fundamentals</button>
-                <button class="ticker-button" onclick="toggleSection('charts-image-section-hydrogen_fuel_cells', this);">Technicals)</button>
-            </span>
-            <a href="#top" class="scroll-to-top-button">&uarr;</a>
-        </div>
-        <div id="news-container-hydrogen_fuel_cells" class="news-content hidden">
-
-        <h3>Recent News</h3>
-
-        <div  id="news-content-text-hydrogen_fuel_cells" class="markdown-output news-section">Loading news ...</div>
-
-        </div>
-
-        <div id="fundamentals-table-container-hydrogen_fuel_cells" class="fundamentals-table-content">
-
-        <h3>Price levels</h3>
-
-        <div id="fundamentals-table-hydrogen_fuel_cells">Loading Price levels...</div>
-
-        </div>
-
-        <div id="canvas-chart-container-hydrogen_fuel_cells" class="canvas-chart-content hidden">
-
-        <h3>Peer Fundamentals Comparison</h3>
-
-        <canvas id="chart_hydrogen_fuel_cells" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
-
-        </div>
-
-    
-    <div class="button-row" style="margin-top: 10px; margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
-      <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
-
-   <strong>Institutional price level details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'FCEL', event, '7.45'); return false;" style="margin-right: 10px;">FCEL</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'BE', event, '139.17'); return false;" style="margin-right: 10px;">BE</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'PLUG', event, '2.26'); return false;" style="margin-right: 10px;">PLUG</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'HYLN', event, '2.23'); return false;" style="margin-right: 10px;">HYLN</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'BW', event, '8.31'); return false;" style="margin-right: 10px;">BW</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'BLDP', event, 'N/A'); return false;" style="margin-right: 10px;">BLDP</button></div>
-
-      <strong>Options levels details:</strong>
-      <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'hydrogen_fuel_cells', 'fcel(7.45) be(139.17) plug(2.26) hyln(2.23) bw(8.31) bldp(N/A) ',event); return false;" style="margin-right: 10px;">hydrogen_fuel_cells</button>
-    </div>
-    <div id="charts-image-section-hydrogen_fuel_cells" class="charts-image-content hidden">
-      <h3 class="charts-section">Technicals & charts <small><span id="chart-date-hydrogen_fuel_cells">Loading date...</span></small></h3>
-      <img src="" data-src="https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/screenshots/hydrogen_fuel_cells.png" alt="Hydrogen Fuel Cells Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-    </div>
-    </div>
-
-    <div class="industry-section" id="batteries_storage_tech">
-        <div class="industry-header-container">
-            <h2>12. Batteries Storage Tech</h2>
-            <span class="section-toggles-inline">
-                <button class="ticker-button" onclick="toggleSection('news-container-batteries_storage_tech', this);">(News</button>
-                <button class="ticker-button" onclick="toggleSection('fundamentals-table-container-batteries_storage_tech', this);">Price levels</button>
-                <button class="ticker-button" onclick="toggleSection('canvas-chart-container-batteries_storage_tech', this);">Fundamentals</button>
-                <button class="ticker-button" onclick="toggleSection('charts-image-section-batteries_storage_tech', this);">Technicals)</button>
-            </span>
-            <a href="#top" class="scroll-to-top-button">&uarr;</a>
-        </div>
-        <div id="news-container-batteries_storage_tech" class="news-content hidden">
-
-        <h3>Recent News</h3>
-
-        <div  id="news-content-text-batteries_storage_tech" class="markdown-output news-section">Loading news ...</div>
-
-        </div>
-
-        <div id="fundamentals-table-container-batteries_storage_tech" class="fundamentals-table-content">
-
-        <h3>Price levels</h3>
-
-        <div id="fundamentals-table-batteries_storage_tech">Loading Price levels...</div>
-
-        </div>
-
-        <div id="canvas-chart-container-batteries_storage_tech" class="canvas-chart-content hidden">
-
-        <h3>Peer Fundamentals Comparison</h3>
-
-        <canvas id="chart_batteries_storage_tech" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
-
-        </div>
-
-    
-    <div class="button-row" style="margin-top: 10px; margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
-      <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
-
-   <strong>Institutional price level details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'QS', event, '10.38'); return false;" style="margin-right: 10px;">QS</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'ENVX', event, '7.82'); return false;" style="margin-right: 10px;">ENVX</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'SES', event, '2.16'); return false;" style="margin-right: 10px;">SES</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'MVST', event, '2.97'); return false;" style="margin-right: 10px;">MVST</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'AMPX', event, '10.15'); return false;" style="margin-right: 10px;">AMPX</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'SLDP', event, '5.63'); return false;" style="margin-right: 10px;">SLDP</button></div>
-
-      <strong>Options levels details:</strong>
-      <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'batteries_storage_tech', 'qs(10.38) envx(7.82) ses(2.16) mvst(2.97) ampx(10.15) sldp(5.63) ',event); return false;" style="margin-right: 10px;">batteries_storage_tech</button>
-    </div>
-    <div id="charts-image-section-batteries_storage_tech" class="charts-image-content hidden">
-      <h3 class="charts-section">Technicals & charts <small><span id="chart-date-batteries_storage_tech">Loading date...</span></small></h3>
-      <img src="" data-src="https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/screenshots/batteries_storage_tech.png" alt="Batteries Storage Tech Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-    </div>
-    </div>
-
-    <div class="industry-section" id="batteries_storage_sw">
-        <div class="industry-header-container">
-            <h2>13. Batteries Storage Sw</h2>
-            <span class="section-toggles-inline">
-                <button class="ticker-button" onclick="toggleSection('news-container-batteries_storage_sw', this);">(News</button>
-                <button class="ticker-button" onclick="toggleSection('fundamentals-table-container-batteries_storage_sw', this);">Price levels</button>
-                <button class="ticker-button" onclick="toggleSection('canvas-chart-container-batteries_storage_sw', this);">Fundamentals</button>
-                <button class="ticker-button" onclick="toggleSection('charts-image-section-batteries_storage_sw', this);">Technicals)</button>
-            </span>
-            <a href="#top" class="scroll-to-top-button">&uarr;</a>
-        </div>
-        <div id="news-container-batteries_storage_sw" class="news-content hidden">
-
-        <h3>Recent News</h3>
-
-        <div  id="news-content-text-batteries_storage_sw" class="markdown-output news-section">Loading news ...</div>
-
-        </div>
-
-        <div id="fundamentals-table-container-batteries_storage_sw" class="fundamentals-table-content">
-
-        <h3>Price levels</h3>
-
-        <div id="fundamentals-table-batteries_storage_sw">Loading Price levels...</div>
-
-        </div>
-
-        <div id="canvas-chart-container-batteries_storage_sw" class="canvas-chart-content hidden">
-
-        <h3>Peer Fundamentals Comparison</h3>
-
-        <canvas id="chart_batteries_storage_sw" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
-
-        </div>
-
-    
-    <div class="button-row" style="margin-top: 10px; margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
-      <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
-
-   <strong>Institutional price level details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'ENPH', event, '35.36'); return false;" style="margin-right: 10px;">ENPH</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'STEM', event, '19.70'); return false;" style="margin-right: 10px;">STEM</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'FLNC', event, '25.50'); return false;" style="margin-right: 10px;">FLNC</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'EOSE', event, '16.88'); return false;" style="margin-right: 10px;">EOSE</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'GWH', event, '1.78'); return false;" style="margin-right: 10px;">GWH</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'KULR', event, '3.98'); return false;" style="margin-right: 10px;">KULR</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'TE', event, '7.41'); return false;" style="margin-right: 10px;">TE</button><span style="margin-right: 10px; color: #666;">NRGV ($6.03)</span></div>
-
-      <strong>Options levels details:</strong>
-      <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'batteries_storage_sw', 'enph(35.36) stem(19.70) flnc(25.50) eose(16.88) gwh(1.78) kulr(3.98) te(7.41) nrgv(6.03) ',event); return false;" style="margin-right: 10px;">batteries_storage_sw</button>
-    </div>
-    <div id="charts-image-section-batteries_storage_sw" class="charts-image-content hidden">
-      <h3 class="charts-section">Technicals & charts <small><span id="chart-date-batteries_storage_sw">Loading date...</span></small></h3>
-      <img src="" data-src="https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/screenshots/batteries_storage_sw.png" alt="Batteries Storage Sw Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-    </div>
-    </div>
-
-    <div class="industry-section" id="battery_materials_mining">
-        <div class="industry-header-container">
-            <h2>14. Battery Materials Mining</h2>
-            <span class="section-toggles-inline">
-                <button class="ticker-button" onclick="toggleSection('news-container-battery_materials_mining', this);">(News</button>
-                <button class="ticker-button" onclick="toggleSection('fundamentals-table-container-battery_materials_mining', this);">Price levels</button>
-                <button class="ticker-button" onclick="toggleSection('canvas-chart-container-battery_materials_mining', this);">Fundamentals</button>
-                <button class="ticker-button" onclick="toggleSection('charts-image-section-battery_materials_mining', this);">Technicals)</button>
-            </span>
-            <a href="#top" class="scroll-to-top-button">&uarr;</a>
-        </div>
-        <div id="news-container-battery_materials_mining" class="news-content hidden">
-
-        <h3>Recent News</h3>
-
-        <div  id="news-content-text-battery_materials_mining" class="markdown-output news-section">Loading news ...</div>
-
-        </div>
-
-        <div id="fundamentals-table-container-battery_materials_mining" class="fundamentals-table-content">
-
-        <h3>Price levels</h3>
-
-        <div id="fundamentals-table-battery_materials_mining">Loading Price levels...</div>
-
-        </div>
-
-        <div id="canvas-chart-container-battery_materials_mining" class="canvas-chart-content hidden">
-
-        <h3>Peer Fundamentals Comparison</h3>
-
-        <canvas id="chart_battery_materials_mining" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
-
-        </div>
-
-    
-    <div class="button-row" style="margin-top: 10px; margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
-      <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
-
-   <strong>Institutional price level details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'ATLX', event, '5.78'); return false;" style="margin-right: 10px;">ATLX</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'ABAT', event, '4.87'); return false;" style="margin-right: 10px;">ABAT</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'ALB', event, '173.78'); return false;" style="margin-right: 10px;">ALB</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'SQM', event, '79.58'); return false;" style="margin-right: 10px;">SQM</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'SGML', event, '14.25'); return false;" style="margin-right: 10px;">SGML</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'ELVR', event, '63.33'); return false;" style="margin-right: 10px;">ELVR</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'LAC', event, '5.87'); return false;" style="margin-right: 10px;">LAC</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'NB', event, '6.36'); return false;" style="margin-right: 10px;">NB</button></div>
-
-      <strong>Options levels details:</strong>
-      <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'battery_materials_mining', 'atlx(5.78) abat(4.87) alb(173.78) sqm(79.58) sgml(14.25) elvr(63.33) lac(5.87) nb(6.36) ',event); return false;" style="margin-right: 10px;">battery_materials_mining</button>
-    </div>
-    <div id="charts-image-section-battery_materials_mining" class="charts-image-content hidden">
-      <h3 class="charts-section">Technicals & charts <small><span id="chart-date-battery_materials_mining">Loading date...</span></small></h3>
-      <img src="" data-src="https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/screenshots/battery_materials_mining.png" alt="Battery Materials Mining Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-    </div>
-    </div>
-
-    <div class="industry-section" id="Hyperscalers">
-        <div class="industry-header-container">
-            <h2>15. Hyperscalers</h2>
-            <span class="section-toggles-inline">
-                <button class="ticker-button" onclick="toggleSection('news-container-Hyperscalers', this);">(News</button>
-                <button class="ticker-button" onclick="toggleSection('fundamentals-table-container-Hyperscalers', this);">Price levels</button>
-                <button class="ticker-button" onclick="toggleSection('canvas-chart-container-Hyperscalers', this);">Fundamentals</button>
-                <button class="ticker-button" onclick="toggleSection('charts-image-section-Hyperscalers', this);">Technicals)</button>
-            </span>
-            <a href="#top" class="scroll-to-top-button">&uarr;</a>
-        </div>
-        <div id="news-container-Hyperscalers" class="news-content hidden">
-
-        <h3>Recent News</h3>
-
-        <div  id="news-content-text-Hyperscalers" class="markdown-output news-section">Loading news ...</div>
-
-        </div>
-
-        <div id="fundamentals-table-container-Hyperscalers" class="fundamentals-table-content">
-
-        <h3>Price levels</h3>
-
-        <div id="fundamentals-table-Hyperscalers">Loading Price levels...</div>
-
-        </div>
-
-        <div id="canvas-chart-container-Hyperscalers" class="canvas-chart-content hidden">
-
-        <h3>Peer Fundamentals Comparison</h3>
-
-        <canvas id="chart_Hyperscalers" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
-
-        </div>
-
-    
-    <div class="button-row" style="margin-top: 10px; margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
-      <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
-
-   <strong>Institutional price level details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'CRWV', event, '95.01'); return false;" style="margin-right: 10px;">CRWV</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'NBIS', event, '103.89'); return false;" style="margin-right: 10px;">NBIS</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'CORZ', event, '18.08'); return false;" style="margin-right: 10px;">CORZ</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'APLD', event, '35.22'); return false;" style="margin-right: 10px;">APLD</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'CIFR', event, '17.52'); return false;" style="margin-right: 10px;">CIFR</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'WULF', event, '13.83'); return false;" style="margin-right: 10px;">WULF</button></div>
-
-      <strong>Options levels details:</strong>
-      <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'Hyperscalers', 'crwv(95.01) nbis(103.89) corz(18.08) apld(35.22) cifr(17.52) wulf(13.83) ',event); return false;" style="margin-right: 10px;">Hyperscalers</button>
-    </div>
-    <div id="charts-image-section-Hyperscalers" class="charts-image-content hidden">
-      <h3 class="charts-section">Technicals & charts <small><span id="chart-date-Hyperscalers">Loading date...</span></small></h3>
-      <img src="" data-src="https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/screenshots/Hyperscalers.png" alt="Hyperscalers Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-    </div>
-    </div>
-
-    <div class="industry-section" id="Mining">
-        <div class="industry-header-container">
-            <h2>16. Mining</h2>
-            <span class="section-toggles-inline">
-                <button class="ticker-button" onclick="toggleSection('news-container-Mining', this);">(News</button>
-                <button class="ticker-button" onclick="toggleSection('fundamentals-table-container-Mining', this);">Price levels</button>
-                <button class="ticker-button" onclick="toggleSection('canvas-chart-container-Mining', this);">Fundamentals</button>
-                <button class="ticker-button" onclick="toggleSection('charts-image-section-Mining', this);">Technicals)</button>
-            </span>
-            <a href="#top" class="scroll-to-top-button">&uarr;</a>
-        </div>
-        <div id="news-container-Mining" class="news-content hidden">
-
-        <h3>Recent News</h3>
-
-        <div  id="news-content-text-Mining" class="markdown-output news-section">Loading news ...</div>
-
-        </div>
-
-        <div id="fundamentals-table-container-Mining" class="fundamentals-table-content">
-
-        <h3>Price levels</h3>
-
-        <div id="fundamentals-table-Mining">Loading Price levels...</div>
-
-        </div>
-
-        <div id="canvas-chart-container-Mining" class="canvas-chart-content hidden">
-
-        <h3>Peer Fundamentals Comparison</h3>
-
-        <canvas id="chart_Mining" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
-
-        </div>
-
-    
-    <div class="button-row" style="margin-top: 10px; margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
-      <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
-
-   <strong>Institutional price level details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'MARA', event, '10.66'); return false;" style="margin-right: 10px;">MARA</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'CLSK', event, '12.73'); return false;" style="margin-right: 10px;">CLSK</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'BITF', event, '2.84'); return false;" style="margin-right: 10px;">BITF</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'HIVE', event, '3.40'); return false;" style="margin-right: 10px;">HIVE</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'BTBT', event, '2.31'); return false;" style="margin-right: 10px;">BTBT</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'HUT', event, '57.28'); return false;" style="margin-right: 10px;">HUT</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'RIOT', event, '16.57'); return false;" style="margin-right: 10px;">RIOT</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'IREN', event, '51.89'); return false;" style="margin-right: 10px;">IREN</button></div>
-
-      <strong>Options levels details:</strong>
-      <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'Mining', 'mara(10.66) clsk(12.73) bitf(2.84) hive(3.40) btbt(2.31) hut(57.28) riot(16.57) iren(51.89) ',event); return false;" style="margin-right: 10px;">Mining</button>
-    </div>
-    <div id="charts-image-section-Mining" class="charts-image-content hidden">
-      <h3 class="charts-section">Technicals & charts <small><span id="chart-date-Mining">Loading date...</span></small></h3>
-      <img src="" data-src="https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/screenshots/Mining.png" alt="Mining Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-    </div>
-    </div>
-
-    <div class="industry-section" id="new_nuclear_energy">
-        <div class="industry-header-container">
-            <h2>17. New Nuclear Energy</h2>
-            <span class="section-toggles-inline">
-                <button class="ticker-button" onclick="toggleSection('news-container-new_nuclear_energy', this);">(News</button>
-                <button class="ticker-button" onclick="toggleSection('fundamentals-table-container-new_nuclear_energy', this);">Price levels</button>
-                <button class="ticker-button" onclick="toggleSection('canvas-chart-container-new_nuclear_energy', this);">Fundamentals</button>
-                <button class="ticker-button" onclick="toggleSection('charts-image-section-new_nuclear_energy', this);">Technicals)</button>
-            </span>
-            <a href="#top" class="scroll-to-top-button">&uarr;</a>
-        </div>
-        <div id="news-container-new_nuclear_energy" class="news-content hidden">
-
-        <h3>Recent News</h3>
-
-        <div  id="news-content-text-new_nuclear_energy" class="markdown-output news-section">Loading news ...</div>
-
-        </div>
-
-        <div id="fundamentals-table-container-new_nuclear_energy" class="fundamentals-table-content">
-
-        <h3>Price levels</h3>
-
-        <div id="fundamentals-table-new_nuclear_energy">Loading Price levels...</div>
-
-        </div>
-
-        <div id="canvas-chart-container-new_nuclear_energy" class="canvas-chart-content hidden">
-
-        <h3>Peer Fundamentals Comparison</h3>
-
-        <canvas id="chart_new_nuclear_energy" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
-
-        </div>
-
-    
-    <div class="button-row" style="margin-top: 10px; margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
-      <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
-
-   <strong>Institutional price level details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'OKLO', event, '91.45'); return false;" style="margin-right: 10px;">OKLO</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'SMR', event, '18.90'); return false;" style="margin-right: 10px;">SMR</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'NNE', event, '33.38'); return false;" style="margin-right: 10px;">NNE</button><span style="margin-right: 10px; color: #666;">IMSR ($N/A)</span><span style="margin-right: 10px; color: #666;">UEC ($N/A)</span><button class="ticker-button" onclick="toggleDilutionInline(this, 'CCJ', event, '112.84'); return false;" style="margin-right: 10px;">CCJ</button><span style="margin-right: 10px; color: #666;">LEU ($306.10)</span><button class="ticker-button" onclick="toggleDilutionInline(this, 'BWXT', event, '213.25'); return false;" style="margin-right: 10px;">BWXT</button></div>
-
-      <strong>Options levels details:</strong>
-      <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'new_nuclear_energy', 'oklo(91.45) smr(18.90) nne(33.38) imsr(N/A) uec(N/A) ccj(112.84) leu(306.10) bwxt(213.25) ',event); return false;" style="margin-right: 10px;">new_nuclear_energy</button>
-    </div>
-    <div id="charts-image-section-new_nuclear_energy" class="charts-image-content hidden">
-      <h3 class="charts-section">Technicals & charts <small><span id="chart-date-new_nuclear_energy">Loading date...</span></small></h3>
-      <img src="" data-src="https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/screenshots/new_nuclear_energy.png" alt="New Nuclear Energy Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-    </div>
-    </div>
-
-    <div class="industry-section" id="Mag7">
-        <div class="industry-header-container">
-            <h2>18. Mag7</h2>
-            <span class="section-toggles-inline">
-                <button class="ticker-button" onclick="toggleSection('news-container-Mag7', this);">(News</button>
-                <button class="ticker-button" onclick="toggleSection('fundamentals-table-container-Mag7', this);">Price levels</button>
-                <button class="ticker-button" onclick="toggleSection('canvas-chart-container-Mag7', this);">Fundamentals</button>
-                <button class="ticker-button" onclick="toggleSection('charts-image-section-Mag7', this);">Technicals)</button>
-            </span>
-            <a href="#top" class="scroll-to-top-button">&uarr;</a>
-        </div>
-        <div id="news-container-Mag7" class="news-content hidden">
-
-        <h3>Recent News</h3>
-
-        <div  id="news-content-text-Mag7" class="markdown-output news-section">Loading news ...</div>
-
-        </div>
-
-        <div id="fundamentals-table-container-Mag7" class="fundamentals-table-content">
-
-        <h3>Price levels</h3>
-
-        <div id="fundamentals-table-Mag7">Loading Price levels...</div>
-
-        </div>
-
-        <div id="canvas-chart-container-Mag7" class="canvas-chart-content hidden">
-
-        <h3>Peer Fundamentals Comparison</h3>
-
-        <canvas id="chart_Mag7" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
-
-        </div>
-
-    
-    <div class="button-row" style="margin-top: 10px; margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
-      <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
-
-   <strong>Institutional price level details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'SPY', event, '692.24'); return false;" style="margin-right: 10px;">SPY</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'AAPL', event, '258.21'); return false;" style="margin-right: 10px;">AAPL</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'NVDA', event, '186.99'); return false;" style="margin-right: 10px;">NVDA</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'META', event, '620.80'); return false;" style="margin-right: 10px;">META</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'MSFT', event, '456.66'); return false;" style="margin-right: 10px;">MSFT</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'AVGO', event, '343.02'); return false;" style="margin-right: 10px;">AVGO</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'GOOG', event, '333.16'); return false;" style="margin-right: 10px;">GOOG</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'AMZN', event, '238.18'); return false;" style="margin-right: 10px;">AMZN</button></div>
-
-      <strong>Options levels details:</strong>
-      <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'Mag7', 'spy(692.24) aapl(258.21) nvda(186.99) meta(620.80) msft(456.66) avgo(343.02) goog(333.16) amzn(238.18) ',event); return false;" style="margin-right: 10px;">Mag7</button>
-    </div>
-    <div id="charts-image-section-Mag7" class="charts-image-content hidden">
-      <h3 class="charts-section">Technicals & charts <small><span id="chart-date-Mag7">Loading date...</span></small></h3>
-      <img src="" data-src="https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/screenshots/Mag7.png" alt="Mag7 Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
-    </div>
-    </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', async function() {{
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
         // Fetch dilution data first
+        parseCsv();
+        generateIndustrySections();
         await fetchDilutionData();
         // Parse custom dilution ranges from the embedded string
         await parseCustomDilutionRanges();
@@ -2225,79 +1420,76 @@
         fetchAndRenderTables();
         await fetchAndPopulateImageUpdateDates()
         // Configure marked.js if needed (e.g., to sanitize HTML)
-        // marked.setOptions({{ sanitize: true }});
+        // marked.setOptions({ sanitize: true });
 
         const markdownBlocks = document.querySelectorAll('.markdown-raw-content');
-        markdownBlocks.forEach(block => {{
+        markdownBlocks.forEach(block => {
             // Decode HTML entities before passing to marked.js, as we escaped them earlier
             const rawMarkdown = block.innerHTML;
             const decodedMarkdown = new DOMParser().parseFromString(rawMarkdown, 'text/html').documentElement.textContent;
             block.innerHTML = marked.parse(decodedMarkdown);
             block.classList.remove('markdown-raw-content'); // Remove the raw class
             block.classList.add('markdown-output'); // Add a class for styled output
-        }});
+        });
 
         // Process markdown content within the popup for options details
         const popupMarkdownBlocks = document.querySelectorAll('.popup-markdown-content');
-        popupMarkdownBlocks.forEach(block => {{
+        popupMarkdownBlocks.forEach(block => {
             const rawMarkdown = block.innerHTML;
             const decodedMarkdown = new DOMParser().parseFromString(rawMarkdown, 'text/html').documentElement.textContent;
             block.innerHTML = marked.parse(decodedMarkdown);
-        }});
+        });
 
 
         // Initial hiding of all relevant sections if not checked by default
-        document.querySelectorAll('.news-content').forEach(element => {{
+        document.querySelectorAll('.news-content').forEach(element => {
             if (!document.getElementById('toggleNews').checked) element.classList.add('hidden');
-        }});
+        });
 
-        document.querySelectorAll('.canvas-chart-content').forEach(element => {{
+        document.querySelectorAll('.canvas-chart-content').forEach(element => {
             if (!document.getElementById('toggleCanvasChart').checked) element.classList.add('hidden');
-        }});
-        document.querySelectorAll('.charts-image-content').forEach(element => {{
+        });
+        document.querySelectorAll('.charts-image-content').forEach(element => {
             if (!document.getElementById('toggleCharts').checked) element.classList.add('hidden');
-        }});
+        });
 
 
-        document.getElementById('toggleNews').addEventListener('change', function() {{
-            document.querySelectorAll('.news-content').forEach(element => {{
-                if (this.checked) {{ element.classList.remove('hidden'); }} else {{ element.classList.add('hidden'); }}
-            }});
-        }});
+        document.getElementById('toggleNews').addEventListener('change', function() {
+            document.querySelectorAll('.news-content').forEach(element => {
+                if (this.checked) { element.classList.remove('hidden'); } else { element.classList.add('hidden'); }
+            });
+        });
 
-        document.getElementById('toggleFundamentalsTable').addEventListener('change', function() {{
-            document.querySelectorAll('.fundamentals-table-content').forEach(element => {{
-                if (this.checked) {{ element.classList.remove('hidden'); }} else {{ element.classList.add('hidden'); }}
-            }});
-        }});
+        document.getElementById('toggleFundamentalsTable').addEventListener('change', function() {
+            document.querySelectorAll('.fundamentals-table-content').forEach(element => {
+                if (this.checked) { element.classList.remove('hidden'); } else { element.classList.add('hidden'); }
+            });
+        });
 
-        document.getElementById('toggleCanvasChart').addEventListener('change', function() {{
-            document.querySelectorAll('.canvas-chart-content').forEach(element => {{
-                if (this.checked) {{ element.classList.remove('hidden'); }} else {{ element.classList.add('hidden'); }}
-            }});
-        }});
-        document.getElementById('toggleCharts').addEventListener('change', function() {{
+        document.getElementById('toggleCanvasChart').addEventListener('change', function() {
+            document.querySelectorAll('.canvas-chart-content').forEach(element => {
+                if (this.checked) { element.classList.remove('hidden'); } else { element.classList.add('hidden'); }
+            });
+        });
+        document.getElementById('toggleCharts').addEventListener('change', function() {
             const isChecked = this.checked;
-            document.querySelectorAll('.charts-image-content').forEach(element => {{
-                if (isChecked) {{ element.classList.remove('hidden'); }} else {{ element.classList.add('hidden'); }}
-            }});
-            if (isChecked) {{
+            document.querySelectorAll('.charts-image-content').forEach(element => {
+                if (isChecked) { element.classList.remove('hidden'); } else { element.classList.add('hidden'); }
+            });
+            if (isChecked) {
                 loadChartsImages(); // Load images when charts are shown
-            }}
-        }});
-
-
-
+            }
+        });
         // Close dilution popup when clicking outside
         document.getElementById('dilution-backdrop').addEventListener('click', closeDilutionInline);
+    });
+  </script>
+  // Add the disclaimer at the very end of the HTML file
+  // Add a horizontal line before the disclaimer
+  <hr/>
 
-    }});
-</script>
-<hr/>
-
-<p><small><i>This is not a financial advice and all the material and content provided is for study and research purposes only. The financials table and technical charts are not updated regularly. Errors in data is expected</i></small></p>
-<div class="container">
-
+  <p><small><i>This is not a financial advice and all the material and content provided is for study and research purposes only. The financials table and technical charts are not updated regularly. Errors in data is expected</i></small></p>
+  <div class="container">
         <p style="font-size: 10px; color: #666; margin-top: 10px;">
         <b>Institutional levels:</b> <i style="color:green">▶ ▶</i> safe/buy zone; <b style="color:red">◀ ◀</b> sell/take profit;
         <b>Options levels:</b> <b style="color:#27ae60">W</b> (Put Wall), <b style="color:#c0392b">W</b> (Call Wall), <b style="color:#2980b9">F</b> (Gamma Flip), <b style="color:#27ae60">P</b> (Max Pain). May not be Updated daily.
@@ -2315,5 +1507,5 @@
         <span class="statement">Form S8 offer RSU/stock options incentives to employees, directors, or consultants.</span>
         <span class="statement">After shelf/ATM filing, subsequent prospectus supplement Form 424B5 filing to find the exact amount, if any, that was sold or exchanged.</span>
     </div>
-</body>
+    </body>
 </html>
