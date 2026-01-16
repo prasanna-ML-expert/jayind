@@ -1389,7 +1389,7 @@
   <script>
     document.addEventListener('DOMContentLoaded', async function() {
         // Fetch dilution data first
-        parseCsv();
+        await parseCsv();
         generateIndustrySections();
         await fetchDilutionData();
         // Parse custom dilution ranges from the embedded string
