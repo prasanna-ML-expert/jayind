@@ -466,10 +466,8 @@
         function renderDashboard() {
             for (const industryKey in tickerMap) {
                 if (tickerMap.hasOwnProperty(industryKey)) {
-                    let ticker_hyperlinks_html = '<div class="ticker-hyperlinks-row" style="margin-top: 10px;">
-' +
-                                                 '
-   <strong>Institutional price level details:</strong>';
+                    let ticker_hyperlinks_html = '<div class="ticker-hyperlinks-row" style="margin-top: 10px;">\n' +
+                                                 '\n   <strong>Institutional price level details:</strong>';
                     let tickerpricestr = ""; // For options levels
                     const industryTickers = tickerMap[industryKey];
 
@@ -485,8 +483,7 @@
                         ticker_hyperlinks_html += `<button class="ticker-button" onclick="toggleDilutionInline(this, '${upperTicker}', event, '${current_price_str}'); return false;" style="margin-right: 10px;">${upperTicker}</button>`;                        
                     });
 
-                    ticker_hyperlinks_html += '</div>
-'; // Close ticker-hyperlinks-row
+                    ticker_hyperlinks_html += '</div>\n'; // Close ticker-hyperlinks-row
 
                     let options_levels_html = `<div style="margin-top: 10px; margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">` +
                                               `<strong>Options levels details:</strong> ` +
@@ -522,30 +519,18 @@
                   </span>
                   <a href="#top" class="scroll-to-top-button">&uarr;</a>
               </div>
-              <div id="news-container-${industry_key}" class="news-content hidden">
-
-                <h3>Recent News</h3>
-
-                <div  id="news-content-text-${industry_key}" class="markdown-output news-section">Loading news ...</div>
-
-              </div>
-
-              <div id="fundamentals-table-container-${industry_key}" class="fundamentals-table-content">
-
-                <h3>Price levels</h3>
-
-                <div id="fundamentals-table-${industry_key}">Loading Price levels...</div>
-
-              </div>
-
-              <div id="canvas-chart-container-${industry_key}" class="canvas-chart-content hidden">
-
-                <h3>Peer Fundamentals Comparison</h3>
-
-                <canvas id="chart_${industry_key}" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>
-
-              </div>
-
+              <div id="news-container-${industry_key}" class="news-content hidden">\n
+                <h3>Recent News</h3>\n
+                <div  id="news-content-text-${industry_key}" class="markdown-output news-section">Loading news ...</div>\n
+              </div>\n
+              <div id="fundamentals-table-container-${industry_key}" class="fundamentals-table-content">\n
+                <h3>Price levels</h3>\n
+                <div id="fundamentals-table-${industry_key}">Loading Price levels...</div>\n
+              </div>\n
+              <div id="canvas-chart-container-${industry_key}" class="canvas-chart-content hidden">\n
+                <h3>Peer Fundamentals Comparison</h3>\n
+                <canvas id="chart_${industry_key}" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>\n
+              </div>\n
               <div id="buttons-container-${industryKey}" class="button-row" style="margin-top: 10px; margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 10px;"
               </div>
               // Add the Chart.js canvas and the ticker hyperlinks row within the fundamentals sectio
@@ -553,8 +538,7 @@
                 <h3 class="charts-section">Technicals & charts <small><span id="chart-date-${industry_key}">Loading date...</span></small></h3>
                 <img src="" data-src="https://raw.githubusercontent.com/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/main/screenshots/${industry_key}.png" alt="${formatted_industry_name} Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:20px;">
               </div>
-            </div>
-`
+            </div>\n`
     
           industry_counter += 1 # Increment counter
         }
