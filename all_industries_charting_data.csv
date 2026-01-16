@@ -1,5 +1,5 @@
 Industry,Ticker,mcap,Debt_M,Cash_M
-Mag7,AAPL,3795149.8,112400.0,35930.0
+Mag7,AAPL,3795152.0,112400.0,35930.0
 battery_materials_mining,ABAT,632.3,0.27,55.6
 evtol_air_mobility,ACHR,5783.94,88.6,1640.0
 ev_charging_infrastructure,ADSE,696.82,0.0,0.0
@@ -11,7 +11,7 @@ Mag7,AMZN,2546194.14,160400.0,101200.0
 power_management_chips,AOSL,676.08,0.0,169.57
 Hyperscalers,APLD,9847.01,703.0,286.0
 lidar_sensing,ARBE,129.54,0.0,36.7
-quantum,ARQQ,422.13,0.0,36.9
+quantum,ARQQ,88.73,0.0,36.9
 earth_observation,ASTS,36627.61,0.0,1220.123
 battery_materials_mining,ATLX,153.48,10.1,20.98
 autonomous_driving,AUR,8844.64,107.0,1247.0
@@ -39,7 +39,7 @@ Hyperscalers,CORZ,5605.91,1160.0,453.0
 ,CRWD,114704.82,,
 Hyperscalers,CRWV,47345.14,14084.0,1900.0
 uas_defense_robotics,DPRO,293.39,0.25,51.81
-battery_materials_mining,ELVR,1590.0,0.0,0.0
+battery_materials_mining,ELVR,1559.96,0.0,0.0
 batteries_storage_sw,ENPH,4627.2,,
 batteries_storage_tech,ENVX,1687.68,530.0,558.82
 batteries_storage_sw,EOSE,5360.14,448.5,58.73
@@ -47,7 +47,7 @@ evtol_air_mobility,EVEX,1623.1,168.09,410.07
 ev_charging_infrastructure,EVGO,923.95,0.0,0.0
 evtol_air_mobility,EVTL,593.14,0.0,123.4
 hydrogen_fuel_cells,FCEL,355.64,102.9,236.9
-batteries_storage_sw,FLNC,4663.15,390.8,690.77
+batteries_storage_sw,FLNC,83.61,390.8,690.77
 space_launch_systems,FLY,4737.72,0.0,0.0
 cybersecurity,FTNT,56755.22,,
 Mag7,GOOG,4018172.06,21607.0,98490.0
@@ -101,7 +101,7 @@ power_management_chips,POWI,2406.02,0.0,48.65
 service_robotics,PRCT,1704.3,52.0,297.3
 quantum,QBTS,10055.49,32.198,836.2
 batteries_storage_tech,QS,6241.6,0.0,225.826
-quantum,QUBT,2732.06,2.58,352.0
+quantum,QUBT,2729.82,2.58,352.0
 uas_defense_robotics,RCAT,1674.78,21.91,206.43
 space_launch_systems,RDW,1793.54,220.0,52.3
 quantum,RGTI,8151.64,7.59,446.9
@@ -130,7 +130,7 @@ uas_defense_robotics,UMAC,643.85,1.28,81.14
 earth_observation,VSAT,5966.49,5660.0,1560.0
 power_management_chips,WOLF,515.78,,
 Hyperscalers,WULF,5790.37,0.0,0.0
-autonomous_driving,XPEV,20438.5,2666.0,6790.0
+autonomous_driving,XPEV,151361.68,2666.0,6790.0
 service_robotics,ZBRA,13113.4,2183.0,1053.0
 uas_defense_robotics,ZENA,196.67,0.0,0.0
 ,ZS,33581.42,,
