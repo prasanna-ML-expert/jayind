@@ -1392,14 +1392,15 @@
     document.addEventListener('DOMContentLoaded', async function() {
         // Fetch dilution data first
         await parseCsv();
+        generateIndustryIndex();
         generateIndustrySections();
+        renderDashboard();
         await fetchDilutionData();
         // Parse custom dilution ranges from the embedded string
         await parseCustomDilutionRanges();
         await loadAndCleanIndustryData();
         await fetchAndParseGovtNews();
         await fetchAndParseAllIndustriesNews(); // Call the new function here
-        generateIndustryIndex();
         await fetchAndParseFundamentalsData()
         // Then call the function to fetch and render fundamentals tables, which will then call renderCharts
         await fetchAndParseOptionsData()
