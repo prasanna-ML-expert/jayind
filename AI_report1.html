@@ -385,14 +385,25 @@
                             const newsDiv = document.getElementById(`news-content-text-${industryKey}`);
                             if (newsDiv) {
                                 let contentToRender = '';
-                                if (newsData == '0' || (Array.isArray(newsData) && newsData.length === 1 && newsData[0] === '0')) {
+                                if ((Array.isArray(newsData) && newsData.length === 1 && newsData[0] === '0') || newsData === '0') {
                                     contentToRender = '<p>No news available for this industry.</p>';
                                 } else {
-                                    let full_news_text = newsData.join('');
+                                    let full_news_text;
+                                    if (Array.isArray(newsData)) {
+                                        full_news_text = newsData.join(''); // newsData is an array, join it
+                                    } else if (typeof newsData === 'string') {
+                                        full_news_text = newsData; // newsData is already a string
+                                    } else {
+                                        full_news_text = String(newsData); // Convert other types to string as a fallback
+                                    }
+
                                     // Apply cleaning and escaping in JavaScript as done before
-                                    full_news_text = full_news_text.replace(/(\w+),\s*(\d{4})/g, '$1, $2');
-                                    full_news_text = full_news_text.replace(/,\s*,/g, ',');
-                                    full_news_text = full_news_text.replace(/:,/g, ':');
+                                    // Ensure full_news_text is a string before calling replace
+                                    if (typeof full_news_text === 'string') {
+                                        full_news_text = full_news_text.replace(/(\w+),\s*(\d{4})/g, '$1, $2');
+                                        full_news_text = full_news_text.replace(/,\s*,/g, ',');
+                                        full_news_text = full_news_text.replace(/:,/g, ':');
+                                    }
                                     contentToRender = marked.parse(htmlEscapeAndClean(full_news_text));
                                 }
                                 newsDiv.innerHTML = contentToRender;
@@ -1337,10 +1348,10 @@
     <div class="button-row" style="margin-top: 10px; margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
       <div class="ticker-hyperlinks-row" style="margin-top: 10px;">
 
-   <strong>Institutional price level details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'IONQ', event, '47.56'); return false;" style="margin-right: 10px;">IONQ</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'QBTS', event, '28.72'); return false;" style="margin-right: 10px;">QBTS</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'RGTI', event, '24.70'); return false;" style="margin-right: 10px;">RGTI</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'QUBT', event, '12.19'); return false;" style="margin-right: 10px;">QUBT</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'LAES', event, '4.65'); return false;" style="margin-right: 10px;">LAES</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'ARQQ', event, '26.97'); return false;" style="margin-right: 10px;">ARQQ</button></div>
+   <strong>Institutional price level details:</strong><button class="ticker-button" onclick="toggleDilutionInline(this, 'IONQ', event, '47.56'); return false;" style="margin-right: 10px;">IONQ</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'QBTS', event, '28.72'); return false;" style="margin-right: 10px;">QBTS</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'RGTI', event, '24.70'); return false;" style="margin-right: 10px;">RGTI</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'QUBT', event, '12.18'); return false;" style="margin-right: 10px;">QUBT</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'LAES', event, '4.65'); return false;" style="margin-right: 10px;">LAES</button><button class="ticker-button" onclick="toggleDilutionInline(this, 'ARQQ', event, '26.97'); return false;" style="margin-right: 10px;">ARQQ</button></div>
 
       <strong>Options levels details:</strong>
-      <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'quantum', 'ionq(47.56) qbts(28.72) rgti(24.70) qubt(12.19) laes(4.65) arqq(26.97) ',event); return false;" style="margin-right: 10px;">quantum</button>
+      <button class="ticker-button" onclick="toggleOptionsLevelsInline(this, 'quantum', 'ionq(47.56) qbts(28.72) rgti(24.70) qubt(12.18) laes(4.65) arqq(26.97) ',event); return false;" style="margin-right: 10px;">quantum</button>
     </div>
     <div id="charts-image-section-quantum" class="charts-image-content hidden">
       <h3 class="charts-section">Technicals & charts <small><span id="chart-date-quantum">Loading date...</span></small></h3>
