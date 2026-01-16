@@ -446,7 +446,7 @@
                 //    return;
                 //}
 
-                const headers = lines[0].split(',').map(h => h.trim());
+                headers = lines[0].split(',').map(h => h.trim());
 
                 for (let i = 1; i < lines.length; i++) {
                     if (lines[i].trim() === '') continue; // Skip empty lines
@@ -593,7 +593,7 @@
                     }
                 });
 
-                console.log(`Extracted ${Object.keys(tickerDict).length} tickers from today:`, tickerDict);
+                console.log(`Extracted ${Object.keys(tickerDict).length} tickers from telegram today:`, tickerDict);
                 return tickerDict;
 
             } catch (error) {
