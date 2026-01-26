@@ -483,7 +483,7 @@
                             current_price_str = !isNaN(price) ? price.toFixed(2) : 'N/A';
                         }
                         tickerpricestr += `${ticker_symbol}(${current_price_str}) `;
-                        ticker_hyperlinks_html += `<button class="ticker-button" onclick="toggleDilutionInline(this, '${upperTicker}', event, '${current_price_str}'); return false;" style="margin-right: 10px;">${upperTicker}</button>`;                        
+                        ticker_hyperlinks_html += `<button class="ticker-button" onclick="toggleDilutionInline(this, '${upperTicker}', event, '${current_price_str}'); return false;" style="margin-right: 10px;">${upperTicker}</button>`;
                     });
 
                     ticker_hyperlinks_html += '</div>\n'; // Close ticker-hyperlinks-row
@@ -541,7 +541,7 @@
                 <img src="" data-src="https://raw.githubusercontent.com/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/main/screenshots/${industry_key}.png" alt="${formatted_industry_name} Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:2px;">
               </div>
             </div>\n`
-    
+
           industry_counter += 1
         }
         container.innerHTML = sectionsHtml;
@@ -985,7 +985,7 @@
                 // Columns to display (must match Python list in sheets_df)
                 const columnsToDisplay = [
                     'price%', 'Ticker', 'Price', 'mcap',
-                    'OrderBook'
+                    'Open','High','Low','HL' //,'OrderBook'
                 ];
 
                 for (const industryKey in tickerMap) {
@@ -1022,7 +1022,7 @@
                                 // Try to override with fundamentalsData if available and applicable
                                 const tickerUpper = row['Ticker'].toUpperCase();
                                 const fundData = fundamentalsLookup[tickerUpper];
-                                const dailyData = telegramTickerData[tickerUpper];
+                                //const dailyData = telegramTickerData[tickerUpper];
                                 if (fundData) {
                                     if (header === 'Debt_M') {
                                         cellValue = fundData['debt'] !== undefined ? fundData['debt'] : cellValue;
@@ -1032,10 +1032,11 @@
                                         cellValue = fundData['rev'] !== undefined ? fundData['rev'] : cellValue;
                                     } else if (header === 'QPL_M') { // Assuming QPL_M from sheets_df maps to 'burn' from fundamentalsData
                                         cellValue = fundData['burn'] !== undefined ? fundData['burn'] : cellValue;
-                                    } else if (header === 'mcap' || header === 'Price') { 
+                                    } else if (['mcap', 'Price', 'High', 'Low', 'Open'].includes(header)) {
                                         cellValue = '';
-                                    } else if (header === 'OrderBook' && dailyData && dailyData.val3 !== undefined) {
-                                        cellValue = dailyData.val3;
+                                    //} else if (header === 'OrderBook' && dailyData && dailyData.val3 !== undefined) {
+                                    } else if (header === 'HL') {
+                                        cellValue = fundData['HL']; //dailyData.val3;
                                         style = 'text-align: right;color: brown;';
                                     }
                                 }
