@@ -1041,6 +1041,7 @@
                                     //} else if (header === 'OrderBook' && dailyData && dailyData.val3 !== undefined) {
                                     } else if (header === 'HL') {
                                         //cellValue = dailyData.val3;
+                                        cellValue = row['HL'] !== '#N/A' ? row['HL'] : '';
                                         style = 'text-align: right; paddingRight: 20px; color: brown;';
                                     }
                                 }
