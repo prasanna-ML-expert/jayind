@@ -1171,9 +1171,6 @@
                                                     `<div style="position: absolute; top:2px; left: ${clampPosition(floorRange.min)}%; width: ${Math.max(0, clampPosition(ceilingRange.max) - clampPosition(floorRange.min))}%; height: 100%; background-color: ${rowBackgroundColor}; border-radius: 5px;"></div>`
                                                     : ''
                                                 }
-                                                <!--div style="position: absolute; left: ${pricePosition}%; top: -3px; width: 10px; height: 10px; background-color: #333; border-radius: 50%; transform: translateX(-50%); box-shadow: 0 0 5px rgba(0,0,0,0.5);" title="${currentPrice.toFixed(2)}"></div-->
-                                                <span style="position: absolute; left: ${pricePosition}%; top: -12px; transform: translateX(-50%); font-weight: bold; font-size: 1.5em; color: black; z-index: 4;">$&nbsp;</span>
-                                                <span style="position: absolute; left: ${pricePosition}%; top: -26px; transform: translateX(-50%); font-size: 0.8em; color: dimgrey; z-index: 4;">$${currentPrice.toFixed(2)}</span>
 
                                                 ${!isNaN(floorRange.min) ? `<span class="arrow-right-green" style="left: ${floorMinPos}%;" title="${floorRange.min.toFixed(2)}"></span>` : ''}
                                                 ${!isNaN(floorRange.max) ? `<span class="arrow-right-green" style="left: ${floorMaxPos}%;" title="${floorRange.max.toFixed(2)}"></span>` : ''}
@@ -1228,7 +1225,10 @@
                                                     <span style="position: absolute; left: ${gammaflipPos}%; top: -12px; width: auto; height: auto; padding: 0 3px; background-color: blue; color: white; border-radius: 3px; transform: translateX(-50%); font-weight: bold; font-size: 0.8em;" title="$${gammaflip.toFixed(2)}">F</span>
                                                     <!-- Max Pain Character (green) -->
                                                     <span style="position: absolute; left: ${maxpainPos}%; top: -12px; width: auto; height: auto; padding: 0 3px; background-color: green; color: white; border-radius: 3px; transform: translateX(-50%); font-weight: bold; font-size: 0.8em;" title="$${maxpain.toFixed(2)}">P</span>
-                                                </div>
+                                                  <!--div style="position: absolute; left: ${pricePosition}%; top: -3px; width: 10px; height: 10px; background-color: #333; border-radius: 50%; transform: translateX(-50%); box-shadow: 0 0 5px rgba(0,0,0,0.5);" title="${currentPrice.toFixed(2)}"></div-->
+                                                  <span style="position: absolute; left: ${pricePosition}%; top: -12px; transform: translateX(-50%); font-weight: bold; font-size: 1.5em; color: black; z-index: 4;">$&nbsp;</span>
+                                                  <span style="position: absolute; left: ${pricePosition}%; top: -26px; transform: translateX(-50%); font-size: 0.8em; color: dimgrey; z-index: 4;">$${currentPrice.toFixed(2)}</span>
+                                               </div>
                                             </td>
                                         </tr>
                                     `;
