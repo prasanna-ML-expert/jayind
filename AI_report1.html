@@ -1119,10 +1119,10 @@
                                 weeklycandleHtml = `
                                     <tr class="weekly-candle-line-row">
                                         <td colspan="${actualHeaders.length}" style="padding: 0px;">
-                                            <div style="position: relative; width: 100%; height: 4px; border-radius: 5px; background-color: #ddd;">
+                                            <div style="position: relative; top:6px; width: 100%; height: 4px; border-radius: 5px; background-color: #ddd;">
                                                 ${
                                                     !isNaN(lowPrice) && !isNaN(highPrice) && lowPrice <= highPrice ?
-                                                    `<div style="position: absolute; top:6px; left: ${clampPosition(lowPrice)}%; width: ${Math.max(0, clampPosition(highPrice) - clampPosition(lowPrice))}%; height: 100%; background-color: lightblue; border-radius: 5px;"></div>`
+                                                    `<div style="position: absolute; top:6px; left: ${clampPosition(lowPrice)}%; width: ${Math.max(0, clampPosition(highPrice) - clampPosition(lowPrice))}%; height: 100%; background-color: DeepSkyBlue; border-radius: 5px;"></div>`
                                                     : ''
                                                 }
                                                 <!-- Open price vertical line marker -->
