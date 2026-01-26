@@ -982,7 +982,11 @@
                 // Call renderCharts with the parsed data
                 renderCharts(csvdata);
 
-                // Columns to display (must match Python list in sheets_df)
+                const showOptions = document.getElementById('toggleOptions').checked;
+                const showInstitution = document.getElementById('toggleInstitution').checked;
+                const showWeekly = document.getElementById('toggleWeekly').checked;
+
+               // Columns to display (must match Python list in sheets_df)
                 const columnsToDisplay = [
                     'price%', 'Ticker', 'Price', 'mcap',
                     'Open','High','Low','HL' //,'OrderBook'
@@ -1069,7 +1073,7 @@
                             let floorRange = {min: NaN, max: NaN};
 
                             const tickerUpper = row['Ticker'].toUpperCase();
-                            if (customDilutionRangesLookup[tickerUpper]) {
+                            if (showInstitution && customDilutionRangesLookup[tickerUpper]) {
                                 const customRanges = customDilutionRangesLookup[tickerUpper];
                                 ceilingRange = customRanges.ceiling;
                                 floorRange = customRanges.floor;
@@ -1080,24 +1084,27 @@
                             const highPrice = parseFloat(row['High']) || NaN;
                             const lowPrice = parseFloat(row['Low']) || NaN;
                             const openPrice = parseFloat(row['Open']) || NaN; // Get the Open price
-                            if (!isNaN(highPrice)) overallMax = Math.max(overallMax, highPrice);
-                            if (!isNaN(lowPrice)) overallMin = Math.min(overallMin, lowPrice);
-                            if (!isNaN(openPrice)) { // Add openPrice to overall min/max calculation
-                                overallMax = Math.max(overallMax, openPrice);
-                                overallMin = Math.min(overallMin, openPrice);
+                             if (showWeekly) { 
+                              if (!isNaN(highPrice)) overallMax = Math.max(overallMax, highPrice);
+                              if (!isNaN(lowPrice)) overallMin = Math.min(overallMin, lowPrice);
+                              if (!isNaN(openPrice)) { // Add openPrice to overall min/max calculation
+                                  overallMax = Math.max(overallMax, openPrice);
+                                  overallMin = Math.min(overallMin, openPrice);
+                              }
                             }
-
-                            if (!isNaN(ceilingRange.min)) overallMax = Math.max(overallMax, ceilingRange.min);
-                            if (!isNaN(ceilingRange.max)) overallMax = Math.max(overallMax, ceilingRange.max);
-                            if (!isNaN(floorRange.min)) overallMin = Math.min(overallMin, floorRange.min);
-                            if (!isNaN(floorRange.max)) overallMin = Math.min(overallMin, floorRange.max);
+                            if (showInstitution) {
+                              if (!isNaN(ceilingRange.min)) overallMax = Math.max(overallMax, ceilingRange.min);
+                              if (!isNaN(ceilingRange.max)) overallMax = Math.max(overallMax, ceilingRange.max);
+                              if (!isNaN(floorRange.min)) overallMin = Math.min(overallMin, floorRange.min);
+                              if (!isNaN(floorRange.max)) overallMin = Math.min(overallMin, floorRange.max);
+                            }
 
                             let putwall = NaN;
                             let callwall = NaN;
                             let gammaflip = NaN;
                             let maxpain = NaN;
 
-                            if (optionsData) {
+                            if (showOptions && optionsData) {
                                 putwall = parseFloat(optionsData['putwall']);
                                 callwall = parseFloat(optionsData['callwall']);
                                 gammaflip = parseFloat(optionsData['gammaflip']);
@@ -1108,7 +1115,7 @@
                             }
 
                             let weeklycandleHtml = '';
-                            if (!isNaN(openPrice) && !isNaN(highPrice) && !isNaN(lowPrice) && !isNaN(overallMin) && !isNaN(overallMax) && overallMin < overallMax) {
+                            if (showWeekly && !isNaN(openPrice) && !isNaN(highPrice) && !isNaN(lowPrice) && !isNaN(overallMin) && !isNaN(overallMax) && overallMin < overallMax) {
                                 const range = overallMax - overallMin;
                                 const clampPosition = (value) => Math.max(0, Math.min(100, (value - overallMin) / range * 100));
 
@@ -1142,7 +1149,7 @@
                                 if (!currentPrice || currentPrice === 0 || targetValue === 0) return 0;
                                 return Math.round(((targetValue - currentPrice) / currentPrice) * 100);
                             };
-                            if (!isNaN(overallMin) && !isNaN(overallMax) && overallMin < overallMax) {
+                            if (showInstitution && !isNaN(overallMin) && !isNaN(overallMax) && overallMin < overallMax) {
                                 const range = overallMax - overallMin;
                                 // Helper to clamp positions between 0 and 100%
                                 const clampPosition = (value) => Math.max(0, Math.min(100, (value - overallMin) / range * 100));
@@ -1178,7 +1185,7 @@
                             }
 
 
-                            if (optionsData) {
+                            if (showOptions && optionsData) {
                                 // Check if values are valid and a meaningful range exists
                                 if (!isNaN(putwall) && !isNaN(callwall) && !isNaN(gammaflip) && !isNaN(maxpain) && putwall < callwall) {
                                     const range = overallMax - overallMin;
@@ -1226,9 +1233,9 @@
                                     `;
                                 }
                             }
-                            tableHtml += optionsLineHtml;
-                            tableHtml += lineHtml;
-                            tableHtml += weeklycandleHtml;
+                            if(showOptions) tableHtml += optionsLineHtml;
+                            if(showInstitution) tableHtml += lineHtml;
+                            if(showWeekly) tableHtml += weeklycandleHtml;
                         });
                         tableHtml += '</tbody></table>';
                         placeholderDiv.innerHTML = tableHtml;
@@ -1423,7 +1430,9 @@
     <div id="industry-index-placeholder"></div>
     <div style="margin-top: 20px; margin-bottom: 20px;">
         <label><input type="checkbox" id="toggleNews"> News</label>
-        <label><input type="checkbox" id="toggleFundamentalsTable" checked> Price levels </label>
+        <label><input type="checkbox" id="toggleOptions" checked onchange="fetchAndRenderTables()"> Options </label>
+        <label><input type="checkbox" id="toggleInstitution" onchange="fetchAndRenderTables()"> Institution </label>
+        <label><input type="checkbox" id="toggleWeekly" checked onchange="fetchAndRenderTables()"> Weekly </label>
         <label><input type="checkbox" id="toggleCanvasChart"> Fundamentals </label>
         <label><input type="checkbox" id="toggleCharts"> Technicals </label>
     </div>
