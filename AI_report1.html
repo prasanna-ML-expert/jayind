@@ -1035,8 +1035,8 @@
                                     } else if (['mcap', 'Price', 'High', 'Low', 'Open'].includes(header)) {
                                         cellValue = '';
                                     //} else if (header === 'OrderBook' && dailyData && dailyData.val3 !== undefined) {
-                                    } else if (header === 'HL' && fundData['HL'] !== undefined) {
-                                        cellValue = fundData['HL']; //dailyData.val3;
+                                    } else if (header === 'HL') {
+                                        //cellValue = dailyData.val3;
                                         style = 'text-align: right;color: brown;';
                                     }
                                 }
