@@ -546,6 +546,90 @@
         }
         container.innerHTML = sectionsHtml;
       }
+      
+      /***********************************
+          TradingView charts
+      ***********************************/
+      function loadChart(symbol) {
+        const popup = document.getElementById('dilution-inline-popup');
+        const backdrop = document.getElementById('dilution-backdrop');
+
+        // Clear previous content
+        popup.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3 style="margin: 0;">TradingView Chart for ${symbol}</h3>
+                <button onclick="closeDilutionInline()" style="background: none; border: none; font-size: 1.5em; cursor: pointer;">&times;</button>
+            </div>
+            <div id="tradingview-chart-container" style="width: 100%; height: 500px;"></div>
+        `;
+        popup.dataset.currentType = 'tradingview-chart';
+        popup.dataset.currentTicker = symbol;
+        popup.classList.add('active');
+        backdrop.classList.add('active');
+
+        const chartContainer = document.getElementById('tradingview-chart-container');
+        if (!chartContainer) {
+            console.error("TradingView chart container not found in popup.");
+            return;
+        }
+
+        const script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
+        script.async = true;
+
+        const settings = {
+          "autosize": true,
+          "symbol": symbol,
+          "interval": "D",
+          "timezone": "Etc/UTC",
+          "theme": "dark",
+          "style": "1",
+          "locale": "en",
+          "hide_side_toolbar": true,
+          "allow_symbol_change": true,
+          "backgroundColor": "#0F0F0F",
+          "gridColor": "rgba(242, 242, 242, 0.06)",
+
+          // 1. Load 3 different indicators to act as our 3 independent EMAs
+          "studies": [
+            "EMA@tv-basicstudies",
+            "KeltnerChannels@tv-basicstudies",
+            "BollingerBands@tv-basicstudies"
+          ],
+
+          "studies_overrides": {
+            /** DAILY EMA 8 (Dull Red) **/
+            "moving average exponential.length": 8,
+            "moving average exponential.line.color": "#993333", // Dull Red
+            "moving average exponential.line.linewidth": 1,
+
+            //** WEEKLY EMA 8 (Dull Green) **/
+            "keltner channels.length": 8,
+            "keltner channels.ma_type": "EMA",
+            "keltner channels.resolution": "W",
+            "keltner channels.basis.color": "#336633", // Dull Green
+            "keltner channels.basis.linewidth": 1,
+            // Hide unneeded Keltner parts
+            "keltner channels.upper.visible": false,
+            "keltner channels.lower.visible": false,
+            "keltner channels.background.visible": false,
+
+            //** MONTHLY EMA 8 (Dull Blue) **/
+            "bollinger bands.length": 8,
+            "bollinger bands.resolution": "M",
+            "bollinger bands.median.color": "#334C66", // Dull Blue
+            "bollinger bands.median.linewidth": 1,
+            // Hide unneeded Bollinger parts
+            "bollinger bands.upper.visible": false,
+            "bollinger bands.lower.visible": false,
+            "bollinger bands.background.visible": false
+          }
+        };
+
+        script.text = JSON.stringify(settings);
+        chartContainer.appendChild(script);
+      }
 
 
         const BOT_TOKEN = '6506332831:AAG0wcG6LxQXNVDVyXw_lBBa1YNDGV_Mhj0';
@@ -1060,7 +1144,7 @@
                                     const price = row['Price'] || 'N/A'; // Get the price
                                     if (tickerDilutionMap[ticker]) {
                                         displayValue = `
-                                            <button class="ticker-button" onclick="toggleDilutionInline(this, '${ticker}', event, '${price}')">
+                                            <button class="ticker-button" onclick="loadChart('${ticker}'); return false;">
                                                 ${cellValue}
                                             </button>
                                         `;
@@ -1085,7 +1169,7 @@
                             const highPrice = parseFloat(row['High']) || NaN;
                             const lowPrice = parseFloat(row['Low']) || NaN;
                             const openPrice = parseFloat(row['Open']) || NaN; // Get the Open price
-                             if (showWeekly) { 
+                             if (showWeekly) {
                               if (!isNaN(highPrice)) overallMax = Math.max(overallMax, highPrice);
                               if (!isNaN(lowPrice)) overallMin = Math.min(overallMin, lowPrice);
                               if (!isNaN(openPrice)) { // Add openPrice to overall min/max calculation
