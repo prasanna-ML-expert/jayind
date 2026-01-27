@@ -573,11 +573,9 @@
             return;
         }
 
-        const script = document.createElement('script');
-        script.type = 'text/javascript';
-        script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
-        script.async = true;
-
+te the container div for the widget and pass settings via data-options
+        const widgetContainerDiv = document.createElement('div');
+        widgetContainerDiv.className = 'tradingview-widget-container__widget';
         const settings = {
           "autosize": true,
           "symbol": symbol,
@@ -601,12 +599,14 @@
             "moving average exponential.length": 8,
             "moving average exponential.line.color": "#993333", 
             "moving average exponential.line.linewidth": 1,
+            "moving average exponential.visible": true,
 
             "keltner channels.length": 8,
             "keltner channels.ma_type": "EMA",
             "keltner channels.resolution": "W",
             "keltner channels.basis.color": "#336633", 
             "keltner channels.basis.linewidth": 1,
+            "keltner channels.basis.visible": true,
             "keltner channels.upper.visible": false,
             "keltner channels.lower.visible": false,
             "keltner channels.background.visible": false,
@@ -615,13 +615,20 @@
             "bollinger bands.resolution": "M",
             "bollinger bands.median.color": "#334C66", 
             "bollinger bands.median.linewidth": 1,
+            "bollinger bands.median.visible": true,
             "bollinger bands.upper.visible": false,
             "bollinger bands.lower.visible": false,
             "bollinger bands.background.visible": false
           }
         };
+        widgetContainerDiv.setAttribute('data-options', JSON.stringify(settings));
+        chartContainer.appendChild(widgetContainerDiv);
 
-        script.text = JSON.stringify(settings);
+        // Append the TradingView script
+        const script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
+        script.async = true;
         chartContainer.appendChild(script);
       }
 
