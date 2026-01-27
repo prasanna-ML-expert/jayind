@@ -591,36 +591,30 @@
           "backgroundColor": "#0F0F0F",
           "gridColor": "rgba(242, 242, 242, 0.06)",
 
-          // 1. Load 3 different indicators to act as our 3 independent EMAs
           "studies": [
-            "EMA@tv-basicstudies",
+            "MAExp@tv-basicstudies",
             "KeltnerChannels@tv-basicstudies",
-            "BollingerBands@tv-basicstudies"
+            "BB@tv-basicstudies"
           ],
 
           "studies_overrides": {
-            /** DAILY EMA 8 (Dull Red) **/
             "moving average exponential.length": 8,
-            "moving average exponential.line.color": "#993333", // Dull Red
+            "moving average exponential.line.color": "#993333", 
             "moving average exponential.line.linewidth": 1,
 
-            //** WEEKLY EMA 8 (Dull Green) **/
             "keltner channels.length": 8,
             "keltner channels.ma_type": "EMA",
             "keltner channels.resolution": "W",
-            "keltner channels.basis.color": "#336633", // Dull Green
+            "keltner channels.basis.color": "#336633", 
             "keltner channels.basis.linewidth": 1,
-            // Hide unneeded Keltner parts
             "keltner channels.upper.visible": false,
             "keltner channels.lower.visible": false,
             "keltner channels.background.visible": false,
 
-            //** MONTHLY EMA 8 (Dull Blue) **/
             "bollinger bands.length": 8,
             "bollinger bands.resolution": "M",
-            "bollinger bands.median.color": "#334C66", // Dull Blue
+            "bollinger bands.median.color": "#334C66", 
             "bollinger bands.median.linewidth": 1,
-            // Hide unneeded Bollinger parts
             "bollinger bands.upper.visible": false,
             "bollinger bands.lower.visible": false,
             "bollinger bands.background.visible": false
