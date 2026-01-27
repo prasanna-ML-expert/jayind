@@ -554,28 +554,21 @@
         const popup = document.getElementById('dilution-inline-popup');
         const backdrop = document.getElementById('dilution-backdrop');
 
-        // Clear previous content
+        // 1. Clear previous content and set up the header/container
         popup.innerHTML = `
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <h3 style="margin: 0;">TradingView Chart for ${symbol}</h3>
-                <button onclick="closeDilutionInline()" style="background: none; border: none; font-size: 1.5em; cursor: pointer;">&times;</button>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; border-bottom: 1px solid #333;">
+                <h3 style="margin: 0; color: #eee; font-family: sans-serif;">${symbol} Analysis</h3>
+                <button onclick="closeDilutionInline()" style="background: none; border: none; color: #888; font-size: 1.8em; cursor: pointer;">&times;</button>
             </div>
             <div id="tradingview-chart-container" style="width: 100%; height: 500px;"></div>
         `;
-        popup.dataset.currentType = 'tradingview-chart';
-        popup.dataset.currentTicker = symbol;
+        
         popup.classList.add('active');
         backdrop.classList.add('active');
 
         const chartContainer = document.getElementById('tradingview-chart-container');
-        if (!chartContainer) {
-            console.error("TradingView chart container not found in popup.");
-            return;
-        }
 
-te the container div for the widget and pass settings via data-options
-        const widgetContainerDiv = document.createElement('div');
-        widgetContainerDiv.className = 'tradingview-widget-container__widget';
+        // 2. Define settings (Use internal IDs and clean color codes)
         const settings = {
           "autosize": true,
           "symbol": symbol,
@@ -588,48 +581,58 @@ te the container div for the widget and pass settings via data-options
           "allow_symbol_change": true,
           "backgroundColor": "#0F0F0F",
           "gridColor": "rgba(242, 242, 242, 0.06)",
-
           "studies": [
-            "MAExp@tv-basicstudies",
-            "KeltnerChannels@tv-basicstudies",
-            "BB@tv-basicstudies"
+            "MAExp@tv-basicstudies",      // Daily
+            "KeltnerChannels@tv-basicstudies", // Weekly
+            "BB@tv-basicstudies"          // Monthly
           ],
-
           "studies_overrides": {
+            // Daily EMA (Dull Red)
             "moving average exponential.length": 8,
-            "moving average exponential.line.color": "#993333", 
-            "moving average exponential.line.linewidth": 1,
-            "moving average exponential.visible": true,
+            "moving average exponential.plot.color": "#993333",
+            "moving average exponential.plot.linewidth": 1,
 
+            // Weekly EMA (Dull Green)
             "keltner channels.length": 8,
             "keltner channels.ma_type": "EMA",
             "keltner channels.resolution": "W",
-            "keltner channels.basis.color": "#336633", 
-            "keltner channels.basis.linewidth": 1,
-            "keltner channels.basis.visible": true,
+            "keltner channels.basis.color": "#336633",
             "keltner channels.upper.visible": false,
             "keltner channels.lower.visible": false,
             "keltner channels.background.visible": false,
 
+            // Monthly EMA (Dull Blue)
             "bollinger bands.length": 8,
             "bollinger bands.resolution": "M",
-            "bollinger bands.median.color": "#334C66", 
-            "bollinger bands.median.linewidth": 1,
-            "bollinger bands.median.visible": true,
+            "bollinger bands.median.color": "#334C66",
             "bollinger bands.upper.visible": false,
             "bollinger bands.lower.visible": false,
             "bollinger bands.background.visible": false
           }
         };
-        widgetContainerDiv.setAttribute('data-options', JSON.stringify(settings));
-        chartContainer.appendChild(widgetContainerDiv);
 
-        // Append the TradingView script
-        const script = document.createElement('script');
-        script.type = 'text/javascript';
-        script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
-        script.async = true;
-        chartContainer.appendChild(script);
+        // 3. Create the widget container
+        const widgetDiv = document.createElement('div');
+        widgetDiv.className = 'tradingview-widget-container';
+        widgetDiv.style.height = '100%';
+        widgetDiv.style.width = '100%';
+
+        const innerWidgetDiv = document.createElement('div');
+        innerWidgetDiv.className = 'tradingview-widget-container__widget';
+        widgetDiv.appendChild(innerWidgetDiv);
+
+        // 4. THE CRITICAL FIX: The Script Injection
+        const tvScript = document.createElement('script');
+        tvScript.type = 'text/javascript';
+        tvScript.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
+        tvScript.async = true;
+        
+        // Set the text of the script to the settings JSON
+        // This is how the loader script prefers to read data
+        tvScript.innerHTML = JSON.stringify(settings);
+
+        widgetDiv.appendChild(tvScript);
+        chartContainer.appendChild(widgetDiv);
       }
 
 
