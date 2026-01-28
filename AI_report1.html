@@ -43,9 +43,9 @@
         let customDilutionRangesLookup = {};
 
         // Function to parse a single range string like "88.0/93.0"
-        function parseSlashRange(rangeStr) {
+        function parseSlashRange(rangeStr,separator) {
             if (!rangeStr || typeof rangeStr !== 'string') return { min: NaN, max: NaN };
-            const parts = rangeStr.split('/');
+            const parts = rangeStr.split(separator);
             if (parts.length === 2) {
                 const num1 = parseFloat(parts[0]);
                 const num2 = parseFloat(parts[1]);
@@ -110,8 +110,8 @@
                             const floorRangeStr = ranges[0];
                             const ceilingRangeStr = ranges[1];
                             customDilutionRangesLookup[ticker] = {
-                                floor: parseSlashRange(floorRangeStr),
-                                ceiling: parseSlashRange(ceilingRangeStr)
+                                floor: parseSlashRange(floorRangeStr,'/'),
+                                ceiling: parseSlashRange(ceilingRangeStr,'/')
                             };
                         }
                     }
@@ -207,8 +207,8 @@
                                 gammaflip: values[1],
                                 putwall: values[2],
                                 maxpain: values[3],
-                                floor: values[4] ? parseSlashRange(values[4]) : NaN,
-                                ceiling: values[5] ? parseSlashRange(values[5]) : NaN
+                                floor: values[4] ? parseSlashRange(values[4],'-') : NaN,
+                                ceiling: values[5] ? parseSlashRange(values[5],'-') : NaN
                             };
                         }
                     }
