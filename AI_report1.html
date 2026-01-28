@@ -45,7 +45,7 @@
         // Function to parse a single range string like "88.0/93.0"
         function parseSlashRange(rangeStr,separator) {
             if (!rangeStr || typeof rangeStr !== 'string') return { min: NaN, max: NaN };
-            const parts = rangeStr.split(separator);
+            const parts = rangeStr.split(/[-\/]/);
             if (parts.length === 2) {
                 const num1 = parseFloat(parts[0]);
                 const num2 = parseFloat(parts[1]);
