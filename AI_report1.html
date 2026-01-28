@@ -214,6 +214,7 @@
                     }
                 });
                 console.log("Options data fetched and parsed successfully:", Object.keys(optionsLookup).length, "tickers.");
+                console.log("Options data fetched and parsed successfully:", optionsLookup, "tickers.");
             } catch (error) {
                 console.error('Error fetching or parsing options data:', error);
             }
@@ -548,7 +549,7 @@
         }
         container.innerHTML = sectionsHtml;
       }
-      
+
       /***********************************
           TradingView charts
       ***********************************/
@@ -564,7 +565,7 @@
             </div>
             <div id="tradingview-chart-container" style="width: 100%; height: 500px;"></div>
         `;
-        
+
         popup.classList.add('active');
         backdrop.classList.add('active');
 
@@ -585,7 +586,7 @@
         "gridColor": "rgba(242, 242, 242, 0.06)",
         "studies": [
           "STD;EMA",
-          "STD;Keltner_Channels" 
+          "STD;Keltner_Channels"
         ],
         "autosize": true
         };
@@ -605,7 +606,7 @@
         tvScript.type = 'text/javascript';
         tvScript.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
         tvScript.async = true;
-        
+
         // Set the text of the script to the settings JSON
         // This is how the loader script prefers to read data
         tvScript.innerHTML = JSON.stringify(settings);
