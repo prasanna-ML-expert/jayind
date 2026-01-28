@@ -44,7 +44,6 @@
 
         // Function to parse a single range string like "88.0/93.0"
         function parseSlashRange(rangeStr,separator) {
-            console.log(rangeStr, typeof rangeStr);
             if (!rangeStr || typeof rangeStr !== 'string') return { min: NaN, max: NaN };
             const parts = rangeStr.split(/[-\/]/);
             if (parts.length === 2) {
@@ -199,8 +198,9 @@
                     if (parts.length === 2) {
                         const ticker = parts[0].trim().toUpperCase();
                         const rawValues = parts[1].split(',');
-                        const values = rawValues.map(v => parseFloat(v));
-
+                        const values = rawValues.map((v, index) => {
+                            return index < 4 ? parseFloat(v) : v;
+                        });
                         if (values.length >= 4 && values.slice(0, 4).every(v => !isNaN(v))) {
                             optionsLookup[ticker] = {
                                 ticker: ticker,
@@ -215,7 +215,6 @@
                     }
                 });
                 console.log("Options data fetched and parsed successfully:", Object.keys(optionsLookup).length, "tickers.");
-                console.log("Options data fetched and parsed successfully:", optionsLookup, "tickers.");
             } catch (error) {
                 console.error('Error fetching or parsing options data:', error);
             }
