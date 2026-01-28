@@ -43,9 +43,9 @@
         let customDilutionRangesLookup = {};
 
         // Function to parse a single range string like "88.0/93.0"
-        function parseSlashRange(rangeStr) {
+        function parseSlashRange(rangeStr,separator) {
             if (!rangeStr || typeof rangeStr !== 'string') return { min: NaN, max: NaN };
-            const parts = rangeStr.split('/');
+            const parts = rangeStr.split(/[-\/]/);
             if (parts.length === 2) {
                 const num1 = parseFloat(parts[0]);
                 const num2 = parseFloat(parts[1]);
@@ -110,8 +110,8 @@
                             const floorRangeStr = ranges[0];
                             const ceilingRangeStr = ranges[1];
                             customDilutionRangesLookup[ticker] = {
-                                floor: parseSlashRange(floorRangeStr),
-                                ceiling: parseSlashRange(ceilingRangeStr)
+                                floor: parseSlashRange(floorRangeStr,'/'),
+                                ceiling: parseSlashRange(ceilingRangeStr,'/')
                             };
                         }
                     }
@@ -198,15 +198,18 @@
                     if (parts.length === 2) {
                         const ticker = parts[0].trim().toUpperCase();
                         const rawValues = parts[1].split(',');
-                        const values = rawValues.map(v => parseFloat(v));
-
-                        if (values.length === 4 && values.every(v => !isNaN(v))) {
+                        const values = rawValues.map((v, index) => {
+                            return index < 4 ? parseFloat(v) : v;
+                        });
+                        if (values.length >= 4 && values.slice(0, 4).every(v => !isNaN(v))) {
                             optionsLookup[ticker] = {
                                 ticker: ticker,
                                 callwall: values[0],
                                 gammaflip: values[1],
                                 putwall: values[2],
-                                maxpain: values[3]
+                                maxpain: values[3],
+                                ceiling: values[4] ? parseSlashRange(values[4],'-') : NaN,
+                                floor: values[5] ? parseSlashRange(values[5],'-') : NaN
                             };
                         }
                     }
@@ -545,6 +548,71 @@
           industry_counter += 1
         }
         container.innerHTML = sectionsHtml;
+      }
+
+      /***********************************
+          TradingView charts
+      ***********************************/
+      function loadChart(symbol) {
+        const popup = document.getElementById('dilution-inline-popup');
+        const backdrop = document.getElementById('dilution-backdrop');
+
+        // 1. Clear previous content and set up the header/container
+        popup.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; border-bottom: 1px solid #333;">
+                <h3 style="margin: 0; color: #eee; font-family: sans-serif;">${symbol} Analysis</h3>
+                <button onclick="closeDilutionInline()" style="background: none; border: none; color: #888; font-size: 1.8em; cursor: pointer;">&times;</button>
+            </div>
+            <div id="tradingview-chart-container" style="width: 100%; height: 500px;"></div>
+        `;
+
+        popup.classList.add('active');
+        backdrop.classList.add('active');
+
+        const chartContainer = document.getElementById('tradingview-chart-container');
+
+        // 2. Define settings (Use internal IDs and clean color codes)
+        const settings = {
+        "autosize": true,
+        "symbol": symbol,
+        "interval": "D",
+        "theme": "light",
+        "timezone": "Etc/UTC",
+        "style": "1",
+        "locale": "en",
+        "hide_side_toolbar": true,
+        "allow_symbol_change": true,
+        "backgroundColor": "#0F0F0F",
+        "gridColor": "rgba(242, 242, 242, 0.06)",
+        "studies": [
+          "STD;EMA",
+          "STD;Keltner_Channels"
+        ],
+        "autosize": true
+        };
+
+        // 3. Create the widget container
+        const widgetDiv = document.createElement('div');
+        widgetDiv.className = 'tradingview-widget-container';
+        widgetDiv.style.height = '100%';
+        widgetDiv.style.width = '100%';
+
+        const innerWidgetDiv = document.createElement('div');
+        innerWidgetDiv.className = 'tradingview-widget-container__widget';
+        widgetDiv.appendChild(innerWidgetDiv);
+
+        // 4. THE CRITICAL FIX: The Script Injection
+        const tvScript = document.createElement('script');
+        tvScript.type = 'text/javascript';
+        tvScript.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
+        tvScript.async = true;
+
+        // Set the text of the script to the settings JSON
+        // This is how the loader script prefers to read data
+        tvScript.innerHTML = JSON.stringify(settings);
+
+        widgetDiv.appendChild(tvScript);
+        chartContainer.appendChild(widgetDiv);
       }
 
 
@@ -1060,7 +1128,7 @@
                                     const price = row['Price'] || 'N/A'; // Get the price
                                     if (tickerDilutionMap[ticker]) {
                                         displayValue = `
-                                            <button class="ticker-button" onclick="toggleDilutionInline(this, '${ticker}', event, '${price}')">
+                                            <button class="ticker-button" onclick="loadChart('${ticker}'); return false;">
                                                 ${cellValue}
                                             </button>
                                         `;
@@ -1085,7 +1153,7 @@
                             const highPrice = parseFloat(row['High']) || NaN;
                             const lowPrice = parseFloat(row['Low']) || NaN;
                             const openPrice = parseFloat(row['Open']) || NaN; // Get the Open price
-                             if (showWeekly) { 
+                             if (showWeekly) {
                               if (!isNaN(highPrice)) overallMax = Math.max(overallMax, highPrice);
                               if (!isNaN(lowPrice)) overallMin = Math.min(overallMin, lowPrice);
                               if (!isNaN(openPrice)) { // Add openPrice to overall min/max calculation
@@ -1104,15 +1172,22 @@
                             let callwall = NaN;
                             let gammaflip = NaN;
                             let maxpain = NaN;
-
+                            let optionsceilingRange = {min: NaN, max: NaN};
+                            let optionsfloorRange = {min: NaN, max: NaN};
                             if (showOptions && optionsData) {
                                 putwall = parseFloat(optionsData['putwall']);
                                 callwall = parseFloat(optionsData['callwall']);
                                 gammaflip = parseFloat(optionsData['gammaflip']);
                                 maxpain = parseFloat(optionsData['maxpain']);
+                                optionsceilingRange = optionsData.ceiling;
+                                optionsfloorRange = optionsData.floor;
 
                                 if (!isNaN(putwall)) overallMin = Math.min(overallMin, putwall);
                                 if (!isNaN(callwall)) overallMax = Math.max(overallMax, callwall);
+                                if (!isNaN(optionsceilingRange.min)) overallMax = Math.max(overallMax, optionsceilingRange.min);
+                                if (!isNaN(optionsceilingRange.max)) overallMax = Math.max(overallMax, optionsceilingRange.max);
+                                if (!isNaN(optionsfloorRange.min)) overallMin = Math.min(overallMin, optionsfloorRange.min);
+                                if (!isNaN(optionsfloorRange.max)) overallMin = Math.min(overallMin, optionsfloorRange.max);
                             }
 
                             let weeklycandleHtml = '';
@@ -1197,7 +1272,10 @@
                                     const callwallPos = clampPosition(callwall);
                                     const gammaflipPos = clampPosition(gammaflip);
                                     const maxpainPos = clampPosition(maxpain);
-
+                                    const optionsfloorMinPos = clampPosition(optionsfloorRange.min);
+                                    const optionsfloorMaxPos = clampPosition(optionsfloorRange.max);
+                                    const optionsceilMinPos = clampPosition(optionsceilingRange.min);
+                                    const optionsceilMaxPos = clampPosition(optionsceilingRange.max);
                                     // Calculate background color for options line
                                     const pricePosition = clampPosition(currentPrice);
                                     const distToPutWall = getPctDist(putwall);
@@ -1228,6 +1306,11 @@
                                                   <!--div style="position: absolute; left: ${pricePosition}%; top: -3px; width: 10px; height: 10px; background-color: #333; border-radius: 50%; transform: translateX(-50%); box-shadow: 0 0 5px rgba(0,0,0,0.5);" title="${currentPrice.toFixed(2)}"></div-->
                                                   <span style="position: absolute; left: ${pricePosition}%; top: -12px; transform: translateX(-50%); font-weight: bold; font-size: 1.5em; color: black; z-index: 4;">$&nbsp;</span>
                                                   <span style="position: absolute; left: ${pricePosition}%; top: -26px; transform: translateX(-50%); font-size: 0.8em; color: dimgrey; z-index: 4;">$${currentPrice.toFixed(2)}</span>
+                                                  ${!isNaN(optionsfloorRange.min) ? `<span class="arrow-right-green" style="left: ${optionsfloorMinPos}%;" title="${optionsfloorRange.min.toFixed(2)}"></span>` : ''}
+                                                  ${!isNaN(optionsfloorRange.max) ? `<span class="arrow-right-green" style="left: ${optionsfloorMaxPos}%;" title="${optionsfloorRange.max.toFixed(2)}"></span>` : ''}
+                                                  ${!isNaN(optionsceilingRange.min) ? `<span class="arrow-left-red" style="left: ${optionsceilMinPos}%;" title="${optionsceilingRange.min.toFixed(2)}"></span>` : ''}
+                                                  ${!isNaN(optionsceilingRange.max) ? `<span class="arrow-left-red" style="left: ${optionsceilMaxPos}%;" title="${optionsceilingRange.max.toFixed(2)}"></span>` : ''}
+
                                                </div>
                                             </td>
                                         </tr>
