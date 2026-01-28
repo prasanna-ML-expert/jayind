@@ -1171,15 +1171,22 @@
                             let callwall = NaN;
                             let gammaflip = NaN;
                             let maxpain = NaN;
-
+                            let optionsceilingRange = {min: NaN, max: NaN};
+                            let optionsfloorRange = {min: NaN, max: NaN};
                             if (showOptions && optionsData) {
                                 putwall = parseFloat(optionsData['putwall']);
                                 callwall = parseFloat(optionsData['callwall']);
                                 gammaflip = parseFloat(optionsData['gammaflip']);
                                 maxpain = parseFloat(optionsData['maxpain']);
+                                optionsceilingRange = optionsData.ceiling;
+                                optionsfloorRange = optionsData.floor;
 
                                 if (!isNaN(putwall)) overallMin = Math.min(overallMin, putwall);
                                 if (!isNaN(callwall)) overallMax = Math.max(overallMax, callwall);
+                                if (!isNaN(optionsceilingRange.min)) overallMax = Math.max(overallMax, optionsceilingRange.min);
+                                if (!isNaN(optionsceilingRange.max)) overallMax = Math.max(overallMax, optionsceilingRange.max);
+                                if (!isNaN(optionsfloorRange.min)) overallMin = Math.min(overallMin, optionsfloorRange.min);
+                                if (!isNaN(optionsfloorRange.max)) overallMin = Math.min(overallMin, optionsfloorRange.max);
                             }
 
                             let weeklycandleHtml = '';
@@ -1264,7 +1271,10 @@
                                     const callwallPos = clampPosition(callwall);
                                     const gammaflipPos = clampPosition(gammaflip);
                                     const maxpainPos = clampPosition(maxpain);
-
+                                    const optionsfloorMinPos = clampPosition(optionsfloorRange.min);
+                                    const optionsfloorMaxPos = clampPosition(optionsfloorRange.max);
+                                    const optionsceilMinPos = clampPosition(optionsceilingRange.min);
+                                    const optionsceilMaxPos = clampPosition(optionsceilingRange.max);
                                     // Calculate background color for options line
                                     const pricePosition = clampPosition(currentPrice);
                                     const distToPutWall = getPctDist(putwall);
@@ -1295,6 +1305,11 @@
                                                   <!--div style="position: absolute; left: ${pricePosition}%; top: -3px; width: 10px; height: 10px; background-color: #333; border-radius: 50%; transform: translateX(-50%); box-shadow: 0 0 5px rgba(0,0,0,0.5);" title="${currentPrice.toFixed(2)}"></div-->
                                                   <span style="position: absolute; left: ${pricePosition}%; top: -12px; transform: translateX(-50%); font-weight: bold; font-size: 1.5em; color: black; z-index: 4;">$&nbsp;</span>
                                                   <span style="position: absolute; left: ${pricePosition}%; top: -26px; transform: translateX(-50%); font-size: 0.8em; color: dimgrey; z-index: 4;">$${currentPrice.toFixed(2)}</span>
+                                                  ${!isNaN(optionsfloorRange.min) ? `<span class="arrow-right-green" style="left: ${optionsfloorMinPos}%;" title="${floorRange.min.toFixed(2)}"></span>` : ''}
+                                                  ${!isNaN(optionsfloorRange.max) ? `<span class="arrow-right-green" style="left: ${optionsfloorMaxPos}%;" title="${floorRange.max.toFixed(2)}"></span>` : ''}
+                                                  ${!isNaN(optionsceilingRange.min) ? `<span class="arrow-left-red" style="left: ${optionsceilMinPos}%;" title="${ceilingRange.min.toFixed(2)}"></span>` : ''}
+                                                  ${!isNaN(optionsceilingRange.max) ? `<span class="arrow-left-red" style="left: ${optionsceilMaxPos}%;" title="${ceilingRange.max.toFixed(2)}"></span>` : ''}
+
                                                </div>
                                             </td>
                                         </tr>
