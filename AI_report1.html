@@ -574,7 +574,6 @@
         "symbol": symbol,
         "interval": "D",
         "timezone": "Etc/UTC",
-        "theme": "dark",
         "style": "1",
         "locale": "en",
         "hide_side_toolbar": true,
@@ -582,8 +581,13 @@
         "backgroundColor": "#0F0F0F",
         "gridColor": "rgba(242, 242, 242, 0.06)",
         "studies": [
-          "USER;JKReddyLin;Y7hJCKT0-Sangana-beta-table"    
-        ]
+          "STD;EMA",
+          "STD;Keltner_Channels" 
+        ],
+        "studies_overrides": {
+          "keltner channels.upper.visible": false,
+          "keltner channels.lower.visible": false
+          }
         };
 
         // 3. Create the widget container
