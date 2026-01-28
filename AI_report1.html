@@ -1306,10 +1306,10 @@
                                                   <!--div style="position: absolute; left: ${pricePosition}%; top: -3px; width: 10px; height: 10px; background-color: #333; border-radius: 50%; transform: translateX(-50%); box-shadow: 0 0 5px rgba(0,0,0,0.5);" title="${currentPrice.toFixed(2)}"></div-->
                                                   <span style="position: absolute; left: ${pricePosition}%; top: -12px; transform: translateX(-50%); font-weight: bold; font-size: 1.5em; color: black; z-index: 4;">$&nbsp;</span>
                                                   <span style="position: absolute; left: ${pricePosition}%; top: -26px; transform: translateX(-50%); font-size: 0.8em; color: dimgrey; z-index: 4;">$${currentPrice.toFixed(2)}</span>
-                                                  ${!isNaN(optionsfloorRange.min) ? `<span class="arrow-right-green" style="left: ${optionsfloorMinPos}%;" title="${floorRange.min.toFixed(2)}"></span>` : ''}
-                                                  ${!isNaN(optionsfloorRange.max) ? `<span class="arrow-right-green" style="left: ${optionsfloorMaxPos}%;" title="${floorRange.max.toFixed(2)}"></span>` : ''}
-                                                  ${!isNaN(optionsceilingRange.min) ? `<span class="arrow-left-red" style="left: ${optionsceilMinPos}%;" title="${ceilingRange.min.toFixed(2)}"></span>` : ''}
-                                                  ${!isNaN(optionsceilingRange.max) ? `<span class="arrow-left-red" style="left: ${optionsceilMaxPos}%;" title="${ceilingRange.max.toFixed(2)}"></span>` : ''}
+                                                  ${!isNaN(optionsfloorRange.min) ? `<span class="arrow-right-green" style="left: ${optionsfloorMinPos}%;" title="${optionsfloorRange.min.toFixed(2)}"></span>` : ''}
+                                                  ${!isNaN(optionsfloorRange.max) ? `<span class="arrow-right-green" style="left: ${optionsfloorMaxPos}%;" title="${optionsfloorRange.max.toFixed(2)}"></span>` : ''}
+                                                  ${!isNaN(optionsceilingRange.min) ? `<span class="arrow-left-red" style="left: ${optionsceilMinPos}%;" title="${optionsceilingRange.min.toFixed(2)}"></span>` : ''}
+                                                  ${!isNaN(optionsceilingRange.max) ? `<span class="arrow-left-red" style="left: ${optionsceilMaxPos}%;" title="${optionsceilingRange.max.toFixed(2)}"></span>` : ''}
 
                                                </div>
                                             </td>
