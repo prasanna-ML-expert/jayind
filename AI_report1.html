@@ -200,13 +200,16 @@
                         const rawValues = parts[1].split(',');
                         const values = rawValues.map(v => parseFloat(v));
 
-                        if (values.length === 4 && values.every(v => !isNaN(v))) {
+                        if (values.length >= 4 && values.slice(0, 4).every(v => !isNaN(v))) {
                             optionsLookup[ticker] = {
                                 ticker: ticker,
                                 callwall: values[0],
                                 gammaflip: values[1],
                                 putwall: values[2],
                                 maxpain: values[3]
+                                // Safely parse if values[4] exists, otherwise set to null/undefined
+                                floor: values[4] ? parseSlashRange(values[4]) : null,
+                                ceiling: values[5] ? parseSlashRange(values[5]) : null
                             };
                         }
                     }
@@ -584,7 +587,8 @@
         "studies": [
           "STD;EMA",
           "STD;Keltner_Channels" 
-        ]
+        ],
+        "autosize": true
         };
 
         // 3. Create the widget container
