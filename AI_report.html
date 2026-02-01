@@ -183,13 +183,52 @@
         // Create a global lookup for options data
         const optionsLookup = {}; // Initialize globally, will be populated by async function
 
-        async function fetchAndParseOptionsData() {
-            try {
-                const response = await fetch(OPTIONS_DATA_URL);
+        // New helper function to fetch versioned file content
+        async function fetchVersionedFileContent(filename, recency, owner, repo) {
+            const commitApiUrl = `https://api.github.com/repos/${owner}/${repo}/commits?path=${filename}&per_page=${recency + 1}`;
+            const commitResponse = await fetch(commitApiUrl);
+            if (!commitResponse.ok) {
+                throw new Error(`GitHub API error fetching commits for ${filename}: ${commitResponse.status}`);
+            }
+            const commits = await commitResponse.json();
+
+            let fileContent = '';
+            if (!commits || commits.length <= recency) {
+                console.warn(`Not enough commits found for ${filename} for recency ${recency}. Falling back to most recent.`);
+                // Fallback: use the latest if the requested version isn't available
+                const fallbackResponse = await fetch(`${GITHUB_RAW_URL_BASE}${filename}`);
+                if (!fallbackResponse.ok) {
+                    throw new Error(`HTTP error! status: ${fallbackResponse.status}`);
+                }
+                fileContent = await fallbackResponse.text();
+            } else {
+                const commitSha = commits[recency].sha;
+                const versionedDataUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${commitSha}/${filename}`;
+
+                console.log(`Fetching ${filename} from versioned URL: ${versionedDataUrl}`);
+                const response = await fetch(versionedDataUrl);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                const fileContent = await response.text();
+                fileContent = await response.text();
+            }
+            return fileContent;
+        }
+        async function fetchAndParseOptionsData() {
+            try {
+                const selectedRecencyElement = document.querySelector('input[name="selectionGroup"]:checked');
+                const selectedRecency = selectedRecencyElement ? parseInt(selectedRecencyElement.value) : 0; // Default to 0 (most recent)
+                const fileContent = await fetchVersionedFileContent(
+                    OPTIONS_DATA_FILENAME,
+                    selectedRecency,
+                    GITHUB_REPO_OWNER,
+                    GITHUB_REPO_NAME
+                );
+
+                // Clear previous data before populating new data
+                for (const key in optionsLookup) {
+                    delete optionsLookup[key];
+                }
 
                 const blocks = fileContent.trim().split(';');
                 blocks.forEach(block => {
@@ -1306,10 +1345,10 @@
                                                   <!--div style="position: absolute; left: ${pricePosition}%; top: -3px; width: 10px; height: 10px; background-color: #333; border-radius: 50%; transform: translateX(-50%); box-shadow: 0 0 5px rgba(0,0,0,0.5);" title="${currentPrice.toFixed(2)}"></div-->
                                                   <span style="position: absolute; left: ${pricePosition}%; top: -12px; transform: translateX(-50%); font-weight: bold; font-size: 1.5em; color: black; z-index: 4;">$&nbsp;</span>
                                                   <span style="position: absolute; left: ${pricePosition}%; top: -26px; transform: translateX(-50%); font-size: 0.8em; color: dimgrey; z-index: 4;">$${currentPrice.toFixed(2)}</span>
-                                                  ${!isNaN(optionsfloorRange.min) ? `<span class="arrow-right-green" style="left: ${optionsfloorMinPos}%;" title="${optionsfloorRange.min.toFixed(2)}"></span>` : ''}
-                                                  ${!isNaN(optionsfloorRange.max) ? `<span class="arrow-right-green" style="left: ${optionsfloorMaxPos}%;" title="${optionsfloorRange.max.toFixed(2)}"></span>` : ''}
-                                                  ${!isNaN(optionsceilingRange.min) ? `<span class="arrow-left-red" style="left: ${optionsceilMinPos}%;" title="${optionsceilingRange.min.toFixed(2)}"></span>` : ''}
-                                                  ${!isNaN(optionsceilingRange.max) ? `<span class="arrow-left-red" style="left: ${optionsceilMaxPos}%;" title="${optionsceilingRange.max.toFixed(2)}"></span>` : ''}
+                                                  ${!isNaN(optionsfloorRange.min) ? `<span class="arrow-right-green" style="left: ${optionsfloorMinPos}%; top: -4px;" title="${optionsfloorRange.min.toFixed(2)}"></span>` : ''}
+                                                  ${!isNaN(optionsfloorRange.max) ? `<span class="arrow-right-green" style="left: ${optionsfloorMaxPos}%; top: -4px;" title="${optionsfloorRange.max.toFixed(2)}"></span>` : ''}
+                                                  ${!isNaN(optionsceilingRange.min) ? `<span class="arrow-left-red" style="left: ${optionsceilMinPos}%; top: -4px;" title="${optionsceilingRange.min.toFixed(2)}"></span>` : ''}
+                                                  ${!isNaN(optionsceilingRange.max) ? `<span class="arrow-left-red" style="left: ${optionsceilMaxPos}%; top: -4px;" title="${optionsceilingRange.max.toFixed(2)}"></span>` : ''}
 
                                                </div>
                                             </td>
@@ -1520,6 +1559,14 @@
         <label><input type="checkbox" id="toggleCanvasChart"> Fundamentals </label>
         <label><input type="checkbox" id="toggleCharts"> Technicals </label>
     </div>
+    <div style="margin-top: 20px; margin-bottom: 20px;">
+        <b>Historical Options data:</b>
+        <label><input type="radio" name="selectionGroup" value="0" checked> 0</label>
+        <label><input type="radio" name="selectionGroup" value="1"> 1</label>
+        <label><input type="radio" name="selectionGroup" value="2"> 2</label>
+        <label><input type="radio" name="selectionGroup" value="3"> 3</label>
+        <label><input type="radio" name="selectionGroup" value="4"> 4</label>
+    </div>
     <div id='industry-sections-placeholder'></div>
 
   <script>
@@ -1539,7 +1586,7 @@
         // Then call the function to fetch and render fundamentals tables, which will then call renderCharts
         await fetchAndParseOptionsData()
         fetchAndRenderTables();
-        await fetchAndPopulateImageUpdateDates()
+        //await fetchAndPopulateImageUpdateDates()
         // Configure marked.js if needed (e.g., to sanitize HTML)
         // marked.setOptions({ sanitize: true });
 
@@ -1581,11 +1628,11 @@
             });
         });
 
-        document.getElementById('toggleFundamentalsTable').addEventListener('change', function() {
-            document.querySelectorAll('.fundamentals-table-content').forEach(element => {
-                if (this.checked) { element.classList.remove('hidden'); } else { element.classList.add('hidden'); }
-            });
-        });
+        //document.getElementById('toggleFundamentalsTable').addEventListener('change', function() {
+        //    document.querySelectorAll('.fundamentals-table-content').forEach(element => {
+        //        if (this.checked) { element.classList.remove('hidden'); } else { element.classList.add('hidden'); }
+        //    });
+        //});
 
         document.getElementById('toggleCanvasChart').addEventListener('change', function() {
             document.querySelectorAll('.canvas-chart-content').forEach(element => {
@@ -1603,6 +1650,15 @@
         });
         // Close dilution popup when clicking outside
         document.getElementById('dilution-backdrop').addEventListener('click', closeDilutionInline);
+        // Add event listeners to the radio buttons for recency selection
+        document.querySelectorAll('input[name="selectionGroup"]').forEach(radio => {
+            radio.addEventListener('change', async function() {
+                console.log(`Recency changed to: ${this.value}`);
+                await fetchAndParseOptionsData(); // Re-fetch options data with new recency
+                fetchAndRenderTables(); // Re-render tables with new data
+            });
+        });
+
     });
   </script>
 
