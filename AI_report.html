@@ -14,6 +14,7 @@
         
         const GITHUB_REPO_OWNER = `prasanna-ML-expert`;
         const GITHUB_REPO_NAME = `jayind`;
+        const GITHUB_TV_REPO_NAME = `tvscreenshots`;
         const GITHUB_RAW_URL_BASE = `https://raw.githubusercontent.com/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/main/`;
         const PROCESSED_DILUTION_RANGES_FILENAME = "processed_dilution_ranges.csv";
         const PROCESSED_DILUTION_RANGES_URL = GITHUB_RAW_URL_BASE + PROCESSED_DILUTION_RANGES_FILENAME;
@@ -568,20 +569,23 @@
                 <h3>Recent News</h3>\n
                 <div  id="news-content-text-${industry_key}" class="markdown-output news-section">Loading news ...</div>\n
               </div>\n
-              <div id="fundamentals-table-container-${industry_key}" class="fundamentals-table-content">\n
-                <h3>Price levels</h3>\n
-                <div id="fundamentals-table-${industry_key}">Loading Price levels...</div>\n
-              </div>\n
+              <div class="price-technicals-wrapper">
+                <div id="fundamentals-table-container-${industry_key}" class="fundamentals-table-content price-levels">\n
+                  <h3>Price levels</h3>\n
+                  <div id="fundamentals-table-${industry_key}">Loading Price levels...</div>\n
+                </div>\n
+                <div id="charts-image-section-${industry_key}" class="charts-image-content technicals-charts hidden">
+                  <h3 class="charts-section">Technicals & charts <small><span id="chart-date-${industry_key}"></span></small></h3>
+                  <img src="" data-src="https://raw.githubusercontent.com/${GITHUB_REPO_OWNER}/${GITHUB_TV_REPO_NAME}/main/${industry_key}.jpg" alt="${formatted_industry_name} Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:2px;">
+                </div>
+              </div>
               <div id="canvas-chart-container-${industry_key}" class="canvas-chart-content hidden">\n
                 <h3>Peer Fundamentals Comparison</h3>\n
                 <canvas id="chart_${industry_key}" style="max-width:100%; display:block; margin-bottom:20px;"></canvas>\n
               </div>\n
               <div id="buttons-container-${industry_key}" class="button-row" style="margin-top: 10px; margin-bottom: 2px; padding-bottom: 2px;">
               </div>
-              <div id="charts-image-section-${industry_key}" class="charts-image-content hidden">
-                <h3 class="charts-section">Technicals & charts <small><span id="chart-date-${industry_key}">Loading date...</span></small></h3>
-                <img src="" data-src="https://raw.githubusercontent.com/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/main/screenshots/${industry_key}.png" alt="${formatted_industry_name} Industry Image" class="chart-image" style="max-width:100%; height:auto; display:block; margin-bottom:2px;">
-              </div>
+
             </div>\n`
 
           industry_counter += 1
@@ -1092,6 +1096,7 @@
                 const showOptions = document.getElementById('toggleOptions').checked;
                 const showInstitution = document.getElementById('toggleInstitution').checked;
                 const showWeekly = document.getElementById('toggleWeekly').checked;
+                const showCharts = document.getElementById('toggleCharts').checked; // Added this line
 
                // Columns to display (must match Python list in sheets_df)
                 const columnsToDisplay = [
@@ -1113,6 +1118,16 @@
                     if (!placeholderDiv) {
                         console.warn(`Placeholder div not found for industry: ${industryKey}`);
                         continue;
+                    }
+
+                    // Adjust flex basis based on showCharts state
+                    const priceLevelsContainer = document.getElementById(`fundamentals-table-container-${industryKey}`);
+                    if (priceLevelsContainer) {
+                        if (showCharts) {
+                            priceLevelsContainer.style.flex = '2'; // 2/3 width
+                        } else {
+                            priceLevelsContainer.style.flex = '1'; // Full width
+                        }
                     }
 
                     if (industryData.length > 0) {
@@ -1536,6 +1551,29 @@
             font-size: 0.8em; /* Smaller font for inline buttons */
             padding: 2px 5px;
         }
+        /* New styles for side-by-side layout */
+        .price-technicals-wrapper {
+            display: flex;
+            gap: 15px; /* Space between the two sections */
+            flex-wrap: wrap; /* Allows wrapping on smaller screens */
+            align-items: flex-start; /* Align items to the top */
+        }
+        .price-levels {
+            flex: 2; /* Takes 2/3 of the space */
+            min-width: 60%; /* Ensure it doesn't shrink too much */
+            box-sizing: border-box; /* Include padding and border in the element's total width and height */
+        }
+        .technicals-charts {
+            flex: 1; /* Takes 1/3 of the space */
+            min-width: 30%; /* Ensure it doesn't shrink too much */
+            box-sizing: border-box; /* Include padding and border in the element's total width and height */
+        }
+        /* Make image responsive within its container */
+        .technicals-charts img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
     </style>
 </head>
 <body id="top">
@@ -1641,6 +1679,7 @@
         });
         document.getElementById('toggleCharts').addEventListener('change', function() {
             const isChecked = this.checked;
+            fetchAndRenderTables();
             document.querySelectorAll('.charts-image-content').forEach(element => {
                 if (isChecked) { element.classList.remove('hidden'); } else { element.classList.add('hidden'); }
             });
