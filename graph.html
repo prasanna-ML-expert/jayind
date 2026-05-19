@@ -48,12 +48,31 @@
 
 const csvUrl = "https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/sol_addr.csv";
 
+<button onclick="resetZoom()" style="position:absolute; z-index:10;">
+  Reset View
+</button>
+
 const svg = d3.select("svg"),
       width = window.innerWidth,
       height = window.innerHeight;
 
+const container = svg.append("g");
+  const zoom = d3.zoom()
+  .scaleExtent([0.2, 5])  // min zoom, max zoom
+  .on("zoom", (event) => {
+    container.attr("transform", event.transform);
+  });
 
-const defs = svg.append("defs");
+svg.call(zoom).on("dblclick.zoom", null);
+
+function resetZoom() {
+  svg.transition().duration(500).call(
+    zoom.transform,
+    d3.zoomIdentity
+  );
+}
+
+const defs = container.append("defs");
 
 // ✅ Gray arrow
 defs.append("marker")
@@ -150,7 +169,7 @@ const simulation = d3.forceSimulation(nodes)
     simulation.alpha(0.5).restart();
   });
   
-  const link = svg.append("g")
+  const link = container.append("g")
     .selectAll("line")
     .data(links)
     .enter().append("line")
@@ -158,7 +177,7 @@ const simulation = d3.forceSimulation(nodes)
     .attr("stroke-width", d => Math.max(1, Math.sqrt(d.value) / 5));
 
   // 🔴 USD LINKS (RED)
-  const usdLink = svg.append("g")
+  const usdLink = container.append("g")
     .selectAll("line.usd")
     .data(usdLinks)
     .enter().append("line")
@@ -168,7 +187,7 @@ const simulation = d3.forceSimulation(nodes)
     .attr("stroke-width", d => Math.max(0.5, Math.sqrt(d.value) / 80))
     .attr("marker-end", "url(#arrow-red)");
   
-  const node = svg.append("g")
+  const node = container.append("g")
     .selectAll("g")
     .data(nodes)
     .enter().append("g")
@@ -193,7 +212,7 @@ node.append("text")
 
 
 
-  const usdLabel = svg.append("g")
+  const usdLabel = container.append("g")
     .selectAll(".usdLabel")
     .data(usdLinks)
     .enter()
@@ -204,7 +223,7 @@ node.append("text")
     .attr("font-size", 9)
     .attr("dy", -2);
   
-  const edgeLabel = svg.append("g")
+  const edgeLabel = container.append("g")
     .selectAll("text")
     .data(links)
     .enter()
