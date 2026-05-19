@@ -55,6 +55,18 @@ svg.append("defs")
   .attr("d", "M0,-4L8,0L0,4")  // 👈 slimmer arrow shape
   .attr("fill", "#777");
 
+  svg.append("defs")
+  .append("marker")
+  .attr("id", "arrow-red")
+  .attr("viewBox", "0 -5 10 10")
+  .attr("refX", 12)         // closer to node
+  .attr("refY", 0)
+  .attr("markerWidth", 6)   // ✅ much smaller
+  .attr("markerHeight", 6)
+  .attr("orient", "auto")
+  .append("path")
+  .attr("d", "M0,-3L6,0L0,3")
+  .attr("fill", "red");
 
 // Load CSV from GitHub
 d3.csv(csvUrl).then(data => {
@@ -148,18 +160,7 @@ node.append("text")
       : id;
   });
 
-svg.append("defs")
-  .append("marker")
-  .attr("id", "arrow-red")
-  .attr("viewBox", "0 -5 10 10")
-  .attr("refX", 12)         // closer to node
-  .attr("refY", 0)
-  .attr("markerWidth", 2)   // ✅ much smaller
-  .attr("markerHeight", 2)
-  .attr("orient", "auto")
-  .append("path")
-  .attr("d", "M0,-3L6,0L0,3")
-  .attr("fill", "red");
+
 
   const usdLabel = svg.append("g")
     .selectAll(".usdLabel")
