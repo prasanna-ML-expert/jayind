@@ -88,6 +88,7 @@ d3.csv(csvUrl).then(data => {
         value
       };
     })
+    .filter(d => d !== null); // ✅ remove skipped edges
 
 
   const simulation = d3.forceSimulation(nodes)
