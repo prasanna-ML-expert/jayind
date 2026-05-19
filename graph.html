@@ -71,7 +71,7 @@ function resetZoom() {
   );
 }
 
-const defs = container.append("defs");
+const defs = svg.append("defs");
 
 // ✅ Gray arrow
 defs.append("marker")
@@ -106,7 +106,7 @@ d3.csv(csvUrl).then(data => {
 let nodesMap = {};
 let links = [];
 let usdLinks = [];
-
+let simulation;
 data.forEach(d => {
 
   const source = d.source;
@@ -142,7 +142,7 @@ data.forEach(d => {
 
 const nodes = Object.values(nodesMap);
 
-const simulation = d3.forceSimulation(nodes)
+simulation = d3.forceSimulation(nodes)
   .force("link", d3.forceLink([...links, ...usdLinks]).id(d => d.id).distance(100).strength(0.8))
   .force("charge", d3.forceManyBody().strength(-150))
   .force("center", d3.forceCenter(width / 2, height / 2))
@@ -257,10 +257,10 @@ node.append("text")
 
 });
 
-// Drag
-function dragstarted(event, d) {
-  if (!event.active) d.fx = d.x;
-  if (!event.active) d.fy = d.y;
+// Dragfunction dragstarted(event, d) {
+if (!event.active) simulation.alphaTarget(0.3).restart();
+  d.fx = d.x;
+  d.fy = d.y;
 }
 
 function dragged(event, d) {
@@ -269,10 +269,9 @@ function dragged(event, d) {
 }
 
 function dragended(event, d) {
-  if (!event.active) {
-    d.fx = null;
-    d.fy = null;
-  }
+  if (!event.active) simulation.alphaTarget(0);
+  d.fx = null;
+  d.fy = null;
 }
 
 </script>
