@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Graph from GitHub CSV</title>
-
+  
   <script src="https://d3js.org/d3.v7.min.js"></script>
 
   <style>
@@ -42,15 +42,14 @@
 <body>
 
 <h3>Directed Graph (Live from GitHub CSV)</h3>
+  <button onclick="resetZoom()" style="position:absolute; z-index:10;">
+    Reset View
+  </button>
 <svg></svg>
 
 <script>
 
 const csvUrl = "https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/sol_addr.csv";
-
-<button onclick="resetZoom()" style="position:absolute; z-index:10;">
-  Reset View
-</button>
 
 const svg = d3.select("svg"),
       width = window.innerWidth,
