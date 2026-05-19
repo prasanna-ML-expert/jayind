@@ -41,7 +41,7 @@
 </head>
 <body>
 
-<h3>Directed Graph (Live from GitHub CSV)</h3>
+<h3 style="position:absolute; z-index:10; background:white; padding:5px;">Directed Graph (Live from GitHub CSV)</h3>
   <button onclick="resetZoom()" style="position:absolute; z-index:10;">
     Reset View
   </button>
@@ -99,6 +99,7 @@ defs.append("marker")
   .attr("d", "M0,-4L8,0L0,4")
   .attr("fill", "red");
 
+let simulation;
 
 // Load CSV from GitHub
 d3.csv(csvUrl).then(data => {
@@ -106,7 +107,6 @@ d3.csv(csvUrl).then(data => {
 let nodesMap = {};
 let links = [];
 let usdLinks = [];
-let simulation;
 data.forEach(d => {
 
   const source = d.source;
@@ -257,8 +257,9 @@ node.append("text")
 
 });
 
-// Dragfunction dragstarted(event, d) {
-if (!event.active) simulation.alphaTarget(0.3).restart();
+// Drag
+function dragstarted(event, d) {
+  if (!event.active) simulation.alphaTarget(0.3).restart();
   d.fx = d.x;
   d.fy = d.y;
 }
