@@ -233,7 +233,7 @@ simulation.alpha(1).restart();
     .call(d3.drag()
       .on("start", dragstarted)
       .on("drag", dragged)
-      .on("end", dragended));
+      .on("end", dragended))
     .on("click", function(event, d) {
         showNodeInfo(d);
       });
