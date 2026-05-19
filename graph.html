@@ -279,7 +279,7 @@ simulation.alpha(1).restart();
       });
 
   node.append("circle")
-    .attr("r", d => getNodeSize(d.id)
+    .attr("r", d => getNodeSize(d.id))
     .attr("fill", d => getNodeColor(d.id));
 
   node.append("text")
@@ -360,19 +360,23 @@ window.addEventListener("resize", () => {
     simulation.alpha(1).restart();
   });
 
-  function getNodeColor(walletId) {
-    const owner = walletMap[walletId.trim().toLowerCase()];
-    if (!owner) return "#FFD700"; // default
-    if (owner.startsWith("program_accountpAMM")) return "blue";
-    if (owner.startsWith("program_accountp")) return "green";
-    if (owner.startsWith("wallet")) return "red";
-    if (owner.startsWith("unknown")) return "black";
-    return "#FFD700"; // fallback
-  }
+function getNodeColor(walletId) {
+  const entry = walletMap[walletId.trim().toLowerCase()];
+  if (!entry) return "#FFD700";
+  const owner = entry.owner || "";   // ✅ FIX
+  if (owner.startsWith("program_accountpAMM")) return "blue";
+  if (owner.startsWith("program_accountp")) return "green";
+  if (owner.startsWith("wallet")) return "red";
+  if (owner.startsWith("unknown")) return "black";
+  return "#FFD700";
+}
+
 function getNodeSize(walletId) {
   const entry = walletMap[walletId.trim().toLowerCase()];
   if (!entry) return 6; // default radius
-  const value = entry.sol + (entry.usd / 100);
+  const sol = entry.sol || 0;
+  const usd = entry.usd || 0;
+  const value = sol + (usd / 100);
   // ✅ scale it (important!)
   return Math.max(5, Math.min(25, Math.sqrt(value)));
 }
