@@ -8,7 +8,19 @@
 
   <style>
     body { font-family: Arial; }
-
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+    
+    svg {
+      width: 100vw;
+      height: 100vh;
+      display: block;
+    }
     .link {
       stroke: #999;
       stroke-opacity: 0.6;
@@ -30,15 +42,16 @@
 <body>
 
 <h3>Directed Graph (Live from GitHub CSV)</h3>
-<svg width="900" height="600"></svg>
+<svg></svg>
 
 <script>
 
 const csvUrl = "https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/sol_addr.csv";
 
 const svg = d3.select("svg"),
-      width = +svg.attr("width"),
-      height = +svg.attr("height");
+      width = window.innerWidth,
+      height = window.innerHeight;
+
 
 const defs = svg.append("defs");
 
@@ -119,7 +132,24 @@ const simulation = d3.forceSimulation(nodes)
   .force("y", d3.forceY(height / 2).strength(0.05))
   .force("collision", d3.forceCollide().radius(20));
 
-
+  window.addEventListener("resize", () => {
+    const newWidth = window.innerWidth;
+    const newHeight = window.innerHeight;
+  
+    // Update SVG size
+    svg.attr("width", newWidth)
+       .attr("height", newHeight);
+  
+    // Update forces
+    simulation
+      .force("center", d3.forceCenter(newWidth / 2, newHeight / 2))
+      .force("x", d3.forceX(newWidth / 2).strength(0.05))
+      .force("y", d3.forceY(newHeight / 2).strength(0.05));
+  
+    // Restart simulation
+    simulation.alpha(0.5).restart();
+  });
+  
   const link = svg.append("g")
     .selectAll("line")
     .data(links)
