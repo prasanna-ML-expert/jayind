@@ -1,4 +1,4 @@
-target_wallet,wallet_received_sol,solamount,usdamount
+source,destination,amount,usdamount
 6YJhR4erg7afSRRBVbNLZxHsvV39S46TDKejXgjJDFE4,5c7agHftiR7rSDvaUxA32D4brgxU5PoCbF7wuri1KuQ9,0.0,14000.0
 6YJhR4erg7afSRRBVbNLZxHsvV39S46TDKejXgjJDFE4,tf2TNqgAS96bGoQ9S9pMwGTTwzFY4axfiCXwWNFrzM7,0.0,14000.0
 2TVWVpbPYdfPFhXnr1Ji9X3mD3KWJRzY9mVXyqoHJSKg,GFo5haB1mc6a4Tp1uUESCAUS7yjeaj4gaAdTt68cjcA,939.4999999999997,0.0
