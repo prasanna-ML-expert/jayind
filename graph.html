@@ -157,6 +157,17 @@ svg.append("defs")
   .append("path")
   .attr("d", "M0,-3L6,0L0,3")
   .attr("fill", "red");
+
+  const usdLabel = svg.append("g")
+    .selectAll(".usdLabel")
+    .data(usdLinks)
+    .enter()
+    .append("text")
+    .attr("class", "usdLabel")
+    .text(d => Math.round(d.value / 100))
+    .attr("fill", "red")
+    .attr("font-size", 9)
+    .attr("dy", -2);
   
   const edgeLabel = svg.append("g")
     .selectAll("text")
@@ -179,7 +190,11 @@ svg.append("defs")
       .attr("y1", d => d.source.y)
       .attr("x2", d => d.target.x)
       .attr("y2", d => d.target.y);
-  
+
+    usdLabel
+      .attr("x", d => (d.source.x + d.target.x) / 2)
+      .attr("y", d => (d.source.y + d.target.y) / 2);
+    
     node.attr("transform", d => `translate(${d.x},${d.y})`);
   
     edgeLabel
