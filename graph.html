@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Graph from GitHub CSV</title>
+  <title>wallets analyzer</title>
   
   <script src="https://d3js.org/d3.v7.min.js"></script>
 
@@ -41,7 +41,7 @@
 </head>
 <body>
 
-<h3 style="position:absolute; z-index:10; background:white; padding:5px;">Directed Graph (Live from GitHub CSV)</h3>
+<h3 style="position:absolute; z-index:10; background:white; padding:5px;"></h3>
 <button onclick="resetZoom()" style="position:absolute; z-index:10;">
     Reset View
 </button>
@@ -76,12 +76,13 @@
   🔵 TokenPair<br>
   🟢 program owned<br>
   🔴 wallet<br>
-  ⚫ unknown
+  ⚫ unknown<br>
+  🟡 NA
 </div>
 <svg></svg>
 
 <script>
-let labelsVisible = true;
+let labelsVisible = false;
 
 const csvUrl = "https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/sol_addr.csv";
 
@@ -281,6 +282,7 @@ simulation.alpha(1).restart();
     .attr("x", 12)
     .attr("y", 3)
     .attr("class", "node-label")
+    .style("display", "none")
     .text(d => {
       const id = d.id.toString();
       return id.length > 6 
@@ -356,12 +358,12 @@ window.addEventListener("resize", () => {
 
   function getNodeColor(walletId) {
     const owner = walletMap[walletId.trim().toLowerCase()];
-    if (!owner) return "#69b3a2"; // default
+    if (!owner) return "#FFD700"; // default
     if (owner.startsWith("program_accountpAMM")) return "blue";
     if (owner.startsWith("program_accountp")) return "green";
     if (owner.startsWith("wallet")) return "red";
     if (owner.startsWith("unknown")) return "black";
-    return "#69b3a2"; // fallback
+    return "#FFD700"; // fallback
   }
 
 // Drag
