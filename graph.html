@@ -156,7 +156,11 @@ Promise.all([
   walletData = wData;   // ✅ store full dataset
   walletData.forEach(d => {
     if (d.Wallet) {
-      walletMap[d.Wallet.trim().toLowerCase()] = d.owner;
+      walletMap[d.Wallet.trim().toLowerCase()] = {
+        owner: d.owner,
+        sol: +d.SoL_balance || 0,
+        usd: +d.USD_Balance || 0
+      };
     }
   });
   // ✅ also keep the Set if you're using it
@@ -233,7 +237,7 @@ simulation = d3.forceSimulation(nodes)
   .force("center", d3.forceCenter(width / 2, height / 2))
   .force("x", d3.forceX(width / 2).strength(0.05))
   .force("y", d3.forceY(height / 2).strength(0.05))
-  .force("collision", d3.forceCollide().radius(30));
+  .force("collision", d3.forceCollide().radius(d => getNodeSize(d.id) + 5))
 simulation.alpha(1).restart();
 
 
@@ -275,7 +279,7 @@ simulation.alpha(1).restart();
       });
 
   node.append("circle")
-    .attr("r", 8)
+    .attr("r", d => getNodeSize(d.id)
     .attr("fill", d => getNodeColor(d.id));
 
   node.append("text")
@@ -365,6 +369,13 @@ window.addEventListener("resize", () => {
     if (owner.startsWith("unknown")) return "black";
     return "#FFD700"; // fallback
   }
+function getNodeSize(walletId) {
+  const entry = walletMap[walletId.trim().toLowerCase()];
+  if (!entry) return 6; // default radius
+  const value = entry.sol + (entry.usd / 100);
+  // ✅ scale it (important!)
+  return Math.max(5, Math.min(25, Math.sqrt(value)));
+}
 
 // Drag
 function dragstarted(event, d) {
