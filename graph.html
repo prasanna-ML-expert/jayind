@@ -132,18 +132,30 @@ defs.append("marker")
 let simulation;
 let rawData
 // Load CSV from GitHub
-d3.csv(csvUrl).then(data => {
+
+Promise.all([
+  d3.csv(csvUrl),
+  d3.csv("https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/original_addr.csv")
+]).then(([data, walletData]) => {
+
   rawData = data;
+
+  // ✅ Create a Set of wallet addresses
+  window.walletSet = new Set(walletData.map(d => d.Wallet));
+
   const maxAmount = d3.max(rawData, d => +d.amount);
   const maxUsd = d3.max(rawData, d => +d.usdamount);
-  
+
   document.getElementById("amountSlider").max = maxAmount;
   document.getElementById("usdSlider").max = maxUsd;
-  updateGraph(); // initial render
+
+  updateGraph();
 
   document.getElementById("amountSlider").addEventListener("input", updateGraph);
   document.getElementById("usdSlider").addEventListener("input", updateGraph);
+
 });
+
   
 function updateGraph() {
 
@@ -238,9 +250,14 @@ simulation.alpha(1).restart();
         showNodeInfo(d);
       });
 
-  node.append("circle")
-    .attr("r", 8);
 
+  node.append("circle")
+    .attr("r", 8)
+    .attr("fill", d => {
+      return window.walletSet && window.walletSet.has(d.id)
+        ? "green"   // ✅ highlight nodes from second CSV
+        : "#69b3a2"; // default color
+    });
 
   node.append("text")
     .attr("x", 12)
