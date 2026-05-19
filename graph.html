@@ -59,42 +59,50 @@ svg.append("defs")
 // Load CSV from GitHub
 d3.csv(csvUrl).then(data => {
 
-  data.forEach(d => d.amount = +d.amount);
+let nodesMap = {};
+let links = [];
+let usdLinks = [];
 
-  let nodesMap = {};
-  data.forEach(d => {
-    nodesMap[d.source] = { id: d.source };
-    nodesMap[d.destination] = { id: d.destination };
-  });
+data.forEach(d => {
 
-  const nodes = Object.values(nodesMap);
+  const source = d.source;
+  const target = d.destination;
+  const value = +d.amount;
+  const usdValue = +d.usdamount;
 
-  const links = data
-    .map(d => {
-      const value = +d.amount;
+  // ✅ normal links (amount)
+  if (value && value !== 0) {
+    nodesMap[source] = { id: source };
+    nodesMap[target] = { id: target };
 
-      // ✅ Skip zero or invalid values
-      if (!value || value === 0) return null;
+    links.push({
+      source,
+      target,
+      value
+    });
+  }
 
-      const source = d.source;
-      const target = d.destination;
+  // ✅ USD links (only non-zero)
+  if (usdValue && usdValue > 0) {
+    nodesMap[source] = { id: source };
+    nodesMap[target] = { id: target };
 
-      nodesMap[source] = { id: source };
-      nodesMap[target] = { id: target };
+    usdLinks.push({
+      source,
+      target,
+      value: usdValue
+    });
+  }
 
-      return {
-        source,
-        target,
-        value
-      };
-    })
-    .filter(d => d !== null); // ✅ remove skipped edges
+});
 
+const nodes = Object.values(nodesMap);
 
-  const simulation = d3.forceSimulation(nodes)
-    .force("link", d3.forceLink(links).id(d => d.id).distance(120))
-    .force("charge", d3.forceManyBody().strength(-400))
-    .force("center", d3.forceCenter(width / 2, height / 2));
+const simulation = d3.forceSimulation(nodes)
+  .force("link", d3.forceLink([...links, ...usdLinks]).id(d => d.id).distance(120))
+  .force("charge", d3.forceManyBody().strength(-400))
+  .force("center", d3.forceCenter(width / 2, height / 2));
+
 
   const link = svg.append("g")
     .selectAll("line")
@@ -102,6 +110,18 @@ d3.csv(csvUrl).then(data => {
     .enter().append("line")
     .attr("class", "link")
     .attr("stroke-width", d => Math.max(1, Math.sqrt(d.value) / 5));
+
+  // 🔴 USD LINKS (RED)
+  const usdLink = svg.append("g")
+    .selectAll("line.usd")
+    .data(usdLinks)
+    .enter().append("line")
+    .attr("class", "usd")
+    .attr("stroke", "red")
+    .attr("stroke-opacity", 0.7)
+    .attr("stroke-width", d => Math.max(1, Math.sqrt(d.value) / 8))
+    .attr("marker-end", "url(#arrow)");
+
   
   const node = svg.append("g")
     .selectAll("g")
@@ -136,15 +156,21 @@ node.append("text")
     .attr("font-size", 10);
 
   simulation.on("tick", () => {
-
+  
     link
       .attr("x1", d => d.source.x)
       .attr("y1", d => d.source.y)
       .attr("x2", d => d.target.x)
       .attr("y2", d => d.target.y);
-
+  
+    usdLink
+      .attr("x1", d => d.source.x)
+      .attr("y1", d => d.source.y)
+      .attr("x2", d => d.target.x)
+      .attr("y2", d => d.target.y);
+  
     node.attr("transform", d => `translate(${d.x},${d.y})`);
-
+  
     edgeLabel
       .attr("x", d => (d.source.x + d.target.x) / 2)
       .attr("y", d => (d.source.y + d.target.y) / 2);
