@@ -119,9 +119,8 @@ const simulation = d3.forceSimulation(nodes)
     .attr("class", "usd")
     .attr("stroke", "red")
     .attr("stroke-opacity", 0.7)
-    .attr("stroke-width", d => Math.max(1, Math.sqrt(d.value) / 8))
-    .attr("marker-end", "url(#arrow)");
-
+    .attr("stroke-width", d => Math.max(0.5, Math.sqrt(d.value) / 80))
+    .attr("marker-end", "url(#arrow-red)");
   
   const node = svg.append("g")
     .selectAll("g")
@@ -146,7 +145,19 @@ node.append("text")
       : id;
   });
 
-
+svg.append("defs")
+  .append("marker")
+  .attr("id", "arrow-red")
+  .attr("viewBox", "0 -5 10 10")
+  .attr("refX", 12)         // closer to node
+  .attr("refY", 0)
+  .attr("markerWidth", 2)   // ✅ much smaller
+  .attr("markerHeight", 2)
+  .attr("orient", "auto")
+  .append("path")
+  .attr("d", "M0,-3L6,0L0,3")
+  .attr("fill", "red");
+  
   const edgeLabel = svg.append("g")
     .selectAll("text")
     .data(links)
