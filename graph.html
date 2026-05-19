@@ -150,7 +150,7 @@ function updateGraph() {
 let nodesMap = {};
 let links = [];
 let usdLinks = [];
-container.selectAll("*:not(defs)").remove();
+container.selectAll("*").remove();
 rawData.forEach(d => {
 
   const source = d.source;
@@ -198,6 +198,7 @@ simulation = d3.forceSimulation(nodes)
   .force("x", d3.forceX(width / 2).strength(0.05))
   .force("y", d3.forceY(height / 2).strength(0.05))
   .force("collision", d3.forceCollide().radius(30));
+simulation.alpha(1).restart();
 
 
   
