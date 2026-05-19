@@ -68,11 +68,27 @@ d3.csv(csvUrl).then(data => {
   });
 
   const nodes = Object.values(nodesMap);
-  const links = data.map(d => ({
-    source: d.source,
-    target: d.destination,
-    value: d.amount
-  }));
+
+  const links = data
+    .map(d => {
+      const value = +d.amount;
+
+      // ✅ Skip zero or invalid values
+      if (!value || value === 0) return null;
+
+      const source = d.source;
+      const target = d.destination;
+
+      nodesMap[source] = { id: source };
+      nodesMap[target] = { id: target };
+
+      return {
+        source,
+        target,
+        value
+      };
+    })
+
 
   const simulation = d3.forceSimulation(nodes)
     .force("link", d3.forceLink(links).id(d => d.id).distance(120))
