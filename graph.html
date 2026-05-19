@@ -51,14 +51,20 @@
 <div style="position:absolute; top:80px; left:10px; z-index:10; background:white; padding:10px;">
   
   <label>Min Amount:</label><br>
-  <input type="range" id="amountSlider" min="0" max="100000" step="1" value="0">
-  <span id="amountValue">0</span>
+  <input type="range" id="amountSlider" min="10" max="100000" step="1" value="10">
+  <span id="amountValue">10</span>
   <br><br>
 
   <label>Min USD Amount:</label><br>
-  <input type="range" id="usdSlider" min="0" max="100000" step="1" value="0">
-  <span id="usdValue">0</span>
+  <input type="range" id="usdSlider" min="1000" max="100000" step="1" value="1000">
+  <span id="usdValue">1000</span>
 
+</div>
+<div id="nodeInfo"
+     style="position:absolute; top:10px; right:10px; z-index:10; 
+            background:white; padding:10px; border:1px solid #ccc;">
+  <b>Selected Node:</b><br>
+  <span id="nodeValue">None</span>
 </div>
 
 <svg></svg>
@@ -228,6 +234,9 @@ simulation.alpha(1).restart();
       .on("start", dragstarted)
       .on("drag", dragged)
       .on("end", dragended));
+    .on("click", function(event, d) {
+        showNodeInfo(d);
+      });
 
   node.append("circle")
     .attr("r", 8);
@@ -328,7 +337,10 @@ function dragended(event, d) {
   d.fx = null;
   d.fy = null;
 }
-
+function showNodeInfo(d) {
+  document.getElementById("nodeValue").innerText = d.id;
+  navigator.clipboard.writeText(d.id);
+}
 
 </script>
 
