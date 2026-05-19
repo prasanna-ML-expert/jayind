@@ -45,9 +45,14 @@
   <button onclick="resetZoom()" style="position:absolute; z-index:10;">
     Reset View
   </button>
+  <button onclick="toggleLabels()" style="position:absolute; top:40px; z-index:10;">
+  Toggle Labels
+</button>
+
 <svg></svg>
 
 <script>
+let labelsVisible = true;
 
 const csvUrl = "https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/sol_addr.csv";
 
@@ -69,6 +74,13 @@ function resetZoom() {
     zoom.transform,
     d3.zoomIdentity
   );
+}
+function toggleLabels() {
+  labelsVisible = !labelsVisible;
+
+  // toggle node text visibility
+  d3.selectAll(".node-label")
+    .style("display", labelsVisible ? "block" : "none");
 }
 
 const defs = svg.append("defs");
@@ -202,6 +214,7 @@ simulation = d3.forceSimulation(nodes)
 node.append("text")
   .attr("x", 12)
   .attr("y", 3)
+  .attr("class", "node-label")
   .text(d => {
     const id = d.id.toString();
     return id.length > 6 
