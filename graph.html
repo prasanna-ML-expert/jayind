@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Graph from GitHub CSV</title>
+
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+
+  <style>
+    body { font-family: Arial; }
+
+    .link {
+      stroke: #999;
+      stroke-opacity: 0.6;
+      marker-end: url(#arrow);
+    }
+
+    .node circle {
+      fill: #69b3a2;
+      stroke: #fff;
+      stroke-width: 1.5px;
+    }
+
+    text {
+      font-size: 12px;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+<h3>Directed Graph (Live from GitHub CSV)</h3>
+<svg width="900" height="600"></svg>
+
+<script>
+
+const csvUrl = "https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/sol_addr.csv";
+
+const svg = d3.select("svg"),
+      width = +svg.attr("width"),
+      height = +svg.attr("height");
+
+// Arrow marker
+svg.append("defs")
+  .append("marker")
+  .attr("id", "arrow")
+  .attr("viewBox", "0 -5 10 10")
+  .attr("refX", 25)
+  .attr("refY", 0)
+  .attr("markerWidth", 6)
+  .attr("markerHeight", 6)
+  .attr("orient", "auto")
+  .append("path")
+  .attr("d", "M0,-5L10,0L0,5")
+  .attr("fill", "#999");
+
+// Load CSV from GitHub
+d3.csv(csvUrl).then(data => {
+
+  data.forEach(d => d.amount = +d.amount);
+
+  let nodesMap = {};
+  data.forEach(d => {
+    nodesMap[d.source] = { id: d.source };
+    nodesMap[d.destination] = { id: d.destination };
+  });
+
+  const nodes = Object.values(nodesMap);
+  const links = data.map(d => ({
+    source: d.source,
+    target: d.destination,
+    value: d.amount
+  }));
+
+  const simulation = d3.forceSimulation(nodes)
+    .force("link", d3.forceLink(links).id(d => d.id).distance(120))
+    .force("charge", d3.forceManyBody().strength(-400))
+    .force("center", d3.forceCenter(width / 2, height / 2));
+
+  const link = svg.append("g")
+    .selectAll("line")
+    .data(links)
+    .enter().append("line")
+    .attr("class", "link")
+    .attr("stroke-width", d => Math.sqrt(d.value || 1));
+
+  const node = svg.append("g")
+    .selectAll("g")
+    .data(nodes)
+    .enter().append("g")
+    .call(d3.drag()
+      .on("start", dragstarted)
+      .on("drag", dragged)
+      .on("end", dragended));
+
+  node.append("circle")
+    .attr("r", 8);
+
+  node.append("text")
+    .attr("x", 12)
+    .attr("y", 3)
+    .text(d => d.id);
+
+  const edgeLabel = svg.append("g")
+    .selectAll("text")
+    .data(links)
+    .enter()
+    .append("text")
+    .text(d => d.value)
+    .attr("font-size", 10);
+
+  simulation.on("tick", () => {
+
+    link
+      .attr("x1", d => d.source.x)
+      .attr("y1", d => d.source.y)
+      .attr("x2", d => d.target.x)
+      .attr("y2", d => d.target.y);
+
+    node.attr("transform", d => `translate(${d.x},${d.y})`);
+
+    edgeLabel
+      .attr("x", d => (d.source.x + d.target.x) / 2)
+      .attr("y", d => (d.source.y + d.target.y) / 2);
+  });
+
+});
+
+// Drag
+function dragstarted(event, d) {
+  if (!event.active) d.fx = d.x;
+  if (!event.active) d.fy = d.y;
+}
+
+function dragged(event, d) {
+  d.fx = event.x;
+  d.fy = event.y;
+}
+
+function dragended(event, d) {
+  if (!event.active) {
+    d.fx = null;
+    d.fy = null;
+  }
+}
+
+</script>
+
+</body>
+</html>
