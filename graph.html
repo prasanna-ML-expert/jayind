@@ -42,12 +42,24 @@
 <body>
 
 <h3 style="position:absolute; z-index:10; background:white; padding:5px;">Directed Graph (Live from GitHub CSV)</h3>
-  <button onclick="resetZoom()" style="position:absolute; z-index:10;">
+<button onclick="resetZoom()" style="position:absolute; z-index:10;">
     Reset View
-  </button>
-  <button onclick="toggleLabels()" style="position:absolute; top:40px; z-index:10;">
+</button>
+<button onclick="toggleLabels()" style="position:absolute; top:40px; z-index:10;">
   Toggle Labels
 </button>
+<div style="position:absolute; top:80px; left:10px; z-index:10; background:white; padding:10px;">
+  
+  <label>Min Amount:</label><br>
+  <input type="range" id="amountSlider" min="0" max="100000" step="1" value="0">
+  <span id="amountValue">0</span>
+  <br><br>
+
+  <label>Min USD Amount:</label><br>
+  <input type="range" id="usdSlider" min="0" max="100000" step="1" value="0">
+  <span id="usdValue">0</span>
+
+</div>
 
 <svg></svg>
 
@@ -112,14 +124,34 @@ defs.append("marker")
   .attr("fill", "red");
 
 let simulation;
-
+let rawData
 // Load CSV from GitHub
 d3.csv(csvUrl).then(data => {
+  rawData = data;
+  const maxAmount = d3.max(rawData, d => +d.amount);
+  const maxUsd = d3.max(rawData, d => +d.usdamount);
+  
+  document.getElementById("amountSlider").max = maxAmount;
+  document.getElementById("usdSlider").max = maxUsd;
+  updateGraph(); // initial render
+
+  document.getElementById("amountSlider").addEventListener("input", updateGraph);
+  document.getElementById("usdSlider").addEventListener("input", updateGraph);
+});
+  
+function updateGraph() {
+
+  const minAmount = +document.getElementById("amountSlider").value;
+  const minUsd = +document.getElementById("usdSlider").value;
+
+  document.getElementById("amountValue").innerText = minAmount;
+  document.getElementById("usdValue").innerText = minUsd;
 
 let nodesMap = {};
 let links = [];
 let usdLinks = [];
-data.forEach(d => {
+container.selectAll("*:not(defs)").remove();
+rawData.forEach(d => {
 
   const source = d.source;
   const target = d.destination;
@@ -127,7 +159,7 @@ data.forEach(d => {
   const usdValue = +d.usdamount;
 
   // ✅ normal links (amount)
-  if (value && value !== 0) {
+  if (value && value >= minAmount) {
     nodesMap[source] = { id: source };
     nodesMap[target] = { id: target };
 
@@ -139,7 +171,7 @@ data.forEach(d => {
   }
 
   // ✅ USD links (only non-zero)
-  if (usdValue && usdValue > 0) {
+  if (usdValue && usdValue >= minUsd) {
     nodesMap[source] = { id: source };
     nodesMap[target] = { id: target };
 
@@ -162,23 +194,7 @@ simulation = d3.forceSimulation(nodes)
   .force("y", d3.forceY(height / 2).strength(0.05))
   .force("collision", d3.forceCollide().radius(30));
 
-  window.addEventListener("resize", () => {
-    const newWidth = window.innerWidth;
-    const newHeight = window.innerHeight;
-  
-    // Update SVG size
-    svg.attr("width", newWidth)
-       .attr("height", newHeight);
-  
-    // Update forces
-    simulation
-      .force("center", d3.forceCenter(newWidth / 2, newHeight / 2))
-      .force("x", d3.forceX(newWidth / 2).strength(0.05))
-      .force("y", d3.forceY(newHeight / 2).strength(0.05));
-  
-    // Restart simulation
-    simulation.alpha(0.5).restart();
-  });
+
   
   const link = container.append("g")
     .selectAll("line")
@@ -270,6 +286,25 @@ node.append("text")
 
 });
 
+window.addEventListener("resize", () => {
+    const newWidth = window.innerWidth;
+    const newHeight = window.innerHeight;
+  
+    // Update SVG size
+    svg.attr("width", newWidth)
+       .attr("height", newHeight);
+  
+    if (!simulation) return;  // ✅ important
+
+    // Update forces
+    simulation
+      .force("center", d3.forceCenter(newWidth / 2, newHeight / 2))
+      .force("x", d3.forceX(newWidth / 2).strength(0.05))
+      .force("y", d3.forceY(newHeight / 2).strength(0.05));
+  
+    // Restart simulation
+    simulation.alpha(0.5).restart();
+  });
 // Drag
 function dragstarted(event, d) {
   if (!event.active) simulation.alphaTarget(0.3).restart();
@@ -287,6 +322,7 @@ function dragended(event, d) {
   d.fx = null;
   d.fy = null;
 }
+
 
 </script>
 
