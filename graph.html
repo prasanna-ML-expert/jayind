@@ -137,6 +137,7 @@ defs.append("marker")
 let simulation;
 let rawData;
 let walletData; // ✅ add global
+let walletMap = {};
 // Load CSV from GitHub
 
 Promise.all([
@@ -146,7 +147,11 @@ Promise.all([
 
   rawData = data;
   walletData = wData;   // ✅ store full dataset
-
+  walletData.forEach(d => {
+    if (d.Wallet) {
+      walletMap[d.Wallet.trim().toLowerCase()] = d.owner;
+    }
+  });
   // ✅ also keep the Set if you're using it
   window.walletSet = new Set(wData.map(d => d.Wallet));
 
@@ -254,16 +259,17 @@ simulation.alpha(1).restart();
       .on("end", dragended))
     .on("click", function(event, d) {
         showNodeInfo(d);
+       // reset all nodes to their category color
+        d3.selectAll("circle")
+          .attr("fill", d2 => getNodeColor(d2.id));
+        // highlight selected node
+        d3.select(this).select("circle")
+          .attr("fill", "orange");
       });
-
 
   node.append("circle")
     .attr("r", 8)
-    .attr("fill", d => {
-      return window.walletSet && window.walletSet.has(d.id)
-        ? "green"   // ✅ highlight nodes from second CSV
-        : "#69b3a2"; // default color
-    });
+    .attr("fill", d => getNodeColor(d.id));
 
   node.append("text")
     .attr("x", 12)
@@ -275,8 +281,6 @@ simulation.alpha(1).restart();
         ? id.slice(0, 2) + "..." + id.slice(-2)
         : id;
     });
-
-
 
   const usdLabel = container.append("g")
     .selectAll(".usdLabel")
@@ -343,6 +347,17 @@ window.addEventListener("resize", () => {
     // Restart simulation
     simulation.alpha(1).restart();
   });
+
+  function getNodeColor(walletId) {
+    const owner = walletMap[walletId.trim().toLowerCase()];
+    if (!owner) return "#69b3a2"; // default
+    if (owner.startsWith("program_accountpAMM")) return "blue";
+    if (owner.startsWith("program_accountp")) return "green";
+    if (owner.startsWith("wallet")) return "red";
+    if (owner.startsWith("unknown")) return "black";
+    return "#69b3a2"; // fallback
+  }
+
 // Drag
 function dragstarted(event, d) {
   if (!event.active) simulation.alphaTarget(0.3).restart();
