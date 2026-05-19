@@ -158,8 +158,8 @@ Promise.all([
     if (d.Wallet) {
       walletMap[d.Wallet.trim().toLowerCase()] = {
         owner: d.owner,
-        sol: +d.SoL_balance || 0,
-        usd: +d.USD_Balance || 0
+        sol: +String(d.SOL_Balance).replace(/,/g, "") || 0,
+        usd: +String(d["USD Balance"]).replace(/,/g, "") || 0
       };
     }
   });
