@@ -376,7 +376,7 @@ function getNodeColor(walletId) {
   if (!entry) return "#FFD700";
   const owner = entry.owner || "";   // ✅ FIX
   if (owner.startsWith("program_accountpAMM")) return "blue";
-  if (owner.startsWith("program_accountp")) return "green";
+  if (owner.startsWith("program_account")) return "green";
   if (owner.startsWith("wallet")) return "red";
   if (owner.startsWith("unknown")) return "black";
   return "#FFD700";
