@@ -66,6 +66,11 @@
   <b>Selected Node:</b><br>
   <span id="nodeValue">None</span>
 </div>
+<div id="walletTable"
+     style="position:absolute; bottom:0; left:0; width:100%; 
+            background:white; border-top:1px solid #ccc; 
+            max-height:200px; overflow:auto; padding:10px;">
+</div>
 
 <svg></svg>
 
@@ -130,18 +135,20 @@ defs.append("marker")
   .attr("fill", "red");
 
 let simulation;
-let rawData
+let rawData;
+let walletData; // ✅ add global
 // Load CSV from GitHub
 
 Promise.all([
   d3.csv(csvUrl),
   d3.csv("https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/original_addr.csv")
-]).then(([data, walletData]) => {
+]).then(([data, wData]) => {
 
   rawData = data;
+  walletData = wData;   // ✅ store full dataset
 
-  // ✅ Create a Set of wallet addresses
-  window.walletSet = new Set(walletData.map(d => d.Wallet));
+  // ✅ also keep the Set if you're using it
+  window.walletSet = new Set(wData.map(d => d.Wallet));
 
   const maxAmount = d3.max(rawData, d => +d.amount);
   const maxUsd = d3.max(rawData, d => +d.usdamount);
@@ -153,7 +160,6 @@ Promise.all([
 
   document.getElementById("amountSlider").addEventListener("input", updateGraph);
   document.getElementById("usdSlider").addEventListener("input", updateGraph);
-
 });
 
   
@@ -354,9 +360,52 @@ function dragended(event, d) {
   d.fx = null;
   d.fy = null;
 }
+  
 function showNodeInfo(d) {
   document.getElementById("nodeValue").innerText = d.id;
-  navigator.clipboard.writeText(d.id);
+  // ✅ find matching row in walletData
+  const row = walletData.find(w => 
+    w.Wallet && w.Wallet.trim().toLowerCase() === d.id.trim().toLowerCase()
+  );
+  const container = document.getElementById("walletTable");
+  // ✅ clear previous table
+  container.innerHTML = "";
+  if (!row) {
+    container.innerHTML = "<b>No data found for this wallet</b>";
+    return;
+  }
+  // ✅ create table
+  const table = document.createElement("table");
+  table.style.borderCollapse = "collapse";
+  table.style.width = "100%";
+
+  const headerRow = document.createElement("tr");
+  const valueRow = document.createElement("tr");
+
+  // ✅ generate headers + values
+  Object.keys(row).forEach(key => {
+
+    const th = document.createElement("th");
+    th.innerText = key;
+    th.style.border = "1px solid #ccc";
+    th.style.padding = "5px";
+    th.style.background = "#f2f2f2";
+
+    const td = document.createElement("td");
+    td.innerText = row[key];
+    td.style.border = "1px solid #ccc";
+    td.style.padding = "5px";
+
+    headerRow.appendChild(th);
+    valueRow.appendChild(td);
+  });
+  table.appendChild(headerRow);
+  table.appendChild(valueRow);
+  container.appendChild(table);
+  // ✅ optional clipboard
+  try {
+    navigator.clipboard.writeText(d.id);
+  } catch (e) {}
 }
 
 </script>
