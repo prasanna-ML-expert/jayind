@@ -49,16 +49,11 @@
   Toggle Labels
 </button>
 <div style="position:absolute; top:80px; left:10px; z-index:10; background:white; padding:10px;">
-  
   <label>Min Amount:</label><br>
-  <input type="range" id="amountSlider" min="10" max="100000" step="1" value="10">
-  <span id="amountValue">10</span>
+  <input type="number" id="amountInput" value="10" placeholder="Enter min sol amount">
   <br><br>
-
   <label>Min USD Amount:</label><br>
-  <input type="range" id="usdSlider" min="1000" max="100000" step="1" value="1000">
-  <span id="usdValue">1000</span>
-
+  <input type="number" id="usdInput" value="1000" placeholder="Enter min usd amount">
 </div>
 <div id="nodeInfo"
      style="position:absolute; top:10px; right:10px; z-index:10; 
@@ -171,23 +166,16 @@ Promise.all([
   const maxAmount = d3.max(rawData, d => +d.amount);
   const maxUsd = d3.max(rawData, d => +d.usdamount);
 
-  document.getElementById("amountSlider").max = maxAmount;
-  document.getElementById("usdSlider").max = maxUsd;
-
   updateGraph();
-
-  document.getElementById("amountSlider").addEventListener("input", updateGraph);
-  document.getElementById("usdSlider").addEventListener("input", updateGraph);
+  document.getElementById("amountInput").addEventListener("change", updateGraph);
+  document.getElementById("usdInput").addEventListener("change", updateGraph);
 });
 
   
 function updateGraph() {
 
-  const minAmount = +document.getElementById("amountSlider").value;
-  const minUsd = +document.getElementById("usdSlider").value;
-
-  document.getElementById("amountValue").innerText = minAmount;
-  document.getElementById("usdValue").innerText = minUsd;
+const minAmount = Math.max(0, +document.getElementById("amountInput").value || 0);
+const minUsd = Math.max(0, +document.getElementById("usdInput").value || 0);
 
 let nodesMap = {};
 let links = [];
