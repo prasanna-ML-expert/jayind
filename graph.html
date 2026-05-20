@@ -55,6 +55,12 @@
   <label>Min USD Amount:</label><br>
   <input type="number" id="usdInput" value="1000" placeholder="Enter min usd amount">
 </div>
+<div style="position:absolute; top:50px; right:10px; z-index:10; background:white; padding:10px;">
+  <label>Search Wallet:</label><br>
+  <input type="text" id="searchBox" placeholder="Enter address">
+  <button onclick="searchNode()">Search</button>
+</div>
+
 <div id="nodeInfo"
      style="position:absolute; top:10px; right:10px; z-index:10; 
             background:white; padding:10px; border:1px solid #ccc;">
@@ -169,6 +175,12 @@ Promise.all([
   updateGraph();
   document.getElementById("amountInput").addEventListener("change", updateGraph);
   document.getElementById("usdInput").addEventListener("change", updateGraph);
+  document.getElementById("searchBox")
+    .addEventListener("keypress", function(event) {
+      if (event.key === "Enter") {
+        searchNode();
+      }
+  });
 });
 
   
@@ -406,6 +418,40 @@ function dragended(event, d) {
   d.fy = null;
 }
   
+function searchNode() {
+  const input = document.getElementById("searchBox").value
+    .trim()
+    .toLowerCase();
+  if (!input) return;
+  let foundNode = null;
+  d3.selectAll("g")
+    .each(function(d) {
+      if (d && d.id && d.id.toLowerCase() === input) {
+        foundNode = d;
+        // ✅ highlight node
+        d3.selectAll("circle")
+          .attr("fill", d2 => getNodeColor(d2.id));
+        d3.select(this).select("circle")
+          .attr("fill", "yellow")
+          .attr("stroke", "black")
+          .attr("stroke-width", 2);
+      }
+    });
+  if (!foundNode) {
+    alert("Node not found");
+    return;
+  }
+  // ✅ zoom to node
+  svg.transition().duration(600).call(
+    zoom.transform,
+    d3.zoomIdentity
+      .translate(width / 2 - foundNode.x, height / 2 - foundNode.y)
+      .scale(1.5)
+  );
+  // ✅ show node info
+  showNodeInfo(foundNode);
+}
+
 function showNodeInfo(d) {
   document.getElementById("nodeValue").innerText = d.id;
   // ✅ find matching row in walletData
