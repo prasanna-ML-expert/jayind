@@ -483,13 +483,15 @@ circle
   .duration(200)
   .attr("r", baseSize);
 
-
-  // ✅ zoom to node
+  const scale = 1.5;
+  const x = foundNode.x;
+  const y = foundNode.y;
   svg.transition().duration(600).call(
     zoom.transform,
     d3.zoomIdentity
-      .translate(width / 2 - foundNode.x, height / 2 - foundNode.y)
-      .scale(1.5)
+      .translate(width / 2, height / 2)
+      .scale(scale)
+      .translate(-x, -y)
   );
 
   showNodeInfo(foundNode);
