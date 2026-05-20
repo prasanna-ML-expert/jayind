@@ -432,9 +432,12 @@ function searchNode() {
         d3.selectAll("circle")
           .attr("fill", d2 => getNodeColor(d2.id));
         d3.select(this).select("circle")
-          .attr("fill", "yellow")
-          .attr("stroke", "black")
-          .attr("stroke-width", 2);
+          .transition()
+          .duration(300)
+          .attr("r", getNodeSize(foundNode.id) + 5)
+          .transition()
+          .duration(300)
+          .attr("r", getNodeSize(foundNode.id));
       }
     });
   if (!foundNode) {
