@@ -54,16 +54,17 @@
   <br><br>
   <label>Min USD Amount:</label><br>
   <input type="number" id="usdInput" value="1000" placeholder="Enter min usd amount">
-</div>
-<button onclick="toggleAMM()"
-        style="position:absolute; top:80px; right:10px; z-index:10;">
-  Hide Token Pairs
-</button>
-
-<div style="position:absolute; top:50px; right:10px; z-index:10; background:white; padding:10px;">
-  <label>Search Wallet:</label><br>
-  <input type="text" id="searchBox" placeholder="Enter address">
-  <button onclick="searchNode()">Search</button>
+  
+</div><div style="position:absolute; top:10px; right:10px; z-index:20; background:white; padding:10px;">
+  <div>
+    <label>Search Wallet:</label><br>
+    <input type="text" id="searchBox">
+    <button onclick="searchNode()">Search</button>
+  </div>
+  <br>
+  <button onclick="toggleAMM()">
+    Hide Token Pairs
+  </button>
 </div>
 
 <div id="nodeInfo"
