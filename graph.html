@@ -386,52 +386,59 @@ window.addEventListener("resize", () => {
     simulation.alpha(1).restart();
   });
 function toggleAMM() {
+
   hideAMM = !hideAMM;
-  // update button text
-  const btn = document.querySelector('button[onclick="toggleAMM()"]');
+
+  const btn = document.getElementById("ammBtn");
   btn.innerText = hideAMM ? "Show Token Pairs" : "Hide Token Pairs";
+
   applyAMMFilter();
+
+  // ✅ restore correct colors after filtering
+  d3.selectAll("circle")
+    .attr("fill", d => getNodeColor(d.id));
 }
   
 function applyAMMFilter() {
-  container.selectAll("g")
+
+  d3.selectAll(".node")
     .style("display", function(d) {
-      if (!d || !d.id) return null;
-      const entry = walletMap[d.id.toLowerCase()];
-      if (!entry) return null;
-      const owner = entry.owner || "";
-      if (hideAMM && owner.startsWith("program_accountpAMM")) {
-        return "none";
-      }
-      return null;
+
+      const entry = walletMap[d.id?.toLowerCase()];
+      const owner = entry?.owner || "";
+
+      const isAMM = owner.startsWith("program_accountpAMM");
+
+      return (hideAMM && isAMM) ? "none" : "block";
     });
-  // ✅ also hide connected links
+
   d3.selectAll("line")
     .style("display", function(d) {
+
       const srcOwner = walletMap[d.source.id?.toLowerCase()]?.owner || "";
       const dstOwner = walletMap[d.target.id?.toLowerCase()]?.owner || "";
-      if (hideAMM && (
+
+      const isAMM =
         srcOwner.startsWith("program_accountpAMM") ||
-        dstOwner.startsWith("program_accountpAMM")
-      )) {
-        return "none";
-      }
-      return null;
+        dstOwner.startsWith("program_accountpAMM");
+
+      return (hideAMM && isAMM) ? "none" : "block";
     });
-  // ✅ USD links too
+
   d3.selectAll("line.usd")
     .style("display", function(d) {
+
       const srcOwner = walletMap[d.source.id?.toLowerCase()]?.owner || "";
       const dstOwner = walletMap[d.target.id?.toLowerCase()]?.owner || "";
-      if (hideAMM && (
+
+      const isAMM =
         srcOwner.startsWith("program_accountpAMM") ||
-        dstOwner.startsWith("program_accountpAMM")
-      )) {
-        return "none";
-      }
-      return null;
+        dstOwner.startsWith("program_accountpAMM");
+
+      return (hideAMM && isAMM) ? "none" : "block";
     });
 }
+
   
 function getNodeColor(walletId) {
   const entry = walletMap[walletId.trim().toLowerCase()];
