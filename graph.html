@@ -278,6 +278,7 @@ simulation.alpha(1).restart();
     .selectAll("g")
     .data(nodes)
     .enter().append("g")
+    .attr("class", "node")
     .call(d3.drag()
       .on("start", dragstarted)
       .on("drag", dragged)
@@ -393,13 +394,13 @@ function toggleAMM() {
 }
   
 function applyAMMFilter() {
-  d3.selectAll("g")
+  container.selectAll("g")
     .style("display", function(d) {
       if (!d || !d.id) return null;
       const entry = walletMap[d.id.toLowerCase()];
       if (!entry) return null;
       const owner = entry.owner || "";
-      if (hideAMM && owner.startsWith("tokenprogrampAMM")) {
+      if (hideAMM && owner.startsWith("program_accountpAMM")) {
         return "none";
       }
       return null;
@@ -410,8 +411,8 @@ function applyAMMFilter() {
       const srcOwner = walletMap[d.source.id?.toLowerCase()]?.owner || "";
       const dstOwner = walletMap[d.target.id?.toLowerCase()]?.owner || "";
       if (hideAMM && (
-        srcOwner.startsWith("tokenprogrampAMM") ||
-        dstOwner.startsWith("tokenprogrampAMM")
+        srcOwner.startsWith("program_accountpAMM") ||
+        dstOwner.startsWith("program_accountpAMM")
       )) {
         return "none";
       }
@@ -423,8 +424,8 @@ function applyAMMFilter() {
       const srcOwner = walletMap[d.source.id?.toLowerCase()]?.owner || "";
       const dstOwner = walletMap[d.target.id?.toLowerCase()]?.owner || "";
       if (hideAMM && (
-        srcOwner.startsWith("tokenprogrampAMM") ||
-        dstOwner.startsWith("tokenprogrampAMM")
+        srcOwner.startsWith("program_accountpAMM") ||
+        dstOwner.startsWith("program_accountpAMM")
       )) {
         return "none";
       }
