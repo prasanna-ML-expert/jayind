@@ -62,7 +62,7 @@
     <button onclick="searchNode()">Search</button>
   </div>
   <br>
-  <button onclick="toggleAMM()">
+  <button id="ammBtn" onclick="toggleAMM()">
     Hide Token Pairs
   </button>
 </div>
@@ -297,8 +297,7 @@ simulation.alpha(1).restart();
         }
 
        // reset all nodes to their category color
-        d3.selectAll("circle")
-          .attr("fill", d2 => getNodeColor(d2.id));
+        resetNodeColors();
         // highlight selected node
         d3.select(this).select("circle")
           .attr("fill", "orange");
@@ -385,6 +384,12 @@ window.addEventListener("resize", () => {
     // Restart simulation
     simulation.alpha(1).restart();
   });
+function resetNodeColors() {
+  d3.selectAll(".node circle")
+    .each(function(d) {
+      d3.select(this).attr("fill", getNodeColor(d.id));
+    });
+}
 function toggleAMM() {
 
   hideAMM = !hideAMM;
@@ -395,8 +400,7 @@ function toggleAMM() {
   applyAMMFilter();
 
   // ✅ restore correct colors after filtering
-  d3.selectAll("circle")
-    .attr("fill", d => getNodeColor(d.id));
+  resetNodeColors();
 }
   
 function applyAMMFilter() {
