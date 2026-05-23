@@ -159,7 +159,7 @@ let cexSet = new Set();
 Promise.all([
   d3.csv(csvUrl),
   d3.csv("https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/original_addr.csv")
-  d3.csv("https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/cex.csv")  
+  d3.csv("https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/cex_wallets.csv")  
 ]).then(([data, wData, cexData]) => {
 
   rawData = data;
