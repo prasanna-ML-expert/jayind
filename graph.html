@@ -79,7 +79,7 @@
 </div>
 <div style="position:absolute; right:10px; top:120px; background:white; padding:10px;">
   <b>Legend</b><br>
-  🔵 TokenPair<br>
+  🔵 TokenPair/CEX<br>
   🟢 program owned<br>
   🔴 wallet<br>
   ⚫ unknown<br>
@@ -153,12 +153,14 @@ let simulation;
 let rawData;
 let walletData; // ✅ add global
 let walletMap = {};
+let cexSet = new Set(); 
 // Load CSV from GitHub
 
 Promise.all([
   d3.csv(csvUrl),
   d3.csv("https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/original_addr.csv")
-]).then(([data, wData]) => {
+  d3.csv("https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/cex.csv")  
+]).then(([data, wData, cexData]) => {
 
   rawData = data;
   walletData = wData;   // ✅ store full dataset
@@ -171,6 +173,13 @@ Promise.all([
       };
     }
   });
+  
+  cexData.forEach(d => {
+    if (d.address) {
+      cexSet.add(d.address.trim().toLowerCase());
+    }
+  });
+
   // ✅ also keep the Set if you're using it
   window.walletSet = new Set(wData.map(d => d.Wallet));
 
@@ -447,6 +456,8 @@ function applyAMMFilter() {
   
 function getNodeColor(walletId) {
   const entry = walletMap[walletId.trim().toLowerCase()];
+  const id = walletId.trim().toLowerCase();
+  if (cexSet.has(id)) return "lightblue";
   if (!entry) return "#FFD700";
   const owner = entry.owner || "";   // ✅ FIX
   if (owner.startsWith("program_accountpAMM")) return "blue";
