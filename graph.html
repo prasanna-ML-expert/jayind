@@ -29,7 +29,7 @@
 
     .node circle {
       stroke: #fff;
-      stroke-width: 1.5px;
+      stroke-width: 0.3px;
     }
 
     text {
@@ -125,11 +125,10 @@ const defs = svg.append("defs");
 defs.append("marker")
   .attr("id", "arrow")
   .attr("viewBox", "0 -5 10 10")
-  .attr("refX", 15)
   .attr("refY", 0)
   .attr("markerWidth", 5)
   .attr("markerHeight", 5)
-  .attr("refX", 12)
+  .attr("refX", 18)
   .attr("orient", "auto")
   .append("path")
   .attr("d", "M0,-4L8,0L0,4")
@@ -139,11 +138,10 @@ defs.append("marker")
 defs.append("marker")
   .attr("id", "arrow-red")
   .attr("viewBox", "0 -5 10 10")
-  .attr("refX", 15)   // ✅ align with link end
   .attr("refY", 0)
   .attr("markerWidth", 4)
   .attr("markerHeight", 4)
-  .attr("refX", 10)
+  .attr("refX", 15)
   .attr("orient", "auto")
   .append("path")
   .attr("d", "M0,-4L8,0L0,4")
