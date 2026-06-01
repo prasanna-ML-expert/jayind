@@ -477,8 +477,9 @@ function buildSideTable() {
     .filter(c => !hiddenCols.has(c) && c !== "Wallet");
   const columnRenameMap = {
     "SOL_Counterparties": "sol_cp",
-    "Tokens_traded": "Tokens",
+    "Tokens_Traded": "Tokens",
     "max_addresses": "maxAddr"
+    "Gap_Others_Hrs": "Gap"
   };
 
   const table = document.createElement("table");
