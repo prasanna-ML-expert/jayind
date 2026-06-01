@@ -445,7 +445,7 @@ function buildSideTable() {
     const owner = (d.owner || d.Owner || "").toLowerCase();
 
     // ❌ remove unknown owners
-    if (owner.startsWith("unknown")) return false;
+    if (owner.startsWith("NA")) return false;
 
     return true;
   });
