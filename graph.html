@@ -54,16 +54,12 @@
   <label>Min USD Amount:</label><br>
   <input type="number" id="usdInput" value="1000" placeholder="Enter min usd amount">
   
-</div><div style="position:absolute; top:100px; left:10px; z-index:20; background:white; padding:10px;">
+</div><div style="position:absolute; top:10px; left:100px; z-index:20; background:white; padding:10px;">
   <div>
     <label>Search Wallet:</label><br>
     <input type="text" id="searchBox">
     <button onclick="searchNode()">Search</button>
   </div>
-  <br>
-  <button id="ammBtn" onclick="toggleAMM()">
-    Hide Token Pairs
-  </button>
 </div>
 
 <div id="nodeInfo"
@@ -465,7 +461,7 @@ function buildSideTable() {
   // ✅ columns to hide
   const hiddenCols = new Set([
     "Wallet",
-    "Token_Counterparites",
+    "Token_Counterparties",
     "Net_SOL_Transfer",
     "SOL_Balance",
     "USD_In",
@@ -485,6 +481,17 @@ function buildSideTable() {
   // ✅ HEADER
   const thead = document.createElement("thead");
   const headerRow = document.createElement("tr");
+
+  // ✅ Index column
+  const indexTh = document.createElement("th");
+  indexTh.innerText = "#";
+  indexTh.style.border = "1px solid #ccc";
+  indexTh.style.background = "#f2f2f2";
+  indexTh.style.padding = "6px";
+  indexTh.style.position = "sticky";
+  indexTh.style.top = "0";
+  
+  headerRow.appendChild(indexTh)
 
   columns.forEach(col => {
 
@@ -511,9 +518,20 @@ function buildSideTable() {
   // ✅ BODY
   const tbody = document.createElement("tbody");
 
-  data.forEach(row => {
 
+  data.forEach((row, index) => {
+  
     const tr = document.createElement("tr");
+    tr.style.cursor = "pointer";
+  
+    // ✅ index cell
+    const indexTd = document.createElement("td");
+    indexTd.innerText = index + 1;
+    indexTd.style.border = "1px solid #ddd";
+    indexTd.style.padding = "5px";
+  
+    tr.appendChild(indexTd);
+
     tr.style.cursor = "pointer";
 
     tr.onclick = () => {
