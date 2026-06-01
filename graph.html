@@ -168,7 +168,7 @@ Promise.all([
 ]).then(([data, wData, cexData]) => {
 
   rawData = data;
-  walletData = data;   // ✅ store full dataset
+  walletData = wData;   // ✅ store full dataset
   walletData.forEach(d => {
     if (d.Wallet) {
       walletMap[d.Wallet.trim().toLowerCase()] = {
@@ -405,56 +405,57 @@ function buildSideTable() {
   const container = document.getElementById("sideTable");
   container.innerHTML = "";
 
-  // ✅ build wallet list ONLY ONCE
-  if (!window.filteredWallets) {
-
-    // ✅ create fast lookup map (if not already created)
-    if (!window.walletDetailsMap) {
-      window.walletDetailsMap = {};
-      walletData.forEach(d => {
-        if (d.Wallet) {
-          window.walletDetailsMap[d.Wallet.trim().toLowerCase()] = d;
-        }
-      });
-    }
-
-    // ✅ collect unique wallets from refined dataset
-    const walletSet = new Set();
-
-    rawData.forEach(d => {
-      if (d.source) walletSet.add(d.source.trim().toLowerCase());
-      if (d.destination) walletSet.add(d.destination.trim().toLowerCase());
+  // ✅ STEP 1: Build lookup map (original file)
+  if (!window.walletDetailsMap) {
+    window.walletDetailsMap = {};
+    walletData.forEach(d => {
+      if (d.Wallet) {
+        window.walletDetailsMap[d.Wallet.trim().toLowerCase()] = d;
+      }
     });
-
-    // ✅ merge with original dataset details
-    window.filteredWallets = Array.from(walletSet)
-      .map(id => {
-
-        const details = window.walletDetailsMap[id] || {};
-
-        return {
-          Wallet: id,
-          ...details
-        };
-
-      })
-      .filter(d => {
-
-        const id = d.Wallet;
-
-        // ❌ remove CEX wallets
-        if (cexSet.has(id)) return false;
-
-        // ❌ remove unknown / missing owner
-        const owner = (d.owner || "").toLowerCase();
-        if (!owner || owner.startsWith("unknown")) return false;
-
-        return true;
-      });
-
   }
 
-  const data = window.filteredWallets;
+  // ✅ STEP 2: Build wallet list from refined data
+  const walletSet = new Set();
+
+  rawData.forEach(d => {
+    if (d.source) walletSet.add(d.source.trim().toLowerCase());
+    if (d.destination) walletSet.add(d.destination.trim().toLowerCase());
+  });
+
+  // ✅ STEP 3: Merge refined wallets with original details
+  let data = Array.from(walletSet).map(id => {
+
+    const details = window.walletDetailsMap[id];
+
+    return {
+      Wallet: id,
+      ...(details || {}) // merge details if exists
+    };
+
+  })
+
+  // ✅ STEP 4: Apply filters
+  .filter(d => {
+
+    const id = d.Wallet;
+
+    // ❌ remove CEX
+    if (cexSet.has(id)) return false;
+
+    // ❌ must exist in original file
+    if (!d.owner && !d.Owner) return false;
+
+    const owner = (d.owner || d.Owner || "").toLowerCase();
+
+    // ❌ remove unknown owners
+    if (owner.startsWith("unknown")) return false;
+
+    return true;
+  });
+
+  // ✅ save globally for sorting
+  window.filteredWallets = data;
 
   if (!data.length) {
     container.innerHTML = "<b>No data available</b>";
@@ -473,7 +474,7 @@ function buildSideTable() {
     "owner"
   ]);
 
-  // ✅ derive visible columns
+  // ✅ visible columns
   const columns = Object.keys(data[0])
     .filter(c => !hiddenCols.has(c) && c !== "Wallet");
 
