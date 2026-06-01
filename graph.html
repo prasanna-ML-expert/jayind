@@ -72,6 +72,12 @@
   <b>Selected Node:</b><br>
   <span id="nodeValue">None</span>
 </div>
+  
+<div id="walletTable"
+     style="position:absolute; bottom:0; left:0; width:55%;
+            background:white; border-top:1px solid #ccc;
+            max-height:200px; overflow:auto; padding:10px;">
+</div>
 <div id="sideTable"
      style="position:absolute; top:0; right:0; height:100vh;
             width:45%; max-width:50%; overflow:auto;
@@ -162,7 +168,7 @@ Promise.all([
 ]).then(([data, wData, cexData]) => {
 
   rawData = data;
-  walletData = wData;   // ✅ store full dataset
+  walletData = data;   // ✅ store full dataset
   walletData.forEach(d => {
     if (d.Wallet) {
       walletMap[d.Wallet.trim().toLowerCase()] = {
@@ -394,32 +400,68 @@ window.addEventListener("resize", () => {
     simulation.alpha(1).restart();
   });
 let tableSortState = {}; // track sort direction
-
 function buildSideTable() {
 
   const container = document.getElementById("sideTable");
   container.innerHTML = "";
 
-  // ✅ filter wallets
-  let filtered = walletData.filter(d => {
-    if (!d.Wallet) return false;
+  // ✅ build wallet list ONLY ONCE
+  if (!window.filteredWallets) {
 
-    const id = d.Wallet.trim().toLowerCase();
+    // ✅ create fast lookup map (if not already created)
+    if (!window.walletDetailsMap) {
+      window.walletDetailsMap = {};
+      walletData.forEach(d => {
+        if (d.Wallet) {
+          window.walletDetailsMap[d.Wallet.trim().toLowerCase()] = d;
+        }
+      });
+    }
 
-    if (cexSet.has(id)) return false; // remove CEX
+    // ✅ collect unique wallets from refined dataset
+    const walletSet = new Set();
 
-    const owner = (d.owner || "").toLowerCase();
-    if (owner.startsWith("unknown")) return false;
+    rawData.forEach(d => {
+      if (d.source) walletSet.add(d.source.trim().toLowerCase());
+      if (d.destination) walletSet.add(d.destination.trim().toLowerCase());
+    });
 
-    return true;
-  });
+    // ✅ merge with original dataset details
+    window.filteredWallets = Array.from(walletSet)
+      .map(id => {
 
-  if (filtered.length === 0) {
+        const details = window.walletDetailsMap[id] || {};
+
+        return {
+          Wallet: id,
+          ...details
+        };
+
+      })
+      .filter(d => {
+
+        const id = d.Wallet;
+
+        // ❌ remove CEX wallets
+        if (cexSet.has(id)) return false;
+
+        // ❌ remove unknown / missing owner
+        const owner = (d.owner || "").toLowerCase();
+        if (!owner || owner.startsWith("unknown")) return false;
+
+        return true;
+      });
+
+  }
+
+  const data = window.filteredWallets;
+
+  if (!data.length) {
     container.innerHTML = "<b>No data available</b>";
     return;
   }
 
-  // ✅ columns to HIDE
+  // ✅ columns to hide
   const hiddenCols = new Set([
     "Wallet",
     "token_counterparites",
@@ -432,7 +474,8 @@ function buildSideTable() {
   ]);
 
   // ✅ derive visible columns
-  const columns = Object.keys(filtered[0]).filter(c => !hiddenCols.has(c));
+  const columns = Object.keys(data[0])
+    .filter(c => !hiddenCols.has(c) && c !== "Wallet");
 
   const table = document.createElement("table");
   table.style.width = "100%";
@@ -443,16 +486,19 @@ function buildSideTable() {
   const headerRow = document.createElement("tr");
 
   columns.forEach(col => {
+
     const th = document.createElement("th");
     th.innerText = col;
     th.style.cursor = "pointer";
     th.style.border = "1px solid #ccc";
     th.style.background = "#f2f2f2";
     th.style.padding = "6px";
+    th.style.position = "sticky";
+    th.style.top = "0";
 
     th.onclick = () => {
-      sortTable(col, filtered);
-      buildSideTable(); // rebuild after sort
+      sortTable(col, window.filteredWallets);
+      buildSideTable();
     };
 
     headerRow.appendChild(th);
@@ -464,19 +510,24 @@ function buildSideTable() {
   // ✅ BODY
   const tbody = document.createElement("tbody");
 
-  filtered.forEach(row => {
+  data.forEach(row => {
+
     const tr = document.createElement("tr");
     tr.style.cursor = "pointer";
 
     tr.onclick = () => {
-      focusNodeFromTable(row.Wallet);
+      if (row.Wallet) {
+        focusNodeFromTable(row.Wallet);
+      }
     };
 
     columns.forEach(col => {
+
       const td = document.createElement("td");
-      td.innerText = row[col];
+      td.innerText = row[col] ?? "";
       td.style.border = "1px solid #ddd";
       td.style.padding = "5px";
+
       tr.appendChild(td);
     });
 
@@ -486,6 +537,7 @@ function buildSideTable() {
   table.appendChild(tbody);
   container.appendChild(table);
 }
+
 function sortTable(column, data) {
 
   const asc = tableSortState[column] !== true;
