@@ -72,10 +72,11 @@
   <b>Selected Node:</b><br>
   <span id="nodeValue">None</span>
 </div>
-<div id="walletTable"
-     style="position:absolute; bottom:0; left:0; width:100%; 
-            background:white; border-top:1px solid #ccc; 
-            max-height:200px; overflow:auto; padding:10px;">
+<div id="sideTable"
+     style="position:absolute; top:0; right:0; height:100vh;
+            width:45%; max-width:50%; overflow:auto;
+            background:white; border-left:1px solid #ccc;
+            padding:10px; z-index:15;">
 </div>
 <div style="position:absolute; right:10px; top:120px; background:white; padding:10px;">
   <b>Legend</b><br>
@@ -185,6 +186,7 @@ Promise.all([
   const maxUsd = d3.max(rawData, d => +d.usdamount);
 
   updateGraph();
+  buildSideTable();
   document.getElementById("amountInput").addEventListener("change", updateGraph);
   document.getElementById("usdInput").addEventListener("change", updateGraph);
   document.getElementById("searchBox")
@@ -391,6 +393,170 @@ window.addEventListener("resize", () => {
     // Restart simulation
     simulation.alpha(1).restart();
   });
+let tableSortState = {}; // track sort direction
+
+function buildSideTable() {
+
+  const container = document.getElementById("sideTable");
+  container.innerHTML = "";
+
+  // ✅ filter wallets
+  let filtered = walletData.filter(d => {
+    if (!d.Wallet) return false;
+
+    const id = d.Wallet.trim().toLowerCase();
+
+    if (cexSet.has(id)) return false; // remove CEX
+
+    const owner = (d.owner || "").toLowerCase();
+    if (owner.startsWith("unknown")) return false;
+
+    return true;
+  });
+
+  if (filtered.length === 0) {
+    container.innerHTML = "<b>No data available</b>";
+    return;
+  }
+
+  // ✅ columns to HIDE
+  const hiddenCols = new Set([
+    "Wallet",
+    "token_counterparites",
+    "Net_sol_transfer",
+    "SOL_balance",
+    "USD_In",
+    "USD Balance",
+    "Gas_Paid_By_Others",
+    "owner"
+  ]);
+
+  // ✅ derive visible columns
+  const columns = Object.keys(filtered[0]).filter(c => !hiddenCols.has(c));
+
+  const table = document.createElement("table");
+  table.style.width = "100%";
+  table.style.borderCollapse = "collapse";
+
+  // ✅ HEADER
+  const thead = document.createElement("thead");
+  const headerRow = document.createElement("tr");
+
+  columns.forEach(col => {
+    const th = document.createElement("th");
+    th.innerText = col;
+    th.style.cursor = "pointer";
+    th.style.border = "1px solid #ccc";
+    th.style.background = "#f2f2f2";
+    th.style.padding = "6px";
+
+    th.onclick = () => {
+      sortTable(col, filtered);
+      buildSideTable(); // rebuild after sort
+    };
+
+    headerRow.appendChild(th);
+  });
+
+  thead.appendChild(headerRow);
+  table.appendChild(thead);
+
+  // ✅ BODY
+  const tbody = document.createElement("tbody");
+
+  filtered.forEach(row => {
+    const tr = document.createElement("tr");
+    tr.style.cursor = "pointer";
+
+    tr.onclick = () => {
+      focusNodeFromTable(row.Wallet);
+    };
+
+    columns.forEach(col => {
+      const td = document.createElement("td");
+      td.innerText = row[col];
+      td.style.border = "1px solid #ddd";
+      td.style.padding = "5px";
+      tr.appendChild(td);
+    });
+
+    tbody.appendChild(tr);
+  });
+
+  table.appendChild(tbody);
+  container.appendChild(table);
+}
+function sortTable(column, data) {
+
+  const asc = tableSortState[column] !== true;
+  tableSortState[column] = asc;
+
+  data.sort((a, b) => {
+
+    let valA = a[column];
+    let valB = b[column];
+
+    // try numeric compare
+    const numA = parseFloat(valA);
+    const numB = parseFloat(valB);
+
+    if (!isNaN(numA) && !isNaN(numB)) {
+      return asc ? numA - numB : numB - numA;
+    }
+
+    // string compare
+    valA = String(valA).toLowerCase();
+    valB = String(valB).toLowerCase();
+
+    return asc
+      ? valA.localeCompare(valB)
+      : valB.localeCompare(valA);
+  });
+}
+function focusNodeFromTable(walletId) {
+
+  if (!walletId) return;
+
+  const targetId = walletId.trim().toLowerCase();
+
+  let foundNode = null;
+  let foundElement = null;
+
+  d3.selectAll(".node")
+    .each(function(d) {
+      if (d.id.toLowerCase() === targetId) {
+        foundNode = d;
+        foundElement = this;
+      }
+    });
+
+  if (!foundNode) {
+    alert("Node not found in graph (maybe filtered out)");
+    return;
+  }
+
+  resetNodeColors();
+
+  const circle = d3.select(foundElement).select("circle");
+
+  circle
+    .attr("stroke", "black")
+    .attr("stroke-width", 3)
+    .attr("fill", "orange");
+
+  const scale = 1.5;
+
+  svg.transition().duration(600).call(
+    zoom.transform,
+    d3.zoomIdentity
+      .translate(width / 2, height / 2)
+      .scale(scale)
+      .translate(-foundNode.x, -foundNode.y)
+  );
+
+  showNodeInfo(foundNode);
+}
+
 function resetNodeColors() {
   d3.selectAll(".node circle")
     .each(function(d) {
