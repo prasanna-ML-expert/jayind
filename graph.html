@@ -475,6 +475,11 @@ function buildSideTable() {
   // ✅ visible columns
   const columns = Object.keys(data[0])
     .filter(c => !hiddenCols.has(c) && c !== "Wallet");
+  const columnRenameMap = {
+    "SOL_Counterparties": "sol_cp",
+    "Tokens_traded": "Tokens",
+    "max_addresses": "maxAddr"
+  };
 
   const table = document.createElement("table");
   table.style.width = "100%";
@@ -498,7 +503,7 @@ function buildSideTable() {
   columns.forEach(col => {
 
     const th = document.createElement("th");
-    th.innerText = col;
+    th.innerText = columnRenameMap[col] || col;
     th.style.cursor = "pointer";
     th.style.border = "1px solid #ccc";
     th.style.background = "#f2f2f2";
