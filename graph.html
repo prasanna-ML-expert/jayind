@@ -432,62 +432,50 @@ window.addEventListener("resize", () => {
     simulation.alpha(1).restart();
   });
   ////////////////////////////////////////////////////////
-  function buildExtraGraph(centerId) {
-    centerId = centerId.trim().toLowerCase();
-  
-    // ✅ clear old data
-    extraGraphData = { nodes: [], links: [] };
-  
-    let level1 = [];
-    let level2 = [];
-  
-    // ✅ LEVEL 1
-    const rows1 = aggregatedData.filter(d =>
-      d.source === centerId || d.destination === centerId
-    );
-  
-    rows1.forEach(d => {
-      level1.push(d.source, d.destination);
-  
-      extraGraphData.links.push({
-        source: d.source,
-        target: d.destination,
-        value: d.amount,
-        extra: true
-      });
+function buildExtraGraph(centerId) {
+
+  centerId = centerId.trim().toLowerCase();
+
+  // ✅ clear previous
+  extraGraphData = { nodes: [], links: [] };
+
+  let level1 = [];
+
+  // ✅ ONLY LEVEL 1
+  const rows = aggregatedData.filter(d =>
+    d.source === centerId || d.destination === centerId
+  );
+
+  rows.forEach(d => {
+
+    const other = d.source === centerId ? d.destination : d.source;
+
+    if (!other) return;
+
+    level1.push(other);
+
+    // ✅ FORCE DIRECT EDGE from center → neighbor
+    extraGraphData.links.push({
+      source: centerId,
+      target: other,
+      value: d.amount,
+      extra: true
     });
-  
-    level1 = [...new Set(level1)];
-  
-    // ✅ LEVEL 2
-    const rows2 = aggregatedData.filter(d =>
-      level1.includes(d.source) || level1.includes(d.destination)
-    );
-  
-    rows2.forEach(d => {
-  
-      level2.push(d.source, d.destination);
-  
-      extraGraphData.links.push({
-        source: d.source,
-        target: d.destination,
-        value: d.amount,
-        extra: true
-      });
-    });
-  
-    // ✅ collect nodes
-    const allNodes = new Set([
-      centerId,
-      ...level1,
-      ...level2
-    ]);
-  
-    extraGraphData.nodes = Array.from(allNodes).map(id => ({ id }));
-  
-    // ✅ refresh graph
-    updateGraph();
-  }
+
+  });
+
+  // ✅ nodes = center + level1 only
+  extraGraphData.nodes = Array.from(new Set([
+    centerId,
+    ...level1
+  ])).map(id => ({ id }));
+
+  console.log("LEVEL1 nodes:", level1.length);
+  console.log("Links:", extraGraphData.links.length);
+
+  // ✅ redraw
+  updateGraph();
+}
   /////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////
