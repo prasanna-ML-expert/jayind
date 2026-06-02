@@ -17,13 +17,14 @@
     }
     
     svg {
-      width: 100vw;
+      width: 55vw;
       height: 100vh;
       display: block;
       position: absolute;
       left: 0;
       top: 0;
       z-index: 0;   /* ✅ VERY IMPORTANT */
+      pointer-events: visiblePainted;
     }
     .link {
       stroke: #999;
@@ -528,10 +529,13 @@ function buildSideTable() {
     th.style.top = "0";
     th.style.zIndex = "100";
     th.style.pointerEvents = "auto";
-    th.onclick = () => {
+    th.addEventListener("click", (e) => {
+      e.stopPropagation();   // ✅ prevent interference
+      //console.log("CLICK:", col);  // debug
+    
       sortTable(col, window.filteredWallets);
       buildSideTable();
-    };
+    });
 
     headerRow.appendChild(th);
   });
