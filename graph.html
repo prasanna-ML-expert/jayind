@@ -746,12 +746,7 @@ function resetNodeColors() {
   d3.selectAll(".node circle")
     .each(function(d) {
       if (!d || !d.id) return;
-
-      if (d.extra) {
-        d3.select(this).attr("fill", "orange"); // ✅ keep extra nodes visible
-      } else {
-        d3.select(this).attr("fill", getNodeColor(d.id));
-      }
+      d3.select(this).attr("fill", getNodeColor(d.id));
     });
 }
   ////////////////////////////////////
