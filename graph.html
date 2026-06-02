@@ -20,6 +20,7 @@
       width: 100vw;
       height: 100vh;
       display: block;
+      pointer-events: none;
     }
     .link {
       stroke: #999;
@@ -100,6 +101,7 @@ const svg = d3.select("svg"),
       height = window.innerHeight;
 
 const container = svg.append("g");
+  container.style("pointer-events", "all");
   const zoom = d3.zoom()
   .scaleExtent([0.2, 5])  // min zoom, max zoom
   .on("zoom", (event) => {
@@ -511,7 +513,7 @@ function buildSideTable() {
     th.style.padding = "6px";
     th.style.position = "sticky";
     th.style.top = "0";
-
+    th.style.zIndex = "20";
     th.onclick = () => {
       sortTable(col, window.filteredWallets);
       buildSideTable();
