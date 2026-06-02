@@ -20,7 +20,6 @@
       width: 100vw;
       height: 100vh;
       display: block;
-      pointer-events: none;
     }
     .link {
       stroke: #999;
@@ -97,8 +96,17 @@ let hideAMM = false;
 const csvUrl = "https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/refined_sol_addr.csv";
 
 const svg = d3.select("svg"),
-      width = window.innerWidth,
+      graphWidth = window.innerWidth * 0.55,
+      width = graphWidth,
       height = window.innerHeight;
+
+// ✅ adjust SVG size
+svg
+  .attr("width", graphWidth)
+  .attr("height", height)
+  .style("position", "absolute")
+  .style("left", "0px");
+
 
 const container = svg.append("g");
   container.style("pointer-events", "all");
@@ -379,8 +387,11 @@ simulation.alpha(1).restart();
 }
 
 window.addEventListener("resize", () => {
-    const newWidth = window.innerWidth;
-    const newHeight = window.innerHeight;
+  const graphWidth = window.innerWidth * 0.55;
+  const newWidth = graphWidth;
+  
+  svg.attr("width", graphWidth);
+  const newHeight = window.innerHeight;
   
     // Update SVG size
     svg.attr("width", newWidth)
@@ -532,7 +543,10 @@ function buildSideTable() {
   data.forEach((row, index) => {
   
     const tr = document.createElement("tr");
-    tr.style.cursor = "pointer";
+    
+    // apply pointer ONLY for row hover
+    tr.onmouseover = () => tr.style.cursor = "pointer";
+    tr.onmouseout = () => tr.style.cursor = "default";
   
     // ✅ index cell
     const indexTd = document.createElement("td");
