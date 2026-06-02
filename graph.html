@@ -492,6 +492,9 @@ function buildSideTable() {
   const columns = Object.keys(data[0])
     .filter(c => !hiddenCols.has(c) && c !== "Wallet");
   const columnRenameMap = {
+    "Age_Days":"Age",
+    "Days_Active":"Active",
+    "addr_nghbor":"nghbrs",
     "SOL_Counterparties": "sol_cp",
     "Tokens_Traded": "Tokens",
     "max_addresses": "maxAddr",
