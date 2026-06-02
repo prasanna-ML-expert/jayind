@@ -168,14 +168,23 @@ let rawData;
 let walletData; // ✅ add global
 let walletMap = {};
 let cexSet = new Set(); 
+let aggregatedData = [];
+let extraGraphData = { nodes: [], links: [] };
+
 // Load CSV from GitHub
 
 Promise.all([
   d3.csv(csvUrl),
   d3.csv("https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/original_addr.csv"),
   d3.csv("https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/cex_wallets.csv") ,
-  d3.csv("https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/table_sol_addr.csv")
-]).then(([data, wData, cexData,tableData]) => {
+  d3.csv("https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/table_sol_addr.csv"),
+  d3.csv("sol_addr.csv"),
+  d3.csv("sol_addr1.csv"),
+  d3.csv("sol_addr2.csv"),
+  d3.csv("sol_addr3.csv"),
+  d3.csv("sol_addr4.csv"),
+  d3.csv("sol_addr5.csv")
+]).then(([data, wData, cexData,tableData, ...extraCSVs]) => {
 
   rawData = data;
   walletData = wData;   // ✅ store full dataset
@@ -194,6 +203,13 @@ Promise.all([
     if (d.address) {
       cexSet.add(d.address.trim().toLowerCase());
     }
+  });
+  // ✅ merge all CSVs
+  aggregatedData = extraCSVs.flat();
+  aggregatedData.forEach(d => {
+    d.source = (d.source || "").trim().toLowerCase();
+    d.destination = (d.destination || "").trim().toLowerCase();
+    d.amount = +d.amount || 0;
   });
 
   // ✅ also keep the Set if you're using it
@@ -214,183 +230,55 @@ Promise.all([
   });
 });
 
-  
+  ////////////////////////////////////////////////
 function updateGraph() {
 
-const minAmount = Math.max(0, +document.getElementById("amountInput").value || 0);
-const minUsd = Math.max(0, +document.getElementById("usdInput").value || 0);
+  const minAmount = Math.max(0, +document.getElementById("amountInput").value || 0);
+  const minUsd = Math.max(0, +document.getElementById("usdInput").value || 0);
 
-let nodesMap = {};
-let links = [];
-let usdLinks = [];
-container.selectAll("*").remove();
-rawData.forEach(d => {
-
-  const source = d.source;
-  const target = d.destination;
-  const value = +d.amount;
-  const usdValue = +d.usdamount;
-
-  // ✅ normal links (amount)
-  if (value && value >= minAmount) {
-    nodesMap[source] = { id: source };
-    nodesMap[target] = { id: target };
-
-    links.push({
-      source,
-      target,
-      value
-    });
-  }
-
-  // ✅ USD links (only non-zero)
-  if (usdValue && usdValue >= minUsd) {
-    nodesMap[source] = { id: source };
-    nodesMap[target] = { id: target };
-
-    usdLinks.push({
-      source,
-      target,
-      value: usdValue
-    });
-  }
-
-});
-
-const nodes = Object.values(nodesMap);
-
-if (nodes.length === 0) {
-  console.warn("No nodes to display");
-  return;
-}
-
-simulation = d3.forceSimulation(nodes)
-  .force("link", d3.forceLink([...links, ...usdLinks]).id(d => d.id).distance(200).strength(0.3))
-  .force("charge", d3.forceManyBody().strength(-250))
-  .force("center", d3.forceCenter(width / 2, height / 2))
-  .force("x", d3.forceX(width / 2).strength(0.05))
-  .force("y", d3.forceY(height / 2).strength(0.05))
-  .force("collision", d3.forceCollide().radius(d => getNodeSize(d.id) + 5))
-simulation.alpha(1).restart();
-
-
+  let nodesMap = {};
+  let links = [];
+  let usdLinks = [];
+  container.selectAll("*").remove();
+  rawData.forEach(d => {
+    const source = d.source;
+    const target = d.destination;
+    const value = +d.amount;
+    const usdValue = +d.usdamount;
   
-  const link = container.append("g")
-    .selectAll("line")
-    .data(links)
-    .enter().append("line")
-    .attr("class", "link")
-    .attr("stroke-width", d => {
-      const w = Math.sqrt(d.value) / 5;
-      return Math.max(1, Math.min(6, w));  // ✅ cap at 6
-    });
-
-  // 🔴 USD LINKS (RED)
-  const usdLink = container.append("g")
-    .selectAll("line.usd")
-    .data(usdLinks)
-    .enter().append("line")
-    .attr("class", "usd")
-    .attr("stroke", "red")
-    .attr("stroke-opacity", 0.7)
-    .attr("stroke-width", d => {
-      const w = Math.sqrt(d.value) / 80;
-      return Math.max(0.5, Math.min(4, w));  // ✅ cap at 4
-    })
-    .attr("marker-end", "url(#arrow-red)");
-  
-  const node = container.append("g")
-    .selectAll("g")
-    .data(nodes)
-    .enter().append("g")
-    .attr("class", "node")
-    .call(d3.drag()
-      .on("start", dragstarted)
-      .on("drag", dragged)
-      .on("end", dragended))
-    .on("click", function(event, d) {
-        showNodeInfo(d);      
-        const entry = walletMap[d.id.trim().toLowerCase()];
-        if (entry) {
-          const value = (entry.sol || 0) + ((entry.usd || 0) / 100);
-          console.log("Node:", d.id);
-          console.log("SOL:", entry.sol, "USD:", entry.usd);
-          console.log("Computed value:", value);
-          console.log("Final radius:", getNodeSize(d.id));
-        } else {
-          console.log("Node:", d.id, "→ No wallet data");
-        }
-
-       // reset all nodes to their category color
-        resetNodeColors();
-        // highlight selected node
-        d3.select(this).select("circle")
-          .attr("fill", "orange");
+    // ✅ normal links (amount)
+    if (value && value >= minAmount) {
+      nodesMap[source] = { id: source };
+      nodesMap[target] = { id: target };
+      links.push({
+        source,
+        target,
+        value
       });
-
-  node.append("circle")
-    .attr("r", d => getNodeSize(d.id))
-    .attr("fill", d => getNodeColor(d.id));
-
-  node.append("text")
-    .attr("x", 12)
-    .attr("y", 3)
-    .attr("class", "node-label")
-    .style("display", "none")
-    .text(d => {
-      const id = d.id.toString();
-      return id.length > 6 
-        ? id.slice(0, 2) + "..." + id.slice(-2)
-        : id;
-    });
-
-  const usdLabel = container.append("g")
-    .selectAll(".usdLabel")
-    .data(usdLinks)
-    .enter()
-    .append("text")
-    .attr("class", "usdLabel")
-    .text(d => Math.round(d.value / 100))
-    .attr("fill", "red")
-    .attr("font-size", 9)
-    .attr("dy", -2);
-  
-  const edgeLabel = container.append("g")
-    .selectAll("text")
-    .data(links)
-    .enter()
-    .append("text")
-    .text(d => Math.round(d.value).toLocaleString())
-    .attr("font-size", 10);
-
-  simulation.on("tick", () => {
-  
-    link
-      .attr("x1", d => d.source.x)
-      .attr("y1", d => d.source.y)
-      .attr("x2", d => d.target.x)
-      .attr("y2", d => d.target.y);
-  
-    usdLink
-      .attr("x1", d => d.source.x)
-      .attr("y1", d => d.source.y)
-      .attr("x2", d => d.target.x)
-      .attr("y2", d => d.target.y);
-
-    usdLabel
-      .attr("x", d => (d.source.x + d.target.x) / 2)
-      .attr("y", d => (d.source.y + d.target.y) / 2);
-    
-    node.attr("transform", d => `translate(${d.x},${d.y})`);
-  
-    edgeLabel
-      .attr("x", d => (d.source.x + d.target.x) / 2)
-      .attr("y", d => (d.source.y + d.target.y) / 2);
+    }
+    // ✅ USD links (only non-zero)
+    if (usdValue && usdValue >= minUsd) {
+      nodesMap[source] = { id: source };
+      nodesMap[target] = { id: target };
+      usdLinks.push({
+        source,
+        target,
+        value: usdValue
+      });
+    }
   });
-  applyAMMFilter();
-  resetNodeColors();
-}
+  
+  const nodes = Object.values(nodesMap);
+  if (nodes.length === 0) {
+    console.warn("No nodes to display");
+    return;
+  }
+  
+  // ✅ instead of drawing here → call shared renderer
+  renderGraph(nodes, links);
 
+}
+///////////////////////////////////////////////////
 window.addEventListener("resize", () => {
   const graphWidth = window.innerWidth * 0.55;  
   svg.attr("width", graphWidth);
@@ -413,12 +301,142 @@ window.addEventListener("resize", () => {
     // Restart simulation
     simulation.alpha(1).restart();
   });
+  ////////////////////////////////////////////////////////
+  function buildExtraGraph(centerId) {
+    centerId = centerId.trim().toLowerCase();
+  
+    // ✅ clear old data
+    extraGraphData = { nodes: [], links: [] };
+  
+    let level1 = [];
+    let level2 = [];
+  
+    // ✅ LEVEL 1
+    const rows1 = aggregatedData.filter(d =>
+      d.source === centerId || d.destination === centerId
+    );
+  
+    rows1.forEach(d => {
+      level1.push(d.source, d.destination);
+  
+      extraGraphData.links.push({
+        source: d.source,
+        target: d.destination,
+        value: d.amount,
+        extra: true
+      });
+    });
+  
+    level1 = [...new Set(level1)];
+  
+    // ✅ LEVEL 2
+    const rows2 = aggregatedData.filter(d =>
+      level1.includes(d.source) || level1.includes(d.destination)
+    );
+  
+    rows2.forEach(d => {
+  
+      level2.push(d.source, d.destination);
+  
+      extraGraphData.links.push({
+        source: d.source,
+        target: d.destination,
+        value: d.amount,
+        extra: true
+      });
+    });
+  
+    // ✅ collect nodes
+    const allNodes = new Set([
+      centerId,
+      ...level1,
+      ...level2
+    ]);
+  
+    extraGraphData.nodes = Array.from(allNodes).map(id => ({ id }));
+  
+    // ✅ refresh graph
+    updateGraphWithExtras();
+  }
+  /////////////////////////////////////////////////////////////////////////////
+function updateGraphWithExtras() {
+  const minAmount = +document.getElementById("amountInput").value || 0;
+  let nodesMap = {};
+  let links = [];
+
+  // ✅ original graph
+  rawData.forEach(d => {
+    if (+d.amount >= minAmount) {
+      nodesMap[d.source] = { id: d.source };
+      nodesMap[d.destination] = { id: d.destination };
+
+      links.push({
+        source: d.source,
+        target: d.destination,
+        value: +d.amount
+      });
+    }
+  });
+
+  // ✅ ADD extra nodes
+  extraGraphData.nodes.forEach(n => {
+    if (!nodesMap[n.id]) {
+      nodesMap[n.id] = { id: n.id, extra: true };
+    }
+  });
+  // ✅ ADD extra links
+  extraGraphData.links.forEach(l => {
+    links.push(l);
+  });
+  const nodes = Object.values(nodesMap);
+  renderGraph(nodes, links);
+}
+//////////////////////////////////////////////////////
+function renderGraph(nodes, links) {
+  container.selectAll("*").remove();
+  simulation = d3.forceSimulation(nodes)
+    .force("link", d3.forceLink(links).id(d => d.id).distance(200))
+    .force("charge", d3.forceManyBody().strength(-250))
+    .force("center", d3.forceCenter(width / 2, height / 2));
+
+  const link = container.append("g")
+    .selectAll("line")
+    .data(links)
+    .enter()
+    .append("line")
+    .attr("stroke", d => d.extra ? "orange" : "#999")   // ✅ highlight extra
+    .attr("stroke-width", d => d.extra ? 2 : 1);
+  const node = container.append("g")
+    .selectAll("g")
+    .data(nodes)
+    .enter()
+    .append("g")
+    .attr("class", "node")
+    .on("click", function(event, d) {
+      showNodeInfo(d);
+      buildExtraGraph(d.id);
+      resetNodeColors();
+      d3.select(this).select("circle")
+        .attr("fill", "orange");
+    });
+  node.append("circle")
+    .attr("r", d => d.extra ? 6 : getNodeSize(d.id))  // ✅ smaller extra nodes
+    .attr("fill", d => d.extra ? "orange" : getNodeColor(d.id));
+  simulation.on("tick", () => {
+    link
+      .attr("x1", d => d.source.x)
+      .attr("y1", d => d.source.y)
+      .attr("x2", d => d.target.x)
+      .attr("y2", d => d.target.y);
+
+    node.attr("transform", d => `translate(${d.x},${d.y})`);
+  });
+}
+    ///////////////////////////////////////////
 let tableSortState = {}; // track sort direction
 function buildSideTable() {
-
   const container = document.getElementById("sideTable");
   container.innerHTML = "";
-
   // ✅ STEP 1: Build lookup map (original file)
   if (!window.walletDetailsMap) {
     window.walletDetailsMap = {};
