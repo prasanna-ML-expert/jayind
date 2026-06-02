@@ -20,6 +20,10 @@
       width: 100vw;
       height: 100vh;
       display: block;
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: 0;   /* ✅ VERY IMPORTANT */
     }
     .link {
       stroke: #999;
@@ -34,7 +38,6 @@
 
     text {
       font-size: 12px;
-      pointer-events: none;
     }
   </style>
 </head>
@@ -78,7 +81,7 @@
      style="position:absolute; top:0; right:0; height:100vh;
             width:45%; max-width:50%; overflow:auto;
             background:white; border-left:1px solid #ccc;
-            padding:10px; z-index:15;">
+            padding:10px; z-index:50;">
 </div>
 <div style="position:absolute; right:10px; top:120px; background:white; padding:10px;">
   <b>Legend</b><br>
@@ -523,7 +526,8 @@ function buildSideTable() {
     th.style.padding = "6px";
     th.style.position = "sticky";
     th.style.top = "0";
-    th.style.zIndex = "20";
+    th.style.zIndex = "100";
+    th.style.pointerEvents = "auto";
     th.onclick = () => {
       sortTable(col, window.filteredWallets);
       buildSideTable();
