@@ -514,7 +514,8 @@ function buildSideTable() {
   indexTh.style.padding = "6px";
   indexTh.style.position = "sticky";
   indexTh.style.top = "0";
-  
+  indexTh.style.cursor = "pointer";
+
   headerRow.appendChild(indexTh)
 
   columns.forEach(col => {
@@ -530,8 +531,10 @@ function buildSideTable() {
     th.style.zIndex = "100";
     th.style.pointerEvents = "auto";
     th.addEventListener("click", (e) => {
-      e.stopPropagation();   // ✅ prevent interference
-      //console.log("CLICK:", col);  // debug
+      e.preventDefault();
+      e.stopImmediatePropagation();   // ✅ stronger than stopPropagation
+    
+      console.log("HEADER CLICK:", col);  // debug
     
       sortTable(col, window.filteredWallets);
       buildSideTable();
@@ -563,13 +566,25 @@ function buildSideTable() {
   
     tr.appendChild(indexTd);
 
-    tr.style.cursor = "pointer";
+    tr.style.cursor = "default";
+    
+    tr.addEventListener("mouseenter", () => {
+      tr.style.cursor = "pointer";
+    });
+    
+    tr.addEventListener("mouseleave", () => {
+      tr.style.cursor = "default";
+    });
 
-    tr.onclick = () => {
+    tr.addEventListener("click", (e) => {
+      // ✅ IGNORE clicks coming from header or its children
+      if (e.target.tagName === "TH") return;
+    
       if (row.Wallet) {
         focusNodeFromTable(row.Wallet);
       }
-    };
+    });
+
 
     columns.forEach(col => {
 
