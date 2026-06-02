@@ -173,11 +173,13 @@ let cexSet = new Set();
 Promise.all([
   d3.csv(csvUrl),
   d3.csv("https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/original_addr.csv"),
-  d3.csv("https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/cex_wallets.csv")  
-]).then(([data, wData, cexData]) => {
+  d3.csv("https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/cex_wallets.csv") ,
+  d3.csv("https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/table_sol_addr.csv")
+]).then(([data, wData, cexData,tableData]) => {
 
   rawData = data;
   walletData = wData;   // ✅ store full dataset
+  window.tableData = tableData;
   walletData.forEach(d => {
     if (d.Wallet) {
       walletMap[d.Wallet.trim().toLowerCase()] = {
@@ -437,16 +439,13 @@ function buildSideTable() {
 
   // ✅ STEP 3: Merge refined wallets with original details
   let data = Array.from(walletSet).map(id => {
-
     const details = window.walletDetailsMap[id];
-
     return {
       Wallet: id,
       ...(details || {}) // merge details if exists
     };
-
   })
-
+  let data = window.tableData.slice(); 
   // ✅ STEP 4: Apply filters
   .filter(d => {
 
