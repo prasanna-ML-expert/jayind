@@ -332,22 +332,12 @@ simulation.alpha(1).restart();
     .enter().append("g")
     .attr("class", "node")
     .call(d3.drag()
-      .on("start", dragstarted)
-      .on("drag", dragged)
-      .on("end", dragended))
+    .on("start", dragstarted)
+    .on("drag", dragged)
+    .on("end", dragended))
     .on("click", function(event, d) {
         showNodeInfo(d);      
-        const entry = walletMap[d.id.trim().toLowerCase()];
-        if (entry) {
-          const value = (entry.sol || 0) + ((entry.usd || 0) / 100);
-          console.log("Node:", d.id);
-          console.log("SOL:", entry.sol, "USD:", entry.usd);
-          console.log("Computed value:", value);
-          console.log("Final radius:", getNodeSize(d.id));
-        } else {
-          console.log("Node:", d.id, "→ No wallet data");
-        }
-
+        buildExtraGraph(d.id);
        // reset all nodes to their category color
         resetNodeColors();
         // highlight selected node
@@ -499,79 +489,9 @@ window.addEventListener("resize", () => {
     updateGraph();
   }
   /////////////////////////////////////////////////////////////////////////////
-function updateGraphWithExtras() {
-  const minAmount = +document.getElementById("amountInput").value || 0;
-  let nodesMap = {};
-  let links = [];
 
-  // ✅ original graph
-  rawData.forEach(d => {
-    if (+d.amount >= minAmount) {
-      nodesMap[d.source] = { id: d.source };
-      nodesMap[d.destination] = { id: d.destination };
-
-      links.push({
-        source: d.source,
-        target: d.destination,
-        value: +d.amount
-      });
-    }
-  });
-
-  // ✅ ADD extra nodes
-  extraGraphData.nodes.forEach(n => {
-    if (!nodesMap[n.id]) {
-      nodesMap[n.id] = { id: n.id, extra: true };
-    }
-  });
-  // ✅ ADD extra links
-  extraGraphData.links.forEach(l => {
-    links.push(l);
-  });
-  const nodes = Object.values(nodesMap);
-  renderGraph(nodes, links);
-}
 //////////////////////////////////////////////////////
-function renderGraph(nodes, links) {
-  container.selectAll("*").remove();
-  simulation = d3.forceSimulation(nodes)
-    .force("link", d3.forceLink(links).id(d => d.id).distance(200))
-    .force("charge", d3.forceManyBody().strength(-250))
-    .force("center", d3.forceCenter(width / 2, height / 2));
 
-  const link = container.append("g")
-    .selectAll("line")
-    .data(links)
-    .enter()
-    .append("line")
-    .attr("stroke", d => d.extra ? "orange" : "#999")   // ✅ highlight extra
-    .attr("stroke-width", d => d.extra ? 2 : 1);
-  const node = container.append("g")
-    .selectAll("g")
-    .data(nodes)
-    .enter()
-    .append("g")
-    .attr("class", "node")
-    .on("click", function(event, d) {
-      showNodeInfo(d);
-      buildExtraGraph(d.id);
-      resetNodeColors();
-      d3.select(this).select("circle")
-        .attr("fill", "orange");
-    });
-  node.append("circle")
-    .attr("r", d => d.extra ? 6 : getNodeSize(d.id))  // ✅ smaller extra nodes
-    .attr("fill", d => d.extra ? "orange" : getNodeColor(d.id));
-  simulation.on("tick", () => {
-    link
-      .attr("x1", d => d.source.x)
-      .attr("y1", d => d.source.y)
-      .attr("x2", d => d.target.x)
-      .attr("y2", d => d.target.y);
-
-    node.attr("transform", d => `translate(${d.x},${d.y})`);
-  });
-}
     ///////////////////////////////////////////
 let tableSortState = {}; // track sort direction
 function buildSideTable() {
@@ -833,14 +753,20 @@ function focusNodeFromTable(walletId) {
 
   showNodeInfo(foundNode);
 }
-
+////////////////////////////////////////////////////
 function resetNodeColors() {
   d3.selectAll(".node circle")
     .each(function(d) {
-      if (!d || !d.id) return;   // ✅ safety check
-      d3.select(this).attr("fill", getNodeColor(d.id));
+      if (!d || !d.id) return;
+
+      if (d.extra) {
+        d3.select(this).attr("fill", "orange"); // ✅ keep extra nodes visible
+      } else {
+        d3.select(this).attr("fill", getNodeColor(d.id));
+      }
     });
 }
+  ////////////////////////////////////
 function toggleAMM() {
 
   hideAMM = !hideAMM;
