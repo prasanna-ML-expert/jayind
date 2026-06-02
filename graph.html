@@ -438,14 +438,14 @@ function buildSideTable() {
   });
 
   // ✅ STEP 3: Merge refined wallets with original details
-  let data = Array.from(walletSet).map(id => {
-    const details = window.walletDetailsMap[id];
-    return {
-      Wallet: id,
-      ...(details || {}) // merge details if exists
-    };
-  })
-  let data = window.tableData.slice(); 
+  // let data = Array.from(walletSet).map(id => {
+  //   const details = window.walletDetailsMap[id];
+  //   return {
+  //     Wallet: id,
+  //     ...(details || {}) // merge details if exists
+  //   };
+  // })
+  let data = window.tableData.slice() 
   // ✅ STEP 4: Apply filters
   .filter(d => {
 
