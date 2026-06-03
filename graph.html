@@ -101,7 +101,7 @@
 let labelsVisible = false;
 let hideAMM = false;
 const csvUrl = "https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/refined_sol_addr.csv";
-
+const HIGHLIGHT_COLOR = "darkblue";
 const svg = d3.select("svg");
 
 const width = document.getElementById("graphContainer").clientWidth;
@@ -345,8 +345,8 @@ simulation.alpha(1).restart();
         resetNodeColors();
         // highlight selected node
         d3.select(this).select("circle")
-          .attr("fill", "orange");
-      });
+          .attr("fill", HIGHLIGHT_COLOR);
+    });
 
   node.append("circle")
     .attr("r", d => getNodeSize(d.id))
@@ -500,7 +500,9 @@ function expandNodeFromInput() {
   // ✅ Expand graph (this was previously on node click)
   buildExtraGraph(input);
   // ✅ OPTIONAL: highlight + center (same UX as search)
-  searchNode();
+  setTimeout(() => {
+    searchNode(); // already applies highlight + zoom
+  }, 100);
 }
 //////////////////////////////////////////////////////
 
@@ -751,8 +753,7 @@ function focusNodeFromTable(walletId) {
   circle
     .attr("stroke", "black")
     .attr("stroke-width", 3)
-    .attr("fill", "orange");
-
+    .attr("fill", HIGHLIGHT_COLOR);
   const scale = 1.5;
 
   svg.transition().duration(600).call(
@@ -914,7 +915,7 @@ circle
 circle
   .transition()
   .duration(200)
-  .attr("fill", "orange")
+  .attr("fill", HIGHLIGHT_COLOR)
   .attr("r", baseSize * 2)
 
   .transition()
@@ -924,7 +925,7 @@ circle
 
   .transition()
   .duration(200)
-  .attr("fill", "yellow")
+  .attr("fill", HIGHLIGHT_COLOR)
   .attr("r", baseSize * 1.5)
 
   .transition()
