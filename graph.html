@@ -492,7 +492,7 @@ function buildSideTable() {
     window.walletDetailsMap = {};
     walletData.forEach(d => {
       if (d.Wallet) {
-        window.walletDetailsMap[d.Wallet.trim().toLowerCase()] = d;
+        window.walletDetailsMap[d.Wallet.trim()] = d;
       }
     });
   }
@@ -501,8 +501,8 @@ function buildSideTable() {
   const walletSet = new Set();
 
   rawData.forEach(d => {
-    if (d.source) walletSet.add(d.source.trim().toLowerCase());
-    if (d.destination) walletSet.add(d.destination.trim().toLowerCase());
+    if (d.source) walletSet.add(d.source.trim());
+    if (d.destination) walletSet.add(d.destination.trim());
   });
 
   // ✅ STEP 3: Merge refined wallets with original details
@@ -525,7 +525,7 @@ function buildSideTable() {
     // ❌ must exist in original file
     if (!d.owner && !d.Owner) return false;
 
-    const owner = (d.owner || d.Owner || "").toLowerCase();
+    const owner = (d.owner || d.Owner || "");
 
     // ❌ remove unknown owners
     if (owner.startsWith("NA")) return false;
@@ -692,8 +692,8 @@ function sortTable(column, data) {
     }
 
     // string compare
-    valA = String(valA).toLowerCase();
-    valB = String(valB).toLowerCase();
+    valA = String(valA);
+    valB = String(valB);
 
     return asc
       ? valA.localeCompare(valB)
@@ -704,14 +704,14 @@ function focusNodeFromTable(walletId) {
 
   if (!walletId) return;
 
-  const targetId = walletId.trim().toLowerCase();
+  const targetId = walletId.trim();
 
   let foundNode = null;
   let foundElement = null;
 
   d3.selectAll(".node")
     .each(function(d) {
-      if (d.id.toLowerCase() === targetId) {
+      if (d.id === targetId) {
         foundNode = d;
         foundElement = this;
       }
@@ -770,7 +770,7 @@ function applyAMMFilter() {
   d3.selectAll(".node")
     .style("display", function(d) {
 
-      const entry = walletMap[d.id?.toLowerCase()];
+      const entry = walletMap[d.id?];
       const owner = entry?.owner || "";
 
       const isAMM = owner.startsWith("program_accountpAMM");
@@ -781,8 +781,8 @@ function applyAMMFilter() {
   d3.selectAll("line")
     .style("display", function(d) {
 
-      const srcOwner = walletMap[d.source.id?.toLowerCase()]?.owner || "";
-      const dstOwner = walletMap[d.target.id?.toLowerCase()]?.owner || "";
+      const srcOwner = walletMap[d.source.id?]?.owner || "";
+      const dstOwner = walletMap[d.target.id?]?.owner || "";
 
       const isAMM =
         srcOwner.startsWith("program_accountpAMM") ||
@@ -794,8 +794,8 @@ function applyAMMFilter() {
   d3.selectAll("line.usd")
     .style("display", function(d) {
 
-      const srcOwner = walletMap[d.source.id?.toLowerCase()]?.owner || "";
-      const dstOwner = walletMap[d.target.id?.toLowerCase()]?.owner || "";
+      const srcOwner = walletMap[d.source.id?]?.owner || "";
+      const dstOwner = walletMap[d.target.id?]?.owner || "";
 
       const isAMM =
         srcOwner.startsWith("program_accountpAMM") ||
@@ -850,8 +850,7 @@ function dragended(event, d) {
 function searchNode() {
 
   const input = document.getElementById("searchBox").value
-    .trim()
-    .toLowerCase();
+    .trim();
 
   if (!input) return;
 
@@ -860,7 +859,7 @@ function searchNode() {
 
   d3.selectAll("g")
     .each(function(d) {
-      if (d && d.id && d.id.toLowerCase() === input) {
+      if (d && d.id && d.id === input) {
         foundNode = d;
         foundElement = this; // ✅ store element
       }
@@ -929,7 +928,7 @@ function showNodeInfo(d) {
   document.getElementById("nodeValue").innerText = d.id;
   // ✅ find matching row in walletData
   const row = walletData.find(w => 
-    w.Wallet && w.Wallet.trim().toLowerCase() === d.id.trim().toLowerCase()
+    w.Wallet && w.Wallet.trim() === d.id.trim()
   );
   const container = document.getElementById("walletTable");
   // ✅ clear previous table
