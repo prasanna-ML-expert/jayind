@@ -770,7 +770,7 @@ function applyAMMFilter() {
   d3.selectAll(".node")
     .style("display", function(d) {
 
-      const entry = walletMap[d.id?];
+      const entry = walletMap[d.id];
       const owner = entry?.owner || "";
 
       const isAMM = owner.startsWith("program_accountpAMM");
@@ -781,8 +781,8 @@ function applyAMMFilter() {
   d3.selectAll("line")
     .style("display", function(d) {
 
-      const srcOwner = walletMap[d.source.id?]?.owner || "";
-      const dstOwner = walletMap[d.target.id?]?.owner || "";
+      const srcOwner = walletMap[d.source.id]?.owner || "";
+      const dstOwner = walletMap[d.target.id]?.owner || "";
 
       const isAMM =
         srcOwner.startsWith("program_accountpAMM") ||
@@ -794,8 +794,8 @@ function applyAMMFilter() {
   d3.selectAll("line.usd")
     .style("display", function(d) {
 
-      const srcOwner = walletMap[d.source.id?]?.owner || "";
-      const dstOwner = walletMap[d.target.id?]?.owner || "";
+      const srcOwner = walletMap[d.source.id]?.owner || "";
+      const dstOwner = walletMap[d.target.id]?.owner || "";
 
       const isAMM =
         srcOwner.startsWith("program_accountpAMM") ||
