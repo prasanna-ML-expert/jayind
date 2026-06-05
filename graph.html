@@ -178,6 +178,7 @@ let extraGraphData = { nodes: [], links: [] };
 Promise.all([
   d3.csv(csvUrl),
   d3.csv("https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/original_addr.csv"),
+  d3.csv("https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/original_addr1.csv"),
   d3.csv("https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/cex_wallets.csv") ,
   d3.csv("https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/table_sol_addr.csv"),
   d3.csv("sol_addr.csv"),
@@ -186,10 +187,10 @@ Promise.all([
   d3.csv("sol_addr3.csv"),
   d3.csv("sol_addr4.csv"),
   d3.csv("sol_addr5.csv")
-]).then(([data, wData, cexData,tableData, ...extraCSVs]) => {
+]).then(([data, wData1, wData2, cexData,tableData, ...extraCSVs]) => {
 
   rawData = data;
-  walletData = wData;   // ✅ store full dataset
+  walletData = [...wData1, ...wData2];
   window.tableData = tableData;
   walletData.forEach(d => {
     if (d.Wallet) {
