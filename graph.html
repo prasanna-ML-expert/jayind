@@ -103,7 +103,7 @@ let hideAMM = false;
 const csvUrl = "https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main/refined_sol_addr.csv";
 const HIGHLIGHT_COLOR = "darkblue";
 const svg = d3.select("svg");
-
+let allowedNodeSet = null;
 const width = document.getElementById("graphContainer").clientWidth;
 const height = window.innerHeight;
 
@@ -236,7 +236,9 @@ Promise.all([
 
   ////////////////////////////////////////////////
 function updateGraph() {
-
+  if (!extraGraphData.nodes.length) {
+    allowedNodeSet = null; // ✅ show full graph if no expansion
+  }
   const minAmount = Math.max(0, +document.getElementById("amountInput").value || 0);
   const minUsd = Math.max(0, +document.getElementById("usdInput").value || 0);
 
@@ -247,6 +249,13 @@ function updateGraph() {
   rawData.forEach(d => {
     const source = d.source;
     const target = d.destination;
+    
+    if (allowedNodeSet) {
+      if (!allowedNodeSet.has(source) || !allowedNodeSet.has(target)) {
+        return; // ❌ skip unrelated edges
+      }
+    }
+
     const value = +d.amount;
     const usdValue = +d.usdamount;
   
@@ -500,6 +509,12 @@ function buildExtraGraph(centerId) {
     ...level1,
     ...level2
   ])).map(id => ({ id }));
+  // ✅ store allowed nodes for filtering
+  allowedNodeSet = new Set([
+    centerId,
+    ...level1,
+    ...level2
+  ]);
 
   console.log("LEVEL1:", level1.size);
   console.log("LEVEL2:", level2.size);
