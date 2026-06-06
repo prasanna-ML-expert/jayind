@@ -441,42 +441,69 @@ function buildExtraGraph(centerId) {
 
   centerId = centerId.trim();
 
-  // ✅ clear previous
+  // ✅ reset
   extraGraphData = { nodes: [], links: [] };
 
-  let level1 = [];
+  let level1 = new Set();
+  let level2 = new Set();
 
-  // ✅ ONLY LEVEL 1
-  const rows = aggregatedData.filter(d =>
+  // ✅ LEVEL 1
+  const lvl1rows = aggregatedData.filter(d =>
     d.source === centerId || d.destination === centerId
   );
 
-  rows.forEach(d => {
+  lvl1rows.forEach(d => {
 
     const other = d.source === centerId ? d.destination : d.source;
-
     if (!other) return;
 
-    level1.push(other);
+    level1.add(other);
 
-    // ✅ FORCE DIRECT EDGE from center → neighbor
     extraGraphData.links.push({
       source: centerId,
       target: other,
       value: d.amount,
       extra: true
     });
-
   });
 
-  // ✅ nodes = center + level1 only
+  // ✅ LEVEL 2 (skip if level1 node is CEX)
+  level1.forEach(l1Node => {
+
+    // ❌ DO NOT expand from CEX wallets
+    if (cexSet.has(l1Node)) return;
+
+    const rows = aggregatedData.filter(d =>
+      d.source === l1Node || d.destination === l1Node
+    );
+
+    rows.forEach(d => {
+
+      const other = d.source === l1Node ? d.destination : d.source;
+      if (!other || other === centerId) return;
+
+      level2.add(other);
+
+      extraGraphData.links.push({
+        source: l1Node,
+        target: other,
+        value: d.amount,
+        extra: true
+      });
+
+    });
+  });
+
+  // ✅ combine all nodes
   extraGraphData.nodes = Array.from(new Set([
     centerId,
-    ...level1
+    ...level1,
+    ...level2
   ])).map(id => ({ id }));
 
-  console.log("LEVEL1 nodes:", level1.length);
-  console.log("Links:", extraGraphData.links.length);
+  console.log("LEVEL1:", level1.size);
+  console.log("LEVEL2:", level2.size);
+  console.log("TOTAL LINKS:", extraGraphData.links.length);
 
   // ✅ redraw
   updateGraph();
