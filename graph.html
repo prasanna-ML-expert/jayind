@@ -304,43 +304,6 @@ simulation = d3.forceSimulation(nodes)
   .force("collision", d3.forceCollide().radius(d => getNodeSize(d.id) + 5))
 simulation.alpha(1).restart();
 
-
-  
-  const node = container.append("g")
-    .selectAll("g")
-    .data(nodes)
-    .enter().append("g")
-    .attr("class", "node")
-    .call(d3.drag()
-    .on("start", dragstarted)
-    .on("drag", dragged)
-    .on("end", dragended))
-    .on("click", function(event, d) {
-        showNodeInfo(d);      
-        //buildExtraGraph(d.id);
-       // reset all nodes to their category color
-        resetNodeColors();
-        // highlight selected node
-        d3.select(this).select("circle")
-          .attr("fill", HIGHLIGHT_COLOR);
-    });
-
-  node.append("circle")
-    .attr("r", d => getNodeSize(d.id))
-    .attr("fill", d => getNodeColor(d.id));
-
-  node.append("text")
-    .attr("x", 12)
-    .attr("y", 3)
-    .attr("class", "node-label")
-    .style("display", "none")
-    .text(d => {
-      const id = d.id.toString();
-      return id.length > 6 
-        ? id.slice(0, 2) + "..." + id.slice(-2)
-        : id;
-    });
-
   
   const link = container.append("g")
     .selectAll("line")
@@ -384,6 +347,43 @@ simulation.alpha(1).restart();
     .append("text")
     .text(d => Math.round(d.value).toLocaleString())
     .attr("font-size", 10);
+  
+  const node = container.append("g")
+    .selectAll("g")
+    .data(nodes)
+    .enter().append("g")
+    .attr("class", "node")
+    .call(d3.drag()
+    .on("start", dragstarted)
+    .on("drag", dragged)
+    .on("end", dragended))
+    .on("click", function(event, d) {
+        showNodeInfo(d);      
+        //buildExtraGraph(d.id);
+       // reset all nodes to their category color
+        resetNodeColors();
+        // highlight selected node
+        d3.select(this).select("circle")
+          .attr("fill", HIGHLIGHT_COLOR);
+    });
+
+  node.append("circle")
+    .attr("r", d => getNodeSize(d.id))
+    .attr("fill", d => getNodeColor(d.id));
+
+  node.append("text")
+    .attr("x", 12)
+    .attr("y", 3)
+    .attr("class", "node-label")
+    .style("display", "none")
+    .text(d => {
+      const id = d.id.toString();
+      return id.length > 6 
+        ? id.slice(0, 2) + "..." + id.slice(-2)
+        : id;
+    });
+
+
 
   simulation.on("tick", () => {
   
