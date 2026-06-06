@@ -485,36 +485,36 @@ function buildExtraGraph(centerId) {
 
   // ✅ LEVEL 2 (skip if level1 node is CEX)
   level1.forEach(l1Node => {
+  
     const entry = walletMap[l1Node] || {};
-    const owner = entry.owner || ""
-
-    // ❌ DO NOT expand from CEX wallets
-    if (cexSet.has(l1Node)) return;
-    // ❌ skip program accounts
-    //if (owner.startsWith("program_account")) return
-
-    const rows = aggregatedData.filter(d =>
+    const owner = entry.owner || "";
+  
+    // ✅ STOP expanding from these
+    if (cexSet.has(l1Node) || owner.startsWith("program_account")) {
+      return; // ❌ no expansion, but node already included in level1
+    }
+  
+    const rows = [...aggregatedData, ...rawData].filter(d =>
       d.source === l1Node || d.destination === l1Node
     );
-
+  
     rows.forEach(d => {
-
+  
       const other = d.source === l1Node ? d.destination : d.source;
       if (!other || other === centerId) return;
-      // ✅ ❌ DO NOT INCLUDE CEX in level 2
-      if (cexSet.has(other)) return;      
-      // ✅ ❌ DO NOT INCLUDE program accounts (if needed)
-      const otherEntry = walletMap[other] || {};
-      const otherOwner = otherEntry.owner || "";      
-      if (otherOwner.startsWith("program_account")) return;      
-      level2.add(other);      
+  
+      // ✅ ✅ IMPORTANT: DO NOT FILTER HERE
+      // we allow ALL nodes (including CEX + program_account)
+  
+      level2.add(other);
+  
       extraGraphData.links.push({
         source: l1Node,
         target: other,
         value: d.amount,
         extra: true
       });
-
+  
     });
   });
 
