@@ -251,8 +251,14 @@ function updateGraph() {
     const target = d.destination;
     
     if (allowedNodeSet) {
-      if (!allowedNodeSet.has(source) || !allowedNodeSet.has(target)) {
-        return; // ❌ skip unrelated edges
+      const isConnected =
+        allowedNodeSet.has(source) ||
+        allowedNodeSet.has(target);
+      const isDirectCenter =
+        source === currentCenterNode ||
+        target === currentCenterNode;
+      if (!isConnected && !isDirectCenter) {
+        return;
       }
     }
 
@@ -457,7 +463,7 @@ function buildExtraGraph(centerId) {
   let level2 = new Set();
 
   // ✅ LEVEL 1
-  const lvl1rows = aggregatedData.filter(d =>
+  const lvl1rows = [...aggregatedData, ...rawData].filter(d =>
     d.source === centerId || d.destination === centerId
   );
 
