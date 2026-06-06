@@ -104,6 +104,7 @@ const csvUrl = "https://raw.githubusercontent.com/prasanna-ML-expert/jayind/main
 const HIGHLIGHT_COLOR = "darkblue";
 const svg = d3.select("svg");
 let allowedNodeSet = null;
+let currentCenterNode = null;
 const width = document.getElementById("graphContainer").clientWidth;
 const height = window.innerHeight;
 
@@ -455,7 +456,7 @@ window.addEventListener("resize", () => {
 function buildExtraGraph(centerId) {
 
   centerId = centerId.trim();
-
+  currentCenterNode = centerId;
   // ✅ reset
   extraGraphData = { nodes: [], links: [] };
 
