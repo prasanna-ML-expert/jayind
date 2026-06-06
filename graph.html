@@ -252,13 +252,15 @@ function updateGraph() {
     const target = d.destination;
     
     if (allowedNodeSet) {
-      const isConnected =
-        allowedNodeSet.has(source) ||
+      const isAllowedEdge =
+        allowedNodeSet.has(source) &&
         allowedNodeSet.has(target);
+      
       const isDirectCenter =
         source === currentCenterNode ||
         target === currentCenterNode;
-      if (!isConnected && !isDirectCenter) {
+      
+      if (!isAllowedEdge && !isDirectCenter) {
         return;
       }
     }
@@ -489,9 +491,9 @@ function buildExtraGraph(centerId) {
     const entry = walletMap[l1Node] || {};
     const owner = entry.owner || "";
   
-    // ✅ STOP expanding from these
+    // ✅ 🚨 HARD STOP: do NOT expand from these
     if (cexSet.has(l1Node) || owner.startsWith("program_account")) {
-      return; // ❌ no expansion, but node already included in level1
+      return;
     }
   
     const rows = [...aggregatedData, ...rawData].filter(d =>
@@ -501,11 +503,10 @@ function buildExtraGraph(centerId) {
     rows.forEach(d => {
   
       const other = d.source === l1Node ? d.destination : d.source;
+  
       if (!other || other === centerId) return;
   
-      // ✅ ✅ IMPORTANT: DO NOT FILTER HERE
-      // we allow ALL nodes (including CEX + program_account)
-  
+      // ✅ 🚨 CRITICAL: only include if this node is not purely coming via CEX path
       level2.add(other);
   
       extraGraphData.links.push({
