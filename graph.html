@@ -478,9 +478,13 @@ function buildExtraGraph(centerId) {
 
   // ✅ LEVEL 2 (skip if level1 node is CEX)
   level1.forEach(l1Node => {
+    const entry = walletMap[l1Node] || {};
+    const owner = entry.owner || ""
 
     // ❌ DO NOT expand from CEX wallets
     if (cexSet.has(l1Node)) return;
+    // ❌ skip program accounts
+    //if (owner.startsWith("program_account")) return
 
     const rows = aggregatedData.filter(d =>
       d.source === l1Node || d.destination === l1Node
