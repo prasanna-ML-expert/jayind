@@ -501,9 +501,13 @@ function buildExtraGraph(centerId) {
 
       const other = d.source === l1Node ? d.destination : d.source;
       if (!other || other === centerId) return;
-
-      level2.add(other);
-
+      // ✅ ❌ DO NOT INCLUDE CEX in level 2
+      if (cexSet.has(other)) return;      
+      // ✅ ❌ DO NOT INCLUDE program accounts (if needed)
+      const otherEntry = walletMap[other] || {};
+      const otherOwner = otherEntry.owner || "";      
+      if (otherOwner.startsWith("program_account")) return;      
+      level2.add(other);      
       extraGraphData.links.push({
         source: l1Node,
         target: other,
