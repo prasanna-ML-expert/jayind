@@ -306,30 +306,6 @@ simulation.alpha(1).restart();
 
 
   
-  const link = container.append("g")
-    .selectAll("line")
-    .data(links)
-    .enter().append("line")
-    .attr("class", "link")
-    .attr("stroke-width", d => {
-      const w = Math.sqrt(d.value) / 5;
-      return Math.max(1, Math.min(6, w));  // ✅ cap at 6
-    });
-
-  // 🔴 USD LINKS (RED)
-  const usdLink = container.append("g")
-    .selectAll("line.usd")
-    .data(usdLinks)
-    .enter().append("line")
-    .attr("class", "usd")
-    .attr("stroke", "red")
-    .attr("stroke-opacity", 0.7)
-    .attr("stroke-width", d => {
-      const w = Math.sqrt(d.value) / 80;
-      return Math.max(0.5, Math.min(4, w));  // ✅ cap at 4
-    })
-    .attr("marker-end", "url(#arrow-red)");
-  
   const node = container.append("g")
     .selectAll("g")
     .data(nodes)
@@ -365,6 +341,31 @@ simulation.alpha(1).restart();
         : id;
     });
 
+  
+  const link = container.append("g")
+    .selectAll("line")
+    .data(links)
+    .enter().append("line")
+    .attr("class", "link")
+    .attr("stroke-width", d => {
+      const w = Math.sqrt(d.value) / 5;
+      return Math.max(1, Math.min(6, w));  // ✅ cap at 6
+    });
+
+  // 🔴 USD LINKS (RED)
+  const usdLink = container.append("g")
+    .selectAll("line.usd")
+    .data(usdLinks)
+    .enter().append("line")
+    .attr("class", "usd")
+    .attr("stroke", "red")
+    .attr("stroke-opacity", 0.7)
+    .attr("stroke-width", d => {
+      const w = Math.sqrt(d.value) / 80;
+      return Math.max(0.5, Math.min(4, w));  // ✅ cap at 4
+    })
+    .attr("marker-end", "url(#arrow-red)");
+  
   const usdLabel = container.append("g")
     .selectAll(".usdLabel")
     .data(usdLinks)
