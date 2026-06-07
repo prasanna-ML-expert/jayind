@@ -480,10 +480,15 @@ function buildExtraGraph(centerId) {
   extraGraphData = { nodes: [], links: [] };
 
   const visited = new Set();
-  const queue = [centerId];
+  const queue = [{ id: centerId, depth: 0 }];
+
   const MAX_NODES = 2000;
   const MAX_EDGES_PER_NODE = 30;
+  const MAX_DEPTH = 3;
+
   visited.add(centerId);
+
+  const allEdges = [...aggregatedData, ...rawData];
 
   while (queue.length > 0) {
 
@@ -491,32 +496,45 @@ function buildExtraGraph(centerId) {
       console.warn("Node limit reached");
       break;
     }
-    const node = queue.shift();
+
+    const { id: node, depth } = queue.shift();
 
     const entry = walletMap[node] || {};
     const owner = entry.owner || "";
-    // ✅ get ALL connections (important)
-    const rows = [...aggregatedData, ...rawData].filter(d =>d.destination === node);
-    // ✅ STOP expansion from these nodes
-    if (node !== centerId && 
-       (cexSet.has(node) || owner.startsWith("program_account") || rows.length > MAX_EDGES_PER_NODE)) {
+
+    const rows = allEdges.filter(d =>
+      d.source === node || d.destination === node
+    );
+
+    // ✅ STOP expansion rules
+    if (
+      node !== centerId &&
+      (
+        cexSet.has(node) ||
+        owner.startsWith("program_account") ||
+        rows.length > MAX_EDGES_PER_NODE ||
+        depth >= MAX_DEPTH   // ✅ depth control
+      )
+    ) {
       continue;
     }
 
-
-
     rows.forEach(d => {
 
-      const other = d.source; // === node ? d.destination : d.source;
+      const other = d.source === node ? d.destination : d.source;
       if (!other) return;
 
-      // ✅ always include node
+      // ✅ add node if new
       if (!visited.has(other)) {
         visited.add(other);
-        queue.push(other);
+
+        queue.push({
+          id: other,
+          depth: depth + 1   // ✅ increment depth
+        });
       }
 
-      // ✅ always include edge
+      // ✅ add edge
       extraGraphData.links.push({
         source: node,
         target: other,
@@ -530,7 +548,7 @@ function buildExtraGraph(centerId) {
   // ✅ set nodes
   extraGraphData.nodes = Array.from(visited).map(id => ({ id }));
 
-  // ✅ restrict graph view
+  // ✅ restrict graph
   allowedNodeSet = new Set(visited);
 
   console.log("TOTAL NODES:", visited.size);
