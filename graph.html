@@ -482,7 +482,7 @@ function buildExtraGraph(centerId) {
   const visited = new Set();
   const queue = [centerId];
   const MAX_NODES = 2000;
-  const MAX_EDGES_PER_NODE = 50;
+  const MAX_EDGES_PER_NODE = 30;
   visited.add(centerId);
 
   while (queue.length > 0) {
