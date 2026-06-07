@@ -496,9 +496,7 @@ function buildExtraGraph(centerId) {
     const entry = walletMap[node] || {};
     const owner = entry.owner || "";
     // ✅ get ALL connections (important)
-    const rows = [...aggregatedData, ...rawData].filter(d =>
-      d.source === node || d.destination === node
-    );
+    const rows = [...aggregatedData, ...rawData].filter(d =>d.destination === node);
     // ✅ STOP expansion from these nodes
     if (node !== centerId && 
        (cexSet.has(node) || owner.startsWith("program_account") || rows.length > MAX_EDGES_PER_NODE)) {
@@ -509,7 +507,7 @@ function buildExtraGraph(centerId) {
 
     rows.forEach(d => {
 
-      const other = d.source === node ? d.destination : d.source;
+      const other = d.source; // === node ? d.destination : d.source;
       if (!other) return;
 
       // ✅ always include node
