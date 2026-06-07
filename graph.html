@@ -376,6 +376,7 @@ simulation.alpha(1).restart();
     .on("drag", dragged)
     .on("end", dragended))
     .on("click", function(event, d) {
+        document.getElementById("searchBox").value = d.id;
         showNodeInfo(d);      
         //buildExtraGraph(d.id);
        // reset all nodes to their category color
