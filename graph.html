@@ -624,14 +624,12 @@ function buildSideTable() {
   // ✅ columns to hide
   const hiddenCols = new Set([
     "Wallet",
-    "Token_Counterparties",
     "Net_SOL_Transfer",
     "SOL_In",
     "SOL_Balance",
     "USD_In",
     "USD Balance",
     "Gas_Paid_By_Others",
-    "Gap_Top4_Hrs",
     "owner"
   ]);
 
@@ -641,10 +639,13 @@ function buildSideTable() {
   const columnRenameMap = {
     "Age_Days":"Age",
     "Days_Active":"Active",
+    "Avg_Tx_Day":"AvgTx",
     "addr_nghbor":"nghbrs",
-    "SOL_Counterparties": "sol_cp",
+    "Token_Counterparties":"tokenCP",
+    "SOL_Counterparties": "solCP",
     "Tokens_Traded": "Tokens",
     "max_addresses": "maxAddr",
+    "Gap_Top4_Hrs":"Gap4",
     "Gap_Others_Hrs": "Gap"
   };
 
