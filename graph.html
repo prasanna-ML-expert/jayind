@@ -482,7 +482,7 @@ function buildExtraGraph(centerId) {
   const visited = new Set();
   const queue = [centerId];
   const MAX_NODES = 2000;
-
+  const MAX_EDGES_PER_NODE = 50;
   visited.add(centerId);
 
   while (queue.length > 0) {
@@ -495,17 +495,17 @@ function buildExtraGraph(centerId) {
 
     const entry = walletMap[node] || {};
     const owner = entry.owner || "";
-
-    // ✅ STOP expansion from these nodes
-    if (node !== centerId && 
-       (cexSet.has(node) || owner.startsWith("program_account"))) {
-      continue;
-    }
-
     // ✅ get ALL connections (important)
     const rows = [...aggregatedData, ...rawData].filter(d =>
       d.source === node || d.destination === node
     );
+    // ✅ STOP expansion from these nodes
+    if (node !== centerId && 
+       (cexSet.has(node) || owner.startsWith("program_account") || rows.length > MAX_EDGES_PER_NODE)) {
+      continue;
+    }
+
+
 
     rows.forEach(d => {
 
