@@ -481,11 +481,16 @@ function buildExtraGraph(centerId) {
 
   const visited = new Set();
   const queue = [centerId];
+  const MAX_NODES = 2000;
 
   visited.add(centerId);
 
   while (queue.length > 0) {
 
+    if (visited.size >= MAX_NODES) {
+      console.warn("Node limit reached");
+      break;
+    }
     const node = queue.shift();
 
     const entry = walletMap[node] || {};
