@@ -125,6 +125,20 @@ const container = svg.append("g");
 svg.call(zoom).on("dblclick.zoom", null);
 
 function resetZoom() {
+
+  // ✅ clear expansion state
+  extraGraphData = { nodes: [], links: [] };
+
+  // ✅ clear filtering
+  allowedNodeSet = null;
+
+  // ✅ clear center reference
+  currentCenterNode = null;
+
+  // ✅ redraw full graph
+  updateGraph();
+
+  // ✅ reset zoom AFTER redraw
   svg.transition().duration(500).call(
     zoom.transform,
     d3.zoomIdentity
