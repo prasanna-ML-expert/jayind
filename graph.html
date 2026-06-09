@@ -753,7 +753,7 @@ function buildSideTable() {
     tr.addEventListener("click", (e) => {
       // ✅ IGNORE clicks coming from header or its children
       if (e.target.tagName === "TH") return;
-    
+      document.getElementById("searchBox").value = row.Wallet;
       if (row.Wallet) {
         focusNodeFromTable(row.Wallet);
       }
