@@ -1,8 +1,10 @@
 import os
 import json
 import requests
+import time
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
+
 
 # ====== CONFIG FROM GITHUB SECRETS ======
 HELIUS_API_KEY = os.getenv("HELIUS_API_KEY")
@@ -20,6 +22,22 @@ EXCLUDED_TOKENS = {
 
 }
 # ====== HELPERS ======
+
+def get_lookup_window_seconds():
+    now_local = datetime.now(ZoneInfo("America/Chicago"))
+    hour = now_local.hour
+
+    # If we're in quiet hours → skip execution entirely
+    if hour >= 22 or hour < 6:
+        return None
+
+    # If just resumed at 6 AM → fetch overnight data
+    if hour == 6:
+        return 8 * 3600  # 8 hours (10PM → 6AM)
+
+    # Normal hourly run
+    return 3600
+    
 def send_telegram(msg):
     url = f"https://api.telegram.org/{TELEGRAM_BOT_TOKEN}/sendMessage"
     payload = {
@@ -99,10 +117,14 @@ def extract_token_transfers(tx, wallet):
 
 # ====== MAIN LOGIC ======
 def run():
+    window = get_lookup_window_seconds()
+    if window is None:
+        #print("Skipping due to quiet hours")
+        exit(0)
+        
     wallets = json.loads(WALLETS_JSON)
     now = datetime.now(timezone.utc)
-    one_hour_ago = now.timestamp() - 3600
-
+    cutoff_time = now.timestamp() - window
     alerts = []
 
     for w in wallets:
@@ -115,8 +137,8 @@ def run():
             if not block_time:
                 continue
 
-            if block_time < one_hour_ago:
-                continue  # only last 1 hour
+            if block_time < cutoff_time:
+                continue
 
             tx = get_transaction(sig_info["signature"])
             if not tx:
@@ -143,6 +165,7 @@ def run():
                     "amount": amount,
                     "time": local_time.strftime("%Y-%m-%d %H:%M:%S %Z")
                 })
+            time.sleep(0.2)
 
     # ====== SEND ALERT ONLY IF NEW TOKENS ======
     if alerts:
