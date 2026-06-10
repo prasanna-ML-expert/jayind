@@ -2,6 +2,7 @@ import os
 import json
 import requests
 from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
 
 # ====== CONFIG FROM GITHUB SECRETS ======
 HELIUS_API_KEY = os.getenv("HELIUS_API_KEY")
@@ -134,13 +135,13 @@ def run():
                 if not mint or abs(amount) < 1e-6:
                     continue
 
-                time_str = datetime.fromtimestamp(block_time, tz=timezone.utc)
+                local_time = datetime.fromtimestamp(block_time, tz=ZoneInfo("America/Chicago"))
 
                 alerts.append({
                     "wallet": address,
                     "mint": mint,
                     "amount": amount,
-                    "time": time_str.strftime("%Y-%m-%d %H:%M:%S UTC")
+                    "time": local_time.strftime("%Y-%m-%d %H:%M:%S %Z")
                 })
 
     # ====== SEND ALERT ONLY IF NEW TOKENS ======
