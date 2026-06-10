@@ -13,11 +13,11 @@ RPC_URL = f"https://mainnet.helius-rpc.com/?api-key={HELIUS_API_KEY}"
 
 # ====== HELPERS ======
 def send_telegram(msg):
-    url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
+    url = f"https://api.telegram.org/{TELEGRAM_BOT_TOKEN}/sendMessage"
     payload = {
         "chat_id": TELEGRAM_CHAT_ID,
         "text": msg,
-        "parse_mode": "HTML"
+        "parse_mode": "Markdown"
     }
     requests.post(url, json=payload, timeout=10)
 
