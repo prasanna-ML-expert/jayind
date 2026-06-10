@@ -10,14 +10,19 @@ TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 WALLETS_JSON = os.getenv("MYLIST21")  # your secret name
 
 RPC_URL = f"https://mainnet.helius-rpc.com/?api-key={HELIUS_API_KEY}"
-
+# Tokens to ignore (add more as needed)
+EXCLUDED_TOKENS = {    
+    "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",  # USDC
+    "Es9vMFrzaCERmJfrEdpN4HVEhVHgF4PnMiBxactAesQfymh",  # USDT
+    "So11111111111111111111111111111111111111112",  # SOL (wrapped SOL)
+}
 # ====== HELPERS ======
 def send_telegram(msg):
     url = f"https://api.telegram.org/{TELEGRAM_BOT_TOKEN}/sendMessage"
     payload = {
         "chat_id": TELEGRAM_CHAT_ID,
         "text": msg,
-        "parse_mode": "Markdown"
+        "parse_mode": "HTML"
     }
     requests.post(url, json=payload, timeout=10)
 
@@ -120,6 +125,9 @@ def run():
                 mint = t["mint"]
                 amount = t["amount"]
 
+                if mint in EXCLUDED_TOKENS:
+                    continue
+
                 # ignore pure SOL (no mint) and tiny noise
                 if not mint or abs(amount) < 1e-6:
                     continue
@@ -138,14 +146,14 @@ def run():
         msg = "<b>🚨 New Token Activity (Last 1h)</b>\n\n"
 
         for a in alerts:
+            dex_url = f"https://dexscreener.com/solana/{a['mint']}"
             msg += (
                 f"<b>Wallet:</b> {a['wallet']}\n"
-                f"<b>Token:</b> {a['mint']}\n"
+                f"<b>Token:</b> <a href='{dex_url}'>{a['mint']}</a>\n"
                 f"<b>Amount:</b> {a['amount']:.6f}\n"
                 f"<b>Time:</b> {a['time']}\n"
                 f"-------------------\n"
             )
-
         send_telegram(msg)
 
 
