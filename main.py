@@ -19,7 +19,7 @@ EXCLUDED_TOKENS = {
     "Es9vMFrzaCERmJfrEdpN4HVEhVHgF4PnMiBxactAesQfymh",  # USDT
     "So11111111111111111111111111111111111111112",  # SOL (wrapped SOL)
     "HzwqbKZw8HxMN6bF2yFZNrht3c2iXXzpKcFu7uBEDKtr", #EURC
-
+    "2u1tszSeqZ3qBWF3uNGPFc8TzMk2tdiwknnRMWGWjGWH", #USDG
 }
 # ====== HELPERS ======
 
