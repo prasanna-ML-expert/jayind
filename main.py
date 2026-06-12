@@ -17,9 +17,25 @@ RPC_URL = f"https://mainnet.helius-rpc.com/?api-key={HELIUS_API_KEY}"
 EXCLUDED_TOKENS = {    
     "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",  # USDC
     "Es9vMFrzaCERmJfrEdpN4HVEhVHgF4PnMiBxactAesQfymh",  # USDT
-    "So11111111111111111111111111111111111111112",  # SOL (wrapped SOL)
     "HzwqbKZw8HxMN6bF2yFZNrht3c2iXXzpKcFu7uBEDKtr", #EURC
     "2u1tszSeqZ3qBWF3uNGPFc8TzMk2tdiwknnRMWGWjGWH", #USDG
+    "7kbnvuGBxxj8AG9qp8Scn56muWGaRaFqxg1FsRp3PaFT", # UXD
+    
+    "So11111111111111111111111111111111111111112",  # SOL (wrapped SOL)
+    "mSoLzYCxHdYgdzU2t9tR5iAF5Dk6T8rwd1SmxLSjRFi", #msol
+    "JitoSo1vHwr7ZrVxw3s9mxMfhJ3oRpF7gTE9z7UBrR9", #jitosol
+    "bSo13r4TkiE4H6NEz5eQv7i9p8nJpF6hF4X5F2u7a9n", #Bsol
+    
+    "7dHbWXad7Tkn7jYADbY1Kp7b8HTL5cC3yqz6Hji6F6gR", #staking stsol
+    "7Q5p9tE3XhVVZbL6zW8EoP2B7xq6oMzg4t3GP4qZ7r6", #staking jsol
+    
+    "4k3Dyjzvzp8eHFeKrmX9mY1USZ9oFZpDHK5vK6Z8b5C", #Raydium
+    "orcaEKTd4vN6z7aL8mwz1t7cXRL3Qp6RAfZC5Xk7w", #ORCA
+    "JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN", #Jupiter
+    
+    "DezXAZ8z7PnrnRJjz3wXBoRGkGZ9bzQ6uEGyM8DgMCo", #Bonk
+    "EKpQGSJtjMFqKZkH3q7kKQh9R9Mzsqn2F3cKD5LX1z9", #WIF
+    "HhJpBh9tnkZt8Bz4V5t1VwL9Hh5yUrE5m2mc1p7bXYh", #MYRO
 }
 # ====== HELPERS ======
 
