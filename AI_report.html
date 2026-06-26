@@ -40,7 +40,7 @@
 
         // Lookup object for custom dilution ranges
         let customDilutionRangesLookup = {};
-
+        let optionsDetailedRawString = "";
         // Function to parse a single range string like "88.0/93.0"
         function parseSlashRange(rangeStr,separator) {
             if (!rangeStr || typeof rangeStr !== 'string') return { min: NaN, max: NaN };
@@ -256,6 +256,55 @@
             } catch (error) {
                 console.error('Error fetching or parsing options data:', error);
             }
+        }
+
+        /*****************************
+            premium percent
+        ****************************/
+        async function fetchOptionsDetailedRawString() {
+            try {
+                const response = await fetch(GITHUB_RAW_URL_BASE + 'options_detailed.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+        
+                // Read as TEXT (this is the key change)
+                const rawText = await response.text();
+        
+                optionsDetailedRawString = cleanControlChars(rawText);
+        
+                // Render immediately after fetching
+                renderOptionsDetailedRawString();
+        
+                console.log("options_detailed.json loaded as raw string.");
+        
+            } catch (error) {
+                console.error("Error fetching options_detailed.json as string:", error);
+            }
+        }
+        function renderOptionsDetailedRawString() {
+            const indexDiv = document.getElementById('industry-index-placeholder');
+        
+            if (!indexDiv) return;
+        
+            const html = `
+                <div style="margin-top: 20px;">
+                    <h3>Options Detailed Raw Data</h3>
+                    <pre style="
+                        background:#111;
+                        color:#0f0;
+                        padding:10px;
+                        max-height:300px;
+                        overflow:auto;
+                        font-size:12px;
+                        white-space:pre-wrap;
+                    ">
+        ${htmlEscapeAndClean(optionsDetailedRawString)}
+                    </pre>
+                </div>
+            `;
+        
+            indexDiv.insertAdjacentHTML("afterend", html);
         }
 
         /************************
@@ -1616,6 +1665,7 @@
         // Parse custom dilution ranges from the embedded string
         await parseCustomDilutionRanges();
         await loadAndCleanIndustryData();
+        await fetchOptionsDetailedRawString();
         await fetchAndParseGovtNews();
         await fetchAndParseAllIndustriesNews(); // Call the new function here
         await fetchAndParseFundamentalsData()
