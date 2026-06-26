@@ -263,7 +263,7 @@
         ****************************/
         async function fetchOptionsDetailedRawString() {
             try {
-                const response = await fetch(GITHUB_RAW_URL_BASE + 'options_detailed.json');
+                const response = await fetch(GITHUB_RAW_URL_BASE + 'premium_percent.txt');
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
