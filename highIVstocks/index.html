@@ -31,13 +31,13 @@ tbody tr:hover{background:#1a2029}
 .badge.buy{background:rgba(63,185,80,.15);color:var(--green);border:1px solid rgba(63,185,80,.4)}
 .badge.sell{background:rgba(248,81,73,.15);color:var(--red);border:1px solid rgba(248,81,73,.4)}
 .badge.range{background:rgba(139,148,158,.12);color:var(--gray);border:1px solid rgba(139,148,158,.35)}
-.badge.wash{background:rgba(210,153,34,.15);color:var(--amber);border:1px solid rgba(210,153,34,.4)}
+.badge.wash{background:rgba(210,153,34,.15);color:var(--amber);border:1px solid rgba(139,148,158,.35)}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px}
 @media(max-width:420px){.grid{grid-template-columns:1fr}}
 .card{margin:0;background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden;cursor:zoom-in}
 .card figcaption{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line)}
 .card img{display:block;width:100%;height:auto;background:#000}
-.price-tag{color:var(--dim);font-variant-numeric:tabular-nums}
+.price-tag{color:var(--dim);font-variant-numeric:tabular-nums;font-size:.85rem}
 .legend{display:flex;flex-wrap:wrap;gap:14px;color:var(--dim);font-size:.85rem;margin:6px 0 18px}
 .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
 #lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;z-index:50;cursor:zoom-out;padding:12px}
@@ -53,6 +53,7 @@ footer{margin-top:40px;color:var(--dim);font-size:.82rem;border-top:1px solid va
 <p class="sub">30 high-IV NASDAQ names · daily charts with Gamma Levels overlay · data as of Fri Sep 25, 2026</p>
 <div class="meta">
 <span>Prices: <b>Fri Sep 25 close</b></span>
+<span>IV: <b>from Sep 25 option chains</b></span>
 <span>Breadth (SPY Spercentile): <b>+4 / −4 — neutral</b></span>
 <span>No complete four-leg triggers — all calls are <b>conditional watches</b></span>
 <span>Gamma: computed from live option chains (4 nearest expirations)</span>
@@ -102,123 +103,123 @@ footer{margin-top:40px;color:var(--dim);font-size:.82rem;border-top:1px solid va
 <h2>Charts</h2>
 <div class="grid">
 <figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/IREN.jpg">
-  <figcaption><span class="tk">IREN</span><span class="price-tag">$44.1</span><span class="badge buy">BUY</span></figcaption>
+  <figcaption><span class="tk">IREN</span><span class="price-tag">$44.1 (40–50) · IV 72.7%</span><span class="badge buy">BUY</span></figcaption>
   <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/IREN.jpg" alt="IREN daily chart with gamma levels">
 </figure>
 <figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/CRWV.jpg">
-  <figcaption><span class="tk">CRWV</span><span class="price-tag">$87.6</span><span class="badge buy">BUY</span></figcaption>
+  <figcaption><span class="tk">CRWV</span><span class="price-tag">$87.6 (80–105) · IV 68.0%</span><span class="badge buy">BUY</span></figcaption>
   <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/CRWV.jpg" alt="CRWV daily chart with gamma levels">
 </figure>
 <figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/ORCL.jpg">
-  <figcaption><span class="tk">ORCL</span><span class="price-tag">$137.1</span><span class="badge buy">BUY</span></figcaption>
+  <figcaption><span class="tk">ORCL</span><span class="price-tag">$137.1 (140–150) · IV 47.5%</span><span class="badge buy">BUY</span></figcaption>
   <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/ORCL.jpg" alt="ORCL daily chart with gamma levels">
 </figure>
 <figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/SOFI.jpg">
-  <figcaption><span class="tk">SOFI</span><span class="price-tag">$16.6</span><span class="badge buy">BUY</span></figcaption>
+  <figcaption><span class="tk">SOFI</span><span class="price-tag">$16.6 (17–17) · IV 44.0%</span><span class="badge buy">BUY</span></figcaption>
   <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/SOFI.jpg" alt="SOFI daily chart with gamma levels">
 </figure>
 <figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/PCG.jpg">
-  <figcaption><span class="tk">PCG</span><span class="price-tag">$12.3</span><span class="badge wash">WATCH</span></figcaption>
+  <figcaption><span class="tk">PCG</span><span class="price-tag">$12.3 (13–13) · IV 37.3%</span><span class="badge wash">WATCH</span></figcaption>
   <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/PCG.jpg" alt="PCG daily chart with gamma levels">
 </figure>
 <figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/BE.jpg">
-  <figcaption><span class="tk">BE</span><span class="price-tag">$288.6</span><span class="badge sell">SELL</span></figcaption>
+  <figcaption><span class="tk">BE</span><span class="price-tag">$288.6 (260–300) · IV 77.3%</span><span class="badge sell">SELL</span></figcaption>
   <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/BE.jpg" alt="BE daily chart with gamma levels">
 </figure>
 <figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/MRVL.jpg">
-  <figcaption><span class="tk">MRVL</span><span class="price-tag">$261.9</span><span class="badge sell">SELL</span></figcaption>
+  <figcaption><span class="tk">MRVL</span><span class="price-tag">$261.9 (250–250) · IV 65.3%</span><span class="badge sell">SELL</span></figcaption>
   <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/MRVL.jpg" alt="MRVL daily chart with gamma levels">
 </figure>
 <figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/DELL.jpg">
-  <figcaption><span class="tk">DELL</span><span class="price-tag">$562.9</span><span class="badge sell">SELL</span></figcaption>
+  <figcaption><span class="tk">DELL</span><span class="price-tag">$562.9 (550–600) · IV 59.0%</span><span class="badge sell">SELL</span></figcaption>
   <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/DELL.jpg" alt="DELL daily chart with gamma levels">
 </figure>
 <figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/PLTR.jpg">
-  <figcaption><span class="tk">PLTR</span><span class="price-tag">$189.7</span><span class="badge sell">SELL</span></figcaption>
+  <figcaption><span class="tk">PLTR</span><span class="price-tag">$189.7 (190–200) · IV 45.8%</span><span class="badge sell">SELL</span></figcaption>
   <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/PLTR.jpg" alt="PLTR daily chart with gamma levels">
 </figure>
 <figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/MRNA.jpg">
-  <figcaption><span class="tk">MRNA</span><span class="price-tag">$198.9</span><span class="badge sell">SELL</span></figcaption>
+  <figcaption><span class="tk">MRNA</span><span class="price-tag">$198.9 (160–200) · IV 81.2%</span><span class="badge sell">SELL</span></figcaption>
   <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/MRNA.jpg" alt="MRNA daily chart with gamma levels">
 </figure>
 <figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/CIFR.jpg">
-  <figcaption><span class="tk">CIFR</span><span class="price-tag">$17.7</span><span class="badge range">RANGE</span></figcaption>
+  <figcaption><span class="tk">CIFR</span><span class="price-tag">$17.7 (18–20) · IV 96.0%</span><span class="badge range">RANGE</span></figcaption>
   <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/CIFR.jpg" alt="CIFR daily chart with gamma levels">
 </figure>
 <figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/NBIS.jpg">
-  <figcaption><span class="tk">NBIS</span><span class="price-tag">$237.4</span><span class="badge range">RANGE</span></figcaption>
+  <figcaption><span class="tk">NBIS</span><span class="price-tag">$237.4 (220–235) · IV 74.2%</span><span class="badge range">RANGE</span></figcaption>
   <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/NBIS.jpg" alt="NBIS daily chart with gamma levels">
 </figure>
 <figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/MARA.jpg">
-  <figcaption><span class="tk">MARA</span><span class="price-tag">$12.6</span><span class="badge range">RANGE</span></figcaption>
+  <figcaption><span class="tk">MARA</span><span class="price-tag">$12.6 (12.5–13) · IV 77.6%</span><span class="badge range">RANGE</span></figcaption>
   <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/MARA.jpg" alt="MARA daily chart with gamma levels">
 </figure>
 <figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/WULF.jpg">
-  <figcaption><span class="tk">WULF</span><span class="price-tag">$15.7</span><span class="badge range">RANGE</span></figcaption>
+  <figcaption><span class="tk">WULF</span><span class="price-tag">$15.7 (13–18) · IV 76.6%</span><span class="badge range">RANGE</span></figcaption>
   <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/WULF.jpg" alt="WULF daily chart with gamma levels">
 </figure>
 <figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/INTC.jpg">
-  <figcaption><span class="tk">INTC</span><span class="price-tag">$123.0</span><span class="badge range">RANGE</span></figcaption>
+  <figcaption><span class="tk">INTC</span><span class="price-tag">$123.0 (125–125) · IV 58.2%</span><span class="badge range">RANGE</span></figcaption>
   <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/INTC.jpg" alt="INTC daily chart with gamma levels">
 </figure>
 <figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/BMNR.jpg">
-  <figcaption><span class="tk">BMNR</span><span class="price-tag">$27.5</span><span class="badge range">RANGE</span></figcaption>
+  <figcaption><span class="tk">BMNR</span><span class="price-tag">$27.5 (28–27) · IV 71.8%</span><span class="badge range">RANGE</span></figcaption>
   <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/BMNR.jpg" alt="BMNR daily chart with gamma levels">
 </figure>
 <figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/SMCI.jpg">
-  <figcaption><span class="tk">SMCI</span><span class="price-tag">$43.3</span><span class="badge range">RANGE</span></figcaption>
+  <figcaption><span class="tk">SMCI</span><span class="price-tag">$43.3 (40–45) · IV 72.0%</span><span class="badge range">RANGE</span></figcaption>
   <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/SMCI.jpg" alt="SMCI daily chart with gamma levels">
 </figure>
 <figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/SNDK.jpg">
-  <figcaption><span class="tk">SNDK</span><span class="price-tag">$1777.6</span><span class="badge range">RANGE</span></figcaption>
+  <figcaption><span class="tk">SNDK</span><span class="price-tag">$1777.6 (1700–2000) · IV 68.3%</span><span class="badge range">RANGE</span></figcaption>
   <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/SNDK.jpg" alt="SNDK daily chart with gamma levels">
 </figure>
 <figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/RKLB.jpg">
-  <figcaption><span class="tk">RKLB</span><span class="price-tag">$74.0</span><span class="badge range">RANGE</span></figcaption>
+  <figcaption><span class="tk">RKLB</span><span class="price-tag">$74.0 (65–80) · IV 66.4%</span><span class="badge range">RANGE</span></figcaption>
   <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/RKLB.jpg" alt="RKLB daily chart with gamma levels">
 </figure>
 <figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/MSTR.jpg">
-  <figcaption><span class="tk">MSTR</span><span class="price-tag">$158.7</span><span class="badge range">RANGE</span></figcaption>
+  <figcaption><span class="tk">MSTR</span><span class="price-tag">$158.7 (150–167.5) · IV 64.3%</span><span class="badge range">RANGE</span></figcaption>
   <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/MSTR.jpg" alt="MSTR daily chart with gamma levels">
 </figure>
 <figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/COIN.jpg">
-  <figcaption><span class="tk">COIN</span><span class="price-tag">$195.1</span><span class="badge range">RANGE</span></figcaption>
+  <figcaption><span class="tk">COIN</span><span class="price-tag">$195.1 (200–200) · IV 60.0%</span><span class="badge range">RANGE</span></figcaption>
   <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/COIN.jpg" alt="COIN daily chart with gamma levels">
 </figure>
 <figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/MU.jpg">
-  <figcaption><span class="tk">MU</span><span class="price-tag">$1081.7</span><span class="badge range">RANGE</span></figcaption>
+  <figcaption><span class="tk">MU</span><span class="price-tag">$1081.7 (1040–1100) · IV 62.7%</span><span class="badge range">RANGE</span></figcaption>
   <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/MU.jpg" alt="MU daily chart with gamma levels">
 </figure>
 <figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/HOOD.jpg">
-  <figcaption><span class="tk">HOOD</span><span class="price-tag">$119.5</span><span class="badge range">RANGE</span></figcaption>
+  <figcaption><span class="tk">HOOD</span><span class="price-tag">$119.5 (120–120) · IV 58.3%</span><span class="badge range">RANGE</span></figcaption>
   <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/HOOD.jpg" alt="HOOD daily chart with gamma levels">
 </figure>
 <figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/GME.jpg">
-  <figcaption><span class="tk">GME</span><span class="price-tag">$23.4</span><span class="badge range">RANGE</span></figcaption>
+  <figcaption><span class="tk">GME</span><span class="price-tag">$23.4 (24–25) · IV 54.4%</span><span class="badge range">RANGE</span></figcaption>
   <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/GME.jpg" alt="GME daily chart with gamma levels">
 </figure>
 <figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/CRWD.jpg">
-  <figcaption><span class="tk">CRWD</span><span class="price-tag">$252.1</span><span class="badge range">RANGE</span></figcaption>
+  <figcaption><span class="tk">CRWD</span><span class="price-tag">$252.1 (250–250) · IV 52.9%</span><span class="badge range">RANGE</span></figcaption>
   <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/CRWD.jpg" alt="CRWD daily chart with gamma levels">
 </figure>
 <figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/AMD.jpg">
-  <figcaption><span class="tk">AMD</span><span class="price-tag">$630.4</span><span class="badge range">RANGE</span></figcaption>
+  <figcaption><span class="tk">AMD</span><span class="price-tag">$630.4 (600–650) · IV 46.5%</span><span class="badge range">RANGE</span></figcaption>
   <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/AMD.jpg" alt="AMD daily chart with gamma levels">
 </figure>
 <figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/NKE.jpg">
-  <figcaption><span class="tk">NKE</span><span class="price-tag">$35.8</span><span class="badge range">RANGE</span></figcaption>
+  <figcaption><span class="tk">NKE</span><span class="price-tag">$35.8 (35–40) · IV 61.2%</span><span class="badge range">RANGE</span></figcaption>
   <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/NKE.jpg" alt="NKE daily chart with gamma levels">
 </figure>
 <figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/TSLA.jpg">
-  <figcaption><span class="tk">TSLA</span><span class="price-tag">$372.1</span><span class="badge range">RANGE</span></figcaption>
+  <figcaption><span class="tk">TSLA</span><span class="price-tag">$372.1 (375–360) · IV 39.8%</span><span class="badge range">RANGE</span></figcaption>
   <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/TSLA.jpg" alt="TSLA daily chart with gamma levels">
 </figure>
 <figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/NFLX.jpg">
-  <figcaption><span class="tk">NFLX</span><span class="price-tag">$71.1</span><span class="badge range">RANGE</span></figcaption>
+  <figcaption><span class="tk">NFLX</span><span class="price-tag">$71.1 (70–75) · IV 34.2%</span><span class="badge range">RANGE</span></figcaption>
   <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/NFLX.jpg" alt="NFLX daily chart with gamma levels">
 </figure>
 <figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/META.jpg">
-  <figcaption><span class="tk">META</span><span class="price-tag">$751.9</span><span class="badge range">RANGE</span></figcaption>
+  <figcaption><span class="tk">META</span><span class="price-tag">$751.9 (740–800) · IV 39.0%</span><span class="badge range">RANGE</span></figcaption>
   <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/META.jpg" alt="META daily chart with gamma levels">
 </figure>
 </div>
