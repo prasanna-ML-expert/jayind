@@ -1,947 +1,235 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-X300F89Y75"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>hoodlist chart pack — Sep 25, 2026</title>
+<style>
+:root{--bg:#0d1117;--panel:#161b22;--line:#2d333b;--txt:#e6edf3;--dim:#8b949e;
+--green:#3fb950;--red:#f85149;--amber:#d29922;--gray:#8b949e;
+--cw:#089981;--pw:#F23645;--fl:#FF9800;--mp:#B0B0B0}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+.wrap{max-width:1200px;margin:0 auto;padding:20px 16px 64px}
+header h1{margin:.2em 0;font-size:1.6rem}
+.sub{color:var(--dim);margin:0 0 12px}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 20px}
+.meta span{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:6px 12px;font-size:.85rem;color:var(--dim)}
+.meta b{color:var(--txt)}
+h2{margin:28px 0 10px;font-size:1.15rem}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:.9rem}
+thead th{position:sticky;top:0;background:#1c2128;text-align:left;padding:10px 12px;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;color:var(--dim);white-space:nowrap}
+tbody td{padding:9px 12px;border-top:1px solid var(--line);vertical-align:top}
+tbody tr:hover{background:#1a2029}
+.tk{font-weight:700;white-space:nowrap}
+.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.cw{color:var(--cw)}.pw{color:var(--pw)}.fl{color:var(--fl)}.mp{color:var(--mp)}
+.note{color:var(--dim);font-size:.85rem;min-width:180px}
+.badge{display:inline-block;padding:2px 10px;border-radius:999px;font-size:.72rem;font-weight:700;letter-spacing:.05em;white-space:nowrap}
+.badge.buy{background:rgba(63,185,80,.15);color:var(--green);border:1px solid rgba(63,185,80,.4)}
+.badge.sell{background:rgba(248,81,73,.15);color:var(--red);border:1px solid rgba(248,81,73,.4)}
+.badge.range{background:rgba(139,148,158,.12);color:var(--gray);border:1px solid rgba(139,148,158,.35)}
+.badge.wash{background:rgba(210,153,34,.15);color:var(--amber);border:1px solid rgba(210,153,34,.4)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px}
+@media(max-width:420px){.grid{grid-template-columns:1fr}}
+.card{margin:0;background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden;cursor:zoom-in}
+.card figcaption{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line)}
+.card img{display:block;width:100%;height:auto;background:#000}
+.legend{display:flex;flex-wrap:wrap;gap:14px;color:var(--dim);font-size:.85rem;margin:6px 0 18px}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
+#lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;z-index:50;cursor:zoom-out;padding:12px}
+#lightbox.open{display:flex}
+#lightbox img{max-width:100%;max-height:100%;border-radius:8px}
+footer{margin-top:40px;color:var(--dim);font-size:.82rem;border-top:1px solid var(--line);padding-top:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<h1>hoodlist chart pack</h1>
+<p class="sub">30 NASDAQ names · daily charts with Gamma Levels overlay · data as of Fri Sep 25, 2026</p>
+<div class="meta">
+<span>Breadth (SPY Spercentile): <b>+4 / −4 — neutral</b></span>
+<span>No complete four-leg triggers — all calls are <b>conditional watches</b></span>
+<span>Gamma: computed from live option chains (4 nearest expirations)</span>
+</div>
+<div class="legend">
+<span><i class="dot" style="background:var(--cw)"></i>CW call wall</span>
+<span><i class="dot" style="background:var(--pw)"></i>PW put wall</span>
+<span><i class="dot" style="background:var(--fl)"></i>FLIP gamma flip (approx)</span>
+<span><i class="dot" style="background:var(--mp)"></i>MP max pain (Oct-2)</span>
+</div>
+</header>
 
-      gtag('config', 'G-X300F89Y75');
-    </script>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<h2>Buy / Sell / Range</h2>
+<div class="tablewrap"><table><thead><tr><th>Ticker</th><th>Call</th><th>Key zone</th><th>CW</th><th>PW</th><th>Flip</th><th>MP</th><th>Note</th></tr></thead><tbody>
+<tr><td class="tk">IREN</td><td><span class="badge buy">BUY</span></td><td>Support 43–44 (put wall 40)</td><td class="num cw">50</td><td class="num pw">40</td><td class="num fl">55</td><td class="num mp">46</td><td class="note">Buy confluence: pattern support + EMA 43.25/lower band + flip zone</td></tr>
+<tr><td class="tk">CRWV</td><td><span class="badge buy">BUY</span></td><td>Put-wall/support ~80</td><td class="num cw">105</td><td class="num pw">80</td><td class="num fl">95</td><td class="num mp">87</td><td class="note"></td></tr>
+<tr><td class="tk">ORCL</td><td><span class="badge buy">BUY</span></td><td>Zone 137–140</td><td class="num cw">150</td><td class="num pw">140</td><td class="num fl">185</td><td class="num mp">145</td><td class="note"></td></tr>
+<tr><td class="tk">SOFI</td><td><span class="badge buy">BUY</span></td><td>Near 16.5–17</td><td class="num cw">17</td><td class="num pw">17</td><td class="num fl">20</td><td class="num mp">17</td><td class="note"></td></tr>
+<tr><td class="tk">PCG</td><td><span class="badge wash">WATCH</span></td><td>—</td><td class="num cw">13</td><td class="num pw">13</td><td class="num fl">16.5</td><td class="num mp">13</td><td class="note">Washout/base watch — no confirmed pattern support yet</td></tr>
+<tr><td class="tk">BE</td><td><span class="badge sell">SELL</span></td><td>Fade 295–300</td><td class="num cw">300</td><td class="num pw">260</td><td class="num fl">280</td><td class="num mp">262.5</td><td class="note">If overbought tags persist</td></tr>
+<tr><td class="tk">MRVL</td><td><span class="badge sell">SELL</span></td><td>—</td><td class="num cw">250</td><td class="num pw">250</td><td class="num fl">250</td><td class="num mp">240</td><td class="note"></td></tr>
+<tr><td class="tk">DELL</td><td><span class="badge sell">SELL</span></td><td>Fade 595–600</td><td class="num cw">600</td><td class="num pw">550</td><td class="num fl">575</td><td class="num mp">547.5</td><td class="note">If overbought tags persist</td></tr>
+<tr><td class="tk">PLTR</td><td><span class="badge sell">SELL</span></td><td>—</td><td class="num cw">200</td><td class="num pw">190</td><td class="num fl">195</td><td class="num mp">182.5</td><td class="note"></td></tr>
+<tr><td class="tk">MRNA</td><td><span class="badge sell">SELL</span></td><td>—</td><td class="num cw">200</td><td class="num pw">160</td><td class="num fl">131</td><td class="num mp">170</td><td class="note"></td></tr>
+<tr><td class="tk">CIFR</td><td><span class="badge range">RANGE</span></td><td>—</td><td class="num cw">20</td><td class="num pw">18</td><td class="num fl">21</td><td class="num mp">18.5</td><td class="note"></td></tr>
+<tr><td class="tk">NBIS</td><td><span class="badge range">RANGE</span></td><td>—</td><td class="num cw">235</td><td class="num pw">220</td><td class="num fl">250</td><td class="num mp">230</td><td class="note"></td></tr>
+<tr><td class="tk">MARA</td><td><span class="badge range">RANGE</span></td><td>—</td><td class="num cw">13</td><td class="num pw">12.5</td><td class="num fl">14.5</td><td class="num mp">13</td><td class="note"></td></tr>
+<tr><td class="tk">WULF</td><td><span class="badge range">RANGE</span></td><td>—</td><td class="num cw">18</td><td class="num pw">13</td><td class="num fl">12</td><td class="num mp">17</td><td class="note"></td></tr>
+<tr><td class="tk">INTC</td><td><span class="badge range">RANGE</span></td><td>—</td><td class="num cw">125</td><td class="num pw">125</td><td class="num fl">110</td><td class="num mp">109</td><td class="note"></td></tr>
+<tr><td class="tk">BMNR</td><td><span class="badge range">RANGE</span></td><td>—</td><td class="num cw">27</td><td class="num pw">28</td><td class="num fl">27</td><td class="num mp">25</td><td class="note"></td></tr>
+<tr><td class="tk">SMCI</td><td><span class="badge range">RANGE</span></td><td>—</td><td class="num cw">45</td><td class="num pw">40</td><td class="num fl">42</td><td class="num mp">38.5</td><td class="note"></td></tr>
+<tr><td class="tk">SNDK</td><td><span class="badge range">RANGE</span></td><td>—</td><td class="num cw">2000</td><td class="num pw">1700</td><td class="num fl">1160</td><td class="num mp">1695</td><td class="note"></td></tr>
+<tr><td class="tk">RKLB</td><td><span class="badge range">RANGE</span></td><td>—</td><td class="num cw">80</td><td class="num pw">65</td><td class="num fl">70</td><td class="num mp">67</td><td class="note"></td></tr>
+<tr><td class="tk">MSTR</td><td><span class="badge range">RANGE</span></td><td>—</td><td class="num cw">167.5</td><td class="num pw">150</td><td class="num fl">172.5</td><td class="num mp">155</td><td class="note"></td></tr>
+<tr><td class="tk">COIN</td><td><span class="badge range">RANGE</span></td><td>—</td><td class="num cw">200</td><td class="num pw">200</td><td class="num fl">150</td><td class="num mp">190</td><td class="note"></td></tr>
+<tr><td class="tk">MU</td><td><span class="badge range">RANGE</span></td><td>—</td><td class="num cw">1100</td><td class="num pw">1040</td><td class="num fl">1000</td><td class="num mp">970</td><td class="note"></td></tr>
+<tr><td class="tk">HOOD</td><td><span class="badge range">RANGE</span></td><td>—</td><td class="num cw">120</td><td class="num pw">120</td><td class="num fl">121</td><td class="num mp">116</td><td class="note"></td></tr>
+<tr><td class="tk">GME</td><td><span class="badge range">RANGE</span></td><td>—</td><td class="num cw">25</td><td class="num pw">24</td><td class="num fl">15.5</td><td class="num mp">22</td><td class="note"></td></tr>
+<tr><td class="tk">CRWD</td><td><span class="badge range">RANGE</span></td><td>—</td><td class="num cw">250</td><td class="num pw">250</td><td class="num fl">170</td><td class="num mp">250</td><td class="note"></td></tr>
+<tr><td class="tk">AMD</td><td><span class="badge range">RANGE</span></td><td>—</td><td class="num cw">650</td><td class="num pw">600</td><td class="num fl">637.5</td><td class="num mp">575</td><td class="note"></td></tr>
+<tr><td class="tk">NKE</td><td><span class="badge range">RANGE</span></td><td>—</td><td class="num cw">40</td><td class="num pw">35</td><td class="num fl">48</td><td class="num mp">36.5</td><td class="note"></td></tr>
+<tr><td class="tk">TSLA</td><td><span class="badge range">RANGE</span></td><td>—</td><td class="num cw">360</td><td class="num pw">375</td><td class="num fl">385</td><td class="num mp">360</td><td class="note"></td></tr>
+<tr><td class="tk">NFLX</td><td><span class="badge range">RANGE</span></td><td>—</td><td class="num cw">75</td><td class="num pw">70</td><td class="num fl">85</td><td class="num mp">72</td><td class="note"></td></tr>
+<tr><td class="tk">META</td><td><span class="badge range">RANGE</span></td><td>—</td><td class="num cw">800</td><td class="num pw">740</td><td class="num fl">505</td><td class="num mp">692.5</td><td class="note"></td></tr>
+</tbody></table></div>
 
-    <title>Jay Indicators - stock screener picks trades outperforming stocks</title>
+<h2>Charts</h2>
+<div class="grid">
+<figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/IREN.jpg">
+  <figcaption><span class="tk">IREN</span><span class="badge buy">BUY</span></figcaption>
+  <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/IREN.jpg" alt="IREN daily chart with gamma levels">
+</figure>
+<figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/CRWV.jpg">
+  <figcaption><span class="tk">CRWV</span><span class="badge buy">BUY</span></figcaption>
+  <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/CRWV.jpg" alt="CRWV daily chart with gamma levels">
+</figure>
+<figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/ORCL.jpg">
+  <figcaption><span class="tk">ORCL</span><span class="badge buy">BUY</span></figcaption>
+  <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/ORCL.jpg" alt="ORCL daily chart with gamma levels">
+</figure>
+<figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/SOFI.jpg">
+  <figcaption><span class="tk">SOFI</span><span class="badge buy">BUY</span></figcaption>
+  <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/SOFI.jpg" alt="SOFI daily chart with gamma levels">
+</figure>
+<figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/PCG.jpg">
+  <figcaption><span class="tk">PCG</span><span class="badge wash">WATCH</span></figcaption>
+  <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/PCG.jpg" alt="PCG daily chart with gamma levels">
+</figure>
+<figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/BE.jpg">
+  <figcaption><span class="tk">BE</span><span class="badge sell">SELL</span></figcaption>
+  <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/BE.jpg" alt="BE daily chart with gamma levels">
+</figure>
+<figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/MRVL.jpg">
+  <figcaption><span class="tk">MRVL</span><span class="badge sell">SELL</span></figcaption>
+  <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/MRVL.jpg" alt="MRVL daily chart with gamma levels">
+</figure>
+<figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/DELL.jpg">
+  <figcaption><span class="tk">DELL</span><span class="badge sell">SELL</span></figcaption>
+  <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/DELL.jpg" alt="DELL daily chart with gamma levels">
+</figure>
+<figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/PLTR.jpg">
+  <figcaption><span class="tk">PLTR</span><span class="badge sell">SELL</span></figcaption>
+  <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/PLTR.jpg" alt="PLTR daily chart with gamma levels">
+</figure>
+<figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/MRNA.jpg">
+  <figcaption><span class="tk">MRNA</span><span class="badge sell">SELL</span></figcaption>
+  <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/MRNA.jpg" alt="MRNA daily chart with gamma levels">
+</figure>
+<figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/CIFR.jpg">
+  <figcaption><span class="tk">CIFR</span><span class="badge range">RANGE</span></figcaption>
+  <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/CIFR.jpg" alt="CIFR daily chart with gamma levels">
+</figure>
+<figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/NBIS.jpg">
+  <figcaption><span class="tk">NBIS</span><span class="badge range">RANGE</span></figcaption>
+  <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/NBIS.jpg" alt="NBIS daily chart with gamma levels">
+</figure>
+<figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/MARA.jpg">
+  <figcaption><span class="tk">MARA</span><span class="badge range">RANGE</span></figcaption>
+  <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/MARA.jpg" alt="MARA daily chart with gamma levels">
+</figure>
+<figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/WULF.jpg">
+  <figcaption><span class="tk">WULF</span><span class="badge range">RANGE</span></figcaption>
+  <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/WULF.jpg" alt="WULF daily chart with gamma levels">
+</figure>
+<figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/INTC.jpg">
+  <figcaption><span class="tk">INTC</span><span class="badge range">RANGE</span></figcaption>
+  <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/INTC.jpg" alt="INTC daily chart with gamma levels">
+</figure>
+<figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/BMNR.jpg">
+  <figcaption><span class="tk">BMNR</span><span class="badge range">RANGE</span></figcaption>
+  <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/BMNR.jpg" alt="BMNR daily chart with gamma levels">
+</figure>
+<figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/SMCI.jpg">
+  <figcaption><span class="tk">SMCI</span><span class="badge range">RANGE</span></figcaption>
+  <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/SMCI.jpg" alt="SMCI daily chart with gamma levels">
+</figure>
+<figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/SNDK.jpg">
+  <figcaption><span class="tk">SNDK</span><span class="badge range">RANGE</span></figcaption>
+  <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/SNDK.jpg" alt="SNDK daily chart with gamma levels">
+</figure>
+<figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/RKLB.jpg">
+  <figcaption><span class="tk">RKLB</span><span class="badge range">RANGE</span></figcaption>
+  <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/RKLB.jpg" alt="RKLB daily chart with gamma levels">
+</figure>
+<figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/MSTR.jpg">
+  <figcaption><span class="tk">MSTR</span><span class="badge range">RANGE</span></figcaption>
+  <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/MSTR.jpg" alt="MSTR daily chart with gamma levels">
+</figure>
+<figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/COIN.jpg">
+  <figcaption><span class="tk">COIN</span><span class="badge range">RANGE</span></figcaption>
+  <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/COIN.jpg" alt="COIN daily chart with gamma levels">
+</figure>
+<figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/MU.jpg">
+  <figcaption><span class="tk">MU</span><span class="badge range">RANGE</span></figcaption>
+  <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/MU.jpg" alt="MU daily chart with gamma levels">
+</figure>
+<figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/HOOD.jpg">
+  <figcaption><span class="tk">HOOD</span><span class="badge range">RANGE</span></figcaption>
+  <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/HOOD.jpg" alt="HOOD daily chart with gamma levels">
+</figure>
+<figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/GME.jpg">
+  <figcaption><span class="tk">GME</span><span class="badge range">RANGE</span></figcaption>
+  <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/GME.jpg" alt="GME daily chart with gamma levels">
+</figure>
+<figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/CRWD.jpg">
+  <figcaption><span class="tk">CRWD</span><span class="badge range">RANGE</span></figcaption>
+  <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/CRWD.jpg" alt="CRWD daily chart with gamma levels">
+</figure>
+<figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/AMD.jpg">
+  <figcaption><span class="tk">AMD</span><span class="badge range">RANGE</span></figcaption>
+  <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/AMD.jpg" alt="AMD daily chart with gamma levels">
+</figure>
+<figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/NKE.jpg">
+  <figcaption><span class="tk">NKE</span><span class="badge range">RANGE</span></figcaption>
+  <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/NKE.jpg" alt="NKE daily chart with gamma levels">
+</figure>
+<figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/TSLA.jpg">
+  <figcaption><span class="tk">TSLA</span><span class="badge range">RANGE</span></figcaption>
+  <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/TSLA.jpg" alt="TSLA daily chart with gamma levels">
+</figure>
+<figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/NFLX.jpg">
+  <figcaption><span class="tk">NFLX</span><span class="badge range">RANGE</span></figcaption>
+  <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/NFLX.jpg" alt="NFLX daily chart with gamma levels">
+</figure>
+<figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/META.jpg">
+  <figcaption><span class="tk">META</span><span class="badge range">RANGE</span></figcaption>
+  <img loading="lazy" src="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/META.jpg" alt="META daily chart with gamma levels">
+</figure>
+</div>
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css" >
-    <!-- Icon -->
-    <link rel="stylesheet" href="https://cdn.lineicons.com/5.0/lineicons.css" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-
-    <!-- Slicknav -->
-    <link rel="stylesheet" href="assets/css/slicknav.css">
-    <!-- Owl carousel -->
-    <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
-    <link rel="stylesheet" href="assets/css/owl.theme.css">
-    
-    <link rel="stylesheet" href="assets/css/magnific-popup.css">
-    <link rel="stylesheet" href="assets/css/nivo-lightbox.css">
-    <!-- Animate -->
-    <link rel="stylesheet" href="assets/css/animate.css">
-    <!-- Main Style -->
-    <link rel="stylesheet" href="assets/css/main.css">
-    <!-- Responsive Style -->
-    <link rel="stylesheet" href="assets/css/responsive.css">
-
-  </head>
-  <body>
-
-    <!-- Header Area wrapper Starts -->
-    <header id="header-wrap">
-      <!-- Navbar Start -->
-      <nav class="navbar navbar-expand-md bg-inverse fixed-top scrolling-navbar">
-        <div class="container">
-          <!-- Brand and toggle get grouped for better mobile display -->
-          <a href="index.html" class="navbar-brand"><img src="assets/img/logo.png" alt=""></a>       
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-            <i class="lni lni-menu-hamburger-1"></i>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav mr-auto w-100 justify-content-end clearfix">
-              <li class="nav-item active">
-                <a class="nav-link" href="#hero-area">
-                  Home
-                </a>
-              </li>
-              <!--li class="nav-item">
-                <a class="nav-link" href="#feature">
-                  Feature
-                </a>
-              </li-->
-              <li class="nav-item">
-                <a class="nav-link" href="#services">
-                  Indicators
-                </a>
-              </li>
-              <!--li class="nav-item">
-                <a class="nav-link" href="#team">
-                  Team
-                </a>
-              </li-->
-              <li class="nav-item">
-                <a class="nav-link" href="#pricing">
-                  Pricing
-                </a>
-              </li>
-              <!--li class="nav-item">
-                <a class="nav-link" href="#portfolios">
-                  Works
-                </a>
-              </li-->
-              <li class="nav-item">
-                <a class="nav-link" href="#testimonial">
-                  Testimonial
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#blog">
-                  Blog
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#contact">
-                  Contact
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-      <!-- Navbar End -->
-
-      <!-- Hero Area Start -->
-      <div id="hero-area" class="hero-area-bg">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-12 col-sm-12">
-              <div class="contents text-center">
-                <h2 class="head-title wow fadeInUp">Analyze stocks like a Fund Manager <br> trade fast with screeners</h2>
-                <div class="header-button wow fadeInUp" data-wow-delay="0.3s">
-                  <a href="#services" class="btn btn-common">Explore</a>
-                </div>
-              </div>
-              <div class="img-thumb text-center wow fadeInUp" data-wow-delay="0.6s">
-                <img class="img-fluid" src="assets/img/hero-1.png" alt="">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Hero Area End -->
-
-    </header>
-    <!-- Header Area wrapper End -->
-
-    <!-- Feature Section Start 
-    <div id="feature">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-lg-6 col-md-12 col-sm-12">
-            <div class="text-wrapper">
-              <div>
-                <h2 class="title-hl wow fadeInLeft" data-wow-delay="0.3s">We are helping to grow <br> your business.</h2>
-                <p class="mb-4">A digital studio specialising in User Experience & eCommerce, we combine innovation with digital craftsmanship to help brands fulfill their potential.</p>
-                <a href="#" class="btn btn-common">More About Us</a>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-6 col-md-12 col-sm-12 padding-none feature-bg">
-            <div class="feature-thumb">
-              <div class="feature-item wow fadeInDown" data-wow-duration="1000ms" data-wow-delay="300ms">
-                <div class="icon">
-                  <i class="lni-microphone"></i>
-                </div>
-                <div class="feature-content">
-                  <h3>What we do</h3>
-                  <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia con- sequuntur magni dolores </p>
-                </div>
-              </div>
-              <div class="feature-item wow fadeInDown" data-wow-duration="1000ms" data-wow-delay="500ms">
-                <div class="icon">
-                  <i class="lni-users"></i>
-                </div>
-                <div class="feature-content">
-                  <h3>Meet our team</h3>
-                  <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia con- sequuntur magni dolores </p>
-                </div>
-              </div>
-              <div class="feature-item wow fadeInDown" data-wow-duration="1000ms" data-wow-delay="700ms">
-                <div class="icon">
-                  <i class="lni-medall-alt"></i>
-                </div>
-                <div class="feature-content">
-                  <h3>Our Creation</h3>
-                  <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia con- sequuntur magni dolores </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-     Feature Section End -->
-
-    <!-- Services Section Start -->
-    <section id="services" class="section-padding bg-gray">
-      <div class="container">
-        <div class="section-header text-center">
-          <h2 class="section-title wow fadeInDown" data-wow-delay="0.3s">Our Indicators</h2>
-          <p>Our indicators put every trader on par with big hedge funds managers <br> Sector charts & Stock screeners works for S&P500, Nifty500 and Crypto.</p>
-        </div>
-        <div class="row">
-          <!-- Services item -->
-          <div class="col-md-6 col-lg-4 col-xs-12">
-            <div class="services-item wow fadeInRight" data-wow-delay="0.3s">
-              <div class="icon">
-                <i class="lni lni-trend-up-1"></i>
-              </div>
-              <div class="services-content">
-                <h3><a href="https://www.tradingview.com/script/mKBi6rZl-Jay-Stock-Trends/">Stock trends</a></h3>
-                <p>Analyze multi timeframe EMA, trend, support resistance and many more all at once in single window</p>
-              </div>
-            </div>
-          </div>
-          <!-- Services item -->
-          <div class="col-md-6 col-lg-4 col-xs-12">
-            <div class="services-item wow fadeInRight" data-wow-delay="0.6s">
-              <div class="icon">
-                <i class="lni lni-rocket-5"></i>
-              </div>
-              <div class="services-content">
-                <h3><a href="https://www.tradingview.com/script/MjdmnuG7-Jay-Stock-Vs-S-P-Sector-Performance/">Stock performance</a></h3>
-                <p>Based on stock sector, sector chart automatically comes up with performance lines and many more related to sector</p>
-              </div>
-            </div>
-          </div>
-          <!-- Services item -->
-          <div class="col-md-6 col-lg-4 col-xs-12">
-            <div class="services-item wow fadeInRight" data-wow-delay="0.9s">
-              <div class="icon">
-                <i class="lni lni-trees-3"></i>
-              </div>
-              <div class="services-content">
-                <h3><a href="#">Sector EMA plots</a></h3>
-                <p>Plot all stocks EMA, beta, avg return expected for selected sector. all at once for easy comparison</p>
-              </div>
-            </div>
-          </div>
-          <!-- Services item -->
-          <div class="col-md-6 col-lg-4 col-xs-12">
-            <div class="services-item wow fadeInRight" data-wow-delay="1.2s">
-              <div class="icon">
-                <i class="lni lni-trophy-1"></i>
-              </div>
-              <div class="services-content">
-                <h3><a href="#">Sector trends</a></h3>
-                <p>Custom built sector charts after removing heavy weights. Plots EMA and trend of sector for easy sector analysis</p>
-              </div>
-            </div>
-          </div>
-          <!-- Services item -->
-          <div class="col-md-6 col-lg-4 col-xs-12">
-            <div class="services-item wow fadeInRight" data-wow-delay="1.5s">
-              <div class="icon">
-                <!-- i class="lni lni-radar"></i-->
-                <i class="material-icons md-18">radar</i>
-              </div>
-              <div class="services-content">
-                <h3><a href="https://www.tradingview.com/script/zBOIlzTT-Jay-stock-Screener/">Stock Screener</a></h3>
-                <p>Screener to screen stocks based ema, trend, HH, HL conditions and filter them through multi timeframes or sectors</p>
-              </div>
-            </div>
-          </div>
-          <!-- Services item -->
-          <div class="col-md-6 col-lg-4 col-xs-12">
-            <div class="services-item wow fadeInRight" data-wow-delay="1.8s">
-              <div class="icon">
-                <i class="lni lni-funnel-1"></i>
-              </div>
-              <div class="services-content">
-                <h3><a href="#">Sector Filter</a></h3>
-                <p>Screen stocks based on sector conditions. Also supports multi timeframe</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- Services Section End -->
-
-    <!-- Start Video promo Section 
-    <section class="video-promo section-padding text-center">
-      <div class="overlay"></div>
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12 col-sm-12">
-             <h2 style="color: #fff;">You're Using Free Lite Version</h2>
-              <h5>Please purchase full version of the template to get all features/pages and facilities</h5><p></p>
-              <a href="https://rebrand.ly/stack-ud" class="btn btn-common" rel="nofollow">Purchase Now</a>
-          </div>
-        </div>
-      </div>
-    </section>
-    End Video Promo Section -->
-
-    <!-- Team Section Start 
-    <section id="team" class="section-padding text-center">
-      <div class="container">
-        <div class="section-header text-center">
-          <h2 class="section-title wow fadeInDown" data-wow-delay="0.3s">Meet our team</h2>
-          <p>A desire to help and empower others between community contributors in technology <br> began to grow in 2020.</p>
-        </div>
-        <div class="row">
-          <div class="col-sm-6 col-md-6 col-lg-3">
-            <!-- Team Item Starts -
-            <div class="team-item text-center wow fadeInRight" data-wow-delay="0.3s">
-              <div class="team-img">
-                <img class="img-fluid" src="assets/img/team/team-01.png" alt="">
-                <div class="team-overlay">
-                  <div class="overlay-social-icon text-center">
-                    <ul class="social-icons">
-                      <li><a href="#"><i class="lni-facebook-filled" aria-hidden="true"></i></a></li>
-                      <li><a href="#"><i class="lni-twitter-filled" aria-hidden="true"></i></a></li>
-                      <li><a href="#"><i class="lni-instagram-filled" aria-hidden="true"></i></a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class="info-text">
-                <h3><a href="#">David Smith</a></h3>
-                <p>Chief Operating Officer</p>
-              </div>
-            </div>
-            <!-- Team Item Ends 
-          </div>
-          <div class="col-sm-6 col-md-6 col-lg-3">
-            <!-- Team Item Starts 
-            <div class="team-item text-center wow fadeInRight" data-wow-delay="0.6s">
-              <div class="team-img">
-                <img class="img-fluid" src="assets/img/team/team-02.png" alt="">
-                <div class="team-overlay">
-                  <div class="overlay-social-icon text-center">
-                    <ul class="social-icons">
-                      <li><a href="#"><i class="lni-facebook-filled" aria-hidden="true"></i></a></li>
-                      <li><a href="#"><i class="lni-twitter-filled" aria-hidden="true"></i></a></li>
-                      <li><a href="#"><i class="lni-instagram-filled" aria-hidden="true"></i></a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class="info-text">
-                <h3><a href="#">Eric Peterson</a></h3>
-                <p>Product Designer</p>
-              </div>
-            </div>
-            <!-- Team Item Ends 
-          </div>
-
-          <div class="col-sm-6 col-md-6 col-lg-3">
-            <!-- Team Item Starts 
-            <div class="team-item text-center wow fadeInRight" data-wow-delay="0.9s">
-              <div class="team-img">
-                <img class="img-fluid" src="assets/img/team/team-03.png" alt="">
-                <div class="team-overlay">
-                  <div class="overlay-social-icon text-center">
-                    <ul class="social-icons">
-                      <li><a href="#"><i class="lni-facebook-filled" aria-hidden="true"></i></a></li>
-                      <li><a href="#"><i class="lni-twitter-filled" aria-hidden="true"></i></a></li>
-                      <li><a href="#"><i class="lni-instagram-filled" aria-hidden="true"></i></a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class="info-text">
-                <h3><a href="#">Durwin Babb</a></h3>
-                <p>Lead Designer</p>
-              </div>
-            </div>
-            <!-- Team Item Ends 
-          </div>
-
-          <div class="col-sm-6 col-md-6 col-lg-3">
-            <!-- Team Item Starts 
-            <div class="team-item text-center wow fadeInRight" data-wow-delay="1.2s">
-              <div class="team-img">
-                <img class="img-fluid" src="assets/img/team/team-04.png" alt="">
-                <div class="team-overlay">
-                  <div class="overlay-social-icon text-center">
-                    <ul class="social-icons">
-                      <li><a href="#"><i class="lni-facebook-filled" aria-hidden="true"></i></a></li>
-                      <li><a href="#"><i class="lni-twitter-filled" aria-hidden="true"></i></a></li>
-                      <li><a href="#"><i class="lni-instagram-filled" aria-hidden="true"></i></a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class="info-text">
-                <h3><a href="#">Marijn Otte</a></h3>
-                <p>Front-end Developer</p>
-              </div>
-            </div>
-            <!-- Team Item Ends 
-          </div>
-          
-        </div>
-      </div>
-    </section>
-    Team Section End -->
-
-    <!-- Counter Section Start -->
-    <section id="counter" class="section-padding">
-      <div class="overlay"></div>
-      <div class="container">
-        <div class="row justify-content-between">
-          <div class="col-lg-12 col-md-12 col-xs-12">
-            <div class="row">
-              <!-- Start counter -->
-              <div class="col-lg-3 col-md-6 col-xs-12">
-                <div class="counter-box wow fadeInUp" data-wow-delay="0.2s">
-                  <div class="icon-o"><i class="lni lni-user-multiple-4"></i></div>
-                  <div class="fact-count">
-                    <h3><span class="counter">50</span></h3>
-                    <p>Users</p>
-                  </div>
-                </div>
-              </div>
-              <!-- End counter -->
-              <!-- Start counter -->
-              <div class="col-lg-3 col-md-6 col-xs-12">
-                <div class="counter-box wow fadeInUp" data-wow-delay="0.4s">
-                  <div class="icon-o"><i class="lni lni-emoji-smile"></i></div>
-                  <div class="fact-count">
-                    <h3><span class="counter">50</span></h3>
-                    <p>Positive Reviews</p>
-                  </div>
-                </div>
-              </div>
-              <!-- End counter -->
-              <!-- Start counter -->
-              <div class="col-lg-3 col-md-6 col-xs-12">
-                <div class="counter-box wow fadeInUp" data-wow-delay="0.6s">
-                  <div class="icon-o"><i class="lni lni-download-1"></i></div>
-                  <div class="fact-count">
-                    <h3><span class="counter">100</span></h3>
-                    <p>Downloads</p>
-                  </div>
-                </div>
-              </div>
-              <!-- End counter -->
-              <!-- Start counter -->
-              <div class="col-lg-3 col-md-6 col-xs-12">
-                <div class="counter-box wow fadeInUp" data-wow-delay="0.8s">
-                  <div class="icon-o"><i class="lni lni-thumbs-up-3"></i></div>
-                  <div class="fact-count">
-                    <h3><span class="counter">1000</span></h3>
-                    <p>Followers</p>
-                  </div>
-                </div>
-              </div>
-              <!-- End counter -->
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- Counter Section End -->
-
-    <!-- Pricing section Start --> 
-    <section id="pricing" class="section-padding bg-gray">
-      <div class="container">
-        <div class="section-header text-center">
-          <h2 class="section-title wow fadeInDown" data-wow-delay="0.3s">Our Pricing</h2>
-          <p>Pricing Plans Designed for Traders, By Traders. <br> Invest in Your Success, Choose Your Plan.</p>
-        </div>
-        <div class="row">
-          <div class="col-lg-4 col-md-6 col-xs-12">
-            <div class="table wow fadeInLeft" data-wow-delay="1.2s">
-              <div class="title">
-                <h3>Basic</h3>
-              </div>
-              <div class="pricing-header">
-                <p class="price-value">$24.99<span>/ Month</span></p>
-                <p class="price-value-year">$249.90<span>/ Year </span><span style="color:rgba(0, 128, 0, 0.825)">(save $50)</span></p>
-              </div>
-                <ul class="description">
-                <li>Stock trend indicator</li>
-                <li>Sector EMA Plots</li>
-                <li>Customer Support</li>
-              </ul>
-              <!--button class="btn btn-common">Get It</button-->
-              <style>.pp-H6PHSZ7R5FJEG{text-align:center;border:none;border-radius:0.25rem;min-width:11.625rem;padding:0 2rem;height:2.625rem;font-weight:bold;background-color:#FFD140;color:#000000;font-family:"Helvetica Neue",Arial,sans-serif;font-size:1rem;line-height:1.25rem;cursor:pointer;}</style>
-              <form action="https://www.paypal.com/ncp/payment/H6PHSZ7R5FJEG" method="post" target="_top" style="display:inline-grid;justify-items:center;align-content:start;gap:0.5rem;">
-                <input class="pp-H6PHSZ7R5FJEG" type="submit" value="Buy Now" />
-                <img src=https://www.paypalobjects.com/images/Debit_Credit_APM.svg alt="cards" />
-                <section> Powered by <img src="https://www.paypalobjects.com/paypal-ui/logos/svg/paypal-wordmark-color.svg" alt="paypal" style="height:0.875rem;vertical-align:middle;"/></section>
-              </form>
-            </div> 
-          </div>
-          <div class="col-lg-4 col-md-6 col-xs-12 active">
-            <div class="table wow fadeInUp" id="active-tb" data-wow-delay="1.2s">
-              <div class="title">
-                <h3>Professional</h3>
-              </div>
-               <div class="pricing-header">
-                  <p class="price-value">$49.99<span>/ Month</span></p>
-                  <p class="price-value-year">$499.90<span>/ Year </span><span style="color:rgba(0, 128, 0, 0.825)">(save $100)</span></p>
-                </div>
-              <ul class="description">
-                <li>Stock trend indicator</li>
-                <li>Sector EMA Plots</li>
-                <li>Stock performance chart</li>
-                <li>Sector charts</li>
-                <li>Customer Support</li>
-              </ul>
-              <!--button class="btn btn-common">Get It</button-->
-              <style>.pp-PJ8U64MCLX8ME{text-align:center;border:none;border-radius:0.25rem;min-width:11.625rem;padding:0 2rem;height:2.625rem;font-weight:bold;background-color:#FFD140;color:#000000;font-family:"Helvetica Neue",Arial,sans-serif;font-size:1rem;line-height:1.25rem;cursor:pointer;}</style>
-              <form action="https://www.paypal.com/ncp/payment/PJ8U64MCLX8ME" method="post" target="_top" style="display:inline-grid;justify-items:center;align-content:start;gap:0.5rem;">
-                <input class="pp-PJ8U64MCLX8ME" type="submit" value="Buy Now" />
-                <img src=https://www.paypalobjects.com/images/Debit_Credit_APM.svg alt="cards" />
-                <section> Powered by <img src="https://www.paypalobjects.com/paypal-ui/logos/svg/paypal-wordmark-color.svg" alt="paypal" style="height:0.875rem;vertical-align:middle;"/></section>
-              </form>
-           </div> 
-          </div>
-          <div class="col-lg-4 col-md-6 col-xs-12">
-            <div class="table wow fadeInRight" data-wow-delay="1.2s">
-              <div class="title">
-                <h3>Expert</h3>
-              </div>
-               <div class="pricing-header">
-                  <p class="price-value">$99.99<span>/ Month</span></p>
-                  <p class="price-value-year">$999.90<span>/ Year </span><span style="color:rgba(0, 128, 0, 0.825)">(save $200)</span></p>
-                </div>
-              <ul class="description">
-                <li>Stock Trend Indicator</li>
-                <li>Sector EMA Plots</li>
-                <li>Stock Performance chart</li>
-                <li>Sector Charts</li>
-                <li>Stock Screener</li>
-                <li>Sector Filter</li>
-                <li>Customer Support</li>
-              </ul>
-              <!--button class="btn btn-common">Get It</button-->
-              <style>.pp-HBCA8BX8DP6RU{text-align:center;border:none;border-radius:0.25rem;min-width:11.625rem;padding:0 2rem;height:2.625rem;font-weight:bold;background-color:#FFD140;color:#000000;font-family:"Helvetica Neue",Arial,sans-serif;font-size:1rem;line-height:1.25rem;cursor:pointer;}</style>
-              <form action="https://www.paypal.com/ncp/payment/HBCA8BX8DP6RU" method="post" target="_top" style="display:inline-grid;justify-items:center;align-content:start;gap:0.5rem;">
-                <input class="pp-HBCA8BX8DP6RU" type="submit" value="Buy Now" />
-                <img src=https://www.paypalobjects.com/images/Debit_Credit_APM.svg alt="cards" />
-                <section> Powered by <img src="https://www.paypalobjects.com/paypal-ui/logos/svg/paypal-wordmark-color.svg" alt="paypal" style="height:0.875rem;vertical-align:middle;"/></section>
-              </form>
-            </div> 
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- Pricing Table Section End -->
-
-    <!-- Skills Section Begin
-    <div class="skill-area section-padding">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-6 col-md-12 col-xs-12 wow fadeInLeft" data-wow-delay="0.3s">
-            <img class="img-fluid" src="assets/img/about/img-1.jpg" alt="" >
-          </div>
-          <div class="col-lg-6 col-md-12 col-xs-12 info wow fadeInRight" data-wow-delay="0.3s">
-            <div class="site-heading">
-              <h2 class="section-title">Our <span>Skill</span></h2>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus architecto laudantium dolorem, aut aspernatur modi minima alias provident obcaecati! Minima odio porro nemo magnam dolore minus asperiores veniam dolorum est!
-              </p>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas, nesciunt possimus quaerat ipsam, corporis architecto aspernatur non aut! Dolorum consectetur placeat excepturi, perspiciatis sunt.
-              </p>
-            </div>
-            <div class="skills-section">
-              <!-- Progress Bar Start 
-              <div class="progress-box">
-                <h5>Strategy &amp; Analysis <span class="pull-right">88%</span></h5>
-                <div class="progress" style="opacity: 1; left: 0px;">
-                  <div class="progress-bar" role="progressbar" data-width="87" style="width: 87%;"></div>
-                </div>
-              </div>
-              <div class="progress-box">
-                <h5>Eeconomic growth <span class="pull-right">95%</span></h5>
-                <div class="progress" style="opacity: 1; left: 0px;">
-                  <div class="progress-bar" role="progressbar" data-width="96" style="width: 96%;"></div>
-                </div>
-              </div>
-              <div class="progress-box">
-                <h5>Achieves goals <span class="pull-right">70%</span></h5>
-                <div class="progress" style="opacity: 1; left: 0px;">
-                  <div class="progress-bar" role="progressbar" data-width="52" style="width: 52%;"></div>
-                </div>
-              </div>
-              <!-- End Progressbar 
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    End Skills Section -->
-
-      <!-- Start Video promo Section 
-    <section id="portfolios" class="video-promo section-padding text-center">
-      <div class="overlay"></div>
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12 col-sm-12">
-             <h2 style="color: #fff;">You're Using Free Lite Version</h2>
-              <h5>Please purchase full version of the template to get all features/pages and facilities</h5><p></p>
-              <a href="https://rebrand.ly/stack-ud" class="btn btn-common" rel="nofollow">Purchase Now</a>
-          </div>
-        </div>
-      </div>
-    </section>
-    End Video Promo Section -->
-
-    <!-- Testimonial Section Start -->
-    <section id="testimonial" class="testimonial section-padding">
-      <div class="overlay"></div>
-      <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">
-            <div id="testimonials" class="owl-carousel wow fadeInUp" data-wow-delay="1.2s">
-              <div class="item">
-                <div class="testimonial-item">
-                  <div class="img-thumb">
-                    <img src="assets/img/testimonial/img1.png" alt="">
-                  </div>
-                  <div class="info">
-                    <h2><a href="#">Alex W.</a></h2>
-                    <h3><a href="#">S&P500 Large Cap Investor</a></h3>
-                  </div>
-                  <div class="content">
-                    <p class="description">No other indicator is as powerful as Jay indicators. I like to invest only in S&P500 large cap stocks. There are a lot of volatile stocks in S&P500 that can give very good returns which can be easily filtered using Jay indicators. It is so easy to invest in the stocks now as i can pinpoint outperforming stocks.</p>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="testimonial-item">
-                  <div class="img-thumb">
-                    <img src="assets/img/testimonial/img2.png" alt="">
-                  </div>
-                  <div class="info">
-                    <h2><a href="#">Eugene C.</a></h2>
-                    <h3><a href="#">Crypto Bro.</a></h3>
-                  </div>
-                  <div class="content">
-                    <p class="description">Crypto sector charts help me time the entry and exit in large cap coins. Multitimeframe sangana indicator helped me to spot the trends in coins and coin sectors. Took profits in DOGECOIN, SHIBACOIN, ADA, PEPE and many more..</p>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="testimonial-item">
-                  <div class="img-thumb">
-                    <img src="assets/img/testimonial/img3.png" alt="">
-                  </div>
-                  <div class="info">
-                    <h2><a href="#">Juliana G.</a></h2>
-                    <h3><a href="#">S&P Index & Magnif7 Option player</a></h3>
-                  </div>
-                  <div class="content">
-                    <p class="description">Recovered the indicator cost from just one trade by using Jay Indicators. I liked the hourly trend on stocks and sector charts. Helped me scan the stocks on hourly charts and trade easily beside my day job.</p>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="testimonial-item">
-                  <div class="img-thumb">
-                    <img src="assets/img/testimonial/img4.png" alt="">
-                  </div>
-                  <div class="info">
-                    <h2><a href="#">Srinivas Y.</a></h2>
-                    <h3><a href="#">Nifty500 stock Investor</a></h3>
-                  </div>
-                  <div class="content">
-                    <p class="description">I loved scanners on the stocks and sectors. I no need to open 500 charts daily now. Based on my conditions set in scanners, the stocks list is sorted in tables. I invest in stocks that have just started long term bullish trend. Bars on weekly or monthly gives me that information from scanners. Investing was so easy now with scanners.</p>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="testimonial-item">
-                  <div class="img-thumb">
-                    <img src="assets/img/testimonial/img5.png" alt="">
-                  </div>
-                  <div class="info">
-                    <h2><a href="#">Aishwarya D.</a></h2>
-                    <h3><a href="#">Nifty stock trader</a></h3>
-                  </div>
-                  <div class="content">
-                    <p class="description">I used performance charts and scanners with sector filters to find right stocks. Whenever the price comes close to prev low, I just take trade and wait for 2 weeks to take 10% profit easily.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- Testimonial Section End -->  
-
-    <!-- Blog Section -->
-    <section id="blog" class="section-padding">
-      <!-- Container Starts -->
-      <div class="container">
-        <div class="section-header text-center">
-          <h2 class="section-title wow fadeInDown" data-wow-delay="0.3s">Latest blogs</h2>
-          <p>Decoding the Market: Trading Insights & Analysis. <br> Erase the gap between fund managers and individual investors.</p>
-        </div>
-        <div class="row">
-          <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 blog-item">
-            <!-- Blog Item Starts -->
-            <div class="blog-item-wrapper wow fadeInLeft" data-wow-delay="0.3s">
-              <div class="blog-item-img">
-                <a href="https://medium.com/@jkreddy/big-picture-analysis-of-stock-trends-within-a-sector-0c1c944de871">
-                  <img src="assets/img/blog/img1.jpg" alt="">
-                </a>                
-              </div>
-              <div class="blog-item-text"> 
-                <h3>
-                <a href="https://medium.com/@jkreddy/big-picture-analysis-of-stock-trends-within-a-sector-0c1c944de871">Big picture analysis of stock trends within a sector</a>
-                </h3>
-                <p>
-                This kind of analysis helps in picking right stocks like the big boys do. Pick sectors, pick stocks based on performance and ... 
-                </p>
-                <a href="https://medium.com/@jkreddy/big-picture-analysis-of-stock-trends-within-a-sector-0c1c944de871" class="btn btn-common btn-rm">Read More</a>
-              </div>
-            </div>
-            <!-- Blog Item Wrapper Ends-->
-          </div>
-
-          <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 blog-item">
-            <!-- Blog Item Starts -->
-            <div class="blog-item-wrapper wow fadeInUp" data-wow-delay="0.6s">
-              <div class="blog-item-img">
-                <a href="single-post.html">
-                  <img src="assets/img/blog/img2.jpg" alt="">
-                </a>                
-              </div>
-              <div class="blog-item-text"> 
-                <h3>
-                <a href="single-post.html">Beyond Beta: Uncovering Hidden Gems in the Stock Market</a>
-                </h3>
-                <p>
-                  I have done extensive analysis on lot of stocks to see, which group of stocks gives more returns compared to market, index or ... 
-                </p>
-                <a href="single-post.html" class="btn btn-common btn-rm">Read More</a>
-              </div>
-            </div>
-            <!-- Blog Item Wrapper Ends-->
-          </div>
-
-          <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 blog-item">
-            <!-- Blog Item Starts -->
-            <div class="blog-item-wrapper wow fadeInRight" data-wow-delay="0.3s">
-              <div class="blog-item-img">
-                <a href="https://www.tradingview.com/chart/BTCUSDT.P/W0lirfzy-BTC-and-DJI-SPY-correlation-with-markers/">
-                  <img src="assets/img/blog/img3.jpg" alt="">
-                </a>                
-              </div>
-              <div class="blog-item-text"> 
-                <h3>
-                  <a href="https://www.tradingview.com/chart/BTCUSDT.P/W0lirfzy-BTC-and-DJI-SPY-correlation-with-markers/">BTC and DJI/SPY correlation with markers</a>
-                </h3>
-                <p>
-                  I am using DJI(Dow Jones Index) as proxy for SPY here to compare it against BTC price movement ... 
-                </p>
-                <a href="https://www.tradingview.com/chart/BTCUSDT.P/W0lirfzy-BTC-and-DJI-SPY-correlation-with-markers/" class="btn btn-common btn-rm">Read More</a>
-              </div>
-            </div>
-            <!-- Blog Item Wrapper Ends-->
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- blog Section End -->
-
-    <!-- Clients Section Start 
-    <div id="clients" class="section-padding bg-gray">
-      <div class="container">
-        <div class="section-header text-center">
-          <h2 class="section-title wow fadeInDown" data-wow-delay="0.3s">NOTABLE CLIENTS</h2>
-          <p>Over the last 20 years, we have helped and guided organisations to achieve outstanding results</p>
-        </div>
-        <div class="row text-align-">
-          <div class="col-lg-3 col-md-3 col-xs-12 wow fadeInUp" data-wow-delay="0.3s">
-            <div class="client-item-wrapper">
-              <img class="img-fluid" src="assets/img/clients/img1.png" alt="">
-            </div>
-          </div>
-          <div class="col-lg-3 col-md-3 col-xs-12 wow fadeInUp" data-wow-delay="0.6s">
-            <div class="client-item-wrapper">
-              <img class="img-fluid" src="assets/img/clients/img2.png" alt="">
-            </div>
-          </div>
-          <div class="col-lg-3 col-md-3 col-xs-12 wow fadeInUp" data-wow-delay="0.9s">
-            <div class="client-item-wrapper">
-              <img class="img-fluid" src="assets/img/clients/img3.png" alt="">
-            </div>
-          </div>
-          <div class="col-lg-3 col-md-3 col-xs-12 wow fadeInUp" data-wow-delay="1.2s">
-            <div class="client-item-wrapper">
-              <img class="img-fluid"  src="assets/img/clients/img4.png" alt="">
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-     Clients Section End -->
-
-    <!-- Contact Section Start -->
-    <section id="contact" class="section-padding">    
-      <div class="container">
-        <div class="row contact-form-area wow fadeInUp" data-wow-delay="0.4s">          
-          <div class="col-md-6 col-lg-6 col-sm-12">
-            <div class="contact-block">
-         <div class="section-header text-center">
-          <h2 class="section-title wow fadeInDown" data-wow-delay="0.3s">Stock Analysis AI Tool</h2>
-          <p>Run a comprehensive fundamental comparative analysis of stocks within same industry using Generative AI</p>
-        </div>
-              <form id="analysis-form">
-                <div class="row">
-                  <!-- Dropdown Ticker Group -->
-                  <div class="col-md-12">
-                    <div class="form-group">
-                      <label for="ticker-group-select" class="text-white">Choose a Ticker Group:</label>
-                      <select id="ticker-group-select" class="form-control" required>
-                          <option value="" disabled selected>-- Choose a Group --</option>
-                          <!-- Options will be dynamically populated by script.js -->
-                          <option value="quantum">Quantum Computing</option>
-                          <option value="power_management_chips">Power Management & Chips</option>
-                          <option value="uas_defense_robotics">UAS, Defense & Robotics</option>
-                          <option value="lidar_sensing">Lidar & Sensing</option>
-                          <option value="service_robotics">Service Robotics</option>
-                          <option value="autonomous_driving">Autonomous Driving & AV</option>
-                          <option value="space_launch_systems">Space & Launch Systems</option>
-                          <option value="earth_observation">Earth Observation & Imagery</option>
-                          <option value="satellite_communications">Satellite Communications</option>
-                          <option value="ev_charging_infrastructure">EV Charging Infrastructure</option>
-                          <option value="evtol_air_mobility">eVTOL & Air Mobility</option>
-                          <option value="hydrogen_fuel_cells">Hydrogen & Fuel Cells</option>
-                          <option value="cybersecurity">Data Centers REIT</option>
-                          <option value="new_nuclear_energy">Nuclear Energy</option>
-                          <option value="batteries_storage_tech">Batteries Tech</option>
-                          <option value="batteries_storage_sw">Batteries sw</option>
-                          <option value="battery_materials_mining">Battery Mining</option>
-                          <option value="Hyperscalers">AI Infrastructure & Cloud</option>
-                     </select>
-                    </div>
-                  </div>
-                  
-                  <!-- Ticker Input Box -->
-                  <div class="col-md-12">
-                    <div class="form-group">
-                      <label for="tickerInput" class="text-white">Enter Tickers (comma-separated):</label>
-                      <input type="text" id="tickerInput" class="form-control" placeholder="e.g., TSLA, NVDA, AAPL" required>
-                    </div>
-                  </div>
-
-                  <!-- Optional Chart URL Input -->
-                  <div class="col-md-12">
-                    <div class="form-group">
-                      <label for="snapshotUrl" class="text-white">TradingView Chart Link (Optional):</label>
-                      <input type="text" id="snapshotUrl" class="form-control" placeholder="(optional)Paste TradingView Chart image link here">
-                    </div>
-                  </div>
-                  
-                  <!-- Loading Spinner/Status -->
-                  <div class="col-md-12">
-                      <div id="loading-spinner" style="display: none; text-align: center; padding: 10px; border-radius: 4px; background-color: rgba(255,255,255,0.1);">
-                          <p class="mb-0 text-white"><em>Executing query for <span id="current-action">...</span></em></p>
-                      </div>
-                  </div>
-
-                  <!-- Full Analysis Button -->
-                  <div class="col-md-12">
-                    <div class="submit-button">
-                      <button class="btn btn-common" id="startButton" type="button">
-                          Full Analysis
-                      </button>
-                      <div class="clearfix"></div> 
-                    </div>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-
-          <div class="col-md-6 col-lg-6 col-sm-12">
-            <div class="contact-right-area wow fadeIn">
-              <div class="contact-title">
-                <h1>We develop custom indicators on request..</h1>
-                <p>and committed to partner with our customers to achieve their trading goals</p>
-              </div>
-              <h2>Contact Us</h2>
-              <div class="contact-right">
-                <div class="single-contact">
-                  <div class="contact-icon">
-                    <i class="lni lni-map-marker-5"></i>
-                  </div>
-                  <p>ADDRESS: Prestige Tech park, Bangalore, India</p>
-                </div>
-                <div class="single-contact">
-                  <div class="contact-icon">
-                    <i class="lni lni-envelope-1"></i>
-                  </div>
-                  <p><a href="mailto:contact@jayindicators.com">Email:  contact@jayindicators.com</a></p>
-                </div>
-                <div class="single-contact">
-                  <div class="contact-icon">
-                    <i class="lni lni-whatsapp"></i>
-                  </div>
-                  <p><a href="https://wa.me/919632709849?text=Hello%20Jay%20Indicators">Whatsapp:  +91 9632709849</a></p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> 
-    </section>
-    <!-- Contact Section End -->
-    
-    <!-- Copyright Section Start -->
-    <div class="copyright">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-4 col-md-3 col-xs-12">
-            <div class="footer-logo">
-              <img src="assets/img/logo.png" alt="">
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-4 col-xs-12">     
-            <div class="social-icon text-center">
-              <!--a class="facebook" href="#"><i class="lni lni-facebook"></i></a-->
-              <a class="twitter" href="#"><i class="lni lni-twitter-old"></i></a>
-              <a class="instagram" href="#"><i class="lni lni-instagram"></i></a>
-              <a class="google" href="#"><i class="lni lni-youtube"></i></a>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-5 col-xs-12">
-            <p class="float-right">Follow our Tradingview account <a href="https://www.tradingview.com/u/JKReddyLin/" rel="nofollow">Jay</a></p>
-          </div> 
-        </div>
-      </div>
-    </div>
-    <!-- Copyright Section End -->
-
-    <!-- Go to Top Link -->
-    <a href="#" class="back-to-top">
-    	<i class="lni lni-arrow-upward"></i>
-    </a>
-    
-    <!-- Preloader -->
-    <div id="preloader">
-      <div class="loader" id="loader-1"></div>
-    </div>
-    <!-- End Preloader -->
-    
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="assets/js/jquery-min.js"></script>
-    <script src="assets/js/popper.min.js"></script>
-    <script src="assets/js/bootstrap.min.js"></script>
-    <script src="assets/js/owl.carousel.min.js"></script>
-    <script src="assets/js/wow.js"></script>
-    <script src="assets/js/jquery.nav.js"></script>
-    <script src="assets/js/scrolling-nav.js"></script>
-    <script src="assets/js/jquery.easing.min.js"></script>
-    <script src="assets/js/jquery.counterup.min.js"></script>  
-    <script src="assets/js/waypoints.min.js"></script>   
-    <script src="assets/js/jquery.slicknav.js"></script>
-    <script src="assets/js/main.js"></script>
-    <script src="assets/js/GenAIstock.js"></script>
-    <script src="assets/js/marked.min.js"></script> 
-      
-  </body>
+<footer>
+<p>Technical analysis only — not financial advice. Gamma flip is an approximation (first strike where cumulative signed exposure turns non-negative), not a Barchart-verified value. Levels regenerate on each fresh options-data run.</p>
+</footer>
+</div>
+<div id="lightbox"><img alt=""></div>
+<script>
+const lb=document.getElementById('lightbox'),im=lb.querySelector('img');
+document.querySelectorAll('.card').forEach(c=>c.addEventListener('click',()=>{im.src=c.dataset.full;lb.classList.add('open')}));
+lb.addEventListener('click',()=>lb.classList.remove('open'));
+addEventListener('keydown',e=>{if(e.key==='Escape')lb.classList.remove('open')});
+</script>
+</body>
 </html>
