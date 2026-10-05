@@ -300,6 +300,7 @@ let tx=0;
 lb.addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});
 lb.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>50){swiped=true;show(idx+(dx<0?1:-1))}},{passive:true});
 </script>
+<script type="application/json" id="patdata">{}</script>
 <script>
 (function(){
 const sv=document.getElementById('stripview'),tv=document.getElementById('tableview');
@@ -314,8 +315,12 @@ const rows=[...tv.querySelectorAll('tbody tr')].map(tr=>{
     badge:bg?bg.textContent.trim():'',bcls:bg?bg.className.replace('badge ',''):'',
     kzLo:kn.length?Math.min(...kn):null,kzHi:kn.length?Math.max(...kn):null,
     price:num(tds[3].textContent),cw:num(tds[4].textContent),pw:num(tds[5].textContent),
-    fl:num(tds[6].textContent),mp:num(tds[7].textContent)};
+    fl:num(tds[6].textContent),mp:num(tds[7].textContent),pat:null,plo:null,phi:null};
 }).filter(r=>r.price!=null&&r.pw!=null&&r.cw!=null);
+let PAT={};try{PAT=JSON.parse(document.getElementById('patdata').textContent||'{}')}catch(e){PAT={}}
+rows.forEach(r=>{const p=PAT[r.t];
+  if(p&&typeof p.name==='string'&&p.name&&isFinite(p.lo)&&isFinite(p.hi)){
+    r.pat=p.name; r.plo=Math.min(p.lo,p.hi); r.phi=Math.max(p.lo,p.hi);}});
 if(!rows.length)return;
 const pc=v=>(v>=0?'+':'')+(v*100).toFixed(1)+'%';
 function st(r){
@@ -338,15 +343,17 @@ function render(){
   const rs=rows.map(r=>({r,s:st(r)}));
   rs.sort((a,b)=>mode==='pw'?a.s.dP-b.s.dP:mode==='action'?a.s.score-b.s.score:a.r.t.localeCompare(b.r.t));
   sv.innerHTML=rs.map(({r,s})=>{
+    const zLo=r.pat!=null?r.plo:r.kzLo, zHi=r.pat!=null?r.phi:r.kzHi;
+    const zTitle=r.pat?('Pattern '+r.pat):'Key zone';
     const vals=[r.pw,r.cw,r.price];
     if(r.fl!=null)vals.push(r.fl); if(r.mp!=null)vals.push(r.mp);
-    if(r.kzLo!=null)vals.push(r.kzLo); if(r.kzHi!=null)vals.push(r.kzHi);
+    if(zLo!=null)vals.push(zLo); if(zHi!=null)vals.push(zHi);
     let lo=Math.min(...vals),hi=Math.max(...vals);
     if(hi-lo<1e-9){lo-=1;hi+=1}
     const pad=(hi-lo)*0.09; lo-=pad; hi+=pad;
     const X=v=>((v-lo)/(hi-lo)*100).toFixed(2)+'%';
-    const zw=r.kzLo!=null&&r.kzHi!=null&&r.kzHi>r.kzLo
-      ?`<div class="szone" style="left:${X(Math.max(r.kzLo,lo))};width:calc(${X(Math.min(r.kzHi,hi))} - ${X(Math.max(r.kzLo,lo))})" title="Key zone ${fmt(r.kzLo)}–${fmt(r.kzHi)}"></div>`:'';
+    const zw=zLo!=null&&zHi!=null&&zHi>zLo
+      ?`<div class="szone" style="left:${X(Math.max(zLo,lo))};width:calc(${X(Math.min(zHi,hi))} - ${X(Math.max(zLo,lo))})" title="${zTitle} ${fmt(zLo)}–${fmt(zHi)}"></div>`:'';
     return `<div class="srow" data-t="${r.t}">
       <div class="shead"><span class="tk">${r.t}</span><span class="badge ${r.bcls}">${r.badge}</span><span class="sprice">$${r.price.toFixed(1)}</span></div>
       <div class="strack" title="PW ${fmt(r.pw)} · Flip ${fmt(r.fl)} · MP ${fmt(r.mp)} · CW ${fmt(r.cw)}">
@@ -357,7 +364,9 @@ function render(){
         <div class="sdot ${s.c}${s.pulse?' pulse':''}" style="left:${X(r.price)}" title="$${r.price.toFixed(1)}"></div>
         <span class="slo">${fmt(r.pw)}</span><span class="shi">${fmt(r.cw)}</span>
       </div>
-      <div class="sstate"><b class="${s.c}">${s.w}</b><span>${s.dl}</span></div>
+      <div class="sstate">${r.pat!=null
+        ?`<b class="${s.c}">${r.pat}</b><span>${fmt(zLo)}–${fmt(zHi)}</span>`
+        :`<b class="${s.c}">${s.w}</b><span>${s.dl}</span>`}</div>
     </div>`;
   }).join('');
 }
