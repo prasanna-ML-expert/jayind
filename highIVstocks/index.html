@@ -102,7 +102,7 @@ footer{margin-top:40px;color:var(--dim);font-size:.82rem;border-top:1px solid va
 </div>
 </header>
 
-<h2>Buy / Sell / Range <span class="viewtoggle"><button id="v-sort" title="Sort order">&#8645; Actionability</button><button id="v-strip" class="on">Strip</button><button id="v-table">Table</button></span></h2>
+<h2>Buy / Sell / Range <span class="viewtoggle"><button id="v-sort" title="Sort order">&#8645; PW dist</button><button id="v-strip" class="on">Strip</button><button id="v-table">Table</button></span></h2>
 <div id="stripview" style="display:none"></div>
 <div id="tableview">
 <div class="tablewrap"><table><thead><tr><th>Ticker</th><th>Call</th><th>Key zone</th><th>Price</th><th>CW</th><th>PW</th><th>Flip</th><th>MP</th><th>Note</th></tr></thead><tbody>
@@ -330,13 +330,13 @@ function st(r){
   else if(dF!=null){w='UNDER FLIP';c='amber';dl=pc(dF)+' under flip'}
   else{w='—';c='dim';dl=''}
   const score=Math.min(...[dF,dP,dC].filter(v=>v!=null).map(Math.abs));
-  return{w,c,dl,pulse,score};
+  return{w,c,dl,pulse,score,dP};
 }
 function fmt(v){return v==null?'—':(Number.isInteger(v)?String(v):String(Math.round(v*100)/100))}
-let mode='action';
+let mode='pw';
 function render(){
   const rs=rows.map(r=>({r,s:st(r)}));
-  rs.sort((a,b)=>mode==='action'?a.s.score-b.s.score:a.r.t.localeCompare(b.r.t));
+  rs.sort((a,b)=>mode==='pw'?a.s.dP-b.s.dP:mode==='action'?a.s.score-b.s.score:a.r.t.localeCompare(b.r.t));
   sv.innerHTML=rs.map(({r,s})=>{
     const vals=[r.pw,r.cw,r.price];
     if(r.fl!=null)vals.push(r.fl); if(r.mp!=null)vals.push(r.mp);
@@ -367,8 +367,9 @@ function setView(strip){
 }
 bS.addEventListener('click',()=>setView(true));
 bT.addEventListener('click',()=>setView(false));
-bSort.addEventListener('click',()=>{mode=mode==='action'?'az':'action';
-  bSort.innerHTML=mode==='action'?'&#8645; Actionability':'&#8645; A–Z';render()});
+const modes=[['pw','&#8645; PW dist'],['az','&#8645; A–Z'],['action','&#8645; Actionability']];
+bSort.addEventListener('click',()=>{const i=(modes.findIndex(m=>m[0]===mode)+1)%modes.length;
+  mode=modes[i][0];bSort.innerHTML=modes[i][1];render()});
 sv.addEventListener('click',e=>{const row=e.target.closest('.srow');if(!row)return;
   const i=items.findIndex(x=>x.t===row.dataset.t); if(i>=0)show(i)});
 render(); setView(true);
