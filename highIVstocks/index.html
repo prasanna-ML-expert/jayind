@@ -347,9 +347,8 @@ function render(){
     const gLo=Math.min(...gvals),gHi=Math.max(...gvals);
     const vals=[...gvals];
     if(r.plo!=null)vals.push(r.plo); if(r.phi!=null)vals.push(r.phi);
-    let dLo=Math.min(...vals),dHi=Math.max(...vals);
-    if(dHi-dLo<1e-9){dLo-=1;dHi+=1}
-    const pad=(dHi-dLo)*0.09,lo=dLo-pad,hi=dHi+pad;
+    let lo=Math.min(...vals),hi=Math.max(...vals);
+    if(hi-lo<1e-9){lo-=1;hi+=1}
     const X=v=>((v-lo)/(hi-lo)*100).toFixed(2)+'%';
     const Xc=v=>Math.min(100,Math.max(0,(v-lo)/(hi-lo)*100)).toFixed(2)+'%';
     const zw=gHi>gLo
@@ -361,7 +360,7 @@ function render(){
         ${r.fl!=null?`<div class="stick flip" style="left:${X(r.fl)}" title="Flip ${fmt(r.fl)}"></div>`:''}
         ${r.mp!=null?`<div class="stick mp" style="left:${X(r.mp)}" title="MP ${fmt(r.mp)}"></div>`:''}
         <div class="sdot ${s.c}${s.pulse?' pulse':''}" style="left:${Xc(r.price)}" title="$${r.price.toFixed(1)}"></div>
-        <span class="slo">${fmt(dLo)}</span><span class="shi">${fmt(dHi)}</span>
+        <span class="slo">${fmt(lo)}</span><span class="shi">${fmt(hi)}</span>
       </div>
       <div class="sstate">${r.pat!=null
         ?`<b class="${s.c}">${r.pat}</b><span>${fmt(r.plo)}–${fmt(r.phi)}</span>`
