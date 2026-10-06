@@ -345,7 +345,7 @@ function render(){
     const gvals=[r.pw,r.cw];
     if(r.fl!=null)gvals.push(r.fl); if(r.mp!=null)gvals.push(r.mp);
     const gLo=Math.min(...gvals),gHi=Math.max(...gvals);
-    const vals=[...gvals];
+    const vals=[...gvals,r.price];
     if(r.plo!=null)vals.push(r.plo); if(r.phi!=null)vals.push(r.phi);
     let lo=Math.min(...vals),hi=Math.max(...vals);
     if(hi-lo<1e-9){lo-=1;hi+=1}
