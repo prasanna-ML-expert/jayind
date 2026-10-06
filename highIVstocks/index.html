@@ -60,7 +60,6 @@ tbody tr:hover{background:#1a2029}
 .sprice{font-weight:700;font-variant-numeric:tabular-nums}
 .strack{position:relative;height:36px;min-width:120px}
 .sbase{position:absolute;left:0;right:0;top:15px;height:4px;background:#2d333b;border-radius:2px}
-.swalls{position:absolute;top:14px;height:6px;background:#3d4754;border-radius:3px}
 .szone{position:absolute;top:9px;height:16px;background:rgba(210,153,34,.16);border-left:1px solid rgba(210,153,34,.65);border-right:1px solid rgba(210,153,34,.65);border-radius:2px}
 .stick{position:absolute;width:2px;transform:translateX(-50%)}
 .stick.flip{top:4px;height:26px;background:var(--fl)}
@@ -343,26 +342,26 @@ function render(){
   const rs=rows.map(r=>({r,s:st(r)}));
   rs.sort((a,b)=>mode==='pw'?a.s.dP-b.s.dP:mode==='action'?a.s.score-b.s.score:a.r.t.localeCompare(b.r.t));
   sv.innerHTML=rs.map(({r,s})=>{
-    const zLo=r.pat!=null?r.plo:r.kzLo, zHi=r.pat!=null?r.phi:r.kzHi;
-    const zTitle=r.pat?('Pattern '+r.pat):'Key zone';
-    const vals=[r.pw,r.cw,r.price];
-    if(r.fl!=null)vals.push(r.fl); if(r.mp!=null)vals.push(r.mp);
-    if(zLo!=null)vals.push(zLo); if(zHi!=null)vals.push(zHi);
-    let lo=Math.min(...vals),hi=Math.max(...vals);
-    if(hi-lo<1e-9){lo-=1;hi+=1}
-    const pad=(hi-lo)*0.09; lo-=pad; hi+=pad;
+    const gvals=[r.pw,r.cw];
+    if(r.fl!=null)gvals.push(r.fl); if(r.mp!=null)gvals.push(r.mp);
+    const gLo=Math.min(...gvals),gHi=Math.max(...gvals);
+    const vals=[...gvals];
+    if(r.plo!=null)vals.push(r.plo); if(r.phi!=null)vals.push(r.phi);
+    let dLo=Math.min(...vals),dHi=Math.max(...vals);
+    if(dHi-dLo<1e-9){dLo-=1;dHi+=1}
+    const pad=(dHi-dLo)*0.09,lo=dLo-pad,hi=dHi+pad;
     const X=v=>((v-lo)/(hi-lo)*100).toFixed(2)+'%';
-    const zw=zLo!=null&&zHi!=null&&zHi>zLo
-      ?`<div class="szone" style="left:${X(Math.max(zLo,lo))};width:calc(${X(Math.min(zHi,hi))} - ${X(Math.max(zLo,lo))})" title="${zTitle} ${fmt(zLo)}–${fmt(zHi)}"></div>`:'';
+    const Xc=v=>Math.min(100,Math.max(0,(v-lo)/(hi-lo)*100)).toFixed(2)+'%';
+    const zw=gHi>gLo
+      ?`<div class="szone" style="left:${X(gLo)};width:calc(${X(gHi)} - ${X(gLo)})" title="Options range ${fmt(gLo)}–${fmt(gHi)}"></div>`:'';
     return `<div class="srow" data-t="${r.t}">
       <div class="shead"><span class="tk">${r.t}</span><span class="badge ${r.bcls}">${r.badge}</span><span class="sprice">$${r.price.toFixed(1)}</span></div>
       <div class="strack" title="PW ${fmt(r.pw)} · Flip ${fmt(r.fl)} · MP ${fmt(r.mp)} · CW ${fmt(r.cw)}">
-        <div class="sbase"></div>
-        <div class="swalls" style="left:${X(r.pw)};width:calc(${X(r.cw)} - ${X(r.pw)})"></div>${zw}
+        <div class="sbase"></div>${zw}
         ${r.fl!=null?`<div class="stick flip" style="left:${X(r.fl)}" title="Flip ${fmt(r.fl)}"></div>`:''}
         ${r.mp!=null?`<div class="stick mp" style="left:${X(r.mp)}" title="MP ${fmt(r.mp)}"></div>`:''}
-        <div class="sdot ${s.c}${s.pulse?' pulse':''}" style="left:${X(r.price)}" title="$${r.price.toFixed(1)}"></div>
-        <span class="slo">${fmt(r.pw)}</span><span class="shi">${fmt(r.cw)}</span>
+        <div class="sdot ${s.c}${s.pulse?' pulse':''}" style="left:${Xc(r.price)}" title="$${r.price.toFixed(1)}"></div>
+        <span class="slo">${fmt(dLo)}</span><span class="shi">${fmt(dHi)}</span>
       </div>
       <div class="sstate">${r.pat!=null
         ?`<b class="${s.c}">${r.pat}</b><span>${fmt(zLo)}–${fmt(zHi)}</span>`
