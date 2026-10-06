@@ -1,0 +1,180 @@
+//@version=6
+indicator("Gamma Levels", shorttitle="GAMMA", overlay=true)
+
+// === Gamma levels per ticker: update these numbers on each fresh options-data run ===
+// cw = call wall (green) | pw = put wall (red) | flip = gamma flip (orange) | mp = max pain 10-09 (gray)
+
+float cw = na
+float pw = na
+float flip = na
+float mp = na
+
+if syminfo.ticker == "CIFR"
+    cw := 16
+    pw := 15
+    flip := 15.81
+    mp := 16
+else if syminfo.ticker == "MRNA"
+    cw := 207.5
+    pw := 180
+    flip := 170.22
+    mp := 195
+else if syminfo.ticker == "NBIS"
+    cw := 240
+    pw := 220
+    flip := 228.79
+    mp := 232.5
+else if syminfo.ticker == "MARA"
+    cw := 12
+    pw := 11
+    flip := 10.39
+    mp := 11.5
+else if syminfo.ticker == "WULF"
+    cw := 17
+    pw := 13
+    flip := 15.02
+    mp := 15.5
+else if syminfo.ticker == "IREN"
+    cw := 40
+    pw := 40
+    flip := 41.57
+    mp := 41.5
+else if syminfo.ticker == "BE"
+    cw := 300
+    pw := 275
+    flip := 274.16
+    mp := 280
+else if syminfo.ticker == "INTC"
+    cw := 130
+    pw := 110
+    flip := 104.55
+    mp := 115
+else if syminfo.ticker == "BMNR"
+    cw := 27
+    pw := 26
+    flip := 23.95
+    mp := 27
+else if syminfo.ticker == "SMCI"
+    cw := 45
+    pw := 41
+    flip := 38.45
+    mp := 42
+else if syminfo.ticker == "CRWV"
+    cw := 90
+    pw := 80
+    flip := 83.38
+    mp := 88
+else if syminfo.ticker == "SNDK"
+    cw := 1800
+    pw := 1700
+    flip := 1710.61
+    mp := 1720
+else if syminfo.ticker == "RKLB"
+    cw := 80
+    pw := 70
+    flip := 67.96
+    mp := 72
+else if syminfo.ticker == "MSTR"
+    cw := 165
+    pw := 160
+    flip := 146.99
+    mp := 157.5
+else if syminfo.ticker == "MRVL"
+    cw := 300
+    pw := 260
+    flip := 240.29
+    mp := 260
+else if syminfo.ticker == "COIN"
+    cw := 195
+    pw := 180
+    flip := 174.88
+    mp := 187.5
+else if syminfo.ticker == "MU"
+    cw := 1100
+    pw := 1050
+    flip := 1036.99
+    mp := 1060
+else if syminfo.ticker == "HOOD"
+    cw := 120
+    pw := 110
+    flip := 109.85
+    mp := 113
+else if syminfo.ticker == "DELL"
+    cw := 560
+    pw := 550
+    flip := 537.54
+    mp := 547.5
+else if syminfo.ticker == "GME"
+    cw := 25
+    pw := 24
+    flip := 17.43
+    mp := 23
+else if syminfo.ticker == "CRWD"
+    cw := 300
+    pw := 260
+    flip := 252.27
+    mp := 260
+else if syminfo.ticker == "AMD"
+    cw := 640
+    pw := 600
+    flip := 595.44
+    mp := 602.5
+else if syminfo.ticker == "PCG"
+    cw := 13
+    pw := 13
+    flip := 12.85
+    mp := 12.5
+else if syminfo.ticker == "ORCL"
+    cw := 150
+    pw := 140
+    flip := 136.65
+    mp := 144
+else if syminfo.ticker == "PLTR"
+    cw := 195
+    pw := 190
+    flip := 180.21
+    mp := 187.5
+else if syminfo.ticker == "SOFI"
+    cw := 16
+    pw := 16
+    flip := 15.83
+    mp := 16
+else if syminfo.ticker == "TSLA"
+    cw := 400
+    pw := 380
+    flip := 358.22
+    mp := 367.5
+else if syminfo.ticker == "NFLX"
+    cw := 70
+    pw := 70
+    flip := 67.27
+    mp := 68
+else if syminfo.ticker == "META"
+    cw := 750
+    pw := 750
+    flip := 675.73
+    mp := 730
+else if syminfo.ticker == "AMC"
+    cw := 3
+    pw := 2.5
+    flip := 2.63
+    mp := 3
+else if syminfo.ticker == "NU"
+    cw := 15
+    pw := 14
+    flip := 12.5
+    mp := 13.5
+
+drawLevel(level, tag, cl) =>
+    var line ln = na
+    var label lb = na
+    if not na(level) and na(ln)
+        ln := line.new(bar_index, level, bar_index + 1, level, xloc=xloc.bar_index, extend=extend.right, color=cl, style=line.style_solid, width=1)
+        lb := label.new(bar_index, level, tag + " " + str.tostring(level), xloc=xloc.bar_index, yloc=yloc.price, color=color.new(color.white, 100), style=label.style_label_left, textcolor=cl, size=size.small)
+    if not na(lb) and barstate.islast
+        label.set_x(lb, bar_index)
+
+drawLevel(cw, "CW", #089981)
+drawLevel(pw, "PW", #F23645)
+drawLevel(flip, "FLIP", #FF9800)
+drawLevel(mp, "MP", #B0B0B0)
