@@ -364,7 +364,7 @@ function render(){
         <span class="slo">${fmt(dLo)}</span><span class="shi">${fmt(dHi)}</span>
       </div>
       <div class="sstate">${r.pat!=null
-        ?`<b class="${s.c}">${r.pat}</b><span>${fmt(zLo)}–${fmt(zHi)}</span>`
+        ?`<b class="${s.c}">${r.pat}</b><span>${fmt(r.plo)}–${fmt(r.phi)}</span>`
         :`<b class="${s.c}">${s.w}</b><span>${s.dl}</span>`}</div>
     </div>`;
   }).join('');
