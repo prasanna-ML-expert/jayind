@@ -44,7 +44,7 @@ tbody tr:hover{background:#1a2029}
 .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
 #lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;z-index:50;cursor:zoom-out;padding:12px;touch-action:pan-y;user-select:none;-webkit-user-select:none}
 #lightbox.open{display:flex}
-#lightbox img{max-width:100%;max-height:100%;border-radius:8px}
+#lightbox img{max-width:100%;max-height:100%;border-radius:8px;touch-action:none}
 .lb-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(22,27,34,.85);border:1px solid var(--line);color:var(--txt);font-size:1.7rem;line-height:1;width:46px;height:68px;border-radius:10px;cursor:pointer;z-index:2}
 #lb-prev{left:12px}#lb-next{right:12px}
 .lb-nav:active{background:#1c2128}
@@ -285,19 +285,54 @@ const lb=document.getElementById('lightbox'),im=lb.querySelector('img'),cap=lb.q
 const IMG_BASE='https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/';
 const items=[...document.querySelectorAll('tbody tr')].map(tr=>{const t=tr.querySelector('.tk').textContent.trim();return{t:t,src:IMG_BASE+t+'.jpg'}});
 let idx=0,swiped=false;
-function show(i){idx=(i+items.length)%items.length;im.src=items[idx].src;im.alt=items[idx].t+' daily chart with gamma levels';cap.textContent=items[idx].t+' \u00b7 '+(idx+1)+' / '+items.length;lb.classList.add('open')}
-function hide(){lb.classList.remove('open')}
+function show(i){idx=(i+items.length)%items.length;im.src=items[idx].src;im.alt=items[idx].t+' daily chart with gamma levels';cap.textContent=items[idx].t+' \u00b7 '+(idx+1)+' / '+items.length;touchUsed=false;resetT();lb.classList.add('open')}
+function hide(){lb.classList.remove('open');resetT()}
 const tb=document.querySelector('tbody');
 if(tb)tb.addEventListener('click',e=>{const tr=e.target.closest('tr');if(tr)show([...tr.parentNode.children].indexOf(tr))});
 document.querySelectorAll('.card').forEach(c=>c.addEventListener('click',()=>{const t=c.querySelector('.tk').textContent.trim();const i=items.findIndex(x=>x.t===t);show(i<0?0:i)}));
-lb.addEventListener('click',e=>{if(swiped){swiped=false;return}if(e.target===lb||e.target===im)hide()});
+let touchUsed=false;
+lb.addEventListener('click',e=>{if(swiped){swiped=false;return}if(e.target===im&&touchUsed){touchUsed=false;return}if(e.target===lb||e.target===im)hide()});
 document.getElementById('lb-prev').addEventListener('click',e=>{e.stopPropagation();show(idx-1)});
 document.getElementById('lb-next').addEventListener('click',e=>{e.stopPropagation();show(idx+1)});
 document.getElementById('lb-close').addEventListener('click',e=>{e.stopPropagation();hide()});
 addEventListener('keydown',e=>{if(!lb.classList.contains('open'))return;if(e.key==='Escape')hide();else if(e.key==='ArrowLeft')show(idx-1);else if(e.key==='ArrowRight')show(idx+1)});
 let tx=0;
+// pinch zoom / pan / double-tap on the lightbox image
+let scale=1,ox=0,oy=0;
+let pD0=0,s0=1,x0=0,y0=0,ox0=0,oy0=0,tapping=false;
+let lastTapT=0,lastTapX=0,lastTapY=0,tapTimer=null;
+const CL=(v,a,b)=>Math.min(b,Math.max(a,v));
+function applyT(){im.style.transform='translate('+ox+'px,'+oy+'px) scale('+scale+')'}
+function clampPan(){const mx=Math.max(0,(im.clientWidth*scale-innerWidth)/2),my=Math.max(0,(im.clientHeight*scale-innerHeight)/2);ox=CL(ox,-mx,mx);oy=CL(oy,-my,my)}
+function resetT(){scale=1;ox=0;oy=0;applyT()}
+im.addEventListener('touchstart',e=>{
+  if(e.touches.length===2){const dx=e.touches[0].clientX-e.touches[1].clientX,dy=e.touches[0].clientY-e.touches[1].clientY;pD0=Math.hypot(dx,dy)||1;s0=scale;tapping=false;if(tapTimer){clearTimeout(tapTimer);tapTimer=null} e.preventDefault()}
+  else if(e.touches.length===1){x0=e.touches[0].clientX;y0=e.touches[0].clientY;ox0=ox;oy0=oy;tapping=true}
+},{passive:false});
+im.addEventListener('touchmove',e=>{
+  if(e.touches.length===2&&pD0>0){const dx=e.touches[0].clientX-e.touches[1].clientX,dy=e.touches[0].clientY-e.touches[1].clientY;scale=CL(s0*Math.hypot(dx,dy)/pD0,1,4);clampPan();applyT();tapping=false;e.preventDefault()}
+  else if(e.touches.length===1&&tapping&&scale>1){ox=ox0+(e.touches[0].clientX-x0);oy=oy0+(e.touches[0].clientY-y0);clampPan();applyT();if(Math.abs(e.touches[0].clientX-x0)>8||Math.abs(e.touches[0].clientY-y0)>8)tapping=false;e.preventDefault()}
+},{passive:false});
+im.addEventListener('touchend',e=>{
+  touchUsed=true;
+  if(e.touches.length>0)return;
+  pD0=0;
+  if(!tapping)return;
+  tapping=false;
+  const cx=e.changedTouches[0].clientX,cy=e.changedTouches[0].clientY,now=Date.now();
+  if(now-lastTapT<300&&Math.hypot(cx-lastTapX,cy-lastTapY)<30){
+    if(tapTimer){clearTimeout(tapTimer);tapTimer=null}
+    lastTapT=0;
+    if(scale>1)resetT();else{scale=2.5;ox=0;oy=0;clampPan();applyT()}
+  }else{
+    lastTapT=now;lastTapX=cx;lastTapY=cy;
+    tapTimer=setTimeout(()=>{tapTimer=null;hide()},320);
+  }
+});
+im.addEventListener('wheel',e=>{if(!lb.classList.contains('open'))return;e.preventDefault();scale=CL(scale*(e.deltaY<0?1.15:0.87),1,4);clampPan();applyT()},{passive:false});
+// swipe navigation (only when not zoomed)
 lb.addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});
-lb.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>50){swiped=true;show(idx+(dx<0?1:-1))}},{passive:true});
+lb.addEventListener('touchend',e=>{if(scale>1)return;const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>50){swiped=true;show(idx+(dx<0?1:-1))}},{passive:true});
 </script>
 <script type="application/json" id="patdata">{"CIFR":{"name":"Falling Wedge","lo":13.0,"hi":19.1},"AMC":{"name":"Rising Wedge","lo":2.2,"hi":3.4},"WULF":{"name":"Rectangle","lo":14.4,"hi":18.1},"IREN":{"name":"Rising Wedge","lo":41.7,"hi":49.2},"SMCI":{"name":"Bullish Pennant","lo":37.8,"hi":41.3},"CRWV":{"name":"Falling Wedge","lo":78.0,"hi":88.5},"SNDK":{"name":"Bullish Pennant","lo":1580.0,"hi":1798.0},"HOOD":{"name":"Rising Wedge","lo":95.0,"hi":128.0},"NU":{"name":"Triangle","lo":12.3,"hi":15.7},"SOFI":{"name":"Falling Wedge","lo":15.6,"hi":16.1},"ORCL":{"name":"Falling Wedge","lo":142.0,"hi":150.0},"TSLA":{"name":"Rising Wedge","lo":370.0,"hi":386.0},"NFLX":{"name":"Double Bottom","lo":68.0,"hi":83.6}}</script>
 <script>
