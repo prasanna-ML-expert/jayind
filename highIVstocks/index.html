@@ -76,6 +76,8 @@ tbody tr:hover{background:#1a2029}
 .sstate b{display:block;font-size:.78rem;letter-spacing:.04em;white-space:nowrap}
 .sstate b.green{color:var(--green)}.sstate b.amber{color:var(--amber)}.sstate b.red{color:var(--red)}.sstate b.dim{color:var(--dim)}
 .sstate span{font-size:.75rem;color:var(--dim);font-variant-numeric:tabular-nums;white-space:nowrap}
+.snews{grid-column:1/-1;font-size:.8rem;color:var(--dim);line-height:1.45;padding-top:8px;margin-top:2px;border-top:1px solid var(--line)}
+#tableview{display:none!important}
 @media(max-width:700px){.srow{grid-template-columns:1fr auto}.strack{grid-column:1/-1;order:3}.shead{grid-column:1}.sstate{grid-column:2}}
 footer{margin-top:40px;color:var(--dim);font-size:.82rem;border-top:1px solid var(--line);padding-top:16px}
 </style>
@@ -101,7 +103,7 @@ footer{margin-top:40px;color:var(--dim);font-size:.82rem;border-top:1px solid va
 </div>
 </header>
 
-<h2>Buy / Sell / Range <span class="viewtoggle"><button id="v-sort" title="Sort order">&#8645; PW dist</button><button id="v-strip" class="on">Strip</button><button id="v-table">Table</button></span></h2>
+<h2>Buy / Sell / Range <span class="viewtoggle"><button id="v-sort" title="Sort order">&#8645; PW dist</button></span></h2>
 <div id="stripview" style="display:none"></div>
 <div id="tableview">
 <div class="tablewrap"><table><thead><tr><th>Ticker</th><th>Call</th><th>Key zone</th><th>Price</th><th>CW</th><th>PW</th><th>Flip</th><th>MP</th><th>Note</th></tr></thead><tbody>
@@ -338,7 +340,7 @@ lb.addEventListener('touchend',e=>{if(scale>1)return;const dx=e.changedTouches[0
 <script>
 (function(){
 const sv=document.getElementById('stripview'),tv=document.getElementById('tableview');
-const bS=document.getElementById('v-strip'),bT=document.getElementById('v-table'),bSort=document.getElementById('v-sort');
+const bSort=document.getElementById('v-sort');
 if(!sv||!tv)return;
 const num=s=>{const v=parseFloat(String(s).replace(/[$,]/g,'').trim());return isNaN(v)?null:v};
 const rows=[...tv.querySelectorAll('tbody tr')].map(tr=>{
@@ -349,7 +351,9 @@ const rows=[...tv.querySelectorAll('tbody tr')].map(tr=>{
     badge:bg?bg.textContent.trim():'',bcls:bg?bg.className.replace('badge ',''):'',
     kzLo:kn.length?Math.min(...kn):null,kzHi:kn.length?Math.max(...kn):null,
     price:num(tds[3].textContent),cw:num(tds[4].textContent),pw:num(tds[5].textContent),
-    fl:num(tds[6].textContent),mp:num(tds[7].textContent),pat:null,plo:null,phi:null};
+    fl:num(tds[6].textContent),mp:num(tds[7].textContent),
+    note:tds[8]?tds[8].innerHTML.trim():'',
+    pat:null,plo:null,phi:null};
 }).filter(r=>r.price!=null&&r.pw!=null&&r.cw!=null);
 let PAT={};try{PAT=JSON.parse(document.getElementById('patdata').textContent||'{}')}catch(e){PAT={}}
 rows.forEach(r=>{const p=PAT[r.t];
@@ -400,21 +404,17 @@ function render(){
       <div class="sstate">${r.pat!=null
         ?`<b class="${s.c}">${r.pat}</b><span>${fmt(r.plo)}–${fmt(r.phi)}</span>`
         :`<b class="${s.c}">${s.w}</b><span>${s.dl}</span>`}</div>
+      <div class="snews">${r.note}</div>
     </div>`;
   }).join('');
 }
-function setView(strip){
-  sv.style.display=strip?'flex':'none'; tv.style.display=strip?'none':'block';
-  bS.classList.toggle('on',strip); bT.classList.toggle('on',!strip);
-}
-bS.addEventListener('click',()=>setView(true));
-bT.addEventListener('click',()=>setView(false));
+sv.style.display='flex'; tv.style.display='none';
 const modes=[['pw','&#8645; PW dist'],['az','&#8645; A–Z'],['action','&#8645; Actionability']];
 bSort.addEventListener('click',()=>{const i=(modes.findIndex(m=>m[0]===mode)+1)%modes.length;
   mode=modes[i][0];bSort.innerHTML=modes[i][1];render()});
 sv.addEventListener('click',e=>{const row=e.target.closest('.srow');if(!row)return;
   const i=items.findIndex(x=>x.t===row.dataset.t); if(i>=0)show(i)});
-render(); setView(true);
+render();
 })();
 </script>
 </body>
