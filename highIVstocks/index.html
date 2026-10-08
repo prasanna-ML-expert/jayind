@@ -295,7 +295,7 @@ const lb=document.getElementById('lightbox'),im=lb.querySelector('img'),cap=lb.q
 const IMG_BASE='https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/';
 const items=[...document.querySelectorAll('tbody tr')].map(tr=>{const t=tr.querySelector('.tk').textContent.trim();const ds=tr.dataset;let exp='';if(ds.expiry){const p=ds.expiry.split('-');if(p.length===3)exp=p[1]+'/'+p[2]}return{t:t,src:IMG_BASE+t+'.jpg',iv:ds.iv||'',exp:exp,call:ds.atmCall||'',put:ds.atmPut||''}});
 let idx=0,swiped=false;
-function show(i){idx=(i+items.length)%items.length;const it=items[idx];im.src=it.src;im.alt=it.t+' daily chart with gamma levels';let cap=it.t;if(it.exp)cap+=' \u00b7 '+it.exp;if(it.iv)cap+=' \u00b7 IV '+it.iv+'%';if(it.call)cap+=' \u00b7 C '+it.call+'%';if(it.put)cap+=' \u00b7 P '+it.put+'%';cap.textContent=cap;touchUsed=false;resetT();lb.classList.add('open')}
+function show(i){idx=(i+items.length)%items.length;const it=items[idx];im.src=it.src;im.alt=it.t+' daily chart with gamma levels';let txt=it.t;if(it.exp)txt+=' \u00b7 '+it.exp;if(it.iv)txt+=' \u00b7 IV '+it.iv+'%';if(it.call)txt+=' \u00b7 C '+it.call+'%';if(it.put)txt+=' \u00b7 P '+it.put+'%';cap.textContent=txt;touchUsed=false;resetT();lb.classList.add('open')}
 function hide(){lb.classList.remove('open');resetT()}
 const tb=document.querySelector('tbody');
 if(tb)tb.addEventListener('click',e=>{const tr=e.target.closest('tr');if(tr)show([...tr.parentNode.children].indexOf(tr))});
