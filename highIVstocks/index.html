@@ -60,7 +60,13 @@ tbody tr:hover{background:#1a2029}
 .sprice{font-weight:700;font-variant-numeric:tabular-nums}
 .strack{position:relative;height:36px;min-width:120px}
 .sbase{position:absolute;left:0;right:0;top:15px;height:4px;background:#2d333b;border-radius:2px}
-.szone{position:absolute;top:9px;height:16px;background:rgba(210,153,34,.16);border-left:1px solid rgba(210,153,34,.65);border-right:1px solid rgba(210,153,34,.65);border-radius:2px}
+.szone{position:absolute;top:9px;height:16px;border-radius:2px}
+.szone.green{background:rgba(63,185,80,.14);border-left:1px solid rgba(63,185,80,.55);border-right:1px solid rgba(63,185,80,.55)}
+.szone.red{background:rgba(248,81,73,.14);border-left:1px solid rgba(248,81,73,.55);border-right:1px solid rgba(248,81,73,.55)}
+.szone.neutral{background:rgba(210,153,34,.14);border-left:1px solid rgba(210,153,34,.55);border-right:1px solid rgba(210,153,34,.55)}
+.sarrow{position:absolute;top:17px;transform:translate(-50%,-50%);font-size:11px;line-height:1;pointer-events:none;z-index:1}
+.sarrow.cw{color:#f85149}
+.sarrow.pw{color:#3fb950}
 .stick{position:absolute;width:2px;transform:translateX(-50%)}
 .stick.flip{top:4px;height:26px;background:var(--fl)}
 .stick.mp{top:9px;height:16px;background:var(--mp)}
@@ -287,9 +293,9 @@ footer{margin-top:40px;color:var(--dim);font-size:.82rem;border-top:1px solid va
 <script>
 const lb=document.getElementById('lightbox'),im=lb.querySelector('img'),cap=lb.querySelector('.lb-cap');
 const IMG_BASE='https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/';
-const items=[...document.querySelectorAll('tbody tr')].map(tr=>{const t=tr.querySelector('.tk').textContent.trim();return{t:t,src:IMG_BASE+t+'.jpg'}});
+const items=[...document.querySelectorAll('tbody tr')].map(tr=>{const t=tr.querySelector('.tk').textContent.trim();const ds=tr.dataset;let exp='';if(ds.expiry){const p=ds.expiry.split('-');if(p.length===3)exp=p[1]+'/'+p[2]}return{t:t,src:IMG_BASE+t+'.jpg',iv:ds.iv||'',exp:exp,call:ds.atmCall||'',put:ds.atmPut||''}});
 let idx=0,swiped=false;
-function show(i){idx=(i+items.length)%items.length;im.src=items[idx].src;im.alt=items[idx].t+' daily chart with gamma levels';cap.textContent=items[idx].t+' \u00b7 '+(idx+1)+' / '+items.length;touchUsed=false;resetT();lb.classList.add('open')}
+function show(i){idx=(i+items.length)%items.length;const it=items[idx];im.src=it.src;im.alt=it.t+' daily chart with gamma levels';let cap=it.t;if(it.exp)cap+=' \u00b7 '+it.exp;if(it.iv)cap+=' \u00b7 IV '+it.iv+'%';if(it.call)cap+=' \u00b7 C '+it.call+'%';if(it.put)cap+=' \u00b7 P '+it.put+'%';cap.textContent=cap;touchUsed=false;resetT();lb.classList.add('open')}
 function hide(){lb.classList.remove('open');resetT()}
 const tb=document.querySelector('tbody');
 if(tb)tb.addEventListener('click',e=>{const tr=e.target.closest('tr');if(tr)show([...tr.parentNode.children].indexOf(tr))});
@@ -393,12 +399,13 @@ function render(){
     if(hi-lo<1e-9){lo-=1;hi+=1}
     const X=v=>((v-lo)/(hi-lo)*100).toFixed(2)+'%';
     const Xc=v=>Math.min(100,Math.max(0,(v-lo)/(hi-lo)*100)).toFixed(2)+'%';
-    const zw=gHi>gLo
-      ?`<div class="szone" style="left:${X(gLo)};width:calc(${X(gHi)} - ${X(gLo)})" title="Options range ${fmt(gLo)}–${fmt(gHi)}"></div>`:'';
+    const zw=(()=>{if(!(gHi>gLo))return '';if(r.fl!=null){const fX=X(r.fl);let h='';if(r.fl>gLo)h+=`<div class="szone red" style="left:${X(gLo)};width:calc(${fX} - ${X(gLo)})" title="Below flip ${fmt(gLo)}–${fmt(r.fl)}"></div>`;if(r.fl<gHi)h+=`<div class="szone green" style="left:${fX};width:calc(${X(gHi)} - ${fX})" title="Above flip ${fmt(r.fl)}–${fmt(gHi)}"></div>`;return h}return `<div class="szone neutral" style="left:${X(gLo)};width:calc(${X(gHi)} - ${X(gLo)})" title="Options range ${fmt(gLo)}–${fmt(gHi)}"></div>`})();
+    const cwArrow=`<span class="sarrow cw" style="left:${X(r.cw)}" title="Call wall ${fmt(r.cw)}">◀</span>`;
+    const pwArrow=`<span class="sarrow pw" style="left:${X(r.pw)}" title="Put wall ${fmt(r.pw)}">▶</span>`;
     return `<div class="srow" data-t="${r.t}">
       <div class="shead"><span class="tk">${r.t}</span><span class="badge ${r.bcls}">${r.badge}</span><span class="sprice">$${r.price.toFixed(1)}</span></div>
       <div class="strack" title="PW ${fmt(r.pw)} · Flip ${fmt(r.fl)} · MP ${fmt(r.mp)} · CW ${fmt(r.cw)}">
-        <div class="sbase"></div>${zw}
+        <div class="sbase"></div>${zw}${cwArrow}${pwArrow}
         ${r.fl!=null?`<div class="stick flip" style="left:${X(r.fl)}" title="Flip ${fmt(r.fl)}"></div>`:''}
         ${r.mp!=null?`<div class="stick mp" style="left:${X(r.mp)}" title="MP ${fmt(r.mp)}"></div>`:''}
         <div class="sdot ${s.c}${s.pulse?' pulse':''}" style="left:${Xc(r.price)}" title="$${r.price.toFixed(1)}"></div>
