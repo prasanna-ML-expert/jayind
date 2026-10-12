@@ -119,11 +119,6 @@ else if syminfo.ticker == "AMD"
     pw := 600
     flip := 588.12
     mp := 580
-else if syminfo.ticker == "PCG"
-    cw := 14
-    pw := 13
-    flip := 13.32
-    mp := 14
 else if syminfo.ticker == "ORCL"
     cw := 155
     pw := 140
@@ -164,6 +159,21 @@ else if syminfo.ticker == "NU"
     pw := 14
     flip := 14.36
     mp := 15
+else if syminfo.ticker == "ASTS"
+    cw := 55
+    pw := 55
+    flip := 50.75
+    mp := 55
+else if syminfo.ticker == "SKYD"
+    cw := 9.5
+    pw := 9
+    flip := 8.91
+    mp := 10
+else if syminfo.ticker == "SPCX"
+    cw := 170
+    pw := 160
+    flip := 156.24
+    mp := 160
 
 drawLevel(level, tag, cl) =>
     var line ln = na
