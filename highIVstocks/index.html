@@ -41,6 +41,10 @@ tbody tr:hover{background:#1a2029}
 .card img{display:block;width:100%;height:auto;background:#000}
 .nochart{display:flex;align-items:center;justify-content:center;min-height:160px;padding:20px;text-align:center;color:var(--dim);font-size:13px;line-height:1.6;background:#000;border-top:1px solid var(--line)}
 .price-tag{color:var(--dim);font-variant-numeric:tabular-nums;font-size:.85rem}
+.ltri{font-style:normal;font-size:14px;margin-right:6px}
+.ltri.cw{color:var(--cw)}
+.ltri.pw{color:var(--pw)}
+.lline{display:inline-block;width:18px;height:3px;margin-right:6px;vertical-align:middle;border-radius:2px}
 .legend{display:flex;flex-wrap:wrap;gap:14px;color:var(--dim);font-size:.85rem;margin:6px 0 18px}
 .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
 #lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;z-index:50;cursor:zoom-out;padding:12px;touch-action:pan-y;user-select:none;-webkit-user-select:none}
@@ -116,10 +120,10 @@ footer{margin-top:40px;color:var(--dim);font-size:.82rem;border-top:1px solid va
 <span>News: <b>latest announcements as of Oct 12</b></span>
 </div>
 <div class="legend">
-<span><i class="dot" style="background:var(--cw)"></i>CW call wall</span>
-<span><i class="dot" style="background:var(--pw)"></i>PW put wall</span>
-<span><i class="dot" style="background:var(--fl)"></i>FLIP gamma flip</span>
-<span><i class="dot" style="background:var(--mp)"></i>MP max pain (Oct-16)</span>
+<span><i class="ltri cw">◀</i>CW call wall</span>
+<span><i class="ltri pw">▶</i>PW put wall</span>
+<span><i class="lline" style="background:var(--fl)"></i>FLIP gamma flip</span>
+<span><i class="lline" style="background:var(--mp)"></i>MP max pain (Oct-16)</span>
 <span><i class="dot" style="background:#58a6ff"></i>EMA8 monthly</span>
 <span><i class="dot" style="background:#3fb950"></i>EMA8 weekly</span>
 <span><i class="dot" style="background:#f85149"></i>EMA8 daily</span>
