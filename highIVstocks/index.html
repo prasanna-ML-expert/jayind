@@ -54,6 +54,10 @@ tbody tr:hover{background:#1a2029}
 .viewtoggle{float:right;display:inline-flex;gap:6px;align-items:center}
 .viewtoggle button{background:var(--panel);border:1px solid var(--line);color:var(--dim);border-radius:8px;padding:4px 12px;font-size:.8rem;cursor:pointer}
 .viewtoggle button.on{background:#1c2128;color:var(--txt);border-color:var(--gray)}
+#filterbar{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+.fbtn{background:#161b22;border:1px solid var(--line);border-radius:6px;padding:6px 12px;font-size:13px;color:var(--dim);cursor:pointer}
+.fbtn:hover{border-color:#58a6ff;color:#fff}
+.fbtn.active{background:#1f6feb;border-color:#1f6feb;color:#fff;font-weight:600}
 #stripview{display:flex;flex-direction:column;gap:8px}
 .srow{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 14px;display:grid;grid-template-columns:230px 1fr 220px;gap:14px;align-items:center;cursor:pointer}
 .srow:hover{border-color:var(--gray)}
@@ -121,7 +125,7 @@ footer{margin-top:40px;color:var(--dim);font-size:.82rem;border-top:1px solid va
 </div>
 </header>
 
-<h2>Buy / Sell / Range <span class="viewtoggle"><button id="v-sort" title="Sort order">&#8645; PW dist</button></span></h2>
+<div id="filterbar"></div>
 <div id="stripview" style="display:none"></div>
 <div id="tableview">
 <div class="tablewrap"><table><thead><tr data-news-age="999"><th>Ticker</th><th>Call</th><th>Key zone</th><th>Price</th><th>CW</th><th>PW</th><th>Flip</th><th>MP</th><th>Note</th></tr></thead><tbody>
@@ -371,7 +375,6 @@ lb.addEventListener('touchend',e=>{if(scale>1)return;const dx=e.changedTouches[0
 <script>
 (function(){
 const sv=document.getElementById('stripview'),tv=document.getElementById('tableview');
-const bSort=document.getElementById('v-sort');
 if(!sv||!tv)return;
 const num=s=>{const v=parseFloat(String(s).replace(/[$,]/g,'').trim());return isNaN(v)?null:v};
 const rows=[...tv.querySelectorAll('tbody tr')].map(tr=>{
@@ -451,9 +454,13 @@ function render(){
   }).join('');
 }
 sv.style.display='flex'; tv.style.display='none';
-const modes=[['pw','&#8645; PW dist'],['az','&#8645; A–Z'],['action','&#8645; Actionability'],['iv','&#8645; IV high→low'],['fresh','&#8645; Fresh→Old'],['prem','&#8645; Prem% high→low']];
-bSort.addEventListener('click',()=>{const i=(modes.findIndex(m=>m[0]===mode)+1)%modes.length;
-  mode=modes[i][0];bSort.innerHTML=modes[i][1];render()});
+const modes=[['pw','PW dist'],['az','A–Z'],['action','Actionability'],['iv','IV high→low'],['fresh','Fresh→Old'],['prem','Prem% high→low']];
+const fbar=document.getElementById('filterbar');
+function renderFilters(){
+  fbar.innerHTML=modes.map(m=>`<button class="fbtn${m[0]===mode?' active':''}" data-m="${m[0]}">${m[1]}</button>`).join('');
+  fbar.querySelectorAll('.fbtn').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.m;renderFilters();render()}));
+}
+renderFilters();
 sv.addEventListener('click',e=>{const row=e.target.closest('.srow');if(!row)return;
   const i=items.findIndex(x=>x.t===row.dataset.t); if(i>=0)show(i)});
 render();
