@@ -454,7 +454,7 @@ function render(){
   }).join('');
 }
 sv.style.display='flex'; tv.style.display='none';
-const modes=[['pw','PW distance'],['az','A–Z'],['iv','IV high→low'],['fresh','Fresh→Old'],['prem','Prem% high→low']];
+const modes=[['pw','PW distance'],['az','A–Z'],['iv','IV high→low'],['fresh','News freshness'],['prem','Prem% high→low']];
 const fbar=document.getElementById('filterbar');
 function renderFilters(){
   fbar.innerHTML=modes.map(m=>`<button class="fbtn${m[0]===mode?' active':''}" data-m="${m[0]}">${m[1]}</button>`).join('');
