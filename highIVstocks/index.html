@@ -112,7 +112,7 @@ tbody tr:hover{background:#1a2029}
 .nage{display:inline-block;background:#1a2029;border:1px solid var(--line);border-radius:4px;padding:1px 6px;margin-right:8px;font-size:11px;color:var(--dim);white-space:nowrap}
 .snews{grid-column:1/-1;font-size:.8rem;color:var(--dim);line-height:1.45;padding-top:8px;margin-top:2px;border-top:1px solid var(--line)}
 .snews .pos{color:rgba(63,185,80,.7);font-weight:500}
-.snews{touch-action:pan-y}
+.snews{touch-action:pan-y;cursor:pointer}
 .spane.reason{color:#9db4d0}
 .snews .rnage{display:inline-block;min-width:44px;font-size:.72rem;color:#58a6ff;border:1px solid #58a6ff;border-radius:8px;padding:0 6px;margin-right:8px}
 .snews .neg{color:rgba(248,81,73,.7);font-weight:500}
@@ -566,8 +566,11 @@ function render(){
     </div>`;
   }).join('');
 }
-sv.addEventListener('touchstart',e=>{const n=e.target.closest('.snews');if(!n||!n.querySelector('.reason'))return;n._x=e.touches[0].clientX},{passive:true});
-sv.addEventListener('touchend',e=>{const n=e.target.closest('.snews');if(!n||n._x==null||!n.querySelector('.reason'))return;const dx=e.changedTouches[0].clientX-n._x;n._x=null;if(Math.abs(dx)<40)return;const a=n.querySelector('.news'),b=n.querySelector('.reason');const showReason=b.hidden;a.hidden=!showReason;b.hidden=showReason;},{passive:true});
+function flipNews(n){const a=n.querySelector('.news'),b=n.querySelector('.reason');if(!a||!b)return;const showReason=b.hidden;a.hidden=!showReason;b.hidden=showReason;}
+let ptx=null,ptn=null;
+sv.addEventListener('pointerdown',e=>{const n=e.target.closest('.snews');if(!n||!n.querySelector('.reason'))return;ptx=e.clientX;ptn=n;});
+sv.addEventListener('pointerup',e=>{if(ptx==null||!ptn)return;const n=ptn,dx=e.clientX-ptx;ptx=null;ptn=null;if(!document.contains(n)||!n.querySelector('.reason'))return;if(Math.abs(dx)>40)flipNews(n);});
+sv.addEventListener('click',e=>{const n=e.target.closest('.snews');if(!n||!n.querySelector('.reason'))return;if(e.target.closest('.nage,.rnage'))flipNews(n);});
 sv.style.display='flex'; tv.style.display='none';
 const modes=[['pw','PW distance %'],['az','A–Z'],['fresh','News freshness'],['prem','Prem%'],['oner','ONER']];
 const fbar=document.getElementById('filterbar');
