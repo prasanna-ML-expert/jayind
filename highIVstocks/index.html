@@ -357,7 +357,9 @@ footer{margin-top:40px;color:var(--dim);font-size:.82rem;border-top:1px solid va
 </figure>
 <figure class="card" style="cursor:default">
   <figcaption><span class="tk">SPCX</span><span class="price-tag">$163.5 (160–170) · IV 49.9%</span><span class="badge range">RANGE</span></figcaption>
-  <div class="nochart">No TradingView chart yet — SPCX is listed as NASDAQ:SPCX.<br>Gamma levels above are from live option chains.</div>
+  <div class="chart-placeholder" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/SPCX.jpg" data-ticker="SPCX">
+    <span>Tap to load chart</span>
+  </div>
 </figure>
 <figure class="card" data-full="https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/IREN.jpg">
   <figcaption><span class="tk">IREN</span><span class="price-tag">$34.8 (30–40) · IV 80.5%</span><span class="badge range">RANGE</span></figcaption>
@@ -393,7 +395,7 @@ footer{margin-top:40px;color:var(--dim);font-size:.82rem;border-top:1px solid va
 <script>
 const lb=document.getElementById('lightbox'),im=lb.querySelector('img'),cap=lb.querySelector('.lb-cap');
 const IMG_BASE='https://raw.githubusercontent.com/prasanna-ML-expert/tvscreenshots/main/';
-const NO_CHART=new Set(['SPCX']); // tickers with no TradingView chart: no screenshot exists, keep them out of the lightbox
+const NO_CHART=new Set([]); // SPCX confirmed NASDAQ-listed 2026-10-13 — all tickers now chartable
 const items=[...document.querySelectorAll('tbody tr')].filter(tr=>!NO_CHART.has(tr.querySelector('.tk').textContent.trim())).map(tr=>{const t=tr.querySelector('.tk').textContent.trim();const ds=tr.dataset;let exp='';if(ds.expiry){const p=ds.expiry.split('-');if(p.length===3)exp=p[1]+'/'+p[2]}return{t:t,src:IMG_BASE+t+'.jpg',iv:ds.iv||'',exp:exp,call:ds.atmCall||'',put:ds.atmPut||''}});
 let idx=0,swiped=false;
 function show(i){idx=(i+items.length)%items.length;const it=items[idx];document.querySelectorAll('.card').forEach(c=>{if(c.querySelector('.tk').textContent.trim()===it.t){const ph=c.querySelector('.chart-placeholder');if(ph){const img=document.createElement('img');img.src=ph.dataset.full;img.alt=ph.dataset.ticker+' daily chart with gamma levels';ph.replaceWith(img)}}});im.src=it.src;im.alt=it.t+' daily chart with gamma levels';let txt=it.t;if(it.exp)txt+=' \u00b7 '+it.exp;if(it.iv)txt+=' \u00b7 IV '+it.iv+'%';if(it.call)txt+=' \u00b7 C '+it.call+'%';if(it.put)txt+=' \u00b7 P '+it.put+'%';cap.textContent=txt;touchUsed=false;resetT();lb.classList.add('open')}
