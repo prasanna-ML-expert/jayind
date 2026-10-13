@@ -400,7 +400,7 @@ function show(i){idx=(i+items.length)%items.length;const it=items[idx];im.src=it
 function hide(){lb.classList.remove('open');resetT()}
 const tb=document.querySelector('tbody');
 if(tb)tb.addEventListener('click',e=>{const tr=e.target.closest('tr');if(tr)show([...tr.parentNode.children].indexOf(tr))});
-document.querySelectorAll('.card').forEach(c=>c.addEventListener('click',()=>{const t=c.querySelector('.tk').textContent.trim();const i=items.findIndex(x=>x.t===t);if(i>=0)show(i)}));
+document.querySelectorAll('.card').forEach(c=>c.addEventListener('click',()=>{const ph=c.querySelector('.chart-placeholder');if(ph){const img=document.createElement('img');img.src=ph.dataset.full;img.alt=ph.dataset.ticker+' daily chart with gamma levels';ph.replaceWith(img)}const t=c.querySelector('.tk').textContent.trim();const i=items.findIndex(x=>x.t===t);if(i>=0)show(i)}));
 let touchUsed=false;
 lb.addEventListener('click',e=>{if(swiped){swiped=false;return}if(e.target===im&&touchUsed){touchUsed=false;return}if(e.target===lb||e.target===im)hide()});
 document.getElementById('lb-prev').addEventListener('click',e=>{e.stopPropagation();show(idx-1)});
