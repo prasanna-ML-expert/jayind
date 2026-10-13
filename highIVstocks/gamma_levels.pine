@@ -35,8 +35,8 @@ else if syminfo.ticker == "WULF"
     flip := 14.37
     mp := 14
 else if syminfo.ticker == "IREN"
-    cw := 50
-    pw := 35
+    cw := 40
+    pw := 30
     flip := 39.23
     mp := 38.5
 else if syminfo.ticker == "BE"
