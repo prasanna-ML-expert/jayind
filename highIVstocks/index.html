@@ -113,6 +113,9 @@ tbody tr:hover{background:#1a2029}
 .snews{grid-column:1/-1;font-size:.8rem;color:var(--dim);line-height:1.45;padding-top:8px;margin-top:2px;border-top:1px solid var(--line)}
 .snews .pos{color:rgba(63,185,80,.7);font-weight:500}
 .snews{touch-action:pan-y;cursor:pointer}
+.snews:has(.reason) .nage{cursor:pointer}
+.snews:has(.reason) .nage::after{content:' ⇄';color:#58a6ff;font-size:10px}
+.snews .rnage::after{content:' ⇄';font-size:10px}
 .spane.reason{color:#9db4d0}
 .snews .rnage{display:inline-block;min-width:44px;font-size:.72rem;color:#58a6ff;border:1px solid #58a6ff;border-radius:8px;padding:0 6px;margin-right:8px}
 .snews .neg{color:rgba(248,81,73,.7);font-weight:500}
@@ -560,18 +563,15 @@ function render(){
       <div class="sstate">${r.pat!=null
         ?`<b class="${s.c}">${r.pat}</b><span>${fmt(r.plo)}–${fmt(r.phi)}</span>`
         :`<b class="${s.c}">${s.w}</b><span>${s.dl}</span>`}</div>
-      <div class="snews" data-t="${r.t}">
+      <div class="snews" data-t="${r.t}" onclick="flipNewsS(event,this)">
         <div class="spane news"><span class="nage">${r.newsAge>=999?'—':r.newsAge===0?'today':r.newsAge+'d ago'}</span>${r.note}</div>
         ${r.capReason?'<div class="spane reason" hidden><span class="rnage">levels</span>'+r.capReason+'</div>':''}
       </div>
     </div>`;
   }).join('');
 }
+window.flipNewsS=function(e,el){e.stopPropagation();flipNews(el);};
 function flipNews(n){const a=n.querySelector('.news'),b=n.querySelector('.reason');if(!a||!b)return;const showReason=b.hidden;a.hidden=!showReason;b.hidden=showReason;}
-let ptx=null,ptn=null,swipedNews=false;
-sv.addEventListener('pointerdown',e=>{const n=e.target.closest('.snews');if(!n||!n.querySelector('.reason'))return;ptx=e.clientX;ptn=n;swipedNews=false;});
-sv.addEventListener('pointerup',e=>{if(ptx==null||!ptn)return;const n=ptn,dx=e.clientX-ptx;ptx=null;ptn=null;if(!document.contains(n)||!n.querySelector('.reason'))return;if(Math.abs(dx)>40){flipNews(n);swipedNews=true;}});
-sv.addEventListener('click',e=>{const n=e.target.closest('.snews');if(!n||!n.querySelector('.reason'))return;flipNews(n);});
 sv.style.display='flex'; tv.style.display='none';
 const modes=[['pw','PW distance %'],['az','A–Z'],['fresh','News freshness'],['prem','Prem%'],['oner','ONER']];
 const fbar=document.getElementById('filterbar');
@@ -580,7 +580,7 @@ function renderFilters(){
   fbar.querySelectorAll('.fbtn').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.m;renderFilters();render()}));
 }
 renderFilters();
-sv.addEventListener('click',e=>{if(swipedNews){swipedNews=false;return;}if(e.target.closest('.snews'))return;const row=e.target.closest('.srow');if(!row)return;
+sv.addEventListener('click',e=>{if(e.target.closest('.snews'))return;const row=e.target.closest('.srow');if(!row)return;
   const i=items.findIndex(x=>x.t===row.dataset.t); if(i>=0)show(i)});
 render();
 })();
