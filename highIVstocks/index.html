@@ -532,8 +532,9 @@ function render(){
     if(r.plo!=null)vals.push(r.plo); if(r.phi!=null)vals.push(r.phi);
     if(r.capBuy)vals.push(r.capBuy[0],r.capBuy[1]);
     if(r.capSell)vals.push(r.capSell[0],r.capSell[1]);
-    if(r.capConv!=null)vals.push(r.capConv);
-    if(r.capInst!=null)vals.push(r.capInst);
+    const capNear=v=>{if(v==null||!isFinite(v))return false;const d=(v-r.price)/r.price;return d<1.0&&d>-0.5;};
+    if(capNear(r.capConv))vals.push(r.capConv);
+    if(capNear(r.capInst))vals.push(r.capInst);
     let lo=Math.min(...vals),hi=Math.max(...vals);
     if(hi-lo<1e-9){lo-=1;hi+=1}
     const X=v=>((v-lo)/(hi-lo)*100).toFixed(2)+'%';
@@ -551,8 +552,8 @@ function render(){
         ${edots}
         ${r.capBuy?'<div class="czone buy" style="left:'+X(r.capBuy[0])+';width:calc('+X(r.capBuy[1])+' - '+X(r.capBuy[0])+')" title="Safe-buy zone '+fmt(r.capBuy[0])+'-'+fmt(r.capBuy[1])+' (capital structure)"></div>':''}
         ${r.capSell?'<div class="czone sell" style="left:'+X(r.capSell[0])+';width:calc('+X(r.capSell[1])+' - '+X(r.capSell[0])+')" title="Sell/supply zone '+fmt(r.capSell[0])+'-'+fmt(r.capSell[1])+' (capital structure)"></div>':''}
-        ${r.capConv!=null?'<div class="cmark conv" style="left:'+X(r.capConv)+'" title="Convert strike '+fmt(r.capConv)+'"></div>':''}
-        ${r.capInst!=null?'<div class="cmark inst" style="left:'+X(r.capInst)+'" title="Institutional floor '+fmt(r.capInst)+'"></div>':''}
+        ${capNear(r.capConv)?'<div class="cmark conv" style="left:'+X(r.capConv)+'" title="Convert strike '+fmt(r.capConv)+'"></div>':''}
+        ${capNear(r.capInst)?'<div class="cmark inst" style="left:'+X(r.capInst)+'" title="Institutional floor '+fmt(r.capInst)+'"></div>':''}
         <div class="sdot ${s.c}${s.pulse?' pulse':''}" style="left:${Xc(r.price)}" title="$${r.price.toFixed(1)}"></div>
         <span class="slo">${fmt(lo)}</span><span class="shi">${fmt(hi)}</span>
       </div>
@@ -567,10 +568,10 @@ function render(){
   }).join('');
 }
 function flipNews(n){const a=n.querySelector('.news'),b=n.querySelector('.reason');if(!a||!b)return;const showReason=b.hidden;a.hidden=!showReason;b.hidden=showReason;}
-let ptx=null,ptn=null;
-sv.addEventListener('pointerdown',e=>{const n=e.target.closest('.snews');if(!n||!n.querySelector('.reason'))return;ptx=e.clientX;ptn=n;});
-sv.addEventListener('pointerup',e=>{if(ptx==null||!ptn)return;const n=ptn,dx=e.clientX-ptx;ptx=null;ptn=null;if(!document.contains(n)||!n.querySelector('.reason'))return;if(Math.abs(dx)>40)flipNews(n);});
-sv.addEventListener('click',e=>{const n=e.target.closest('.snews');if(!n||!n.querySelector('.reason'))return;if(e.target.closest('.nage,.rnage'))flipNews(n);});
+let ptx=null,ptn=null,swipedNews=false;
+sv.addEventListener('pointerdown',e=>{const n=e.target.closest('.snews');if(!n||!n.querySelector('.reason'))return;ptx=e.clientX;ptn=n;swipedNews=false;});
+sv.addEventListener('pointerup',e=>{if(ptx==null||!ptn)return;const n=ptn,dx=e.clientX-ptx;ptx=null;ptn=null;if(!document.contains(n)||!n.querySelector('.reason'))return;if(Math.abs(dx)>40){flipNews(n);swipedNews=true;}});
+sv.addEventListener('click',e=>{const n=e.target.closest('.snews');if(!n||!n.querySelector('.reason'))return;if(e.target.closest('.nage,.rnage')){e.stopImmediatePropagation();flipNews(n);}});
 sv.style.display='flex'; tv.style.display='none';
 const modes=[['pw','PW distance %'],['az','A–Z'],['fresh','News freshness'],['prem','Prem%'],['oner','ONER']];
 const fbar=document.getElementById('filterbar');
@@ -579,7 +580,7 @@ function renderFilters(){
   fbar.querySelectorAll('.fbtn').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.m;renderFilters();render()}));
 }
 renderFilters();
-sv.addEventListener('click',e=>{const row=e.target.closest('.srow');if(!row)return;
+sv.addEventListener('click',e=>{if(swipedNews){swipedNews=false;return;}const row=e.target.closest('.srow');if(!row)return;
   const i=items.findIndex(x=>x.t===row.dataset.t); if(i>=0)show(i)});
 render();
 })();
