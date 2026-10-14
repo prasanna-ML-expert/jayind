@@ -570,7 +570,7 @@ function render(){
     </div>`;
   }).join('');
 }
-function flipNews(n){const a=n.querySelector('.news'),b=n.querySelector('.reason');if(!a||!b)return;const showReason=b.hidden;a.hidden=!showReason;b.hidden=showReason;}
+function flipNews(n){const a=n.querySelector('.news'),b=n.querySelector('.reason');if(!a||!b)return;const showReason=b.hidden;a.hidden=showReason;b.hidden=!showReason;}
 sv.style.display='flex'; tv.style.display='none';
 const modes=[['pw','PW distance %'],['az','A–Z'],['fresh','News freshness'],['prem','Prem%'],['oner','ONER']];
 const fbar=document.getElementById('filterbar');
