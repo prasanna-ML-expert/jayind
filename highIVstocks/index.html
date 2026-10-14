@@ -152,7 +152,7 @@ footer{margin-top:40px;color:var(--dim);font-size:.82rem;border-top:1px solid va
 </header>
 
 <div id="filterbar"></div>
-<div id="stripview" style="display:none"></div><div id="dbg" style="font-size:11px;color:#58a6ff;white-space:pre-wrap;padding:8px"></div>
+<div id="stripview" style="display:none"></div>
 <div id="tableview">
 <div class="tablewrap"><table><thead><tr data-news-age="999"><th>Ticker</th><th>Call</th><th>Key zone</th><th>Price</th><th>CW</th><th>PW</th><th>Flip</th><th>MP</th><th>Note</th></tr></thead><tbody>
 <tr data-oner="0.0400" data-expiry="2026-10-16" data-atm-put="3.15" data-atm-call="3.36" data-iv="104.90" data-news-age="4"><td><span class="tk">MRNA</span></td><td><span class="badge range">RANGE</span></td><td class="kz">Range: above flip 189.0 · CW 217.5 above · Jays W 123.89 S · M 123.16 S</td><td class="num">$215.0</td><td class="num">217.5</td><td class="num">200</td><td class="num">189.04</td><td class="num">197.5</td><td class="note pos"><span class="pos">On Oct 9, reports emerged that the NIH is planning a public-private partnership to accelerate cancer-vaccine development, sending Moderna up 14% to a 4-year high of $225 the same day it rejoined the Nasdaq-100.</span></td></tr>
@@ -579,12 +579,9 @@ function renderFilters(){
   fbar.querySelectorAll('.fbtn').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.m;renderFilters();render()}));
 }
 renderFilters();
-sv.addEventListener('click',e=>{const dbg=document.getElementById('dbg');const L=m=>{if(dbg)dbg.textContent+='\n'+m;};
-L('click t='+e.target.tagName+'.'+e.target.className);
-const n=e.target.closest('.snews');L('snews='+(n?'FOUND':'null'));
-if(n){L('reason='+(n.querySelector('.reason')?'FOUND':'null'));if(n.querySelector('.reason')){flipNews(n);L('FLIPPED');}return;}
-const row=e.target.closest('.srow');L('srow='+(row?'FOUND':'null'));if(!row)return;
-  const i=items.findIndex(x=>x.t===row.dataset.t); if(i>=0){L('LIGHTBOX');show(i)}});
+sv.addEventListener('click',e=>{const n=e.target.closest('.snews');if(n){if(n.querySelector('.reason'))flipNews(n);return;}
+const row=e.target.closest('.srow');if(!row)return;
+  const i=items.findIndex(x=>x.t===row.dataset.t); if(i>=0)show(i)});
 render();
 })();
 </script>
