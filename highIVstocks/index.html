@@ -140,6 +140,7 @@ footer{margin-top:40px;color:var(--dim);font-size:.82rem;border-top:1px solid va
 <div class="legend">
 <span><i class="ltri cw">◀</i>CW call wall</span>
 <span><i class="ltri pw">▶</i>PW put wall</span>
+<span><i class="ltri" style="color:#bc8cff">▲▼</i>Pattern range (pattern color)</span>
 <span><i class="lline" style="background:var(--fl)"></i>FLIP gamma flip</span>
 <span><i class="lline" style="background:var(--mp)"></i>MP max pain (Oct-16)</span>
 <span><i class="lline" style="background:#58a6ff"></i>Cap safe-buy zone</span>
@@ -545,11 +546,12 @@ function render(){
     const zw=(()=>{if(!(gHi>gLo))return '';if(r.fl!=null){const fX=X(r.fl);let h='';if(r.fl>gLo)h+=`<div class="szone red" style="left:${X(gLo)};width:calc(${fX} - ${X(gLo)})" title="Below flip ${fmt(gLo)}–${fmt(r.fl)}"></div>`;if(r.fl<gHi)h+=`<div class="szone green" style="left:${fX};width:calc(${X(gHi)} - ${fX})" title="Above flip ${fmt(r.fl)}–${fmt(gHi)}"></div>`;return h}return `<div class="szone neutral" style="left:${X(gLo)};width:calc(${X(gHi)} - ${X(gLo)})" title="Options range ${fmt(gLo)}–${fmt(gHi)}"></div>`})();
     const cwArrow=`<span class="sarrow cw" style="left:${X(r.cw)}" title="Call wall ${fmt(r.cw)}">◀</span>`;
     const pwArrow=`<span class="sarrow pw" style="left:${X(r.pw)}" title="Put wall ${fmt(r.pw)}">▶</span>`;
+    const patArrows=r.pat!=null?(()=>{const c=patColor(r.pat);return `<span class="sarrow" style="left:${X(r.plo)};color:${c}" title="${r.pat} low ${fmt(r.plo)}">▼</span><span class="sarrow" style="left:${X(r.phi)};color:${c}" title="${r.pat} high ${fmt(r.phi)}">▲</span>`})():'';
     const edots=[['m',r.emaM,'monthly'],['d',r.emaD,'daily'],['w',r.emaW,'weekly']].filter(([,v])=>v!=null).map(([k,v,l])=>`<span class="sema ${k}" style="left:${Xc(v)}" title="EMA8 ${l} ${fmt(v)}"></span>`).join('');
     return `<div class="srow" data-t="${r.t}">
       <div class="shead"><span class="tk">${r.t}</span><span class="sprice">$${r.price.toFixed(1)}</span>${r.prem!=null?`<span class="sprem">${r.prem.toFixed(2)}%</span>`:''}<span class="spwdist ${s.dP>=0?'pos':'neg'}">${(s.dP*100).toFixed(1)}%</span>${r.oner!=null?`<span class="soner">ONER ${(r.oner*100).toFixed(2)}%</span>`:''}</div>
       <div class="strack" title="PW ${fmt(r.pw)} · Flip ${fmt(r.fl)} · MP ${fmt(r.mp)} · CW ${fmt(r.cw)}">
-        <div class="sbase"></div>${zw}${cwArrow}${pwArrow}
+        <div class="sbase"></div>${zw}${cwArrow}${pwArrow}${patArrows}
         ${r.fl!=null?`<div class="stick flip" style="left:${X(r.fl)}" title="Flip ${fmt(r.fl)}"></div>`:''}
         ${r.mp!=null?`<div class="stick mp" style="left:${X(r.mp)}" title="MP ${fmt(r.mp)}"></div>`:''}
         ${edots}
@@ -570,6 +572,17 @@ function render(){
     </div>`;
   }).join('');
 }
+function patColor(name){const n=(name||'').toLowerCase();
+if(n.includes('falling wedge'))return '#f85149';
+if(n.includes('rising wedge'))return '#3fb950';
+if(n.includes('head and shoulders'))return (n.includes('inverse')||n.includes('reverse'))?'#3fb950':'#bc8cff';
+if(n.includes('double top')||n.includes('triple top'))return '#f85149';
+if(n.includes('double bottom')||n.includes('triple bottom'))return '#3fb950';
+if(n.includes('triangle'))return '#58a6ff';
+if(n.includes('pennant')||n.includes('flag'))return n.includes('bear')?'#f85149':'#3fb950';
+if(n.includes('bull'))return '#3fb950';
+if(n.includes('bear'))return '#f85149';
+return '#58a6ff';}
 function flipNews(n){const a=n.querySelector('.news'),b=n.querySelector('.reason');if(!a||!b)return;const showReason=b.hidden;a.hidden=showReason;b.hidden=!showReason;}
 sv.style.display='flex'; tv.style.display='none';
 const modes=[['pw','PW distance %'],['az','A–Z'],['fresh','News freshness'],['prem','Prem%'],['oner','ONER']];
