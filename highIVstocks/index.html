@@ -558,7 +558,7 @@ function render(){
     const patArrows=r.pat!=null?(()=>{const c=patColor(r.pat);return `<span class="sarrow" style="left:${X(r.plo)};top:26px;color:${c}" title="${r.pat} low ${fmt(r.plo)}">▲</span><span class="sarrow" style="left:${X(r.phi)};top:8px;color:${c}" title="${r.pat} high ${fmt(r.phi)}">▼</span>`})():'';
     const edots=[['m',r.emaM,'monthly'],['d',r.emaD,'daily'],['w',r.emaW,'weekly']].filter(([,v])=>v!=null).map(([k,v,l])=>`<span class="sema ${k}" style="left:${Xc(v)}" title="EMA8 ${l} ${fmt(v)}"></span>`).join('');
     return `<div class="srow" data-t="${r.t}">
-      <div class="shead"><span class="tk">${r.t}</span><span class="sprice">$${r.price.toFixed(1)}</span>${r.prem!=null?`<span class="sprem">Prem ${r.prem.toFixed(2)}%</span>`:''}<span class="spwdist ${s.dP>=0?'pos':'neg'}">PW ${(s.dP*100).toFixed(1)}%</span>${r.oner!=null?`<span class="soner">ONER ${(r.oner*100).toFixed(2)}%</span>`:''}${r.siPct!=null?`<span class="ssi">SI ${r.siPct.toFixed(1)}%${r.siDtc!=null?' - '+r.siDtc.toFixed(1)+'d':''}</span>`:''}${r.instPct!=null?`<span class="sinst">INST ${r.instPct.toFixed(1)}%</span>`:''}${r.pcr!=null?`<span class="spcr">PCR ${r.pcr.toFixed(2)}</span>`:''}${r.pat!=null?(()=>{const c=patColor(r.pat);return `<span class="spat" style="color:${c};border-color:${c}66">${r.pat}</span>`})():''}</div>
+      <div class="shead"><span class="tk">${r.t}</span><span class="sprice">$${r.price.toFixed(1)}</span>${r.prem!=null?`<span class="sprem">Prem ${r.prem.toFixed(2)}%</span>`:''}<span class="spwdist ${s.dP>=0?'pos':'neg'}">PW ${(s.dP*100).toFixed(1)}%</span>${r.oner!=null?`<span class="soner">ONER ${(r.oner*100).toFixed(2)}%</span>`:''}${r.siPct!=null?`<span class="ssi">SI ${r.siPct.toFixed(1)}%${r.siDtc!=null?' - '+r.siDtc.toFixed(1)+'d':''}</span>`:''}${r.instPct!=null?`<span class="sinst">TUTES ${r.instPct.toFixed(1)}%</span>`:''}${r.pcr!=null?`<span class="spcr">PCR ${r.pcr.toFixed(2)}</span>`:''}${r.pat!=null?(()=>{const c=patColor(r.pat);return `<span class="spat" style="color:${c};border-color:${c}66">${r.pat}</span>`})():''}</div>
       <div class="strack" title="PW ${fmt(r.pw)} · Flip ${fmt(r.fl)} · MP ${fmt(r.mp)} · CW ${fmt(r.cw)}">
         <div class="sbase"></div>${zw}${cwArrow}${pwArrow}${patArrows}
         ${r.fl!=null?`<div class="stick flip" style="left:${X(r.fl)}" title="Flip ${fmt(r.fl)}"></div>`:''}
@@ -591,7 +591,7 @@ if(n.includes('bear'))return '#f85149';
 return '#58a6ff';}
 function flipNews(n){const a=n.querySelector('.news'),b=n.querySelector('.reason');if(!a||!b)return;const showReason=b.hidden;a.hidden=showReason;b.hidden=!showReason;}
 sv.style.display='flex'; tv.style.display='none';
-const modes=[['pw','PW distance %'],['fresh','News freshness'],['prem','Prem%'],['oner','ONER'],['si','SI%'],['inst','INST%']];
+const modes=[['pw','PW distance'],['fresh','News'],['prem','Prem'],['oner','ONER'],['si','SI'],['inst','Tutes']];
 const fbar=document.getElementById('filterbar');
 function renderFilters(){
   fbar.innerHTML=modes.map(m=>`<button class="fbtn${m[0]===mode?' active':''}" data-m="${m[0]}">${m[1]}</button>`).join('');
