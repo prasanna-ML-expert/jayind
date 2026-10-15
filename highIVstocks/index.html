@@ -107,9 +107,9 @@ tbody tr:hover{background:#1a2029}
 .cmark.conv{background:#d29922}
 .cmark.inst{background:#58a6ff}
 .sema{position:absolute;width:6px;height:6px;border-radius:50%;transform:translateX(-50%);border:1px solid #0d1117;z-index:5}
-.swk{position:absolute;top:29px;height:2px;background:#6e7681;opacity:.75;transform:translateY(-50%);border-radius:1px}
-.swko{position:absolute;top:29px;width:2px;height:7px;background:#6e7681;transform:translate(-50%,-50%);opacity:.9}
-.swkc{position:absolute;top:29px;width:6px;height:6px;border-radius:50%;background:#e6edf3;transform:translate(-50%,-50%);box-shadow:0 0 3px #000}
+.swk{position:absolute;top:32px;height:2px;background:#6e7681;opacity:.75;transform:translateY(-50%);border-radius:1px}
+.swko{position:absolute;top:32px;width:2px;height:7px;background:#6e7681;transform:translate(-50%,-50%);opacity:.9}
+.swkc{position:absolute;top:32px;width:6px;height:6px;border-radius:50%;background:#e6edf3;transform:translate(-50%,-50%);box-shadow:0 0 3px #000}
 .sema.d{z-index:6}
 .sema.m{top:4px;background:#58a6ff}
 .sema.d{top:15px;background:#f85149}
@@ -551,6 +551,7 @@ function render(){
     const vals=[...gvals,r.price];
     if(r.plo!=null)vals.push(r.plo); if(r.phi!=null)vals.push(r.phi);
     if(r.capBuy)vals.push(r.capBuy[0],r.capBuy[1]);
+    if(r.wk){vals.push(r.wk.l,r.wk.h);}
     if(r.capSell)vals.push(r.capSell[0],r.capSell[1]);
     const capNear=v=>{if(v==null||!isFinite(v))return false;const d=(v-r.price)/r.price;return d<1.0&&d>-0.5;};
     if(capNear(r.capConv))vals.push(r.capConv);
