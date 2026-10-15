@@ -580,8 +580,8 @@ function render(){
         <span class="slo">${fmt(lo)}</span><span class="shi">${fmt(hi)}</span>
       </div>
       <div class="sstate">${r.pat!=null
-        ?`<b class="${s.c}">${r.pat}</b><span>${fmt(r.plo)}–${fmt(r.phi)}</span>`
-        :`<b class="${s.c}">${s.w}</b><span>${s.dl}</span>`}</div>
+        ?`<b style="color:${patColor(r.pat)}">${r.pat}</b><span>${fmt(r.plo)}–${fmt(r.phi)}</span>`
+        :``}</div>
       <div class="snews" data-t="${r.t}">
         <div class="spane news"><span class="nage">${r.newsAge>=999?'—':r.newsAge===0?'today':r.newsAge+'d ago'}</span>${r.note}</div>
         ${r.capReason?'<div class="spane reason" hidden><span class="rnage">levels</span>'+r.capReason+'</div>':''}
