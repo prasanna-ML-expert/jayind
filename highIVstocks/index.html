@@ -69,13 +69,14 @@ tbody tr:hover{background:#1a2029}
 .fbtn:hover{border-color:#58a6ff;color:#fff}
 .fbtn.active{background:#1f6feb;border-color:#1f6feb;color:#fff;font-weight:600}
 #stripview{display:flex;flex-direction:column;gap:8px}
-.srow{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 14px;display:grid;grid-template-columns:230px 1fr 220px;gap:14px;align-items:center;cursor:pointer}
+.srow{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 14px;display:grid;grid-template-columns:1fr;gap:10px;align-items:center;cursor:pointer}
 .srow:hover{border-color:var(--gray)}
 .shead{display:flex;align-items:center;gap:8px;min-width:0;flex-wrap:wrap}
 .soner{display:inline-block;background:#1a2029;border:1px solid var(--line);border-radius:4px;padding:1px 6px;margin-left:6px;font-size:11px;color:#a371f7;white-space:nowrap}
 .ssi{display:inline-block;background:#1a2029;border:1px solid var(--line);border-radius:4px;padding:1px 6px;margin-left:6px;font-size:11px;color:#f0883e;white-space:nowrap}
 .sinst{display:inline-block;background:#1a2029;border:1px solid var(--line);border-radius:4px;padding:1px 6px;margin-left:6px;font-size:11px;color:#39c5cf;white-space:nowrap}
 .spcr{display:inline-block;background:#1a2029;border:1px solid var(--line);border-radius:4px;padding:1px 6px;margin-left:6px;font-size:11px;color:#f778ba;white-space:nowrap}
+.spat{display:inline-block;background:#1a2029;border:1px solid var(--line);border-radius:4px;padding:1px 6px;margin-left:6px;font-size:11px;white-space:nowrap}
 .spwdist{display:inline-block;background:#1a2029;border:1px solid var(--line);border-radius:4px;padding:1px 6px;margin-left:6px;font-size:11px;white-space:nowrap}
 .spwdist.pos{color:#3fb950}
 .spwdist.neg{color:#f85149}
@@ -112,10 +113,6 @@ tbody tr:hover{background:#1a2029}
 .sema.w{top:26px;background:#3fb950}
 .slo,.shi{position:absolute;top:27px;font-size:.68rem;color:var(--dim);font-variant-numeric:tabular-nums;white-space:nowrap}
 .slo{left:0}.shi{right:0}
-.sstate{text-align:right}
-.sstate b{display:block;font-size:.78rem;letter-spacing:.04em;white-space:nowrap}
-.sstate b.green{color:var(--green)}.sstate b.amber{color:var(--amber)}.sstate b.red{color:var(--red)}.sstate b.dim{color:var(--dim)}
-.sstate span{font-size:.75rem;color:var(--dim);font-variant-numeric:tabular-nums;white-space:nowrap}
 .nage{display:inline-block;background:#1a2029;border:1px solid var(--line);border-radius:4px;padding:1px 6px;margin-right:8px;font-size:11px;color:var(--dim);white-space:nowrap}
 .snews{grid-column:1/-1;font-size:.8rem;color:var(--dim);line-height:1.45;padding-top:8px;margin-top:2px;border-top:1px solid var(--line)}
 .snews .pos{color:rgba(63,185,80,.7);font-weight:500}
@@ -127,7 +124,7 @@ tbody tr:hover{background:#1a2029}
 .snews .rnage{display:inline-block;min-width:44px;font-size:.72rem;color:#58a6ff;border:1px solid #58a6ff;border-radius:8px;padding:0 6px;margin-right:8px}
 .snews .neg{color:rgba(248,81,73,.7);font-weight:500}
 #tableview{display:none!important}
-@media(max-width:700px){.srow{grid-template-columns:1fr auto}.strack{grid-column:1/-1;order:3}.shead{grid-column:1}.sstate{grid-column:2}}
+@media(max-width:700px){.srow{gap:8px}}
 footer{margin-top:40px;color:var(--dim);font-size:.82rem;border-top:1px solid var(--line);padding-top:16px}
 </style>
 </head>
@@ -566,7 +563,7 @@ function render(){
     const patArrows=r.pat!=null?(()=>{const c=patColor(r.pat);return `<span class="sarrow" style="left:${X(r.plo)};top:26px;color:${c}" title="${r.pat} low ${fmt(r.plo)}">▲</span><span class="sarrow" style="left:${X(r.phi)};top:8px;color:${c}" title="${r.pat} high ${fmt(r.phi)}">▼</span>`})():'';
     const edots=[['m',r.emaM,'monthly'],['d',r.emaD,'daily'],['w',r.emaW,'weekly']].filter(([,v])=>v!=null).map(([k,v,l])=>`<span class="sema ${k}" style="left:${Xc(v)}" title="EMA8 ${l} ${fmt(v)}"></span>`).join('');
     return `<div class="srow" data-t="${r.t}">
-      <div class="shead"><span class="tk">${r.t}</span><span class="sprice">$${r.price.toFixed(1)}</span>${r.prem!=null?`<span class="sprem">Prem ${r.prem.toFixed(2)}%</span>`:''}<span class="spwdist ${s.dP>=0?'pos':'neg'}">PW ${(s.dP*100).toFixed(1)}%</span>${r.oner!=null?`<span class="soner">ONER ${(r.oner*100).toFixed(2)}%</span>`:''}${r.siPct!=null?`<span class="ssi">SI ${r.siPct.toFixed(1)}%${r.siDtc!=null?' - '+r.siDtc.toFixed(1)+'d':''}</span>`:''}${r.instPct!=null?`<span class="sinst">INST ${r.instPct.toFixed(1)}%</span>`:''}${r.pcr!=null?`<span class="spcr">PCR ${r.pcr.toFixed(2)}</span>`:''}</div>
+      <div class="shead"><span class="tk">${r.t}</span><span class="sprice">$${r.price.toFixed(1)}</span>${r.prem!=null?`<span class="sprem">Prem ${r.prem.toFixed(2)}%</span>`:''}<span class="spwdist ${s.dP>=0?'pos':'neg'}">PW ${(s.dP*100).toFixed(1)}%</span>${r.oner!=null?`<span class="soner">ONER ${(r.oner*100).toFixed(2)}%</span>`:''}${r.siPct!=null?`<span class="ssi">SI ${r.siPct.toFixed(1)}%${r.siDtc!=null?' - '+r.siDtc.toFixed(1)+'d':''}</span>`:''}${r.instPct!=null?`<span class="sinst">INST ${r.instPct.toFixed(1)}%</span>`:''}${r.pcr!=null?`<span class="spcr">PCR ${r.pcr.toFixed(2)}</span>`:''}${r.pat!=null?(()=>{const c=patColor(r.pat);return `<span class="spat" style="color:${c};border-color:${c}66">${r.pat}</span>`})():''}</div>
       <div class="strack" title="PW ${fmt(r.pw)} · Flip ${fmt(r.fl)} · MP ${fmt(r.mp)} · CW ${fmt(r.cw)}">
         <div class="sbase"></div>${zw}${cwArrow}${pwArrow}${patArrows}
         ${r.fl!=null?`<div class="stick flip" style="left:${X(r.fl)}" title="Flip ${fmt(r.fl)}"></div>`:''}
@@ -579,9 +576,6 @@ function render(){
         <div class="sdot ${s.c}${s.pulse?' pulse':''}" style="left:${Xc(r.price)}" title="$${r.price.toFixed(1)}"></div>
         <span class="slo">${fmt(lo)}</span><span class="shi">${fmt(hi)}</span>
       </div>
-      <div class="sstate">${r.pat!=null
-        ?`<b style="color:${patColor(r.pat)}">${r.pat}</b><span>${fmt(r.plo)}–${fmt(r.phi)}</span>`
-        :``}</div>
       <div class="snews" data-t="${r.t}">
         <div class="spane news"><span class="nage">${r.newsAge>=999?'—':r.newsAge===0?'today':r.newsAge+'d ago'}</span>${r.note}</div>
         ${r.capReason?'<div class="spane reason" hidden><span class="rnage">levels</span>'+r.capReason+'</div>':''}
