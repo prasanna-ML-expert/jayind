@@ -16,6 +16,10 @@ header h1{margin:.2em 0;font-size:1.6rem}
 .meta{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 20px}
 .meta span{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:6px 12px;font-size:.85rem;color:var(--dim)}
 .meta b{color:var(--txt)}
+.mchip{display:inline-flex!important;flex-direction:column;gap:2px}
+.mchip i{font-style:normal;font-size:.66rem;color:var(--dim);text-transform:uppercase;letter-spacing:.06em}
+.mchip b{font-size:.92rem;font-weight:600}
+.fg-extremefear{color:#ff7b72}.fg-fear{color:#f85149}.fg-neutral{color:#d29922}.fg-greed{color:#3fb950}.fg-extremegreed{color:#2ea043}
 h2{margin:28px 0 10px;font-size:1.15rem;overflow:hidden}
 .tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
 table{border-collapse:collapse;width:100%;min-width:820px;font-size:.9rem}
@@ -131,14 +135,13 @@ footer{margin-top:40px;color:var(--dim);font-size:.82rem;border-top:1px solid va
 <div class="wrap">
 <header>
 <h1>highIVstocks</h1>
-<p class="sub">31 high-IV NASDAQ names · daily charts with Gamma Levels overlay · data as of Wed Oct 14, 2026</p>
+<p class="sub">33 high-IV NASDAQ names · daily charts with Gamma Levels overlay · data as of Wed Oct 14, 2026</p>
 <div class="meta">
-<span>Prices: <b>Oct 14 3:00 PM CT</b></span>
-<span>IV: <b>from Sep 25 option chains</b></span>
-<span>Breadth (SPY Spercentile): <b>+7 / −1 — thin, no majority</b></span>
-<span>No complete four-leg triggers — all calls are <b>conditional watches</b></span>
-<span>Gamma: computed from live option chains (4 nearest expirations) · Oct 14, 2026</span>
-<span>News: <b>latest announcements as of Oct 14</b></span>
+<span class="mchip" data-chip="prices"><i>Prices</i><b>Oct 14 3:00 PM CT</b></span>
+<span class="mchip" data-chip="gamma"><i>Gamma walls</i><b>Oct 14 · 7:00 AM CT</b></span>
+<span class="mchip" data-chip="news"><i>News</i><b>Oct 14</b></span>
+<span class="mchip" data-chip="feargreed"><i>Fear &amp; Greed</i><b class="fg-fear">32 · Fear</b></span>
+<span class="mchip" data-chip="breadth"><i>Breadth</i><b>+7 / −1 · thin</b></span>
 </div>
 <div class="legend">
 <span><i class="ltri cw">◀</i>CW call wall</span>
