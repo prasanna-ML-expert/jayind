@@ -94,11 +94,6 @@ tbody tr:hover{background:#1a2029}
 .stick{position:absolute;width:2px;transform:translateX(-50%)}
 .stick.flip{top:4px;height:26px;background:var(--fl)}
 .stick.mp{top:9px;height:16px;background:var(--mp)}
-.sdot{position:absolute;top:11px;width:12px;height:12px;border-radius:50%;transform:translateX(-50%);border:2px solid #0d1117;box-shadow:0 0 0 1px currentColor}
-.sdot.green{background:var(--green);color:var(--green)}
-.sdot.amber{background:var(--amber);color:var(--amber)}
-.sdot.red{background:var(--red);color:var(--red)}
-.sdot.pulse{animation:spulse 1.3s infinite}
 @keyframes spulse{50%{box-shadow:0 0 0 6px rgba(210,153,34,.22)}}
 .czone{position:absolute;top:0;bottom:0;pointer-events:auto}
 .czone.buy{background:repeating-linear-gradient(45deg,rgba(88,166,255,.16),rgba(88,166,255,.16) 4px,transparent 4px,transparent 8px);border-left:1px dashed #58a6ff;border-right:1px dashed #58a6ff}
@@ -577,7 +572,6 @@ function render(){
         ${r.capSell?'<div class="czone sell" style="left:'+X(r.capSell[0])+';width:calc('+X(r.capSell[1])+' - '+X(r.capSell[0])+')" title="Sell/supply zone '+fmt(r.capSell[0])+'-'+fmt(r.capSell[1])+' (capital structure)"></div>':''}
         ${capNear(r.capConv)?'<div class="cmark conv" style="left:'+X(r.capConv)+'" title="Convert strike '+fmt(r.capConv)+'"></div>':''}
         ${capNear(r.capInst)?'<div class="cmark inst" style="left:'+X(r.capInst)+'" title="Institutional floor '+fmt(r.capInst)+'"></div>':''}
-        <div class="sdot ${s.c}${s.pulse?' pulse':''}" style="left:${Xc(r.price)}" title="$${r.price.toFixed(1)}"></div>
         <span class="slo">${fmt(lo)}</span><span class="shi">${fmt(hi)}</span>
       </div>
       <div class="snews" data-t="${r.t}">
