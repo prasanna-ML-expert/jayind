@@ -53,10 +53,9 @@ tbody tr:hover{background:#1a2029}
 .lline{display:inline-block;width:18px;height:3px;margin-right:6px;vertical-align:middle;border-radius:2px}
 .legend{display:flex;flex-wrap:wrap;gap:14px;color:var(--dim);font-size:.85rem;margin:6px 0 18px}
 .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
-#gammachip{cursor:pointer;border:1px solid transparent;border-radius:8px;padding:2px 6px;margin:-2px -6px}
-#gammachip:hover,#gammachip:focus-visible{border-color:var(--line);background:var(--panel);outline:none}
-#newschip{cursor:pointer;border:1px solid transparent;border-radius:8px;padding:2px 6px;margin:-2px -6px}
-#newschip:hover,#newschip:focus-visible{border-color:var(--line);background:var(--panel);outline:none}
+#gammachip,#newschip{cursor:pointer;border-radius:8px;padding:2px 6px;-webkit-tap-highlight-color:transparent}
+#gammachip:hover,#gammachip:focus-visible,#newschip:hover,#newschip:focus-visible{background:var(--panel);box-shadow:0 0 0 1px var(--line);outline:none}
+#gammachip:active,#newschip:active{background:var(--panel)}
 .spos{color:var(--green);opacity:.85}.sneg{color:var(--red);opacity:.85}.sneu{color:var(--txt)}
 .spxsrc{color:var(--dim);font-size:.78rem;margin-left:8px;white-space:nowrap}
 #gampop{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;z-index:60;padding:16px}
@@ -506,12 +505,12 @@ var feed=document.getElementById('gammachanges'),data=feed?JSON.parse(feed.textC
 var fmt=function(v){return v==null?'\u2014':v};
 function open(){var list=document.getElementById('gplist'),dates=document.getElementById('gpdates');
 if(data){dates.textContent=data.prev+' \u2192 '+data.curr;list.innerHTML='';
-var ch=data.changes,keys=Object.keys(ch);
-if(!keys.length)list.innerHTML='<div class="gprow"><span class="chg">No wall changes since the previous reading.</span></div>';
+var ch=data.changes,keys=Object.keys(ch).filter(function(t){var d=ch[t];return d._new||d._removed||d.CW||d.PW});
+if(!keys.length)list.innerHTML='<div class="gprow"><span class="chg">No call/put wall moves since the previous reading.</span></div>';
 keys.forEach(function(t){var d=ch[t],row=document.createElement('div');row.className='gprow';
-if(d._new)row.innerHTML='<span class="tk">'+t+'</span><span class="gpnew">new</span> <span class="chg">CW '+fmt(d.CW[1])+' / PW '+fmt(d.PW[1])+' / flip '+fmt(d.flip[1])+' / MP '+fmt(d.MP[1])+'</span>';
+if(d._new)row.innerHTML='<span class="tk">'+t+'</span><span class="gpnew">new</span> <span class="chg">CW '+fmt(d.CW[1])+' / PW '+fmt(d.PW[1])+'</span>';
 else if(d._removed)row.innerHTML='<span class="tk">'+t+'</span><span class="gpremove">removed from watchlist</span>';
-else{var parts=[];['CW','PW','flip','MP'].forEach(function(w){if(d[w])parts.push('<b>'+w+'</b> '+fmt(d[w][0])+'\u2192'+fmt(d[w][1]))});
+else{var parts=[];['CW','PW'].forEach(function(w){if(d[w])parts.push('<b>'+w+'</b> '+fmt(d[w][0])+'\u2192'+fmt(d[w][1]))});
 row.innerHTML='<span class="tk">'+t+'</span><span class="chg">'+parts.join(' \u00b7 ')+'</span>'}
 list.appendChild(row)})}
 pop.classList.add('open')}
