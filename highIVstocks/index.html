@@ -57,6 +57,7 @@ tbody tr:hover{background:#1a2029}
 #gammachip:hover,#gammachip:focus-visible,#newschip:hover,#newschip:focus-visible{background:var(--panel);box-shadow:0 0 0 1px var(--line);outline:none}
 #gammachip:active,#newschip:active{background:var(--panel)}
 .spos{color:var(--green);opacity:.85}.sneg{color:var(--red);opacity:.85}.sneu{color:var(--txt)}
+.wup{color:var(--green);opacity:.85}.wdn{color:var(--red);opacity:.85}
 .spxsrc{color:var(--dim);font-size:.78rem;margin-left:8px;white-space:nowrap}
 #gampop,#spxpop{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;z-index:60;padding:16px}
 #gampop.open,#spxpop.open{display:flex}
@@ -503,6 +504,7 @@ lb.addEventListener('touchend',e=>{if(scale>1)return;const dx=e.changedTouches[0
 (function(){var chip=document.getElementById('gammachip'),pop=document.getElementById('gampop');if(!chip||!pop)return;
 var feed=document.getElementById('gammachanges'),data=feed?JSON.parse(feed.textContent):null;
 var fmt=function(v){return v==null?'\u2014':v};
+var wcls=function(o,n){if(o==null||n==null||o===n)return '';return n>o?'wup':'wdn'};
 function open(){var list=document.getElementById('gplist'),dates=document.getElementById('gpdates');
 if(data){dates.textContent=data.prev+' \u2192 '+data.curr;list.innerHTML='';
 var ch=data.changes,keys=Object.keys(ch).filter(function(t){var d=ch[t];return d._new||d._removed||d.CW||d.PW});
@@ -510,7 +512,7 @@ if(!keys.length)list.innerHTML='<div class="gprow"><span class="chg">No call/put
 keys.forEach(function(t){var d=ch[t],row=document.createElement('div');row.className='gprow';
 if(d._new)row.innerHTML='<span class="tk">'+t+'</span><span class="gpnew">new</span> <span class="chg">CW '+fmt(d.CW[1])+' / PW '+fmt(d.PW[1])+'</span>';
 else if(d._removed)row.innerHTML='<span class="tk">'+t+'</span><span class="gpremove">removed from watchlist</span>';
-else{var parts=[];['CW','PW'].forEach(function(w){if(d[w])parts.push('<b>'+w+'</b> '+fmt(d[w][0])+'\u2192'+fmt(d[w][1]))});
+else{var parts=[];['CW','PW'].forEach(function(w){if(d[w])parts.push('<b>'+w+'</b> <span class="'+wcls(d[w][0],d[w][1])+'">'+fmt(d[w][0])+'\u2192'+fmt(d[w][1])+'</span>')});
 row.innerHTML='<span class="tk">'+t+'</span><span class="chg">'+parts.join(' \u00b7 ')+'</span>'}
 list.appendChild(row)})}
 pop.classList.add('open')}
