@@ -35,9 +35,9 @@ else if syminfo.ticker == "WULF"
     flip := 13.95
     mp := 13
 else if syminfo.ticker == "IREN"
-    cw := 40
+    cw := 30
     pw := 30
-    flip := 39.23
+    flip := na
     mp := 30
 else if syminfo.ticker == "BE"
     cw := 260
@@ -109,11 +109,6 @@ else if syminfo.ticker == "GME"
     pw := 26
     flip := na
     mp := 25
-else if syminfo.ticker == "CRWD"
-    cw := 275
-    pw := 250
-    flip := 263.88
-    mp := 265
 else if syminfo.ticker == "AMD"
     cw := 550
     pw := 530
