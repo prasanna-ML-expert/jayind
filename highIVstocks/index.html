@@ -536,8 +536,8 @@ if(r.kind==='rem'){html+='<tr><td class="tk">'+r.t+' <span class="tag">removed</
 if(r.kind==='new'){html+='<tr><td class="tk">'+r.t+' <span class="tag">new</span></td><td>'+fmt(r.d.PW[1])+'</td><td>'+fmt(r.d.CW[1])+'</td></tr>';return}
 html+='<tr><td class="tk">'+r.t+'</td><td>'+cell(r.d.PW)+'</td><td>'+cell(r.d.CW)+'</td></tr>'});
 html+='</table>';list.innerHTML=html}}
-pop.classList.add('open')}
-function close(){pop.classList.remove('open')}
+pop.classList.add('open');document.body.style.overflow='hidden'}
+function close(){pop.classList.remove('open');document.body.style.overflow=''}
 chip.addEventListener('click',open);
 chip.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();open()}});
 document.getElementById('gpclose').addEventListener('click',close);
@@ -553,8 +553,8 @@ data.items.forEach(function(it){var row=document.createElement('div');row.classN
 var cls=it.sent==='pos'?'spos':(it.sent==='neg'?'sneg':'sneu');
 row.innerHTML='<span class="'+cls+'">'+it.h+'</span><span class="spxsrc">'+it.s+'</span>';
 list.appendChild(row)})}
-pop.classList.add('open')}
-function close(){pop.classList.remove('open')}
+pop.classList.add('open');document.body.style.overflow='hidden'}
+function close(){pop.classList.remove('open');document.body.style.overflow=''}
 chip.addEventListener('click',open);
 chip.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();open()}});
 document.getElementById('spxclose').addEventListener('click',close);
