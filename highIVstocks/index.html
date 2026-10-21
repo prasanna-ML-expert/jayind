@@ -577,7 +577,7 @@ var BIZ={RDW:'space',ASTS:'space',SATS:'satellite',NVTS:'semiconductor',ON:'semi
 var sortKey='pct';
 function draw(){var list=document.getElementById('breadthlist'),dates=document.getElementById('breadthdates');
 if(!data){list.innerHTML='<div class="gpnone">No breadth data yet.</div>';return}
-dates.textContent=data.as_of+' · candle '+data.candle_date+' · '+data.universe+' names';
+dates.textContent=data.as_of+' · '+data.universe+' names';
 var rows=Object.keys(data.rows).map(function(t){var r=data.rows[t];return{t:t,side:r.side,pct:r.pct,dist:Math.abs(r.close-r.ema8)/r.ema8*100}});
 if(!rows.length){list.innerHTML='<div class="gpnone">No names at the 70th percentile.</div>';return}
 rows.sort(function(a,b){return sortKey==='dist'?b.dist-a.dist:b.pct-a.pct});
