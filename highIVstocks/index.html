@@ -76,7 +76,7 @@ tbody tr:hover{background:#1a2029}
 .btab th{text-align:left;color:var(--dim);font-size:11px;text-transform:uppercase;letter-spacing:.04em;padding:2px 10px 6px 0;border-bottom:1px solid var(--line)}
 .btab td{padding:5px 10px 5px 0;border-bottom:1px solid var(--line);white-space:nowrap}
 .btab th:last-child,.btab td:last-child{padding-right:0}
-.btab th:first-child{width:30%}.btab th:nth-child(2){width:18%}.btab th:nth-child(3){width:24%}.btab th:nth-child(4){width:28%}
+.btab th:first-child{width:26%}.btab th:nth-child(2){width:14%}.btab th:nth-child(3){width:20%}.btab th:nth-child(4){width:40%}
 .btab .tk{font-weight:700}
 .gpcard{background:var(--panel);border:1px solid var(--line);border-radius:12px;max-width:520px;width:100%;max-height:72vh;display:flex;flex-direction:column;overflow:hidden}
 .gphead{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--line);font-weight:600}
@@ -448,7 +448,7 @@ footer{margin-top:40px;color:var(--dim);font-size:.82rem;border-top:1px solid va
 </div>
 <div id="gampop" role="dialog" aria-label="Gamma wall changes"><div class="gpcard"><div class="gphead"><span>Gamma wall changes<small id="gpdates"></small></span><button class="gpclose" id="gpclose" aria-label="Close">&#215;</button></div><div class="gplist" id="gplist"></div><div class="gpfoot">Only wall moves &ge; 2.5% shown &middot; &mdash; = no substantial change &middot; green = wall up, red = wall down</div></div></div>
 <div id="spxpop" role="dialog" aria-label="SPX and Nasdaq news"><div class="gpcard"><div class="gphead"><span>SPX / Nasdaq news<small id="spxdates"></small></span><button class="gpclose" id="spxclose" aria-label="Close">&#215;</button></div><div class="gplist" id="spxlist"></div></div></div>
-<div id="breadthpop" role="dialog" aria-label="EMA8 percentile breadth"><div class="gpcard"><div class="gphead"><span>EMA8 percentile breadth<small id="breadthdates"></small></span><button class="gpclose" id="breadthclose" aria-label="Close">&#215;</button></div><div class="gplist" id="breadthlist"></div><div class="gpfoot">Names at &ge; 70th percentile of candle extension vs EMA8 (full-history percentrank, above/below EMA8 counted separately) &middot; green = above EMA8 &middot; red = below EMA8</div></div></div>
+<div id="breadthpop" role="dialog" aria-label="EMA8 percentile breadth"><div class="gpcard"><div class="gphead"><span>EMA8 percentile breadth<small id="breadthdates"></small></span><button class="gpclose" id="breadthclose" aria-label="Close">&#215;</button></div><div class="gplist" id="breadthlist"></div><div class="gpfoot">Names at &ge; 70th percentile of candle extension vs EMA8 (full-history percentrank, above/below EMA8 counted separately) &middot; green = above EMA8 &middot; red = below EMA8 &middot; Dist % = close vs EMA8 &middot; tap Pctl or Dist % to sort</div></div></div>
 <div id="lightbox"><button id="lb-prev" class="lb-nav" aria-label="Previous chart">&#8249;</button><img alt=""><button id="lb-next" class="lb-nav" aria-label="Next chart">&#8250;</button><div class="lb-cap"></div><button id="lb-close" class="lb-close" aria-label="Close">&#215;</button></div>
 <script>
 const lb=document.getElementById('lightbox'),im=lb.querySelector('img'),cap=lb.querySelector('.lb-cap');
@@ -573,16 +573,21 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')close()})})(
 /* Breadth chip button -> EMA8 percentile popup */
 (function(){var chip=document.getElementById('breadthchip'),pop=document.getElementById('breadthpop');if(!chip||!pop)return;
 var feed=document.getElementById('breadthdata'),data=feed?JSON.parse(feed.textContent):null;
-function open(){var list=document.getElementById('breadthlist'),dates=document.getElementById('breadthdates');
-if(data){dates.textContent=data.as_of+' \u00B7 candle '+data.candle_date+' \u00B7 '+data.universe+' names';
-var rows=Object.keys(data.rows).map(function(t){var r=data.rows[t];return{t:t,side:r.side,pct:r.pct,dist:r.dist,close:r.close}});
-rows.sort(function(a,b){if(a.side!==b.side)return a.side==='above'?-1:1;return b.pct-a.pct});
-if(!rows.length){list.innerHTML='<div class="gpnone">No names at the 70th percentile.</div>'}
-else{var html='<table class="btab"><tr><th>Ticker</th><th>Pctl</th><th>Dist %</th><th>Close</th></tr>';
+var BIZ={RDW:'space',ASTS:'space',SATS:'satellite',NVTS:'semiconductor',ON:'semiconductor',IONQ:'quantum',QBTS:'quantum',RGTI:'quantum',QUBT:'quantum',SMR:'nuclear',OKLO:'nuclear',AMPX:'battery',SPY:'index',QQQ:'index',TSLA:'EV',META:'social',NVDA:'AI chips',MU:'memory',AVGO:'semiconductor',MSFT:'cloud',AMZN:'retail',AAPL:'devices',GOOG:'search',ENPH:'solar',EOSE:'battery',ALB:'lithium',LAC:'lithium',NB:'mining',SGML:'lithium',ACHR:'air taxi',JOBY:'air taxi',FCEL:'fuel cell',BE:'fuel cell',PLUG:'hydrogen',BW:'nuclear',CRWV:'AI cloud',NBIS:'AI cloud',APLD:'datacenter',ALAB:'connectivity',CIFR:'crypto mining',CORZ:'crypto mining',IREN:'datacenter',WULF:'crypto mining',MARA:'crypto mining',CLSK:'crypto mining',RCAT:'drones',UMAC:'drones',ONDS:'drones',AVAV:'defense',KTOS:'defense',RKLB:'space',PL:'space',LUNR:'space'};
+var sortKey='pct';
+function draw(){var list=document.getElementById('breadthlist'),dates=document.getElementById('breadthdates');
+if(!data){list.innerHTML='<div class="gpnone">No breadth data yet.</div>';return}
+dates.textContent=data.as_of+' · candle '+data.candle_date+' · '+data.universe+' names';
+var rows=Object.keys(data.rows).map(function(t){var r=data.rows[t];return{t:t,side:r.side,pct:r.pct,dist:Math.abs(r.close-r.ema8)/r.ema8*100}});
+if(!rows.length){list.innerHTML='<div class="gpnone">No names at the 70th percentile.</div>';return}
+rows.sort(function(a,b){return sortKey==='dist'?b.dist-a.dist:b.pct-a.pct});
+function hd(k,label){return '<th data-k="'+k+'" style="cursor:pointer">'+label+(sortKey===k?' ▼':'')+'</th>'}
+var html='<table class="btab"><tr><th>Ticker</th>'+hd('pct','Pctl')+hd('dist','Dist %')+'<th>Business</th></tr>';
 rows.forEach(function(r){var up=r.side==='above';
-html+='<tr class="'+(up?'spos':'sneg')+'"><td class="tk">'+r.t+'</td><td>'+r.pct.toFixed(0)+'</td><td>'+r.dist.toFixed(2)+'</td><td>'+r.close+'</td></tr>'});
-html+='</table>';list.innerHTML=html}}
-pop.classList.add('open');document.body.style.overflow='hidden'}
+html+='<tr class="'+(up?'spos':'sneg')+'"><td class="tk">'+r.t+'</td><td>'+r.pct.toFixed(0)+'</td><td>'+r.dist.toFixed(2)+'</td><td>'+(BIZ[r.t]||'')+'</td></tr>'});
+html+='</table>';list.innerHTML=html;
+list.querySelectorAll('th[data-k]').forEach(function(th){th.addEventListener('click',function(){sortKey=th.getAttribute('data-k');draw()})})}
+function open(){draw();pop.classList.add('open');document.body.style.overflow='hidden'}
 function close(){pop.classList.remove('open');document.body.style.overflow=''}
 chip.addEventListener('click',open);
 chip.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();open()}});
