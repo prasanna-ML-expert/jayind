@@ -76,7 +76,7 @@ tbody tr:hover{background:#1a2029}
 .btab th{text-align:left;color:var(--dim);font-size:11px;text-transform:uppercase;letter-spacing:.04em;padding:2px 10px 6px 0;border-bottom:1px solid var(--line)}
 .btab td{padding:5px 10px 5px 0;border-bottom:1px solid var(--line);white-space:nowrap}
 .btab th:last-child,.btab td:last-child{padding-right:0}
-.btab th:first-child{width:20%}.btab th:nth-child(2){width:28%}.btab th:nth-child(3){width:14%}.btab th:nth-child(4){width:16%}.btab th:nth-child(5){width:22%}
+.btab th:first-child{width:30%}.btab th:nth-child(2){width:18%}.btab th:nth-child(3){width:24%}.btab th:nth-child(4){width:28%}
 .btab .tk{font-weight:700}
 .gpcard{background:var(--panel);border:1px solid var(--line);border-radius:12px;max-width:520px;width:100%;max-height:72vh;display:flex;flex-direction:column;overflow:hidden}
 .gphead{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--line);font-weight:600}
@@ -578,9 +578,9 @@ if(data){dates.textContent=data.as_of+' \u00B7 candle '+data.candle_date+' \u00B
 var rows=Object.keys(data.rows).map(function(t){var r=data.rows[t];return{t:t,side:r.side,pct:r.pct,dist:r.dist,close:r.close}});
 rows.sort(function(a,b){if(a.side!==b.side)return a.side==='above'?-1:1;return b.pct-a.pct});
 if(!rows.length){list.innerHTML='<div class="gpnone">No names at the 70th percentile.</div>'}
-else{var html='<table class="btab"><tr><th>Ticker</th><th>Side</th><th>Pctl</th><th>Dist %</th><th>Close</th></tr>';
+else{var html='<table class="btab"><tr><th>Ticker</th><th>Pctl</th><th>Dist %</th><th>Close</th></tr>';
 rows.forEach(function(r){var up=r.side==='above';
-html+='<tr><td class="tk">'+r.t+'</td><td class="'+(up?'spos':'sneg')+'">'+(up?'\u25B2 above EMA8':'\u25BC below EMA8')+'</td><td>'+r.pct.toFixed(0)+'</td><td>'+r.dist.toFixed(2)+'</td><td>'+r.close+'</td></tr>'});
+html+='<tr class="'+(up?'spos':'sneg')+'"><td class="tk">'+r.t+'</td><td>'+r.pct.toFixed(0)+'</td><td>'+r.dist.toFixed(2)+'</td><td>'+r.close+'</td></tr>'});
 html+='</table>';list.innerHTML=html}}
 pop.classList.add('open');document.body.style.overflow='hidden'}
 function close(){pop.classList.remove('open');document.body.style.overflow=''}
