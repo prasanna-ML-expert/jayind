@@ -630,7 +630,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')close()})})(
 /* Fear & Greed chip button -> history bar-chart popup */
 (function(){var chip=document.getElementById('fgchip'),pop=document.getElementById('fgpop');if(!chip||!pop)return;
 var feed=document.getElementById('fgdata'),data=feed?JSON.parse(feed.textContent):null;
-function zone(v){return v<25?'#ff7b72':(v<45?'#f85149':(v<55?'#d29922':(v<75?'#3fb950':'#2ea043')))}
+function zone(v){v=Math.min(100,Math.max(0,v));return 'hsl('+Math.round(v*1.2)+',78%,42%)'}
 function draw(){var chart=document.getElementById('fgchart'),dates=document.getElementById('fgdates');
 if(!data||!data.values||!data.values.length){chart.innerHTML='<div class="gpnone">No Fear &amp; Greed history yet.</div>';return}
 dates.textContent='latest '+data.latest+' \u00b7 '+data.rating+' \u00b7 '+data.as_of;
