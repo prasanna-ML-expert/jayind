@@ -115,7 +115,7 @@ tbody tr:hover{background:#1a2029}
 .fbtn:hover{border-color:#58a6ff;color:#fff}
 .fbtn.active{background:#1f6feb;border-color:#1f6feb;color:#fff;font-weight:600}
 #stripview{display:flex;flex-direction:column;gap:8px}
-.srow{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 14px;display:grid;grid-template-columns:1fr;gap:10px;align-items:center;cursor:pointer}
+.srow{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 14px;display:grid;grid-template-columns:1fr;gap:10px;align-items:center}
 .srow:hover{border-color:var(--gray)}
 .shead{display:flex;align-items:center;gap:8px;min-width:0;flex-wrap:wrap}
 .soner{display:inline-block;background:#1a2029;border:1px solid var(--line);border-radius:4px;padding:1px 6px;margin-left:6px;font-size:11px;color:#a371f7;white-space:nowrap}
@@ -131,7 +131,7 @@ tbody tr:hover{background:#1a2029}
 .spwdist.neg{color:#f85149}
 .sprem{display:inline-block;background:#1a2029;border:1px solid var(--line);border-radius:4px;padding:1px 6px;margin-left:6px;font-size:11px;color:#e8b400;white-space:nowrap}
 .sprice{font-weight:700;font-variant-numeric:tabular-nums}
-.strack{position:relative;height:40px;min-width:120px;touch-action:pan-y}
+.strack{position:relative;height:40px;min-width:120px;touch-action:pan-y;cursor:pointer}
 .sread{position:absolute;bottom:calc(100% + 4px);transform:translateX(-50%);background:#0d1117;border:1px solid var(--gray);color:#e6edf3;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;pointer-events:none;z-index:20;box-shadow:0 2px 8px rgba(0,0,0,.5)}
 .sguide{position:absolute;top:0;bottom:0;width:2px;margin-left:-1px;background:#e6edf3;opacity:.9;pointer-events:none;z-index:15;box-shadow:0 0 4px rgba(0,0,0,.65);border-radius:1px}
 .sbase{position:absolute;left:0;right:0;top:15px;height:4px;background:#2d333b;border-radius:2px}
@@ -791,6 +791,7 @@ let scrubMoved=false;
 sv.addEventListener('click',e=>{if(scrubMoved){scrubMoved=false;return;}
 const n=e.target.closest('.snews');if(n){if(n.querySelector('.reason'))flipNews(n);return;}
 const row=e.target.closest('.srow');if(!row)return;
+if(!e.target.closest('.strack'))return;
   const i=items.findIndex(x=>x.t===row.dataset.t); if(i>=0)show(i)});
 (function(){
   let act=null;
@@ -821,7 +822,7 @@ render();
 <div><b>ONER</b> = Option Notional Exposure Ratio = (total open interest × 100 × price) ÷ market cap. Measures option-market notional exposure relative to company size.</div>
 <div><b>Prem%</b> = (ATM call time-value + ATM put time-value) ÷ 2, as % of spot, nearest Friday expiry.</div>
 <div><b>PW distance %</b> = (price − put wall) ÷ put wall. Green = above put wall, red = below.</div>
-<div><b>Strip bar:</b> drag across a strip's bar to read the price at any point along it. Tap a strip to open its chart; tap the news line to switch between news and levels.</div>
+<div><b>Strip bar:</b> drag across a strip's bar to read the price at any point along it. Tap a strip's bar to open its chart; tap the news line to switch between news and levels.</div>
 <div><b>Fear &amp; Greed:</b> 0&ndash;24 extreme fear &middot; 25&ndash;44 fear &middot; 45&ndash;55 neutral &middot; 56&ndash;74 greed &middot; 75&ndash;100 extreme greed. History-bar colors run on a continuous scale, deep red at 0 to deep green at 100.</div>
 <div><b>SI%</b> = shares sold short ÷ float shares, from FINRA's twice-monthly short-interest file (settlement mid-month + month-end, published ~7 business days later). The number after the dash is days to cover.</div>
 <div><b>INST%</b> = shares held by institutions ÷ float shares, from Nasdaq's 13F-derived institutional holdings (quarterly, ~45-day lag). Can exceed 100% on heavily shorted names — the same shares get counted in multiple holders' long positions.</div>
