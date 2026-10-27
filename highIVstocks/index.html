@@ -590,7 +590,7 @@ var hi=Math.max.apply(null,cs.map(function(c){return c.h}).concat([W.pw,W.flip,W
 var sp=(hi-lo)||1;function Y(v){return (1-(v-lo)/sp)*100}
 var cols='';
 cs.forEach(function(c,ix){
-if(ix>0&&(effD(c.d)-effD(cs[ix-1].d))/86400000>1)cols+='<div class="bicol" title="Weekend \u2014 no trading"><div class="biwick weekend" style="top:30%;height:40%"></div><div class="bibody weekend" style="top:40%;height:20%"></div></div>';
+if(ix>0&&(new Date(c.d)-new Date(cs[ix-1].d))/86400000>1)cols+='<div class="bicol" title="Weekend \u2014 no trading"><div class="biwick weekend" style="top:30%;height:40%"></div><div class="bibody weekend" style="top:40%;height:20%"></div></div>';
 var up=c.c>=c.o,col=up?'#3fb950':'#f85149';
 var top=Y(Math.max(c.o,c.c)),bot=Y(Math.min(c.o,c.c));
 cols+='<div class="bicol" title="'+c.d.slice(5)+' O '+c.o+' H '+c.h+' L '+c.l+' C '+c.c+(c.partial?' (partial)':'')+'"><div class="biwick" style="top:'+Y(c.h).toFixed(1)+'%;height:'+(Y(c.l)-Y(c.h)).toFixed(1)+'%"></div><div class="bibody'+(c.partial?' partial':'')+'" style="top:'+top.toFixed(1)+'%;height:'+Math.max(bot-top,1.5).toFixed(1)+'%;background:'+col+(c.partial?';border:1px dashed '+col:'')+'"></div></div>'});
