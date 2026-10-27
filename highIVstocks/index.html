@@ -84,6 +84,8 @@ tbody tr:hover{background:#1a2029}
 .nccol{position:relative;flex:1 1 0;min-width:1px}
 .ncbar{position:absolute;left:0;right:0;border-radius:1px}
 .ncline{position:absolute;left:0;right:0;top:50%;border-top:1px dashed var(--dim)}
+.nssc.pos{color:var(--green)}
+.nssc.neg{color:var(--red)}
 .fgaxis{display:flex;justify-content:space-between;color:var(--dim);font-size:10px;padding:3px 14px 10px}
 .btab{border-collapse:collapse;font-size:12.5px;width:100%;min-width:0;table-layout:fixed}
 .btab th{text-align:left;color:var(--dim);font-size:11px;text-transform:uppercase;letter-spacing:.04em;padding:2px 10px 6px 0;border-bottom:1px solid var(--line)}
@@ -193,7 +195,7 @@ footer{margin-top:40px;color:var(--dim);font-size:.82rem;border-top:1px solid va
 <div class="meta">
 <span class="mchip" data-chip="prices" id="pricechip" role="button" tabindex="0" title="Show EMA8 stack strength ranking"><i>Prices</i><b>Oct 26 3:00 PM CT</b></span>
 <span class="mchip" data-chip="gamma" id="gammachip" role="button" tabindex="0" title="Show gamma wall changes"><i>Gamma walls</i><b>Oct 27 · 7:00 AM CT</b></span>
-<span class="mchip" data-chip="news" id="newschip" role="button" tabindex="0" title="Show SPX-moving news"><i>News</i><b>Oct 27</b></span>
+<span class="mchip" data-chip="news" id="newschip" role="button" tabindex="0" title="Show SPX-moving news"><i>News</i><b>Oct 27 <span class="nssc pos">+27</span></b></span>
 <span class="mchip" data-chip="feargreed" id="fgchip" role="button" tabindex="0" title="Show Fear &amp; Greed history"><i>Fear &amp; Greed</i><b class="fg-fear">30 · Fear</b></span>
 <span class="mchip" data-chip="breadth" id="breadthchip" role="button" tabindex="0" title="Show EMA8 percentile breadth"><i>Breadth</i><b>9 red / 0 green</b></span>
 </div>
@@ -455,7 +457,7 @@ footer{margin-top:40px;color:var(--dim);font-size:.82rem;border-top:1px solid va
 </footer>
 </div>
 <div id="gampop" role="dialog" aria-label="Gamma wall changes"><div class="gpcard"><div class="gphead"><span>Gamma wall changes<small id="gpdates"></small></span><button class="gpclose" id="gpclose" aria-label="Close">&#215;</button></div><div class="gplist" id="gplist"></div><div class="gpfoot">Only wall moves &ge; 2.5% shown &middot; PCR shown on a move &ge; 0.25 or a cross of 1.0 (red = PCR up / put-heavy build, green = PCR down) &middot; &mdash; = no substantial change &middot; green = wall up, red = wall down</div></div></div>
-<div id="spxpop" role="dialog" aria-label="SPX and Nasdaq news"><div class="gpcard"><div class="gphead"><span>SPX / Nasdaq news<small id="spxdates"></small></span><button class="gpclose" id="spxclose" aria-label="Close">&#215;</button></div><div class="gplist" id="spxlist"></div><div class="nschart" id="nschart"></div><div class="fgaxis"><span id="nsoldest"></span><span id="nsnewest"></span></div><div class="gpfoot">News score = blended %pos &minus; %neg (60% index items / 40% stock notes) &middot; one bar per day &middot; green positive, red negative</div></div></div>
+<div id="spxpop" role="dialog" aria-label="SPX and Nasdaq news"><div class="gpcard"><div class="gphead"><span>SPX / Nasdaq news<small id="spxdates"></small> <b id="nsscorehead" class="nssc"></b></span><button class="gpclose" id="spxclose" aria-label="Close">&#215;</button></div><div class="gplist" id="spxlist"></div><div class="nschart" id="nschart"></div><div class="fgaxis"><span id="nsoldest"></span><span id="nsnewest"></span></div><div class="gpfoot">News score = blended %pos &minus; %neg (60% index items / 40% stock notes) &middot; one bar per day &middot; green positive, red negative</div></div></div>
 <div id="breadthpop" role="dialog" aria-label="EMA8 percentile breadth"><div class="gpcard"><div class="gphead"><span>EMA8 percentile breadth<small id="breadthdates"></small></span><button class="gpclose" id="breadthclose" aria-label="Close">&#215;</button></div><div class="gplist" id="breadthlist"></div><div class="gpfoot">Names at &ge; 70th percentile of candle extension vs EMA8 (full-history percentrank, above/below EMA8 counted separately) &middot; green = above EMA8 &middot; red = below EMA8 &middot; Dist % = close vs EMA8 &middot; tap Pctl or Dist % to sort</div></div></div>
 <div id="strengthpop" role="dialog" aria-label="EMA8 stack strength ranking"><div class="gpcard"><div class="gphead"><span>EMA8 stack strength<small id="strengthdates"></small></span><button class="gpclose" id="strengthclose" aria-label="Close">&#215;</button></div><div class="gplist" id="strengthlist"></div><div class="gpfoot">Strongest first. Sequence: weekly EMA8 &gt; monthly EMA8, then daily EMA8 &gt; weekly EMA8, then price &gt; daily EMA8 &middot; within a tier, ranked by the spreads in the same order (Wk vs Mo, then Dy vs Wk, then Px vs Dy) &middot; cells show the signed % spread (green = condition met, red = not)</div></div></div>
 <div id="fgpop" role="dialog" aria-label="Fear and Greed history"><div class="gpcard"><div class="gphead"><span>Fear &amp; Greed history<small id="fgdates"></small></span><button class="gpclose" id="fgclose" aria-label="Close">&#215;</button></div><div class="fgchart" id="fgchart"></div><div class="fgaxis"><span id="fgoldest"></span><span id="fgnewest"></span></div><div class="gpfoot">One bar per price refresh, oldest &rarr; newest &middot; CNN Fear &amp; Greed &middot; zones: <span class="fg-extremefear">extreme fear 0&ndash;24</span> &middot; <span class="fg-fear">fear 25&ndash;44</span> &middot; <span class="fg-neutral">neutral 45&ndash;55</span> &middot; <span class="fg-greed">greed 56&ndash;74</span> &middot; <span class="fg-extremegreed">extreme greed 75&ndash;100</span> &middot; last 180 updates</div></div></div>
@@ -585,6 +587,9 @@ var nsfeed=document.getElementById('newsscoredata'),ns=nsfeed?JSON.parse(nsfeed.
 function nsD(d){return d.slice(5).replace('-','/')}
 if(ns&&ns.values&&ns.values.length){var cols='';ns.values.forEach(function(p){var h=Math.max(2,Math.abs(p.v)/2);cols+='<div class="nccol"><div class="ncbar" style="'+(p.v>=0?'bottom:50%;height:'+h+'%;background:var(--green)':'top:50%;height:'+h+'%;background:var(--red)')+'" title="'+(p.v>0?'+':'')+p.v+' \u00b7 '+nsD(p.d)+'"></div></div>'});chart.innerHTML='<div class="nccols">'+cols+'</div><div class="ncline"></div>';document.getElementById('nsoldest').textContent=nsD(ns.values[0].d);document.getElementById('nsnewest').textContent=nsD(ns.values[ns.values.length-1].d)}
 else{chart.innerHTML='<div class="gpnone">No news-score history yet.</div>'}
+var head=document.getElementById('nsscorehead');
+if(ns&&ns.values&&ns.values.length){var last=ns.values[ns.values.length-1];head.textContent=(last.v>0?'+':'')+last.v;head.className='nssc '+(last.v>=0?'pos':'neg')}
+else{head.textContent='';head.className='nssc'}
 pop.classList.add('open');document.body.style.overflow='hidden'}
 function close(){pop.classList.remove('open');document.body.style.overflow=''}
 chip.addEventListener('click',open);
