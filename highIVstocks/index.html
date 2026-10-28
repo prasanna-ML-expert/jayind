@@ -844,7 +844,7 @@ sv.style.display='flex'; tv.style.display='none';
 const modes=[['pw','PW distance'],['fresh','News'],['prem','Prem'],['oner','ONER'],['si','SI'],['inst','Tutes']];
 const fbar=document.getElementById('filterbar');
 function renderFilters(){
-  fbar.innerHTML=modes.map(m=>`<button class="fbtn${m[0]===mode?' active':''}" data-m="${m[0]}">${m[1]}</button>`).join('')+`<button class="gbtn${mode==='gamma'?' active':''}" id="gammabtn">gamma${mode==='gamma'?' · '+GAMMA_ORDER[gammaTop]:''}</button>`;
+  fbar.innerHTML=modes.map(m=>`<button class="fbtn${m[0]===mode?' active':''}" data-m="${m[0]}">${m[1]}</button>`).join('')+`<button class="gbtn${mode==='gamma'?' active':''}" id="gammabtn">OpFlow${mode==='gamma'?' · '+GAMMA_ORDER[gammaTop]:''}</button>`;
   fbar.querySelectorAll('.fbtn').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.m;renderFilters();render()}));
   fbar.querySelector('#gammabtn').addEventListener('click',()=>{gammaTop=(gammaTop+1)%GAMMA_ORDER.length;mode='gamma';renderFilters();render()});
 }
