@@ -87,6 +87,9 @@ tbody tr:hover{background:#1a2029}
 .nssc.pos{color:var(--green)}
 .nssc.neg{color:var(--red)}
 .meta span.nssc{background:none;border:0;padding:0}
+.bred{color:var(--red)}
+.bgreen{color:var(--green)}
+.meta span.bred,.meta span.bgreen{background:none;border:0;padding:0}
 .wzchart{position:relative;height:170px;margin:12px 14px 2px} .bichart{position:relative;height:200px;margin:12px 14px 2px} .biwrap{position:absolute;inset:0} .bicols{position:absolute;inset:0;display:flex;gap:1px;align-items:stretch} .bicol{flex:1 1 0;min-width:1px;position:relative} .biwick{position:absolute;left:50%;width:1px;background:#8b949e;transform:translateX(-50%)} .bibody{position:absolute;left:1px;right:1px;border-radius:1px} .bibody.partial{opacity:.55} .bibody.weekend{background:transparent;border:1px solid #6e7681} .biwick.weekend{background:#6e7681} .biline{position:absolute;left:0;right:0;border-top:1px dashed;height:0;pointer-events:none} .biline span{position:absolute;left:0;top:-7px;font-size:9px;background:var(--panel);padding:0 2px;white-space:nowrap}
 .wzcols{position:absolute;inset:0;display:flex;gap:1px;align-items:stretch}
 .wzcol{flex:1 1 0;min-width:1px;display:flex;flex-direction:column}
@@ -204,7 +207,7 @@ footer{margin-top:40px;color:var(--dim);font-size:.82rem;border-top:1px solid va
 <span class="mchip" data-chip="gamma" id="gammachip" role="button" tabindex="0" title="Show gamma wall changes"><i>Gamma walls</i><b>chased</b></span>
 <span class="mchip" data-chip="news" id="newschip" role="button" tabindex="0" title="Show SPX-moving news"><i>News</i><b>Oct 28 <span class="nssc pos">+17</span></b></span>
 <span class="mchip" data-chip="feargreed" id="fgchip" role="button" tabindex="0" title="Show Fear &amp; Greed history"><i>Fear &amp; Greed</i><b class="fg-fear">36 · Fear</b></span>
-<span class="mchip" data-chip="breadth" id="breadthchip" role="button" tabindex="0" title="Show EMA8 percentile breadth"><i>Breadth</i><b>2 red / 2 green</b></span>
+<span class="mchip" data-chip="breadth" id="breadthchip" role="button" tabindex="0" title="Show EMA8 percentile breadth"><i>Breadth</i><b><span class="bred">2</span> / <span class="bgreen">2</span></b></span>
 </div>
 <div class="legend">
 <span><i class="ltri cw">◀</i>CW call wall</span>
