@@ -704,6 +704,7 @@ const pb=e.target.closest('.spcr');if(pb){const rw=e.target.closest('.srow');if(
 const n=e.target.closest('.snews');if(n){if(n.querySelector('.reason'))flipNews(n);return;}
 const row=e.target.closest('.srow');if(!row)return;
 if(!e.target.closest('.strack'))return;
+  const ord=new Map([...sv.querySelectorAll('.srow')].map((el,j)=>[el.dataset.t,j]));items.sort((a,b)=>(ord.get(a.t)??999)-(ord.get(b.t)??999));
   const i=items.findIndex(x=>x.t===row.dataset.t); if(i>=0)show(i)});
 (function(){
   let act=null;
