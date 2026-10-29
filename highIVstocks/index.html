@@ -608,6 +608,9 @@ rows.forEach(r=>{const v=INST[r.t]||{};
 let MIG={};try{MIG=JSON.parse(document.getElementById('migrationdata').textContent||'{}')}catch(e){MIG={}}
 const MIGMAP=MIG.per_ticker||MIG;
 rows.forEach(r=>{const m=MIGMAP[r.t];if(typeof m==='string'&&['chased','diverged','shakeout','mixed','leading','quiet'].includes(m))r.mig=m;});
+let STR={};try{STR=JSON.parse(document.getElementById('strengthdata').textContent||'{}')}catch(e){STR={}}
+const STRRANK={};(STR.rows||[]).forEach(x=>{if(x.t&&isFinite(x.rank))STRRANK[x.t]=x.rank});
+rows.forEach(r=>{r.strRank=STRRANK[r.t]!=null?STRRANK[r.t]:999;});
 if(!rows.length)return;
 const pc=v=>(v>=0?'+':'')+(v*100).toFixed(1)+'%';
 function st(r){
@@ -631,7 +634,7 @@ let gammaTop=-1;
 function gammaRank(r){if(r.mig==null)return 99;const ord=GAMMA_ORDER.slice(gammaTop).concat(GAMMA_ORDER.slice(0,gammaTop));const i=ord.indexOf(r.mig);return i<0?99:i;}
 function render(){
   const rs=rows.map(r=>({r,s:st(r)}));
-  rs.sort((a,b)=>mode==='gamma'?(gammaRank(a.r)-gammaRank(b.r)):mode==='pw'?a.s.dP-b.s.dP:mode==='fresh'?a.r.newsAge-b.r.newsAge:mode==='prem'?(b.r.prem??-1)-(a.r.prem??-1):mode==='oner'?(b.r.oner??-1)-(a.r.oner??-1):mode==='si'?(b.r.siPct??-1)-(a.r.siPct??-1):mode==='inst'?(b.r.instPct??-1)-(a.r.instPct??-1):a.r.t.localeCompare(b.r.t));
+  rs.sort((a,b)=>mode==='gamma'?(gammaRank(a.r)-gammaRank(b.r)):mode==='pw'?a.s.dP-b.s.dP:mode==='fresh'?a.r.newsAge-b.r.newsAge:mode==='prem'?(b.r.prem??-1)-(a.r.prem??-1):mode==='oner'?(b.r.oner??-1)-(a.r.oner??-1):mode==='si'?(b.r.siPct??-1)-(a.r.siPct??-1):mode==='inst'?(b.r.instPct??-1)-(a.r.instPct??-1):mode==='ema'?a.r.strRank-b.r.strRank:a.r.t.localeCompare(b.r.t));
   sv.innerHTML=rs.map(({r,s})=>{
     const gvals=[r.pw,r.cw];
     if(r.fl!=null)gvals.push(r.fl); if(r.mp!=null)gvals.push(r.mp);
@@ -687,7 +690,7 @@ if(n.includes('bear'))return '#f85149';
 return '#58a6ff';}
 function flipNews(n){const a=n.querySelector('.news'),b=n.querySelector('.reason');if(!a||!b)return;const showReason=b.hidden;a.hidden=showReason;b.hidden=!showReason;}
 sv.style.display='flex'; tv.style.display='none';
-const modes=[['pw','PW distance'],['fresh','News'],['prem','Prem'],['oner','ONER'],['si','SI'],['inst','Tutes']];
+const modes=[['pw','PW distance'],['fresh','News'],['prem','Prem'],['oner','ONER'],['si','SI'],['inst','Tutes'],['ema','EMA']];
 const fbar=document.getElementById('filterbar');
 function renderFilters(){
   fbar.innerHTML=modes.map(m=>`<button class="fbtn${m[0]===mode?' active':''}" data-m="${m[0]}">${m[1]}</button>`).join('')+`<button class="gbtn${mode==='gamma'?' active':''}" id="gammabtn">OpFlow${mode==='gamma'?' · '+GAMMA_ORDER[gammaTop]:''}</button>`;
