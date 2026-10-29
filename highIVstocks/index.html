@@ -89,6 +89,9 @@ tbody tr:hover{background:#1a2029}
 .meta span.nssc{background:none;border:0;padding:0}
 .meta span.bred{color:var(--red);background:none;border:0;padding:0}
 .meta span.bgreen{color:var(--green);background:none;border:0;padding:0}
+.meta span.emam{color:#58a6ff;background:none;border:0;padding:0}
+.meta span.emaw{color:#3fb950;background:none;border:0;padding:0}
+.meta span.emad{color:#f85149;background:none;border:0;padding:0}
 .wzchart{position:relative;height:170px;margin:12px 14px 2px} .bichart{position:relative;height:200px;margin:12px 14px 2px} .biwrap{position:absolute;inset:0} .bicols{position:absolute;inset:0;display:flex;gap:1px;align-items:stretch} .bicol{flex:1 1 0;min-width:1px;position:relative} .biwick{position:absolute;left:50%;width:1px;background:#8b949e;transform:translateX(-50%)} .bibody{position:absolute;left:1px;right:1px;border-radius:1px} .bibody.partial{opacity:.55} .bibody.weekend{background:transparent;border:1px solid #6e7681} .biwick.weekend{background:#6e7681} .biline{position:absolute;left:0;right:0;border-top:1px dashed;height:0;pointer-events:none} .biline span{position:absolute;left:0;top:-7px;font-size:9px;background:var(--panel);padding:0 2px;white-space:nowrap}
 .wzcols{position:absolute;inset:0;display:flex;gap:1px;align-items:stretch}
 .wzcol{flex:1 1 0;min-width:1px;display:flex;flex-direction:column}
@@ -202,7 +205,7 @@ footer{margin-top:40px;color:var(--dim);font-size:.82rem;border-top:1px solid va
 <div class="wrap">
 <header>
 <div class="meta">
-<span class="mchip" data-chip="prices" id="pricechip" role="button" tabindex="0" title="Show EMA8 stack strength ranking"><i>EMA</i><b>10 / 5 / 15</b></span>
+<span class="mchip" data-chip="prices" id="pricechip" role="button" tabindex="0" title="Show EMA8 stack strength ranking"><i>EMA</i><b><span class="emam">10</span> / <span class="emaw">5</span> / <span class="emad">15</span></b></span>
 <span class="mchip" data-chip="gamma" id="gammachip" role="button" tabindex="0" title="Show gamma wall changes"><i>Gamma walls</i><b>chased</b></span>
 <span class="mchip" data-chip="news" id="newschip" role="button" tabindex="0" title="Show SPX-moving news"><i>News</i><b>Oct 29 <span class="nssc neg">-23</span></b></span>
 <span class="mchip" data-chip="feargreed" id="fgchip" role="button" tabindex="0" title="Show Fear &amp; Greed history"><i>Fear &amp; Greed</i><b class="fg-fear">35 · Fear</b></span>
