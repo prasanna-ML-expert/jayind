@@ -79,6 +79,7 @@ tbody tr:hover{background:#1a2029}
 .pcrbar{flex:1 1 0;min-width:1px;border-radius:1px 1px 0 0}
 .pcrline{position:absolute;left:0;right:0;border-top:1px dashed rgba(247,120,186,.55)}
 .pcrgrid{position:absolute;left:0;right:0;border-top:1px dotted rgba(139,148,158,.45)}
+.pcrgrid span{position:absolute;right:0;top:-14px;font-size:10px;color:#8b949e;background:var(--panel);padding:0 2px}
 .pcrline span{position:absolute;right:0;top:-14px;font-size:10px;color:#f778ba}
 .fgchart{display:flex;align-items:flex-end;gap:1px;height:170px;padding:12px 14px 2px}
 .fgbar{flex:1 1 0;min-width:1px;border-radius:1px 1px 0 0}
@@ -412,7 +413,7 @@ if(wz&&wz.values&&wz.values.length){_gs.push(effS(wz.values[0][0]));_ge.push(wz.
 if(bi&&bi.candles&&bi.candles.length){_gs.push(bi.candles[0].d);_ge.push(bi.candles[bi.candles.length-1].d)}
 var grid=(_gs.length&&_ge.length)?gridCols(_gs.sort()[0],_ge.sort()[_ge.length-1]):[];
 if(agg&&agg.values&&agg.values.length){var s=agg.values;var vMax=Math.max.apply(null,s.map(function(p){return p[1]})),vMin=Math.min.apply(null,s.map(function(p){return p[1]}));var lo=Math.min(0.5,Math.floor(vMin*10)/10),hi=Math.max(1.2,Math.ceil(vMax*10)/10),sp=hi-lo;var sm={};s.forEach(function(p){sm[effS(p[0])]=p});
-var bars='';grid.forEach(function(g){if(g===null){bars+='<div class="pcrbar" style="height:2%;background:#6e7681" title="Weekend \u2014 no trading"></div>';return}var p=sm[g];if(!p){bars+='<div class="pcrbar" style="height:0;background:transparent" title="'+g+' \u00b7 no data yet"></div>';return}bars+='<div class="pcrbar" style="height:'+Math.max(2,(p[1]-lo)/sp*100).toFixed(1)+'%;background:'+(p[1]>=1?'#f778ba':'rgba(88,166,255,.75)')+'" title="'+p[1].toFixed(2)+' \u00b7 '+aggD(p[0])+'"></div>'});var gl='';for(var gv=lo;gv<hi-1e-9;gv+=0.1){gv=Math.round(gv*10)/10;if(Math.abs(gv-1)<1e-9)continue;gl+='<div class="pcrgrid" style="bottom:'+((gv-lo)/sp*100).toFixed(1)+'%"></div>'}aggchart.innerHTML='<div class="pcrbars">'+bars+'</div>'+gl+'<div class="pcrline" style="bottom:'+((1-lo)/sp*100).toFixed(1)+'%"><span>1.0</span></div>';}
+var bars='';grid.forEach(function(g){if(g===null){bars+='<div class="pcrbar" style="height:2%;background:#6e7681" title="Weekend \u2014 no trading"></div>';return}var p=sm[g];if(!p){bars+='<div class="pcrbar" style="height:0;background:transparent" title="'+g+' \u00b7 no data yet"></div>';return}bars+='<div class="pcrbar" style="height:'+Math.max(2,(p[1]-lo)/sp*100).toFixed(1)+'%;background:'+(p[1]>=1?'#f778ba':'rgba(88,166,255,.75)')+'" title="'+p[1].toFixed(2)+' \u00b7 '+aggD(p[0])+'"></div>'});var gl='';for(var gv=lo;gv<hi-1e-9;gv+=0.1){gv=Math.round(gv*10)/10;if(Math.abs(gv-1)<1e-9)continue;var lab=Math.round((gv-0.5)*10)%2===0;gl+='<div class="pcrgrid" style="bottom:'+((gv-lo)/sp*100).toFixed(1)+'%">'+(lab?'<span>'+gv.toFixed(1)+'</span>':'')+'</div>'}aggchart.innerHTML='<div class="pcrbars">'+bars+'</div>'+gl+'<div class="pcrline" style="bottom:'+((1-lo)/sp*100).toFixed(1)+'%"><span>1.0</span></div>';}
 else{aggchart.innerHTML='<div class="gpnone">No average PCR history yet.</div>'}
 function wzD(d){return d.slice(5).replace('-','/')}
 if(wz&&wz.values&&wz.values.length){var cols='';var WZCOLS=['#f85149','#d29922','#56d364','#3fb950'];var wm={};wz.values.forEach(function(p){wm[effS(p[0])]=p});
