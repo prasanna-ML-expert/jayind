@@ -690,7 +690,7 @@ if(n.includes('bear'))return '#f85149';
 return '#58a6ff';}
 function flipNews(n){const a=n.querySelector('.news'),b=n.querySelector('.reason');if(!a||!b)return;const showReason=b.hidden;a.hidden=showReason;b.hidden=!showReason;}
 sv.style.display='flex'; tv.style.display='none';
-const modes=[['pw','PW distance'],['fresh','News'],['prem','Prem'],['oner','ONER'],['si','SI'],['inst','Tutes'],['ema','EMA']];
+const modes=[['pw','PW distance'],['fresh','News'],['prem','Prem'],['oner','ONER'],['si','SI'],['inst','Tutes'],['ema','Strength']];
 const fbar=document.getElementById('filterbar');
 function renderFilters(){
   fbar.innerHTML=modes.map(m=>`<button class="fbtn${m[0]===mode?' active':''}" data-m="${m[0]}">${m[1]}</button>`).join('')+`<button class="gbtn${mode==='gamma'?' active':''}" id="gammabtn">OpFlow${mode==='gamma'?' · '+GAMMA_ORDER[gammaTop]:''}</button>`;
