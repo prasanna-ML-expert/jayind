@@ -481,7 +481,7 @@ var BIZC={'space':'#6ab0f5','satellite':'#30c9d6','semiconductor':'#2fd4c4','qua
 var sortKey='pct';
 function draw(){var list=document.getElementById('breadthlist'),dates=document.getElementById('breadthdates'),chart=document.getElementById('breadthchart');
 if(!data){list.innerHTML='<div class="gpnone">No breadth data yet.</div>';if(chart)chart.innerHTML='<div class="gpnone">No breadth history yet.</div>';return}
-dates.textContent=data.as_of+' · '+data.universe+' names';
+dates.textContent=data.as_of.split(' ').slice(0,2).join(' ');
 if(chart){var H=data.history||[];
 if(!H.length){chart.innerHTML='<div class="gpnone">No breadth history yet.</div>'}
 else{var mx=5;H.forEach(function(h){if(h[1]>mx)mx=h[1];if(h[2]>mx)mx=h[2]});
