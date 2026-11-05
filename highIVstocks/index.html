@@ -172,6 +172,17 @@ tbody tr:hover{background:#1a2029}
 .anarow .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}
 .anapt{padding:8px 6px 2px;font-size:.9rem}
 .anapt.dim{color:var(--dim);font-size:.8rem}
+.anptbar{position:relative;padding:20px 6px 20px;margin:6px 0 2px}
+.anpt-track{position:relative;height:18px;border-radius:9px;background:#21262d}
+.anpt-range{position:absolute;top:0;bottom:0;background:rgba(57,197,207,.35);border-radius:9px}
+.anpt-tick{position:absolute;top:-4px;bottom:-4px;width:2px}
+.anpt-tick.mean{background:#3fb950}
+.anpt-tick.spot{background:#e6edf3}
+.anpt-lo,.anpt-hi{position:absolute;top:50%;transform:translateY(-50%);font-size:10px;color:#8b949e}
+.anpt-lo{left:6px}
+.anpt-hi{right:6px}
+.anpt-mean{position:absolute;top:0;transform:translateX(-50%);font-size:11px;color:#3fb950;white-space:nowrap}
+.anpt-spot{position:absolute;bottom:0;transform:translateX(-50%);font-size:11px;color:#e6edf3;white-space:nowrap}
 .optab{width:100%;min-width:0;border-collapse:collapse;font-size:.85rem}
 .optab th{color:var(--dim);font-weight:600;text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
 .optab td{padding:6px 8px;border-top:1px solid var(--line)}
@@ -886,15 +897,30 @@ else{
 dates.textContent='as of '+a.vintage+(a.updated_at?' · last revised '+a.updated_at:'');
 var row=document.querySelector('.srow[data-t="'+t+'"]'),price=null;
 if(row){var sp=row.querySelector('.sprice');if(sp)price=parseFloat(sp.textContent.replace(/[^0-9.]/g,''))}
-var meanVs='';
-if(a.mean!=null&&price){var d=(a.mean/price-1)*100;meanVs=' <span style="color:'+(d>=0?'#3fb950':'#f85149')+'">('+(d>=0?'+':'')+d.toFixed(1)+'% vs $'+price.toFixed(1)+')</span>'}
+var ptHtml='';
+if(a.mean==null&&a.high==null&&a.low==null){ptHtml='<div class="anapt dim">Price targets not available.</div>'}
+else{var lo=Math.min(a.low!=null?a.low:Infinity,price!=null?price:Infinity),hi=Math.max(a.high!=null?a.high:-Infinity,price!=null?price:-Infinity);
+if(!isFinite(lo)||!isFinite(hi)){ptHtml='<div class="anapt dim">Price targets not available.</div>'}
+else{if(hi<=lo){lo-=0.5;hi+=0.5}else{var pad=(hi-lo)*0.05;lo-=pad;hi+=pad}
+var pc=function(v){return (v-lo)/(hi-lo)*100},cl=function(p){return Math.min(90,Math.max(10,p))};
+var rL=a.low!=null?pc(a.low):0,rW=a.high!=null?pc(a.high)-rL:0;
+ptHtml='<div class="anptbar">'
++(a.mean!=null?'<div class="anpt-mean" style="left:'+cl(pc(a.mean))+'%">Mean '+money(a.mean)+'</div>':'')
++'<div class="anpt-track">'
++(a.low!=null&&a.high!=null?'<div class="anpt-range" style="left:'+rL+'%;width:'+rW+'%"></div>':'')
++(a.mean!=null?'<div class="anpt-tick mean" style="left:'+pc(a.mean)+'%"></div>':'')
++(price!=null?'<div class="anpt-tick spot" style="left:'+pc(price)+'%"></div>':'')
++(a.low!=null?'<span class="anpt-lo">'+money(a.low)+'</span>':'')
++(a.high!=null?'<span class="anpt-hi">'+money(a.high)+'</span>':'')
++'</div>'
++(price!=null?'<div class="anpt-spot" style="left:'+cl(pc(price))+'%">Spot '+money(price)+'</div>':'')
++'</div>'}}
 body.innerHTML='<div style="padding:4px 6px;font-size:.95rem"><b>'+a.total+'</b> analysts</div>'
 +'<div class="anabar"><i style="width:'+a.buy_pct+'%;background:#3fb950"></i><i style="width:'+a.hold_pct+'%;background:#d29922"></i><i style="width:'+a.sell_pct+'%;background:#f85149"></i></div>'
 +'<div class="anarow"><span><i class="dot" style="background:#3fb950"></i>Buy</span><span><b>'+a.buy+'</b> · '+a.buy_pct.toFixed(1)+'%</span></div>'
 +'<div class="anarow"><span><i class="dot" style="background:#d29922"></i>Hold</span><span><b>'+a.hold+'</b> · '+a.hold_pct.toFixed(1)+'%</span></div>'
 +'<div class="anarow"><span><i class="dot" style="background:#f85149"></i>Sell</span><span><b>'+a.sell+'</b> · '+a.sell_pct.toFixed(1)+'%</span></div>'
-+'<div class="anapt">Mean PT '+money(a.mean)+meanVs+'</div>'
-+'<div class="anapt dim">High '+money(a.high)+' · Low '+money(a.low)+'</div>'}
++ptHtml}
 pop.classList.add('open');document.body.style.overflow='hidden'}
 function close(){pop.classList.remove('open');document.body.style.overflow=''}
 document.getElementById('analystclose').addEventListener('click',close);
