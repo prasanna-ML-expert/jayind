@@ -952,7 +952,7 @@ function fmtD(d){var p=d.split('-');return MN[parseInt(p[1],10)-1]+' '+parseInt(
 function fmtSh(n){if(n==null)return '—';if(n>=1e9)return (n/1e9).toFixed(2)+'B';if(n>=1e6)return (n/1e6).toFixed(1)+'M';return Math.round(n).toLocaleString()}
 var order=[],idx=0;
 window.openSi=function(t){
-var mm=MM[t];document.getElementById('sititle').textContent=t+' · Short interest'+(mm?' · '+mm[0].toFixed(2)+'–'+mm[1].toFixed(2)+'% FINRA':'');
+var mm=MM[t],cv=(SI[t]&&SI[t].si_pct!=null)?SI[t].si_pct:null;document.getElementById('sititle').textContent=[t+' · SI'].concat(mm?[mm[0].toFixed(2)+'–'+mm[1].toFixed(2)+'%']:[]).concat(cv!=null?[cv.toFixed(2)+'%']:[]).join(' · ');
 order=[].map.call(document.querySelectorAll('.srow'),function(el){return el.dataset.t});
 idx=order.indexOf(t);if(idx<0)idx=0;
 var s=H[t]||[],chart=document.getElementById('sichart'),list=document.getElementById('silist');
