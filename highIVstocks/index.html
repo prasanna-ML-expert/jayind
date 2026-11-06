@@ -187,6 +187,14 @@ tbody tr:hover{background:#1a2029}
 .anpt-hi{right:6px}
 .anpt-mean{position:absolute;top:0;transform:translateX(-50%);font-size:11px;color:#3fb950;white-space:nowrap}
 .anpt-spot{position:absolute;bottom:0;transform:translateX(-50%);font-size:11px;color:#e6edf3;white-space:nowrap}
+.siptbar{position:relative;padding:6px 6px 20px;margin:6px 0 2px}
+.sipt-track{position:relative;height:18px;border-radius:9px;background:#21262d}
+.sipt-range{position:absolute;top:0;bottom:0;background:rgba(240,136,62,.35);border-radius:9px}
+.sipt-tick{position:absolute;top:-4px;bottom:-4px;width:2px;background:#e6edf3}
+.sipt-lo,.sipt-hi{position:absolute;top:50%;transform:translateY(-50%);font-size:10px;color:#8b949e}
+.sipt-lo{left:6px}
+.sipt-hi{right:6px}
+.sipt-now{position:absolute;bottom:0;transform:translateX(-50%);font-size:11px;color:#e6edf3;white-space:nowrap}
 .optab{width:100%;min-width:0;border-collapse:collapse;font-size:.85rem}
 .optab th{color:var(--dim);font-weight:600;text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
 .optab td{padding:6px 8px;border-top:1px solid var(--line)}
@@ -331,7 +339,7 @@ footer{margin-top:40px;color:var(--dim);font-size:.82rem;border-top:1px solid va
 <div id="opflowpop" role="dialog" aria-label="OpFlow history"><div class="gpcard"><div class="gphead"><span><span id="opflowtitle">OpFlow history</span></span><button class="gpclose" id="opflowclose" aria-label="Close">&#215;</button></div><div class="gplist" id="opflowlist"></div><div class="gpfoot">Day = trading session date (MM/DD), latest first &middot; Price % = session close vs prior close &middot; PW / CW &Delta; shown only when |&Delta;| &ge; 2.5% of the wall level, else &mdash; &middot; Flip &Delta; shown when |&Delta;| &ge; 0.6% (the vote threshold), else &mdash; &middot; green up, red down &middot; OpFlow class considers PW, CW and flip together &middot; D/W/M = daily/weekly/monthly avg range</div></div></div>
 <div id="gexpop" role="dialog" aria-label="Net gamma by strike"><div class="gpcard"><div class="gphead"><span><span id="gextitle">Net gamma by strike</span><small id="gexdates"></small></span><button class="gpclose" id="gexclose" aria-label="Close">&#215;</button></div><div id="gexchart"></div><div class="gpfoot">Net gamma per strike = call GEX &minus; put GEX (quoted-gamma dollar GEX, same basis as the walls), summed across the 4 Friday expiries &middot; price axis = the &plusmn; chain range fetched this morning &middot; green = net call-heavy, red = net put-heavy &middot; vertical lines: spot (white), PW (red), CW (green), FP (orange), MP (gray) &middot; swipe left/right (or arrow keys) for the next/previous ticker in the current strip order &middot; bottom ticks sit on the tallest bars' strikes, 1-decimal</div></div></div>
 <div id="analystpop" role="dialog" aria-label="Analyst ratings"><div class="gpcard"><div class="gphead"><span id="analysttitle">Analyst ratings</span><button class="gpclose" id="analystclose" aria-label="Close">&#215;</button></div><div class="gplist" id="analystlist"></div><div class="gpfoot">Robinhood analyst consensus &middot; refreshed every Thursday afternoon &middot; price targets are the mean / high / low across covering analysts &middot; swipe left/right (or arrow keys) for the next/previous ticker in the current strip order</div></div></div>
-<div id="sipop" role="dialog" aria-label="Short interest history"><div class="gpcard"><div class="gphead"><span><span id="sititle">Short interest</span><small id="sidates"></small></span><button class="gpclose" id="siclose" aria-label="Close">&#215;</button></div><div class="pcrchart" id="sichart"></div><div class="fgaxis"><span id="sioldest"></span><span id="sinewest"></span></div><div class="gpfoot">Short % of float (shares sold short &divide; float shares) per FINRA settlement, last 12 settlements &middot; bars = shares short &middot; line = short float % &middot; swipe left/right (or arrow keys) for the next/previous ticker in the current strip order</div></div></div>
+<div id="sipop" role="dialog" aria-label="Short interest history"><div class="gpcard"><div class="gphead"><span><span id="sititle">Short interest</span><small id="sidates"></small></span><button class="gpclose" id="siclose" aria-label="Close">&#215;</button></div><div class="pcrchart" id="sichart"></div><div class="fgaxis"><span id="sioldest"></span><span id="sinewest"></span></div><div id="sibar"></div><div class="gpfoot">Short % of float (shares sold short &divide; float shares) per FINRA settlement, last 12 settlements &middot; bars = shares short &middot; line = short float % &middot; swipe left/right (or arrow keys) for the next/previous ticker in the current strip order</div></div></div>
 <div id="lightbox"><button id="lb-prev" class="lb-nav" aria-label="Previous chart">&#8249;</button><img alt=""><button id="lb-next" class="lb-nav" aria-label="Next chart">&#8250;</button><div class="lb-cap"></div><button id="lb-close" class="lb-close" aria-label="Close">&#215;</button></div>
 <script>
 const lb=document.getElementById('lightbox'),im=lb.querySelector('img'),cap=lb.querySelector('.lb-cap');
@@ -969,6 +977,18 @@ bars+='<div class="pcrbar" style="height:'+Math.max(2,(p[2]||0)/mxS*100).toFixed
 if(p[1]!=null){pts+=(pts?' ':'')+x+','+(100-py).toFixed(2);dots+='<div class="sidot" style="left:'+x+'%;bottom:'+py.toFixed(2)+'%" title="'+fmtD(p[0])+' · '+p[1].toFixed(2)+'% short float"></div>'}});
 chart.innerHTML='<div class="pcrbars">'+bars+'</div><svg class="siline" viewBox="0 0 100 100" preserveAspectRatio="none"><polyline points="'+pts+'" fill="none" stroke="#e6edf3" stroke-width="1.5" vector-effect="non-scaling-stroke"/></svg>'+dots;
 document.getElementById('sioldest').textContent=fmtD(s[0][0]);document.getElementById('sinewest').textContent=fmtD(last[0])}
+var bar=document.getElementById('sibar');
+if(bar){if(!mm&&cv==null){bar.innerHTML='<div class="anapt dim">SI range not available.</div>'}
+else{var blo=mm?Math.min(mm[0],cv!=null?cv:Infinity):cv,bhi=mm?Math.max(mm[1],cv!=null?cv:-Infinity):cv;
+if(bhi<=blo){blo-=0.5;bhi+=0.5}else{var bpad=(bhi-blo)*0.05;blo-=bpad;bhi+=bpad}
+var bpc=function(v){return (v-blo)/(bhi-blo)*100},bcl=function(p){return Math.min(90,Math.max(10,p))};
+var brL=mm?bpc(mm[0]):0,brW=mm?bpc(mm[1])-brL:0;
+bar.innerHTML='<div class="siptbar"><div class="sipt-track">'
++(mm?'<div class="sipt-range" style="left:'+brL.toFixed(2)+'%;width:'+brW.toFixed(2)+'%">'+'</div>':'')
++(cv!=null?'<div class="sipt-tick" style="left:'+bpc(cv).toFixed(2)+'%">'+'</div>':'')
++(mm?'<span class="sipt-lo">'+mm[0].toFixed(2)+'%</span>':'')
++(mm?'<span class="sipt-hi">'+mm[1].toFixed(2)+'%</span>':'')
++'</div>'+(cv!=null?'<div class="sipt-now" style="left:'+bcl(bpc(cv)).toFixed(2)+'%">'+'Now '+cv.toFixed(2)+'%</div>':'')+'</div>'}}
 var ft=pop.querySelector('.gpfoot');if(ft)ft.textContent=src==='rh'?'Robinhood modeled daily short interest (% of free float) · bars = shares short · line = short float % · last 90 days · title range = FINRA SI% min–max · swipe left/right (or arrow keys) for the next/previous ticker in the current strip order':'Short % of float (shares sold short ÷ float shares) per FINRA settlement, last 12 settlements · bars = shares short · line = short float % · swipe left/right (or arrow keys) for the next/previous ticker in the current strip order';
 pop.classList.add('open');document.body.style.overflow='hidden'};
 function close(){pop.classList.remove('open');document.body.style.overflow=''}
