@@ -1,5 +1,5 @@
 //@version=6
-indicator("Gamma Levels", shorttitle="GAMMA 1109", overlay=true)
+indicator("Gamma Levels", shorttitle="GAMMA 1110", overlay=true)
 
 // === Gamma levels per ticker: update these numbers on each fresh options-data run ===
 // cw = call wall (green) | pw = put wall (red) | flip = gamma flip (orange) | mp = max pain 11-13 (gray)
@@ -10,170 +10,170 @@ float flip = na
 float mp = na
 
 if syminfo.ticker == "CIFR"
-    cw := 10
+    cw := 8
     pw := 7
-    flip := 5.23
+    flip := 5.34
     mp := 6.5
 else if syminfo.ticker == "NBIS"
     cw := 175
-    pw := 115
-    flip := 181.78
-    mp := 145
+    pw := 150
+    flip := 144.45
+    mp := 140
 else if syminfo.ticker == "MARA"
     cw := 6.5
     pw := 6.5
-    flip := 4.37
+    flip := 4.74
     mp := 6
 else if syminfo.ticker == "WULF"
     cw := 13
-    pw := 11
-    flip := 10.78
+    pw := 12
+    flip := 10.55
     mp := 11.5
 else if syminfo.ticker == "IREN"
     cw := 25
     pw := 20
-    flip := 22.87
-    mp := 22.5
+    flip := 21.18
+    mp := 22
 else if syminfo.ticker == "BE"
     cw := 200
     pw := 200
-    flip := 217.16
-    mp := 180
+    flip := 202.34
+    mp := 192.5
 else if syminfo.ticker == "INTC"
-    cw := 60
+    cw := 65
     pw := 55
-    flip := 56.84
-    mp := 59
+    flip := 57.32
+    mp := 58
 else if syminfo.ticker == "SMCI"
     cw := 30
     pw := 30
-    flip := 25.17
+    flip := 25.75
     mp := 28.5
 else if syminfo.ticker == "CRWV"
     cw := 60
-    pw := 50
-    flip := na
-    mp := 53
+    pw := 44
+    flip := 54.81
+    mp := 52
 else if syminfo.ticker == "SNDK"
     cw := 1000
-    pw := 800
-    flip := 967.4
-    mp := 920
+    pw := 870
+    flip := 890.57
+    mp := 870
 else if syminfo.ticker == "RKLB"
-    cw := 60
-    pw := 50
-    flip := 52.05
-    mp := 54
+    cw := 65
+    pw := 55
+    flip := 53.02
+    mp := 55
 else if syminfo.ticker == "MSTR"
     cw := 133
     pw := 120
-    flip := 116.14
-    mp := 132
+    flip := 117.71
+    mp := 130
 else if syminfo.ticker == "MRVL"
     cw := 160
     pw := 160
-    flip := na
-    mp := 149
+    flip := 150.6
+    mp := 145
 else if syminfo.ticker == "COIN"
     cw := 141
     pw := 135
-    flip := 126.71
+    flip := 127.86
     mp := 137
 else if syminfo.ticker == "MU"
     cw := 800
     pw := 750
-    flip := 846.29
-    mp := 760
+    flip := 747.28
+    mp := 720
 else if syminfo.ticker == "HOOD"
     cw := 85
     pw := 80
-    flip := 79.92
+    flip := 79.41
     mp := 81
 else if syminfo.ticker == "AMD"
-    cw := 462.5
-    pw := 440
-    flip := 453.85
+    cw := 500
+    pw := 500
+    flip := 492.52
     mp := 462.5
 else if syminfo.ticker == "ORCL"
     cw := 130
-    pw := 105
-    flip := 134.05
-    mp := 125
+    pw := 120
+    flip := 123.57
+    mp := 120
 else if syminfo.ticker == "PLTR"
-    cw := 165
-    pw := 160
-    flip := 155.17
+    cw := 170
+    pw := 170
+    flip := 157.4
     mp := 160
 else if syminfo.ticker == "SOFI"
     cw := 17
-    pw := 14
-    flip := 15.26
+    pw := 17
+    flip := 15.41
     mp := 16
 else if syminfo.ticker == "NU"
     cw := 14
     pw := 13
-    flip := 13.48
+    flip := 12.92
     mp := 12
 else if syminfo.ticker == "ASTS"
     cw := 38
-    pw := 30
-    flip := 36.22
-    mp := 38
+    pw := 40
+    flip := 35.54
+    mp := 37.5
 else if syminfo.ticker == "SPCX"
-    cw := 145
-    pw := 135
-    flip := 137.52
-    mp := 138
+    cw := 160
+    pw := 140
+    flip := 136.2
+    mp := 140
 else if syminfo.ticker == "APLD"
-    cw := 15
+    cw := 16.5
     pw := 16
-    flip := 11.32
-    mp := 14.5
+    flip := 13.37
+    mp := 15
 else if syminfo.ticker == "NVDA"
     cw := 200
-    pw := 180
-    flip := 189.42
+    pw := 190
+    flip := 185.22
     mp := 180
 else if syminfo.ticker == "AVGO"
     cw := 340
-    pw := 300
-    flip := 324.84
-    mp := 320
+    pw := 320
+    flip := 328.64
+    mp := 312.5
 else if syminfo.ticker == "JBLU"
     cw := 4
     pw := 4
-    flip := 2.97
+    flip := 3.51
     mp := 3.5
 else if syminfo.ticker == "MRNA"
     cw := 280
-    pw := 200
-    flip := 216.9
-    mp := 237.5
+    pw := 260
+    flip := 229.07
+    mp := 255
 else if syminfo.ticker == "RIVN"
     cw := 15
     pw := 13
-    flip := 12.05
+    flip := 12.18
     mp := 13
 else if syminfo.ticker == "NOW"
     cw := 105
     pw := 105
-    flip := 103.78
-    mp := 107
+    flip := 102.42
+    mp := 105
 else if syminfo.ticker == "TSLA"
     cw := 400
-    pw := 350
-    flip := 345.66
+    pw := 380
+    flip := 357.53
     mp := 360
 else if syminfo.ticker == "RIOT"
-    cw := 17
+    cw := 18
     pw := 15
-    flip := 10.03
-    mp := 13.5
+    flip := 11.11
+    mp := 15
 else if syminfo.ticker == "META"
     cw := 650
     pw := 600
-    flip := 605.01
-    mp := 630
+    flip := 617.91
+    mp := 635
 
 drawLevel(level, tag, cl) =>
     var line ln = na
