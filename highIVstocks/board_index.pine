@@ -246,8 +246,8 @@ float rangeMa = ta.ema(trIdx, 60)
 float upperK = bbmc + 0.2 * rangeMa
 float lowerK = bbmc - 0.2 * rangeMa
 plot(bbmc, title="BBMC 60", color=color.new(#2962ff, 0), linewidth=2, display=display.pane)
-plot pU = plot(upperK, title="BBMC upper", color=color.new(#2962ff, 0), linewidth=1, display=display.pane)
-plot pL = plot(lowerK, title="BBMC lower", color=color.new(#2962ff, 0), linewidth=1, display=display.pane)
+pU = plot(upperK, title="BBMC upper", color=color.new(#2962ff, 0), linewidth=1, display=display.pane)
+pL = plot(lowerK, title="BBMC lower", color=color.new(#2962ff, 0), linewidth=1, display=display.pane)
 fill(pU, pL, color=color.new(#2962ff, 90))
 
 // --- 10. aggregate gamma walls (baked, refresh daily) ---
