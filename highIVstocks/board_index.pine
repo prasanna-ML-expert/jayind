@@ -1,45 +1,45 @@
 //@version=6
 indicator("Board Index — Jays + Gamma (Live)", shorttitle="BOARD 1111", overlay=false)
 
-// LIVE equal-weight board index: 33 tickers (baked 2026-11-11 from hoodlist.csv), chained mean daily returns, base 100 @ 2026-10-14 close.
-// Candles + EMA8s compute live from TradingView quotes. Aggregate gamma walls baked daily.
-// Regenerate daily for walls, weekly for composition: make_board_index_pine.py + publish_board_index_pine.py
-// USE ON A DAILY CHART in a separate pane, with history back to the base date. Weekly/monthly EMA8 blend the in-progress period (like TradingView's own multi-TF EMAs).
+// LIVE equal-weight board index: 33 tickers (baked 2026-11-11 from hoodlist.csv), chained mean returns, base 100 @ 2026-10-14 close.
+// Candles + EMA8s compute live from TradingView quotes IN THE CHART'S TIMEFRAME (daily candles on daily, weekly on weekly, hourly on hourly).
+// Aggregate gamma walls baked daily. Regenerate daily for walls, weekly for composition: make_board_index_pine.py + publish_board_index_pine.py
+// Chart must show history back to the base date or the chain never anchors (a label warns).
 
-// --- 1. ticker OHLC, one security call each (tuple = one call) ---
-[o01, h01, l01, c01] = request.security("NASDAQ:CIFR", "D", [open, high, low, close], lookahead=barmerge.lookahead_off)  // CIFR
-[o02, h02, l02, c02] = request.security("NASDAQ:CRWV", "D", [open, high, low, close], lookahead=barmerge.lookahead_off)  // CRWV
-[o03, h03, l03, c03] = request.security("NASDAQ:ASTS", "D", [open, high, low, close], lookahead=barmerge.lookahead_off)  // ASTS
-[o04, h04, l04, c04] = request.security("NASDAQ:NBIS", "D", [open, high, low, close], lookahead=barmerge.lookahead_off)  // NBIS
-[o05, h05, l05, c05] = request.security("NASDAQ:IREN", "D", [open, high, low, close], lookahead=barmerge.lookahead_off)  // IREN
-[o06, h06, l06, c06] = request.security("NASDAQ:WULF", "D", [open, high, low, close], lookahead=barmerge.lookahead_off)  // WULF
-[o07, h07, l07, c07] = request.security("NASDAQ:RIOT", "D", [open, high, low, close], lookahead=barmerge.lookahead_off)  // RIOT
-[o08, h08, l08, c08] = request.security("NASDAQ:APLD", "D", [open, high, low, close], lookahead=barmerge.lookahead_off)  // APLD
-[o09, h09, l09, c09] = request.security("NASDAQ:MARA", "D", [open, high, low, close], lookahead=barmerge.lookahead_off)  // MARA
-[o10, h10, l10, c10] = request.security("NASDAQ:SNDK", "D", [open, high, low, close], lookahead=barmerge.lookahead_off)  // SNDK
-[o11, h11, l11, c11] = request.security("NASDAQ:RKLB", "D", [open, high, low, close], lookahead=barmerge.lookahead_off)  // RKLB
-[o12, h12, l12, c12] = request.security("NYSE:BE", "D", [open, high, low, close], lookahead=barmerge.lookahead_off)  // BE
-[o13, h13, l13, c13] = request.security("NASDAQ:MRNA", "D", [open, high, low, close], lookahead=barmerge.lookahead_off)  // MRNA
-[o14, h14, l14, c14] = request.security("NASDAQ:MRVL", "D", [open, high, low, close], lookahead=barmerge.lookahead_off)  // MRVL
-[o15, h15, l15, c15] = request.security("NASDAQ:JBLU", "D", [open, high, low, close], lookahead=barmerge.lookahead_off)  // JBLU
-[o16, h16, l16, c16] = request.security("NASDAQ:SMCI", "D", [open, high, low, close], lookahead=barmerge.lookahead_off)  // SMCI
-[o17, h17, l17, c17] = request.security("NASDAQ:MU", "D", [open, high, low, close], lookahead=barmerge.lookahead_off)  // MU
-[o18, h18, l18, c18] = request.security("NASDAQ:MSTR", "D", [open, high, low, close], lookahead=barmerge.lookahead_off)  // MSTR
-[o19, h19, l19, c19] = request.security("NASDAQ:INTC", "D", [open, high, low, close], lookahead=barmerge.lookahead_off)  // INTC
-[o20, h20, l20, c20] = request.security("NASDAQ:COIN", "D", [open, high, low, close], lookahead=barmerge.lookahead_off)  // COIN
-[o21, h21, l21, c21] = request.security("NASDAQ:AMD", "D", [open, high, low, close], lookahead=barmerge.lookahead_off)  // AMD
-[o22, h22, l22, c22] = request.security("NASDAQ:HOOD", "D", [open, high, low, close], lookahead=barmerge.lookahead_off)  // HOOD
-[o23, h23, l23, c23] = request.security("NASDAQ:RIVN", "D", [open, high, low, close], lookahead=barmerge.lookahead_off)  // RIVN
-[o24, h24, l24, c24] = request.security("NYSE:ORCL", "D", [open, high, low, close], lookahead=barmerge.lookahead_off)  // ORCL
-[o25, h25, l25, c25] = request.security("NASDAQ:SPCX", "D", [open, high, low, close], lookahead=barmerge.lookahead_off)  // SPCX
-[o26, h26, l26, c26] = request.security("NASDAQ:NVDA", "D", [open, high, low, close], lookahead=barmerge.lookahead_off)  // NVDA
-[o27, h27, l27, c27] = request.security("NASDAQ:AVGO", "D", [open, high, low, close], lookahead=barmerge.lookahead_off)  // AVGO
-[o28, h28, l28, c28] = request.security("NASDAQ:PLTR", "D", [open, high, low, close], lookahead=barmerge.lookahead_off)  // PLTR
-[o29, h29, l29, c29] = request.security("NYSE:NU", "D", [open, high, low, close], lookahead=barmerge.lookahead_off)  // NU
-[o30, h30, l30, c30] = request.security("NASDAQ:SOFI", "D", [open, high, low, close], lookahead=barmerge.lookahead_off)  // SOFI
-[o31, h31, l31, c31] = request.security("NASDAQ:TSLA", "D", [open, high, low, close], lookahead=barmerge.lookahead_off)  // TSLA
-[o32, h32, l32, c32] = request.security("NYSE:NOW", "D", [open, high, low, close], lookahead=barmerge.lookahead_off)  // NOW
-[o33, h33, l33, c33] = request.security("NASDAQ:META", "D", [open, high, low, close], lookahead=barmerge.lookahead_off)  // META
+// --- 1. ticker OHLC in the chart's timeframe, one security call each (tuple = one call) ---
+[o01, h01, l01, c01] = request.security("NASDAQ:CIFR", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // CIFR
+[o02, h02, l02, c02] = request.security("NASDAQ:CRWV", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // CRWV
+[o03, h03, l03, c03] = request.security("NASDAQ:ASTS", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // ASTS
+[o04, h04, l04, c04] = request.security("NASDAQ:NBIS", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // NBIS
+[o05, h05, l05, c05] = request.security("NASDAQ:IREN", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // IREN
+[o06, h06, l06, c06] = request.security("NASDAQ:WULF", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // WULF
+[o07, h07, l07, c07] = request.security("NASDAQ:RIOT", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // RIOT
+[o08, h08, l08, c08] = request.security("NASDAQ:APLD", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // APLD
+[o09, h09, l09, c09] = request.security("NASDAQ:MARA", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // MARA
+[o10, h10, l10, c10] = request.security("NASDAQ:SNDK", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // SNDK
+[o11, h11, l11, c11] = request.security("NASDAQ:RKLB", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // RKLB
+[o12, h12, l12, c12] = request.security("NYSE:BE", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // BE
+[o13, h13, l13, c13] = request.security("NASDAQ:MRNA", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // MRNA
+[o14, h14, l14, c14] = request.security("NASDAQ:MRVL", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // MRVL
+[o15, h15, l15, c15] = request.security("NASDAQ:JBLU", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // JBLU
+[o16, h16, l16, c16] = request.security("NASDAQ:SMCI", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // SMCI
+[o17, h17, l17, c17] = request.security("NASDAQ:MU", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // MU
+[o18, h18, l18, c18] = request.security("NASDAQ:MSTR", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // MSTR
+[o19, h19, l19, c19] = request.security("NASDAQ:INTC", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // INTC
+[o20, h20, l20, c20] = request.security("NASDAQ:COIN", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // COIN
+[o21, h21, l21, c21] = request.security("NASDAQ:AMD", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // AMD
+[o22, h22, l22, c22] = request.security("NASDAQ:HOOD", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // HOOD
+[o23, h23, l23, c23] = request.security("NASDAQ:RIVN", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // RIVN
+[o24, h24, l24, c24] = request.security("NYSE:ORCL", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // ORCL
+[o25, h25, l25, c25] = request.security("NASDAQ:SPCX", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // SPCX
+[o26, h26, l26, c26] = request.security("NASDAQ:NVDA", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // NVDA
+[o27, h27, l27, c27] = request.security("NASDAQ:AVGO", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // AVGO
+[o28, h28, l28, c28] = request.security("NASDAQ:PLTR", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // PLTR
+[o29, h29, l29, c29] = request.security("NYSE:NU", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // NU
+[o30, h30, l30, c30] = request.security("NASDAQ:SOFI", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // SOFI
+[o31, h31, l31, c31] = request.security("NASDAQ:TSLA", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // TSLA
+[o32, h32, l32, c32] = request.security("NYSE:NOW", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // NOW
+[o33, h33, l33, c33] = request.security("NASDAQ:META", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // META
 
 // --- 2. field returns vs each ticker's own prior close ---
 float rC01 = c01 / c01[1] - 1
@@ -175,7 +175,7 @@ float rO33 = o33 / c33[1] - 1
 float rH33 = h33 / c33[1] - 1
 float rL33 = l33 / c33[1] - 1
 
-// --- 3. mean returns (tickers missing either day are skipped) ---
+// --- 3. mean returns (tickers missing either bar are skipped) ---
 float sC = nz(rC01) + nz(rC02) + nz(rC03) + nz(rC04) + nz(rC05) + nz(rC06) + nz(rC07) + nz(rC08) + nz(rC09) + nz(rC10) + nz(rC11) + nz(rC12) + nz(rC13) + nz(rC14) + nz(rC15) + nz(rC16) + nz(rC17) + nz(rC18) + nz(rC19) + nz(rC20) + nz(rC21) + nz(rC22) + nz(rC23) + nz(rC24) + nz(rC25) + nz(rC26) + nz(rC27) + nz(rC28) + nz(rC29) + nz(rC30) + nz(rC31) + nz(rC32) + nz(rC33)
 int nC = (na(rC01) ? 0 : 1) + (na(rC02) ? 0 : 1) + (na(rC03) ? 0 : 1) + (na(rC04) ? 0 : 1) + (na(rC05) ? 0 : 1) + (na(rC06) ? 0 : 1) + (na(rC07) ? 0 : 1) + (na(rC08) ? 0 : 1) + (na(rC09) ? 0 : 1) + (na(rC10) ? 0 : 1) + (na(rC11) ? 0 : 1) + (na(rC12) ? 0 : 1) + (na(rC13) ? 0 : 1) + (na(rC14) ? 0 : 1) + (na(rC15) ? 0 : 1) + (na(rC16) ? 0 : 1) + (na(rC17) ? 0 : 1) + (na(rC18) ? 0 : 1) + (na(rC19) ? 0 : 1) + (na(rC20) ? 0 : 1) + (na(rC21) ? 0 : 1) + (na(rC22) ? 0 : 1) + (na(rC23) ? 0 : 1) + (na(rC24) ? 0 : 1) + (na(rC25) ? 0 : 1) + (na(rC26) ? 0 : 1) + (na(rC27) ? 0 : 1) + (na(rC28) ? 0 : 1) + (na(rC29) ? 0 : 1) + (na(rC30) ? 0 : 1) + (na(rC31) ? 0 : 1) + (na(rC32) ? 0 : 1) + (na(rC33) ? 0 : 1)
 float retC = nC > 0 ? sC / nC : na
@@ -189,28 +189,32 @@ float sL = nz(rL01) + nz(rL02) + nz(rL03) + nz(rL04) + nz(rL05) + nz(rL06) + nz(
 int nL = (na(rL01) ? 0 : 1) + (na(rL02) ? 0 : 1) + (na(rL03) ? 0 : 1) + (na(rL04) ? 0 : 1) + (na(rL05) ? 0 : 1) + (na(rL06) ? 0 : 1) + (na(rL07) ? 0 : 1) + (na(rL08) ? 0 : 1) + (na(rL09) ? 0 : 1) + (na(rL10) ? 0 : 1) + (na(rL11) ? 0 : 1) + (na(rL12) ? 0 : 1) + (na(rL13) ? 0 : 1) + (na(rL14) ? 0 : 1) + (na(rL15) ? 0 : 1) + (na(rL16) ? 0 : 1) + (na(rL17) ? 0 : 1) + (na(rL18) ? 0 : 1) + (na(rL19) ? 0 : 1) + (na(rL20) ? 0 : 1) + (na(rL21) ? 0 : 1) + (na(rL22) ? 0 : 1) + (na(rL23) ? 0 : 1) + (na(rL24) ? 0 : 1) + (na(rL25) ? 0 : 1) + (na(rL26) ? 0 : 1) + (na(rL27) ? 0 : 1) + (na(rL28) ? 0 : 1) + (na(rL29) ? 0 : 1) + (na(rL30) ? 0 : 1) + (na(rL31) ? 0 : 1) + (na(rL32) ? 0 : 1) + (na(rL33) ? 0 : 1)
 float retL = nL > 0 ? sL / nL : na
 
-// --- 4. chain from the base anchor ---
+// --- 4. chain from the base anchor (first bar on/after the day after the base date) ---
+// daily/intraday anchor = base level; weekly anchor = index close at end of base week; monthly anchor = index close at end of base month.
 var float idxC = na
 var float idxO = na
 var float idxH = na
 var float idxL = na
-bool isBase = year == 2026 and month == 10 and dayofmonth == 14
-if isBase
-    idxC := 100
-    idxO := na
-    idxH := na
-    idxL := na
-else if not na(idxC[1]) and not na(retC)
+var bool anchored = false
+float aVal = timeframe.isweekly ? 94.77 : timeframe.ismonthly ? 89.16 : 100
+int aTime = timestamp(2026, 10, 15, 0, 0)
+if not anchored and time >= aTime and not na(retC)
+    idxO := aVal * (1 + retO)
+    idxH := aVal * (1 + retH)
+    idxL := aVal * (1 + retL)
+    idxC := aVal * (1 + retC)
+    anchored := true
+else if anchored and not na(retC)
     idxO := idxC[1] * (1 + retO)
     idxH := idxC[1] * (1 + retH)
     idxL := idxC[1] * (1 + retL)
     idxC := idxC[1] * (1 + retC)
 
-// --- 5. index candles (plotcandle takes one series color, not colorup/colordown) ---
+// --- 5. index candles (chart timeframe; plotcandle takes one series color, not colorup/colordown) ---
 color cndlCol = idxC >= idxO ? color.new(#089981, 0) : color.new(#f23645, 0)
 plotcandle(idxO, idxH, idxL, idxC, title="Board index", color=cndlCol, wickcolor=cndlCol, bordercolor=color.new(#787b86, 0))
 
-// --- 6. EMA8 daily (manual recursion, seeded on the first index close) ---
+// --- 6. EMA8 of the index closes (chart timeframe; manual recursion, seeded on the first index close) ---
 var float emaD = na
 if not na(idxC)
     emaD := na(emaD) ? idxC : 2.0 / 9.0 * idxC + 7.0 / 9.0 * emaD[1]
@@ -226,21 +230,22 @@ if timeframe.change("M") and not na(idxC[1])
 float eM = na(mEmaPrev) ? na : 2.0 / 9.0 * idxC + 7.0 / 9.0 * mEmaPrev
 
 // --- 8. EMA8 lines, green when rising, red when falling (Jays multi-TF trend) ---
-plot(emaD, title="EMA8 daily", color=emaD > emaD[1] ? color.new(#089981, 0) : color.new(#f23645, 0), linewidth=2)
-plot(eW, title="EMA8 weekly", color=eW > eW[1] ? color.new(#089981, 0) : color.new(#f23645, 0), linewidth=2)
-plot(eM, title="EMA8 monthly", color=eM > eM[1] ? color.new(#089981, 0) : color.new(#f23645, 0), linewidth=2)
+// display=display.none: only the index candle OHLC shows beside the indicator name (EMAs/walls live in the table).
+plot(emaD, title="EMA8 chart", color=emaD > emaD[1] ? color.new(#089981, 0) : color.new(#f23645, 0), linewidth=2, display=display.none)
+plot(eW, title="EMA8 weekly", color=eW > eW[1] ? color.new(#089981, 0) : color.new(#f23645, 0), linewidth=2, display=display.none)
+plot(eM, title="EMA8 monthly", color=eM > eM[1] ? color.new(#089981, 0) : color.new(#f23645, 0), linewidth=2, display=display.none)
 
 // --- 9. aggregate gamma walls (baked, refresh daily) ---
 float pw   = 85.92
 float flip = 83.06
 float mp   = 87.71
 float cw   = 93.51
-plot(cw,   title="CW",   color=color.new(#089981, 0), linewidth=1)
-plot(pw,   title="PW",   color=color.new(#f23645, 0), linewidth=1)
-plot(flip, title="Flip", color=color.new(#ff9800, 0), linewidth=1)
-plot(mp,   title="MP",   color=color.new(#787b86, 0), linewidth=1)
+plot(cw,   title="CW",   color=color.new(#089981, 0), linewidth=1, display=display.none)
+plot(pw,   title="PW",   color=color.new(#f23645, 0), linewidth=1, display=display.none)
+plot(flip, title="Flip", color=color.new(#ff9800, 0), linewidth=1, display=display.none)
+plot(mp,   title="MP",   color=color.new(#787b86, 0), linewidth=1, display=display.none)
 
-// --- 10. Jays tier for the index (same three legs as strength_rank.py) ---
+// --- 10. Jays tier for the index (same three legs as strength_rank.py; on the daily chart this is the framework tier) ---
 bool leg1 = not na(eW) and not na(eM) and eW > eM
 bool leg2 = not na(emaD) and not na(eW) and emaD > eW
 bool leg3 = not na(idxC) and not na(emaD) and idxC > emaD
@@ -262,11 +267,12 @@ if barstate.islast
     lbMP := label.new(bar_index, mp,   "MP 87.71",   xloc=xloc.bar_index, style=label.style_label_left, color=color.new(#787b86, 0), textcolor=color.white, size=size.small)
 
 // --- 12. readout table (live values) ---
+string tfName = timeframe.isdaily ? "daily" : timeframe.isweekly ? "weekly" : timeframe.ismonthly ? "monthly" : "intraday"
 var table tb = table.new(position.top_right, 2, 9, border_width=1)
 if barstate.islast
     table.cell(tb, 0, 0, "Board index", text_color=color.white, text_size=size.small)
     table.cell(tb, 1, 0, "close " + str.tostring(idxC, "#.##"), text_color=color.white, text_size=size.small)
-    table.cell(tb, 0, 1, "EMA8 daily", text_color=color.white, text_size=size.small)
+    table.cell(tb, 0, 1, "EMA8 " + tfName, text_color=color.white, text_size=size.small)
     table.cell(tb, 1, 1, str.tostring(emaD, "#.##"), text_color=color.white, text_size=size.small)
     table.cell(tb, 0, 2, "EMA8 weekly", text_color=color.white, text_size=size.small)
     table.cell(tb, 1, 2, str.tostring(eW, "#.##"), text_color=color.white, text_size=size.small)
@@ -283,9 +289,9 @@ if barstate.islast
     table.cell(tb, 0, 8, "Gamma regime", text_color=color.white, text_size=size.small)
     table.cell(tb, 1, 8, (idxC > flip ? "POSITIVE" : "NEGATIVE") + " (close vs flip)", text_color=color.white, text_size=size.small)
 
-// --- 13. daily-chart guard (chaining assumes one bar per session) ---
-var label wrn = na
-if not timeframe.isdaily and barstate.islast
-    label.delete(wrn)
-    wrn := label.new(bar_index, high, "Daily chart only — the index chains one bar per session", xloc=xloc.bar_index, style=label.style_label_down, color=color.new(#f23645, 0), textcolor=color.white, size=size.normal)
+// --- 13. history guard (chain never anchored = chart starts after the base date) ---
+var label nohist = na
+if barstate.islast and na(idxC)
+    label.delete(nohist)
+    nohist := label.new(bar_index, high, "No index data — chart needs history back to 2026-10-14", xloc=xloc.bar_index, style=label.style_label_down, color=color.new(#f23645, 0), textcolor=color.white, size=size.normal)
 
