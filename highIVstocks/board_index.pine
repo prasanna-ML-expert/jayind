@@ -1,7 +1,7 @@
 //@version=6
 indicator("Board Index — Jays + Gamma (Live)", shorttitle="BOARD 1111", overlay=false)
 
-// LIVE equal-weight board index: 33 tickers (baked 2026-11-11 from hoodlist.csv), chained mean returns, base 100 @ 2021-12-09 close.
+// LIVE equal-weight board index: 33 tickers (baked 2026-11-11 from hoodlist.csv), chained mean returns, base 100 @ 2026-10-14 close.
 // Candles + EMA8s compute live from TradingView quotes IN THE CHART'S TIMEFRAME (daily candles on daily, weekly on weekly, hourly on hourly).
 // Aggregate gamma walls baked daily. Regenerate daily for walls, weekly for composition: make_board_index_pine.py + publish_board_index_pine.py
 // Chart must show history back to the base date or the chain never anchors (a label warns).
@@ -201,8 +201,8 @@ var float idxO = na
 var float idxH = na
 var float idxL = na
 var bool anchored = false
-float aVal = timeframe.isweekly ? 99.97 : timeframe.ismonthly ? 94.50 : 100
-int aTime = timestamp(2021, 12, 10, 0, 0)
+float aVal = timeframe.isweekly ? 94.50 : timeframe.ismonthly ? 89.04 : 100
+int aTime = timestamp(2026, 10, 15, 0, 0)
 int aWin = timeframe.isweekly ? 8 * 86400000 : timeframe.ismonthly ? 35 * 86400000 : 3 * 86400000
 int aTimeMax = aTime + aWin
 if not anchored and time >= aTime and time <= aTimeMax and not na(retC)
@@ -304,10 +304,10 @@ plot(trW, title="Trend weekly", color=wRising ? color.new(#089981, 0) : color.ne
 plot(trM, title="Trend monthly", color=mRising ? color.new(#089981, 0) : color.new(#f23645, 0), linewidth=3, display=display.pane)
 
 // --- 11. aggregate gamma walls (baked, refresh daily) ---
-float pw   = 536.17
-float flip = 518.35
-float mp   = 547.35
-float cw   = 583.56
+float pw   = 85.82
+float flip = 82.97
+float mp   = 87.61
+float cw   = 93.40
 plot(cw,   title="CW",   color=color.new(#089981, 0), linewidth=1, display=display.pane)
 plot(pw,   title="PW",   color=color.new(#f23645, 0), linewidth=1, display=display.pane)
 plot(flip, title="Flip", color=color.new(#ff9800, 0), linewidth=1, display=display.pane)
@@ -329,10 +329,10 @@ if barstate.islast
     label.delete(lbPW)
     label.delete(lbFL)
     label.delete(lbMP)
-    lbCW := label.new(bar_index + 2, cw,   "CW 583.56",   xloc=xloc.bar_index, style=label.style_label_left, color=color.new(#089981, 0), textcolor=color.white, size=size.small)
-    lbPW := label.new(bar_index + 2, pw,   "PW 536.17",   xloc=xloc.bar_index, style=label.style_label_left, color=color.new(#f23645, 0), textcolor=color.white, size=size.small)
-    lbFL := label.new(bar_index + 2, flip, "FLIP 518.35", xloc=xloc.bar_index, style=label.style_label_left, color=color.new(#ff9800, 0), textcolor=color.white, size=size.small)
-    lbMP := label.new(bar_index + 2, mp,   "MP 547.35",   xloc=xloc.bar_index, style=label.style_label_left, color=color.new(#787b86, 0), textcolor=color.white, size=size.small)
+    lbCW := label.new(bar_index + 2, cw,   "CW 93.40",   xloc=xloc.bar_index, style=label.style_label_left, color=color.new(#089981, 0), textcolor=color.white, size=size.small)
+    lbPW := label.new(bar_index + 2, pw,   "PW 85.82",   xloc=xloc.bar_index, style=label.style_label_left, color=color.new(#f23645, 0), textcolor=color.white, size=size.small)
+    lbFL := label.new(bar_index + 2, flip, "FLIP 82.97", xloc=xloc.bar_index, style=label.style_label_left, color=color.new(#ff9800, 0), textcolor=color.white, size=size.small)
+    lbMP := label.new(bar_index + 2, mp,   "MP 87.61",   xloc=xloc.bar_index, style=label.style_label_left, color=color.new(#787b86, 0), textcolor=color.white, size=size.small)
 
 // --- 14. readout table (live values) ---
 string tfName = timeframe.isdaily ? "daily" : timeframe.isweekly ? "weekly" : timeframe.ismonthly ? "monthly" : "intraday"
@@ -349,11 +349,11 @@ if barstate.islast
     table.cell(tb, 0, 4, "Jays tier", text_color=color.white, text_size=size.small)
     table.cell(tb, 1, 4, "Tier " + str.tostring(tier) + "  (W>M:" + (leg1 ? "Y" : "n") + " D>W:" + (leg2 ? "Y" : "n") + " Px>D:" + (leg3 ? "Y" : "n") + ")", text_color=color.white, text_size=size.small)
     table.cell(tb, 0, 5, "PW / Flip", text_color=color.white, text_size=size.small)
-    table.cell(tb, 1, 5, "536.17 / 518.35", text_color=color.white, text_size=size.small)
+    table.cell(tb, 1, 5, "85.82 / 82.97", text_color=color.white, text_size=size.small)
     table.cell(tb, 0, 6, "MP / CW", text_color=color.white, text_size=size.small)
-    table.cell(tb, 1, 6, "547.35 / 583.56", text_color=color.white, text_size=size.small)
+    table.cell(tb, 1, 6, "87.61 / 93.40", text_color=color.white, text_size=size.small)
     table.cell(tb, 0, 7, "Walls as of", text_color=color.white, text_size=size.small)
-    table.cell(tb, 1, 7, "2026-11-11 (anchor 540.37)", text_color=color.white, text_size=size.small)
+    table.cell(tb, 1, 7, "2026-11-11 (anchor 86.49)", text_color=color.white, text_size=size.small)
     table.cell(tb, 0, 8, "Gamma regime", text_color=color.white, text_size=size.small)
     table.cell(tb, 1, 8, (idxC > flip ? "POSITIVE" : "NEGATIVE") + " (close vs flip)", text_color=color.white, text_size=size.small)
     table.cell(tb, 0, 9, "BBMC 60", text_color=color.white, text_size=size.small)
@@ -369,5 +369,5 @@ if barstate.islast
 var label nohist = na
 if barstate.islast and na(idxC)
     label.delete(nohist)
-    nohist := label.new(bar_index, high, "No index data — chart needs history back to 2021-12-09", xloc=xloc.bar_index, style=label.style_label_down, color=color.new(#f23645, 0), textcolor=color.white, size=size.normal)
+    nohist := label.new(bar_index, high, "No index data — chart needs history back to 2026-10-14", xloc=xloc.bar_index, style=label.style_label_down, color=color.new(#f23645, 0), textcolor=color.white, size=size.normal)
 
