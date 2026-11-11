@@ -1,240 +1,70 @@
 //@version=6
-indicator("Board Index — Jays + Gamma (Live)", shorttitle="BOARD 1111", overlay=false)
+indicator("Board Index — Jays + Gamma", shorttitle="BOARD 1111", overlay=false)
 
-// LIVE equal-weight board index: 33 tickers (baked 2026-11-11 from hoodlist.csv), chained mean returns, base 100 @ 2026-10-14 close.
-// Candles + EMA8s compute live from TradingView quotes IN THE CHART'S TIMEFRAME (daily candles on daily, weekly on weekly, hourly on hourly).
-// Aggregate gamma walls baked daily. Regenerate daily for walls, weekly for composition: make_board_index_pine.py + publish_board_index_pine.py
-// Chart must show history back to the base date or the chain never anchors (a label warns).
+// Equal-weight board index: 33 tickers (baked 2026-11-11 from hoodlist.csv), base 100 @ 2026-10-14 close.
+// Candles are BAKED from board_index.json (daily), weekly/monthly aggregated in Python
+// so the weekly high = max daily high by construction (the live per-timeframe chain
+// computed a different weekly-rebalanced index whose high ran above the daily highs).
+// Aggregate gamma walls baked daily. Regenerate daily for walls, weekly for composition.
+// Intraday charts show the daily candles (no live intraday chain).
 
-// --- 1. ticker OHLC in the chart's timeframe, one security call each (tuple = one call) ---
-[o01, h01, l01, c01] = request.security("NASDAQ:CIFR", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // CIFR
-[o02, h02, l02, c02] = request.security("NASDAQ:CRWV", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // CRWV
-[o03, h03, l03, c03] = request.security("NASDAQ:ASTS", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // ASTS
-[o04, h04, l04, c04] = request.security("NASDAQ:NBIS", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // NBIS
-[o05, h05, l05, c05] = request.security("NASDAQ:IREN", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // IREN
-[o06, h06, l06, c06] = request.security("NASDAQ:WULF", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // WULF
-[o07, h07, l07, c07] = request.security("NASDAQ:RIOT", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // RIOT
-[o08, h08, l08, c08] = request.security("NASDAQ:APLD", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // APLD
-[o09, h09, l09, c09] = request.security("NASDAQ:MARA", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // MARA
-[o10, h10, l10, c10] = request.security("NASDAQ:SNDK", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // SNDK
-[o11, h11, l11, c11] = request.security("NASDAQ:RKLB", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // RKLB
-[o12, h12, l12, c12] = request.security("NYSE:BE", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // BE
-[o13, h13, l13, c13] = request.security("NASDAQ:MRNA", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // MRNA
-[o14, h14, l14, c14] = request.security("NASDAQ:MRVL", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // MRVL
-[o15, h15, l15, c15] = request.security("NASDAQ:JBLU", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // JBLU
-[o16, h16, l16, c16] = request.security("NASDAQ:SMCI", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // SMCI
-[o17, h17, l17, c17] = request.security("NASDAQ:MU", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // MU
-[o18, h18, l18, c18] = request.security("NASDAQ:MSTR", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // MSTR
-[o19, h19, l19, c19] = request.security("NASDAQ:INTC", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // INTC
-[o20, h20, l20, c20] = request.security("NASDAQ:COIN", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // COIN
-[o21, h21, l21, c21] = request.security("NASDAQ:AMD", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // AMD
-[o22, h22, l22, c22] = request.security("NASDAQ:HOOD", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // HOOD
-[o23, h23, l23, c23] = request.security("NASDAQ:RIVN", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // RIVN
-[o24, h24, l24, c24] = request.security("NYSE:ORCL", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // ORCL
-[o25, h25, l25, c25] = request.security("NASDAQ:SPCX", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // SPCX
-[o26, h26, l26, c26] = request.security("NASDAQ:NVDA", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // NVDA
-[o27, h27, l27, c27] = request.security("NASDAQ:AVGO", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // AVGO
-[o28, h28, l28, c28] = request.security("NASDAQ:PLTR", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // PLTR
-[o29, h29, l29, c29] = request.security("NYSE:NU", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // NU
-[o30, h30, l30, c30] = request.security("NASDAQ:SOFI", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // SOFI
-[o31, h31, l31, c31] = request.security("NASDAQ:TSLA", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // TSLA
-[o32, h32, l32, c32] = request.security("NYSE:NOW", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // NOW
-[o33, h33, l33, c33] = request.security("NASDAQ:META", timeframe.period, [open, high, low, close], lookahead=barmerge.lookahead_off)  // META
+// --- 1. embedded candles (dates YYYYMMDD; weekly = Monday, monthly = 1st) ---
+int[] eDDate = array.from(20261015, 20261016, 20261019, 20261020, 20261021, 20261022, 20261023, 20261026, 20261027, 20261028, 20261029, 20261030, 20261102, 20261103, 20261104, 20261105, 20261106, 20261109, 20261110, 20261111)
+float[] eDO = array.from(96.25, 99.63, 97.55, 94.41, 99.30, 95.91, 92.29, 90.74, 93.79, 96.93, 96.19, 90.51, 89.72, 87.01, 88.60, 85.53, 82.66, 83.94, 85.77, 90.30)
+float[] eDH = array.from(102.04, 100.69, 99.08, 99, 101.64, 97.90, 94.77, 94.48, 97.83, 99.78, 98.60, 92.18, 91.27, 91.29, 92.29, 86.29, 85.56, 89.37, 89.64, 93.82)
+float[] eDL = array.from(93.33, 93.33, 94.68, 92.75, 96.54, 90.97, 90.15, 88.69, 92.28, 94.50, 93.95, 86.35, 84.56, 85.88, 85.40, 75.61, 79, 82.57, 83.41, 88.47)
+float[] eDC = array.from(101.34, 94.50, 95.92, 96.46, 99.33, 92.95, 92.19, 91.78, 96.38, 98.79, 95.74, 89.04, 85.61, 89.85, 88.04, 78.48, 83.23, 87.66, 86.49, 91.41)
+int[] eWDate = array.from(20261012, 20261019, 20261026, 20261102, 20261109)
+float[] eWO = array.from(96.25, 97.55, 90.74, 89.72, 83.94)
+float[] eWH = array.from(102.04, 101.64, 99.78, 92.29, 93.82)
+float[] eWL = array.from(93.33, 90.15, 86.35, 75.61, 82.57)
+float[] eWC = array.from(94.50, 92.19, 89.04, 83.23, 91.41)
+int[] eMDate = array.from(20261001, 20261101)
+float[] eMO = array.from(96.25, 89.72)
+float[] eMH = array.from(102.04, 93.82)
+float[] eML = array.from(86.35, 75.61)
+float[] eMC = array.from(89.04, 91.41)
 
-// --- 2. field returns vs each ticker's own prior close ---
-float rC01 = c01 / c01[1] - 1
-float rO01 = o01 / c01[1] - 1
-float rH01 = h01 / c01[1] - 1
-float rL01 = l01 / c01[1] - 1
-float rC02 = c02 / c02[1] - 1
-float rO02 = o02 / c02[1] - 1
-float rH02 = h02 / c02[1] - 1
-float rL02 = l02 / c02[1] - 1
-float rC03 = c03 / c03[1] - 1
-float rO03 = o03 / c03[1] - 1
-float rH03 = h03 / c03[1] - 1
-float rL03 = l03 / c03[1] - 1
-float rC04 = c04 / c04[1] - 1
-float rO04 = o04 / c04[1] - 1
-float rH04 = h04 / c04[1] - 1
-float rL04 = l04 / c04[1] - 1
-float rC05 = c05 / c05[1] - 1
-float rO05 = o05 / c05[1] - 1
-float rH05 = h05 / c05[1] - 1
-float rL05 = l05 / c05[1] - 1
-float rC06 = c06 / c06[1] - 1
-float rO06 = o06 / c06[1] - 1
-float rH06 = h06 / c06[1] - 1
-float rL06 = l06 / c06[1] - 1
-float rC07 = c07 / c07[1] - 1
-float rO07 = o07 / c07[1] - 1
-float rH07 = h07 / c07[1] - 1
-float rL07 = l07 / c07[1] - 1
-float rC08 = c08 / c08[1] - 1
-float rO08 = o08 / c08[1] - 1
-float rH08 = h08 / c08[1] - 1
-float rL08 = l08 / c08[1] - 1
-float rC09 = c09 / c09[1] - 1
-float rO09 = o09 / c09[1] - 1
-float rH09 = h09 / c09[1] - 1
-float rL09 = l09 / c09[1] - 1
-float rC10 = c10 / c10[1] - 1
-float rO10 = o10 / c10[1] - 1
-float rH10 = h10 / c10[1] - 1
-float rL10 = l10 / c10[1] - 1
-float rC11 = c11 / c11[1] - 1
-float rO11 = o11 / c11[1] - 1
-float rH11 = h11 / c11[1] - 1
-float rL11 = l11 / c11[1] - 1
-float rC12 = c12 / c12[1] - 1
-float rO12 = o12 / c12[1] - 1
-float rH12 = h12 / c12[1] - 1
-float rL12 = l12 / c12[1] - 1
-float rC13 = c13 / c13[1] - 1
-float rO13 = o13 / c13[1] - 1
-float rH13 = h13 / c13[1] - 1
-float rL13 = l13 / c13[1] - 1
-float rC14 = c14 / c14[1] - 1
-float rO14 = o14 / c14[1] - 1
-float rH14 = h14 / c14[1] - 1
-float rL14 = l14 / c14[1] - 1
-float rC15 = c15 / c15[1] - 1
-float rO15 = o15 / c15[1] - 1
-float rH15 = h15 / c15[1] - 1
-float rL15 = l15 / c15[1] - 1
-float rC16 = c16 / c16[1] - 1
-float rO16 = o16 / c16[1] - 1
-float rH16 = h16 / c16[1] - 1
-float rL16 = l16 / c16[1] - 1
-float rC17 = c17 / c17[1] - 1
-float rO17 = o17 / c17[1] - 1
-float rH17 = h17 / c17[1] - 1
-float rL17 = l17 / c17[1] - 1
-float rC18 = c18 / c18[1] - 1
-float rO18 = o18 / c18[1] - 1
-float rH18 = h18 / c18[1] - 1
-float rL18 = l18 / c18[1] - 1
-float rC19 = c19 / c19[1] - 1
-float rO19 = o19 / c19[1] - 1
-float rH19 = h19 / c19[1] - 1
-float rL19 = l19 / c19[1] - 1
-float rC20 = c20 / c20[1] - 1
-float rO20 = o20 / c20[1] - 1
-float rH20 = h20 / c20[1] - 1
-float rL20 = l20 / c20[1] - 1
-float rC21 = c21 / c21[1] - 1
-float rO21 = o21 / c21[1] - 1
-float rH21 = h21 / c21[1] - 1
-float rL21 = l21 / c21[1] - 1
-float rC22 = c22 / c22[1] - 1
-float rO22 = o22 / c22[1] - 1
-float rH22 = h22 / c22[1] - 1
-float rL22 = l22 / c22[1] - 1
-float rC23 = c23 / c23[1] - 1
-float rO23 = o23 / c23[1] - 1
-float rH23 = h23 / c23[1] - 1
-float rL23 = l23 / c23[1] - 1
-float rC24 = c24 / c24[1] - 1
-float rO24 = o24 / c24[1] - 1
-float rH24 = h24 / c24[1] - 1
-float rL24 = l24 / c24[1] - 1
-float rC25 = c25 / c25[1] - 1
-float rO25 = o25 / c25[1] - 1
-float rH25 = h25 / c25[1] - 1
-float rL25 = l25 / c25[1] - 1
-float rC26 = c26 / c26[1] - 1
-float rO26 = o26 / c26[1] - 1
-float rH26 = h26 / c26[1] - 1
-float rL26 = l26 / c26[1] - 1
-float rC27 = c27 / c27[1] - 1
-float rO27 = o27 / c27[1] - 1
-float rH27 = h27 / c27[1] - 1
-float rL27 = l27 / c27[1] - 1
-float rC28 = c28 / c28[1] - 1
-float rO28 = o28 / c28[1] - 1
-float rH28 = h28 / c28[1] - 1
-float rL28 = l28 / c28[1] - 1
-float rC29 = c29 / c29[1] - 1
-float rO29 = o29 / c29[1] - 1
-float rH29 = h29 / c29[1] - 1
-float rL29 = l29 / c29[1] - 1
-float rC30 = c30 / c30[1] - 1
-float rO30 = o30 / c30[1] - 1
-float rH30 = h30 / c30[1] - 1
-float rL30 = l30 / c30[1] - 1
-float rC31 = c31 / c31[1] - 1
-float rO31 = o31 / c31[1] - 1
-float rH31 = h31 / c31[1] - 1
-float rL31 = l31 / c31[1] - 1
-float rC32 = c32 / c32[1] - 1
-float rO32 = o32 / c32[1] - 1
-float rH32 = h32 / c32[1] - 1
-float rL32 = l32 / c32[1] - 1
-float rC33 = c33 / c33[1] - 1
-float rO33 = o33 / c33[1] - 1
-float rH33 = h33 / c33[1] - 1
-float rL33 = l33 / c33[1] - 1
+// --- 2. display candle for this bar: pick the set by timeframe, look up by bar date ---
+int barDate = year(time) * 10000 + month(time) * 100 + dayofmonth(time)
+findIdx(int[] dates, int d) =>
+    int ix = -1
+    for i = 0 to array.size(dates) - 1
+        if array.get(dates, i) == d
+            ix := i
+            break
+    ix
+bool useW = timeframe.isweekly
+bool useM = timeframe.ismonthly
+int[] eDate = useW ? eWDate : useM ? eMDate : eDDate
+float[] eOa = useW ? eWO : useM ? eMO : eDO
+float[] eHa = useW ? eWH : useM ? eMH : eDH
+float[] eLa = useW ? eWL : useM ? eML : eDL
+float[] eCa = useW ? eWC : useM ? eMC : eDC
+int cIdx = findIdx(eDate, barDate)
+float dispO = cIdx >= 0 ? array.get(eOa, cIdx) : na
+float dispH = cIdx >= 0 ? array.get(eHa, cIdx) : na
+float dispL = cIdx >= 0 ? array.get(eLa, cIdx) : na
+float dispC = cIdx >= 0 ? array.get(eCa, cIdx) : na
 
-// --- 3. mean returns (tickers missing either bar are skipped) ---
-float sC = nz(rC01) + nz(rC02) + nz(rC03) + nz(rC04) + nz(rC05) + nz(rC06) + nz(rC07) + nz(rC08) + nz(rC09) + nz(rC10) + nz(rC11) + nz(rC12) + nz(rC13) + nz(rC14) + nz(rC15) + nz(rC16) + nz(rC17) + nz(rC18) + nz(rC19) + nz(rC20) + nz(rC21) + nz(rC22) + nz(rC23) + nz(rC24) + nz(rC25) + nz(rC26) + nz(rC27) + nz(rC28) + nz(rC29) + nz(rC30) + nz(rC31) + nz(rC32) + nz(rC33)
-int nC = (na(rC01) ? 0 : 1) + (na(rC02) ? 0 : 1) + (na(rC03) ? 0 : 1) + (na(rC04) ? 0 : 1) + (na(rC05) ? 0 : 1) + (na(rC06) ? 0 : 1) + (na(rC07) ? 0 : 1) + (na(rC08) ? 0 : 1) + (na(rC09) ? 0 : 1) + (na(rC10) ? 0 : 1) + (na(rC11) ? 0 : 1) + (na(rC12) ? 0 : 1) + (na(rC13) ? 0 : 1) + (na(rC14) ? 0 : 1) + (na(rC15) ? 0 : 1) + (na(rC16) ? 0 : 1) + (na(rC17) ? 0 : 1) + (na(rC18) ? 0 : 1) + (na(rC19) ? 0 : 1) + (na(rC20) ? 0 : 1) + (na(rC21) ? 0 : 1) + (na(rC22) ? 0 : 1) + (na(rC23) ? 0 : 1) + (na(rC24) ? 0 : 1) + (na(rC25) ? 0 : 1) + (na(rC26) ? 0 : 1) + (na(rC27) ? 0 : 1) + (na(rC28) ? 0 : 1) + (na(rC29) ? 0 : 1) + (na(rC30) ? 0 : 1) + (na(rC31) ? 0 : 1) + (na(rC32) ? 0 : 1) + (na(rC33) ? 0 : 1)
-float retC = nC > 0 ? sC / nC : na
-float sO = nz(rO01) + nz(rO02) + nz(rO03) + nz(rO04) + nz(rO05) + nz(rO06) + nz(rO07) + nz(rO08) + nz(rO09) + nz(rO10) + nz(rO11) + nz(rO12) + nz(rO13) + nz(rO14) + nz(rO15) + nz(rO16) + nz(rO17) + nz(rO18) + nz(rO19) + nz(rO20) + nz(rO21) + nz(rO22) + nz(rO23) + nz(rO24) + nz(rO25) + nz(rO26) + nz(rO27) + nz(rO28) + nz(rO29) + nz(rO30) + nz(rO31) + nz(rO32) + nz(rO33)
-int nO = (na(rO01) ? 0 : 1) + (na(rO02) ? 0 : 1) + (na(rO03) ? 0 : 1) + (na(rO04) ? 0 : 1) + (na(rO05) ? 0 : 1) + (na(rO06) ? 0 : 1) + (na(rO07) ? 0 : 1) + (na(rO08) ? 0 : 1) + (na(rO09) ? 0 : 1) + (na(rO10) ? 0 : 1) + (na(rO11) ? 0 : 1) + (na(rO12) ? 0 : 1) + (na(rO13) ? 0 : 1) + (na(rO14) ? 0 : 1) + (na(rO15) ? 0 : 1) + (na(rO16) ? 0 : 1) + (na(rO17) ? 0 : 1) + (na(rO18) ? 0 : 1) + (na(rO19) ? 0 : 1) + (na(rO20) ? 0 : 1) + (na(rO21) ? 0 : 1) + (na(rO22) ? 0 : 1) + (na(rO23) ? 0 : 1) + (na(rO24) ? 0 : 1) + (na(rO25) ? 0 : 1) + (na(rO26) ? 0 : 1) + (na(rO27) ? 0 : 1) + (na(rO28) ? 0 : 1) + (na(rO29) ? 0 : 1) + (na(rO30) ? 0 : 1) + (na(rO31) ? 0 : 1) + (na(rO32) ? 0 : 1) + (na(rO33) ? 0 : 1)
-float retO = nO > 0 ? sO / nO : na
-float sH = nz(rH01) + nz(rH02) + nz(rH03) + nz(rH04) + nz(rH05) + nz(rH06) + nz(rH07) + nz(rH08) + nz(rH09) + nz(rH10) + nz(rH11) + nz(rH12) + nz(rH13) + nz(rH14) + nz(rH15) + nz(rH16) + nz(rH17) + nz(rH18) + nz(rH19) + nz(rH20) + nz(rH21) + nz(rH22) + nz(rH23) + nz(rH24) + nz(rH25) + nz(rH26) + nz(rH27) + nz(rH28) + nz(rH29) + nz(rH30) + nz(rH31) + nz(rH32) + nz(rH33)
-int nH = (na(rH01) ? 0 : 1) + (na(rH02) ? 0 : 1) + (na(rH03) ? 0 : 1) + (na(rH04) ? 0 : 1) + (na(rH05) ? 0 : 1) + (na(rH06) ? 0 : 1) + (na(rH07) ? 0 : 1) + (na(rH08) ? 0 : 1) + (na(rH09) ? 0 : 1) + (na(rH10) ? 0 : 1) + (na(rH11) ? 0 : 1) + (na(rH12) ? 0 : 1) + (na(rH13) ? 0 : 1) + (na(rH14) ? 0 : 1) + (na(rH15) ? 0 : 1) + (na(rH16) ? 0 : 1) + (na(rH17) ? 0 : 1) + (na(rH18) ? 0 : 1) + (na(rH19) ? 0 : 1) + (na(rH20) ? 0 : 1) + (na(rH21) ? 0 : 1) + (na(rH22) ? 0 : 1) + (na(rH23) ? 0 : 1) + (na(rH24) ? 0 : 1) + (na(rH25) ? 0 : 1) + (na(rH26) ? 0 : 1) + (na(rH27) ? 0 : 1) + (na(rH28) ? 0 : 1) + (na(rH29) ? 0 : 1) + (na(rH30) ? 0 : 1) + (na(rH31) ? 0 : 1) + (na(rH32) ? 0 : 1) + (na(rH33) ? 0 : 1)
-float retH = nH > 0 ? sH / nH : na
-float sL = nz(rL01) + nz(rL02) + nz(rL03) + nz(rL04) + nz(rL05) + nz(rL06) + nz(rL07) + nz(rL08) + nz(rL09) + nz(rL10) + nz(rL11) + nz(rL12) + nz(rL13) + nz(rL14) + nz(rL15) + nz(rL16) + nz(rL17) + nz(rL18) + nz(rL19) + nz(rL20) + nz(rL21) + nz(rL22) + nz(rL23) + nz(rL24) + nz(rL25) + nz(rL26) + nz(rL27) + nz(rL28) + nz(rL29) + nz(rL30) + nz(rL31) + nz(rL32) + nz(rL33)
-int nL = (na(rL01) ? 0 : 1) + (na(rL02) ? 0 : 1) + (na(rL03) ? 0 : 1) + (na(rL04) ? 0 : 1) + (na(rL05) ? 0 : 1) + (na(rL06) ? 0 : 1) + (na(rL07) ? 0 : 1) + (na(rL08) ? 0 : 1) + (na(rL09) ? 0 : 1) + (na(rL10) ? 0 : 1) + (na(rL11) ? 0 : 1) + (na(rL12) ? 0 : 1) + (na(rL13) ? 0 : 1) + (na(rL14) ? 0 : 1) + (na(rL15) ? 0 : 1) + (na(rL16) ? 0 : 1) + (na(rL17) ? 0 : 1) + (na(rL18) ? 0 : 1) + (na(rL19) ? 0 : 1) + (na(rL20) ? 0 : 1) + (na(rL21) ? 0 : 1) + (na(rL22) ? 0 : 1) + (na(rL23) ? 0 : 1) + (na(rL24) ? 0 : 1) + (na(rL25) ? 0 : 1) + (na(rL26) ? 0 : 1) + (na(rL27) ? 0 : 1) + (na(rL28) ? 0 : 1) + (na(rL29) ? 0 : 1) + (na(rL30) ? 0 : 1) + (na(rL31) ? 0 : 1) + (na(rL32) ? 0 : 1) + (na(rL33) ? 0 : 1)
-float retL = nL > 0 ? sL / nL : na
-
-// --- 4. chain from the base anchor (first bar on/after the day after the base date) ---
-// daily/intraday anchor = base level; weekly anchor = index close at end of base week; monthly anchor = index close at end of base month.
-// ANCHOR WINDOW (fix 2026-11-11): the anchor bar must fall within one bar-period of the base date
-// (daily +3d, weekly +8d, monthly +35d). Without this, a chart whose history starts AFTER the base
-// date would anchor at its first bar with the fixed base value and silently scale the whole index down
-// (e.g. history starting when the index was ~114 reads ~500 now). With the window, short history
-// leaves the chain na and the 'No index data' label shows instead of a wrong level.
-var float idxC = na
-var float idxO = na
-var float idxH = na
-var float idxL = na
-var bool anchored = false
-float aVal = timeframe.isweekly ? 94.50 : timeframe.ismonthly ? 89.04 : 100
-int aTime = timestamp(2026, 10, 15, 0, 0)
-int aWin = timeframe.isweekly ? 8 * 86400000 : timeframe.ismonthly ? 35 * 86400000 : 3 * 86400000
-int aTimeMax = aTime + aWin
-if not anchored and time >= aTime and time <= aTimeMax and not na(retC)
-    idxO := aVal * (1 + retO)
-    idxH := aVal * (1 + retH)
-    idxL := aVal * (1 + retL)
-    idxC := aVal * (1 + retC)
-    anchored := true
-else if anchored and not na(retC)
-    idxO := idxC[1] * (1 + retO)
-    idxH := idxC[1] * (1 + retH)
-    idxL := idxC[1] * (1 + retL)
-    idxC := idxC[1] * (1 + retC)
-
-// --- 5. index candles (chart timeframe; plotcandle takes one series color, not colorup/colordown) ---
-color cndlCol = idxC >= idxO ? color.new(#089981, 0) : color.new(#f23645, 0)
-plotcandle(idxO, idxH, idxL, idxC, title="Board index", color=cndlCol, wickcolor=cndlCol, bordercolor=color.new(#787b86, 0))
+// --- 3. index candles (plotcandle takes one series color, not colorup/colordown) ---
+color cndlCol = dispC >= dispO ? color.new(#089981, 0) : color.new(#f23645, 0)
+plotcandle(dispO, dispH, dispL, dispC, title="Board index", color=cndlCol, wickcolor=cndlCol, bordercolor=color.new(#787b86, 0))
 
 // --- 6. EMA8 of the index closes (chart timeframe; manual recursion, seeded on the first index close) ---
 var float emaD = na
-if not na(idxC)
-    emaD := na(emaD) ? idxC : 2.0 / 9.0 * idxC + 7.0 / 9.0 * emaD[1]
+if not na(dispC)
+    emaD := na(emaD) ? dispC : 2.0 / 9.0 * dispC + 7.0 / 9.0 * emaD[1]
 
 // --- 7. EMA8 weekly / monthly (completed periods folded, in-progress period blended) ---
 var float wEmaPrev = na
-if timeframe.change("W") and not na(idxC[1])
-    wEmaPrev := na(wEmaPrev) ? idxC[1] : 2.0 / 9.0 * idxC[1] + 7.0 / 9.0 * wEmaPrev
-float eW = na(wEmaPrev) ? na : 2.0 / 9.0 * idxC + 7.0 / 9.0 * wEmaPrev
+if timeframe.change("W") and not na(dispC[1])
+    wEmaPrev := na(wEmaPrev) ? dispC[1] : 2.0 / 9.0 * dispC[1] + 7.0 / 9.0 * wEmaPrev
+float eW = na(wEmaPrev) ? na : 2.0 / 9.0 * dispC + 7.0 / 9.0 * wEmaPrev
 var float mEmaPrev = na
-if timeframe.change("M") and not na(idxC[1])
-    mEmaPrev := na(mEmaPrev) ? idxC[1] : 2.0 / 9.0 * idxC[1] + 7.0 / 9.0 * mEmaPrev
-float eM = na(mEmaPrev) ? na : 2.0 / 9.0 * idxC + 7.0 / 9.0 * mEmaPrev
+if timeframe.change("M") and not na(dispC[1])
+    mEmaPrev := na(mEmaPrev) ? dispC[1] : 2.0 / 9.0 * dispC[1] + 7.0 / 9.0 * mEmaPrev
+float eM = na(mEmaPrev) ? na : 2.0 / 9.0 * dispC + 7.0 / 9.0 * mEmaPrev
 
 // --- 8. EMA8 lines, hardcoded Jays colors (monthly blue / weekly green / daily red) ---
 // display=display.pane: line draws on the chart, value hidden from the legend.
@@ -246,9 +76,9 @@ plot(eM, title="EMA8 monthly", color=color.new(#2962ff, 0), linewidth=2, display
 // ma(src,len) = Hull-style WMA; BBMC = ma(close,60); bands = BBMC +/- 0.2 * EMA(true range,60).
 ma(src, len) =>
     ta.wma(2 * ta.wma(src, int(len / 2)) - ta.wma(src, len), math.round(math.sqrt(len)))
-float bbmc = ma(idxC, 60)
-float prevC = nz(idxC[1], idxC)
-float trIdx = math.max(idxH - idxL, math.max(math.abs(idxH - prevC), math.abs(idxL - prevC)))
+float bbmc = ma(dispC, 60)
+float prevC = nz(dispC[1], dispC)
+float trIdx = math.max(dispH - dispL, math.max(math.abs(dispH - prevC), math.abs(dispL - prevC)))
 float rangeMa = ta.ema(trIdx, 60)
 float upperK = bbmc + 0.2 * rangeMa
 float lowerK = bbmc - 0.2 * rangeMa
@@ -260,7 +90,7 @@ fill(pU, pL, color=color.new(#2962ff, 90))
 // --- 10. Jays trend lines (Hull-8 per timeframe), green when rising, red when falling ---
 // Trend = Hull WMA length 8 (jay_backtest.py primary); trend start = EMA crosses above trend.
 // Weekly/monthly use completed periods only (like the backtest); direction persists through the period.
-float trD = ma(idxC, 8)
+float trD = ma(dispC, 8)
 // WMA of n elements in arr ending `off` before the last (off=0 = last n); partial windows OK.
 wmaArrOff(float[] arr, int n, int off) =>
     int sz = array.size(arr)
@@ -281,14 +111,14 @@ hullArr(float[] arr) =>
     float i2 = 2 * wmaArrOff(arr, 4, 2) - wmaArrOff(arr, 8, 2)
     (i0 * 3 + i1 * 2 + i2 * 1) / 6
 var float[] wkCloses = array.new_float()
-if timeframe.change("W") and not na(idxC[1])
-    array.push(wkCloses, idxC[1])
+if timeframe.change("W") and not na(dispC[1])
+    array.push(wkCloses, dispC[1])
     if array.size(wkCloses) > 12
         array.shift(wkCloses)
 float trW = hullArr(wkCloses)
 var float[] moCloses = array.new_float()
-if timeframe.change("M") and not na(idxC[1])
-    array.push(moCloses, idxC[1])
+if timeframe.change("M") and not na(dispC[1])
+    array.push(moCloses, dispC[1])
     if array.size(moCloses) > 12
         array.shift(moCloses)
 float trM = hullArr(moCloses)
@@ -316,7 +146,7 @@ plot(mp,   title="MP",   color=color.new(#787b86, 0), linewidth=1, display=displ
 // --- 12. Jays tier for the index (same three legs as strength_rank.py; on the daily chart this is the framework tier) ---
 bool leg1 = not na(eW) and not na(eM) and eW > eM
 bool leg2 = not na(emaD) and not na(eW) and emaD > eW
-bool leg3 = not na(idxC) and not na(emaD) and idxC > emaD
+bool leg3 = not na(dispC) and not na(emaD) and dispC > emaD
 int tier = (leg1 ? 4 : 0) + (leg2 ? 2 : 0) + (leg3 ? 1 : 0)
 
 // --- 13. wall labels on the last bar (right of the bar, in the empty space) ---
@@ -339,7 +169,7 @@ string tfName = timeframe.isdaily ? "daily" : timeframe.isweekly ? "weekly" : ti
 var table tb = table.new(position.top_right, 2, 13, border_width=1)
 if barstate.islast
     table.cell(tb, 0, 0, "Board index", text_color=color.white, text_size=size.small)
-    table.cell(tb, 1, 0, "close " + str.tostring(idxC, "#.##"), text_color=color.white, text_size=size.small)
+    table.cell(tb, 1, 0, "close " + str.tostring(dispC, "#.##"), text_color=color.white, text_size=size.small)
     table.cell(tb, 0, 1, "EMA8 " + tfName, text_color=color.white, text_size=size.small)
     table.cell(tb, 1, 1, str.tostring(emaD, "#.##"), text_color=color.white, text_size=size.small)
     table.cell(tb, 0, 2, "EMA8 weekly", text_color=color.white, text_size=size.small)
@@ -355,9 +185,9 @@ if barstate.islast
     table.cell(tb, 0, 7, "Walls as of", text_color=color.white, text_size=size.small)
     table.cell(tb, 1, 7, "2026-11-11 (anchor 86.49)", text_color=color.white, text_size=size.small)
     table.cell(tb, 0, 8, "Gamma regime", text_color=color.white, text_size=size.small)
-    table.cell(tb, 1, 8, (idxC > flip ? "POSITIVE" : "NEGATIVE") + " (close vs flip)", text_color=color.white, text_size=size.small)
+    table.cell(tb, 1, 8, (dispC > flip ? "POSITIVE" : "NEGATIVE") + " (close vs flip)", text_color=color.white, text_size=size.small)
     table.cell(tb, 0, 9, "BBMC 60", text_color=color.white, text_size=size.small)
-    table.cell(tb, 1, 9, na(bbmc) ? "n/a (<60 bars)" : str.tostring(bbmc, "#.##") + " · " + (idxC > upperK ? "ABOVE band" : idxC < lowerK ? "BELOW band" : "inside band"), text_color=color.white, text_size=size.small)
+    table.cell(tb, 1, 9, na(bbmc) ? "n/a (<60 bars)" : str.tostring(bbmc, "#.##") + " · " + (dispC > upperK ? "ABOVE band" : dispC < lowerK ? "BELOW band" : "inside band"), text_color=color.white, text_size=size.small)
     table.cell(tb, 0, 10, "Trend " + tfName, text_color=color.white, text_size=size.small)
     table.cell(tb, 1, 10, na(trD) ? "n/a" : str.tostring(trD, "#.##") + " · " + (trD > trD[1] ? "rising" : "falling"), text_color=color.white, text_size=size.small)
     table.cell(tb, 0, 11, "Trend weekly", text_color=color.white, text_size=size.small)
@@ -365,9 +195,9 @@ if barstate.islast
     table.cell(tb, 0, 12, "Trend monthly", text_color=color.white, text_size=size.small)
     table.cell(tb, 1, 12, na(trM) ? "n/a" : str.tostring(trM, "#.##") + " · " + (mRising ? "rising" : "falling"), text_color=color.white, text_size=size.small)
 
-// --- 15. history guard (chain never anchored = chart starts after the base date) ---
+// --- 15. history guard (no embedded candle for this bar = chart starts before the base date) ---
 var label nohist = na
-if barstate.islast and na(idxC)
+if barstate.islast and na(dispC)
     label.delete(nohist)
-    nohist := label.new(bar_index, high, "No index data — chart needs history back to 2026-10-14", xloc=xloc.bar_index, style=label.style_label_down, color=color.new(#f23645, 0), textcolor=color.white, size=size.normal)
+    nohist := label.new(bar_index, high, "No index data — index starts 2026-10-14 (20 candles)", xloc=xloc.bar_index, style=label.style_label_down, color=color.new(#f23645, 0), textcolor=color.white, size=size.normal)
 
