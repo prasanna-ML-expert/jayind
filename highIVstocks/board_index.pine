@@ -1,7 +1,7 @@
 //@version=6
 indicator("Board Index — Jays + Gamma (Live)", shorttitle="BOARD 1111", overlay=false)
 
-// LIVE equal-weight board index: 33 tickers (baked 2026-11-11 from hoodlist.csv), chained mean returns, base 100 @ 2026-10-14 close.
+// LIVE equal-weight board index: 33 tickers (baked 2026-11-11 from hoodlist.csv), chained mean returns, base 100 @ 2021-12-09 close.
 // Candles + EMA8s compute live from TradingView quotes IN THE CHART'S TIMEFRAME (daily candles on daily, weekly on weekly, hourly on hourly).
 // Aggregate gamma walls baked daily. Regenerate daily for walls, weekly for composition: make_board_index_pine.py + publish_board_index_pine.py
 // Chart must show history back to the base date or the chain never anchors (a label warns).
@@ -196,8 +196,8 @@ var float idxO = na
 var float idxH = na
 var float idxL = na
 var bool anchored = false
-float aVal = timeframe.isweekly ? 94.77 : timeframe.ismonthly ? 89.16 : 100
-int aTime = timestamp(2026, 10, 15, 0, 0)
+float aVal = timeframe.isweekly ? 99.97 : timeframe.ismonthly ? 94.50 : 100
+int aTime = timestamp(2021, 12, 10, 0, 0)
 if not anchored and time >= aTime and not na(retC)
     idxO := aVal * (1 + retO)
     idxH := aVal * (1 + retH)
@@ -235,23 +235,38 @@ plot(emaD, title="EMA8 chart", color=emaD > emaD[1] ? color.new(#089981, 0) : co
 plot(eW, title="EMA8 weekly", color=eW > eW[1] ? color.new(#089981, 0) : color.new(#f23645, 0), linewidth=2, display=display.none)
 plot(eM, title="EMA8 monthly", color=eM > eM[1] ? color.new(#089981, 0) : color.new(#f23645, 0), linewidth=2, display=display.none)
 
-// --- 9. aggregate gamma walls (baked, refresh daily) ---
-float pw   = 85.92
-float flip = 83.06
-float mp   = 87.71
-float cw   = 93.51
+// --- 9. Jays Hull-MA-60 BBMC band (jay_indicator.py), live from the index candles ---
+// ma(src,len) = Hull-style WMA; BBMC = ma(close,60); bands = BBMC +/- 0.2 * EMA(true range,60).
+ma(src, len) =>
+    ta.wma(2 * ta.wma(src, int(len / 2)) - ta.wma(src, len), math.round(math.sqrt(len)))
+float bbmc = ma(idxC, 60)
+float prevC = nz(idxC[1], idxC)
+float trIdx = math.max(idxH - idxL, math.max(math.abs(idxH - prevC), math.abs(idxL - prevC)))
+float rangeMa = ta.ema(trIdx, 60)
+float upperK = bbmc + 0.2 * rangeMa
+float lowerK = bbmc - 0.2 * rangeMa
+plot(bbmc, title="BBMC 60", color=color.new(#2962ff, 0), linewidth=2, display=display.none)
+plot pU = plot(upperK, title="BBMC upper", color=color.new(#2962ff, 0), linewidth=1, display=display.none)
+plot pL = plot(lowerK, title="BBMC lower", color=color.new(#2962ff, 0), linewidth=1, display=display.none)
+fill(pU, pL, color=color.new(#2962ff, 90))
+
+// --- 10. aggregate gamma walls (baked, refresh daily) ---
+float pw   = 536.17
+float flip = 518.35
+float mp   = 547.35
+float cw   = 583.56
 plot(cw,   title="CW",   color=color.new(#089981, 0), linewidth=1, display=display.none)
 plot(pw,   title="PW",   color=color.new(#f23645, 0), linewidth=1, display=display.none)
 plot(flip, title="Flip", color=color.new(#ff9800, 0), linewidth=1, display=display.none)
 plot(mp,   title="MP",   color=color.new(#787b86, 0), linewidth=1, display=display.none)
 
-// --- 10. Jays tier for the index (same three legs as strength_rank.py; on the daily chart this is the framework tier) ---
+// --- 11. Jays tier for the index (same three legs as strength_rank.py; on the daily chart this is the framework tier) ---
 bool leg1 = not na(eW) and not na(eM) and eW > eM
 bool leg2 = not na(emaD) and not na(eW) and emaD > eW
 bool leg3 = not na(idxC) and not na(emaD) and idxC > emaD
 int tier = (leg1 ? 4 : 0) + (leg2 ? 2 : 0) + (leg3 ? 1 : 0)
 
-// --- 11. wall labels on the last bar ---
+// --- 12. wall labels on the last bar ---
 var label lbCW = na
 var label lbPW = na
 var label lbFL = na
@@ -261,14 +276,14 @@ if barstate.islast
     label.delete(lbPW)
     label.delete(lbFL)
     label.delete(lbMP)
-    lbCW := label.new(bar_index, cw,   "CW 93.51",   xloc=xloc.bar_index, style=label.style_label_left, color=color.new(#089981, 0), textcolor=color.white, size=size.small)
-    lbPW := label.new(bar_index, pw,   "PW 85.92",   xloc=xloc.bar_index, style=label.style_label_left, color=color.new(#f23645, 0), textcolor=color.white, size=size.small)
-    lbFL := label.new(bar_index, flip, "FLIP 83.06", xloc=xloc.bar_index, style=label.style_label_left, color=color.new(#ff9800, 0), textcolor=color.white, size=size.small)
-    lbMP := label.new(bar_index, mp,   "MP 87.71",   xloc=xloc.bar_index, style=label.style_label_left, color=color.new(#787b86, 0), textcolor=color.white, size=size.small)
+    lbCW := label.new(bar_index, cw,   "CW 583.56",   xloc=xloc.bar_index, style=label.style_label_left, color=color.new(#089981, 0), textcolor=color.white, size=size.small)
+    lbPW := label.new(bar_index, pw,   "PW 536.17",   xloc=xloc.bar_index, style=label.style_label_left, color=color.new(#f23645, 0), textcolor=color.white, size=size.small)
+    lbFL := label.new(bar_index, flip, "FLIP 518.35", xloc=xloc.bar_index, style=label.style_label_left, color=color.new(#ff9800, 0), textcolor=color.white, size=size.small)
+    lbMP := label.new(bar_index, mp,   "MP 547.35",   xloc=xloc.bar_index, style=label.style_label_left, color=color.new(#787b86, 0), textcolor=color.white, size=size.small)
 
-// --- 12. readout table (live values) ---
+// --- 13. readout table (live values) ---
 string tfName = timeframe.isdaily ? "daily" : timeframe.isweekly ? "weekly" : timeframe.ismonthly ? "monthly" : "intraday"
-var table tb = table.new(position.top_right, 2, 9, border_width=1)
+var table tb = table.new(position.top_right, 2, 10, border_width=1)
 if barstate.islast
     table.cell(tb, 0, 0, "Board index", text_color=color.white, text_size=size.small)
     table.cell(tb, 1, 0, "close " + str.tostring(idxC, "#.##"), text_color=color.white, text_size=size.small)
@@ -281,17 +296,19 @@ if barstate.islast
     table.cell(tb, 0, 4, "Jays tier", text_color=color.white, text_size=size.small)
     table.cell(tb, 1, 4, "Tier " + str.tostring(tier) + "  (W>M:" + (leg1 ? "Y" : "n") + " D>W:" + (leg2 ? "Y" : "n") + " Px>D:" + (leg3 ? "Y" : "n") + ")", text_color=color.white, text_size=size.small)
     table.cell(tb, 0, 5, "PW / Flip", text_color=color.white, text_size=size.small)
-    table.cell(tb, 1, 5, "85.92 / 83.06", text_color=color.white, text_size=size.small)
+    table.cell(tb, 1, 5, "536.17 / 518.35", text_color=color.white, text_size=size.small)
     table.cell(tb, 0, 6, "MP / CW", text_color=color.white, text_size=size.small)
-    table.cell(tb, 1, 6, "87.71 / 93.51", text_color=color.white, text_size=size.small)
+    table.cell(tb, 1, 6, "547.35 / 583.56", text_color=color.white, text_size=size.small)
     table.cell(tb, 0, 7, "Walls as of", text_color=color.white, text_size=size.small)
-    table.cell(tb, 1, 7, "2026-11-11 (anchor 86.59)", text_color=color.white, text_size=size.small)
+    table.cell(tb, 1, 7, "2026-11-11 (anchor 540.37)", text_color=color.white, text_size=size.small)
     table.cell(tb, 0, 8, "Gamma regime", text_color=color.white, text_size=size.small)
     table.cell(tb, 1, 8, (idxC > flip ? "POSITIVE" : "NEGATIVE") + " (close vs flip)", text_color=color.white, text_size=size.small)
+    table.cell(tb, 0, 9, "BBMC 60", text_color=color.white, text_size=size.small)
+    table.cell(tb, 1, 9, na(bbmc) ? "n/a (<60 bars)" : str.tostring(bbmc, "#.##") + " · " + (idxC > upperK ? "ABOVE band" : idxC < lowerK ? "BELOW band" : "inside band"), text_color=color.white, text_size=size.small)
 
-// --- 13. history guard (chain never anchored = chart starts after the base date) ---
+// --- 14. history guard (chain never anchored = chart starts after the base date) ---
 var label nohist = na
 if barstate.islast and na(idxC)
     label.delete(nohist)
-    nohist := label.new(bar_index, high, "No index data — chart needs history back to 2026-10-14", xloc=xloc.bar_index, style=label.style_label_down, color=color.new(#f23645, 0), textcolor=color.white, size=size.normal)
+    nohist := label.new(bar_index, high, "No index data — chart needs history back to 2021-12-09", xloc=xloc.bar_index, style=label.style_label_down, color=color.new(#f23645, 0), textcolor=color.white, size=size.normal)
 
