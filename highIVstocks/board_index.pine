@@ -206,8 +206,9 @@ else if not na(idxC[1]) and not na(retC)
     idxL := idxC[1] * (1 + retL)
     idxC := idxC[1] * (1 + retC)
 
-// --- 5. index candles ---
-plotcandle(idxO, idxH, idxL, idxC, title="Board index", colorup=color.new(#089981, 0), colordown=color.new(#f23645, 0), wickup=color.new(#089981, 0), wickdown=color.new(#f23645, 0), bordercolor=color.new(#787b86, 0))
+// --- 5. index candles (plotcandle takes one series color, not colorup/colordown) ---
+color cndlCol = idxC >= idxO ? color.new(#089981, 0) : color.new(#f23645, 0)
+plotcandle(idxO, idxH, idxL, idxC, title="Board index", color=cndlCol, wickcolor=cndlCol, bordercolor=color.new(#787b86, 0))
 
 // --- 6. EMA8 daily (manual recursion, seeded on the first index close) ---
 var float emaD = na
