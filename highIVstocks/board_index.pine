@@ -292,9 +292,9 @@ if not na(trW) and not na(trW[1]) and trW != trW[1]
     wRising := trW > trW[1]
 if not na(trM) and not na(trM[1]) and trM != trM[1]
     mRising := trM > trM[1]
-plot(trD, title="Trend chart", color=trD > trD[1] ? color.new(#089981, 0) : color.new(#f23645, 0), linewidth=2, display=display.pane)
-plot(trW, title="Trend weekly", color=wRising ? color.new(#089981, 0) : color.new(#f23645, 0), linewidth=2, display=display.pane)
-plot(trM, title="Trend monthly", color=mRising ? color.new(#089981, 0) : color.new(#f23645, 0), linewidth=2, display=display.pane)
+plot(trD, title="Trend chart", color=trD > trD[1] ? color.new(#089981, 0) : color.new(#f23645, 0), linewidth=3, display=display.pane)
+plot(trW, title="Trend weekly", color=wRising ? color.new(#089981, 0) : color.new(#f23645, 0), linewidth=3, display=display.pane)
+plot(trM, title="Trend monthly", color=mRising ? color.new(#089981, 0) : color.new(#f23645, 0), linewidth=3, display=display.pane)
 
 // --- 11. aggregate gamma walls (baked, refresh daily) ---
 float pw   = 536.17
@@ -322,10 +322,10 @@ if barstate.islast
     label.delete(lbPW)
     label.delete(lbFL)
     label.delete(lbMP)
-    lbCW := label.new(bar_index, cw,   "CW 583.56",   xloc=xloc.bar_index, style=label.style_label_right, color=color.new(#089981, 0), textcolor=color.white, size=size.small)
-    lbPW := label.new(bar_index, pw,   "PW 536.17",   xloc=xloc.bar_index, style=label.style_label_right, color=color.new(#f23645, 0), textcolor=color.white, size=size.small)
-    lbFL := label.new(bar_index, flip, "FLIP 518.35", xloc=xloc.bar_index, style=label.style_label_right, color=color.new(#ff9800, 0), textcolor=color.white, size=size.small)
-    lbMP := label.new(bar_index, mp,   "MP 547.35",   xloc=xloc.bar_index, style=label.style_label_right, color=color.new(#787b86, 0), textcolor=color.white, size=size.small)
+    lbCW := label.new(bar_index + 2, cw,   "CW 583.56",   xloc=xloc.bar_index, style=label.style_label_left, color=color.new(#089981, 0), textcolor=color.white, size=size.small)
+    lbPW := label.new(bar_index + 2, pw,   "PW 536.17",   xloc=xloc.bar_index, style=label.style_label_left, color=color.new(#f23645, 0), textcolor=color.white, size=size.small)
+    lbFL := label.new(bar_index + 2, flip, "FLIP 518.35", xloc=xloc.bar_index, style=label.style_label_left, color=color.new(#ff9800, 0), textcolor=color.white, size=size.small)
+    lbMP := label.new(bar_index + 2, mp,   "MP 547.35",   xloc=xloc.bar_index, style=label.style_label_left, color=color.new(#787b86, 0), textcolor=color.white, size=size.small)
 
 // --- 14. readout table (live values) ---
 string tfName = timeframe.isdaily ? "daily" : timeframe.isweekly ? "weekly" : timeframe.ismonthly ? "monthly" : "intraday"
