@@ -191,6 +191,11 @@ float retL = nL > 0 ? sL / nL : na
 
 // --- 4. chain from the base anchor (first bar on/after the day after the base date) ---
 // daily/intraday anchor = base level; weekly anchor = index close at end of base week; monthly anchor = index close at end of base month.
+// ANCHOR WINDOW (fix 2026-11-11): the anchor bar must fall within one bar-period of the base date
+// (daily +3d, weekly +8d, monthly +35d). Without this, a chart whose history starts AFTER the base
+// date would anchor at its first bar with the fixed base value and silently scale the whole index down
+// (e.g. history starting when the index was ~114 reads ~500 now). With the window, short history
+// leaves the chain na and the 'No index data' label shows instead of a wrong level.
 var float idxC = na
 var float idxO = na
 var float idxH = na
@@ -198,7 +203,9 @@ var float idxL = na
 var bool anchored = false
 float aVal = timeframe.isweekly ? 99.97 : timeframe.ismonthly ? 94.50 : 100
 int aTime = timestamp(2021, 12, 10, 0, 0)
-if not anchored and time >= aTime and not na(retC)
+int aWin = timeframe.isweekly ? 8 * 86400000 : timeframe.ismonthly ? 35 * 86400000 : 3 * 86400000
+int aTimeMax = aTime + aWin
+if not anchored and time >= aTime and time <= aTimeMax and not na(retC)
     idxO := aVal * (1 + retO)
     idxH := aVal * (1 + retH)
     idxL := aVal * (1 + retL)
