@@ -260,11 +260,12 @@ wmaArrOff(float[] arr, int n, int off) =>
     int m = math.max(0, math.min(n, sz - off))
     float s = 0.0
     float wsum = 0.0
-    for i = 0 to m - 1
-        float v = array.get(arr, sz - 1 - off - i)
-        float w = m - i
-        s += v * w
-        wsum += w
+    if m > 0
+        for i = 0 to m - 1
+            float v = array.get(arr, sz - 1 - off - i)
+            float w = m - i
+            s += v * w
+            wsum += w
     s / wsum
 // Hull-8 from an array of closes (needs the last 10 for the full WMA3; partial windows OK).
 hullArr(float[] arr) =>
