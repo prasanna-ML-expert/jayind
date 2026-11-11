@@ -2,7 +2,7 @@
 indicator("Board Index — Jays + Gamma (Live)", shorttitle="BOARD 1111", overlay=false)
 
 // LIVE equal-weight board index: 33 tickers (baked 2026-11-11 from hoodlist.csv), chained mean returns, base 100 @ 2026-10-14 close.
-// Candles + EMA8s compute live from TradingView quotes IN THE CHART'S TIMEFRAME (daily candles on daily, weekly on weekly, hourly on hourly).
+// Candles compute live from TradingView quotes IN THE CHART'S TIMEFRAME (daily candles on daily, weekly on weekly, hourly on hourly).
 // Aggregate gamma walls baked daily. Regenerate daily for walls, weekly for composition: make_board_index_pine.py + publish_board_index_pine.py
 // Chart must show history back to the base date or the chain never anchors (a label warns).
 
@@ -221,27 +221,6 @@ else if anchored and not na(retC)
 color cndlCol = idxC >= idxO ? color.new(#089981, 0) : color.new(#f23645, 0)
 plotcandle(idxO, idxH, idxL, idxC, title="Board index", color=cndlCol, wickcolor=cndlCol, bordercolor=color.new(#787b86, 0))
 
-// --- 6. EMA8 of the index closes (chart timeframe; manual recursion, seeded on the first index close) ---
-var float emaD = na
-if not na(idxC)
-    emaD := na(emaD) ? idxC : 2.0 / 9.0 * idxC + 7.0 / 9.0 * emaD[1]
-
-// --- 7. EMA8 weekly / monthly (completed periods folded, in-progress period blended) ---
-var float wEmaPrev = na
-if timeframe.change("W") and not na(idxC[1])
-    wEmaPrev := na(wEmaPrev) ? idxC[1] : 2.0 / 9.0 * idxC[1] + 7.0 / 9.0 * wEmaPrev
-float eW = na(wEmaPrev) ? na : 2.0 / 9.0 * idxC + 7.0 / 9.0 * wEmaPrev
-var float mEmaPrev = na
-if timeframe.change("M") and not na(idxC[1])
-    mEmaPrev := na(mEmaPrev) ? idxC[1] : 2.0 / 9.0 * idxC[1] + 7.0 / 9.0 * mEmaPrev
-float eM = na(mEmaPrev) ? na : 2.0 / 9.0 * idxC + 7.0 / 9.0 * mEmaPrev
-
-// --- 8. EMA8 lines, hardcoded Jays colors (monthly blue / weekly green / daily red) ---
-// display=display.pane: line draws on the chart, value hidden from the legend.
-plot(emaD, title="EMA8 chart", color=color.new(#f23645, 0), linewidth=2, display=display.pane)
-plot(eW, title="EMA8 weekly", color=color.new(#089981, 0), linewidth=2, display=display.pane)
-plot(eM, title="EMA8 monthly", color=color.new(#2962ff, 0), linewidth=2, display=display.pane)
-
 // --- 9. Jays Hull-MA-60 BBMC band (jay_indicator.py), live from the index candles ---
 // ma(src,len) = Hull-style WMA; BBMC = ma(close,60); bands = BBMC +/- 0.2 * EMA(true range,60).
 ma(src, len) =>
@@ -257,52 +236,6 @@ pU = plot(upperK, title="BBMC upper", color=color.new(#2962ff, 0), linewidth=1, 
 pL = plot(lowerK, title="BBMC lower", color=color.new(#2962ff, 0), linewidth=1, display=display.pane)
 fill(pU, pL, color=color.new(#2962ff, 90))
 
-// --- 10. Jays trend lines (Hull-8 per timeframe), green when rising, red when falling ---
-// Trend = Hull WMA length 8 (jay_backtest.py primary); trend start = EMA crosses above trend.
-// Weekly/monthly use completed periods only (like the backtest); direction persists through the period.
-float trD = ma(idxC, 8)
-// WMA of n elements in arr ending `off` before the last (off=0 = last n); partial windows OK.
-wmaArrOff(float[] arr, int n, int off) =>
-    int sz = array.size(arr)
-    int m = math.max(0, math.min(n, sz - off))
-    float s = 0.0
-    float wsum = 0.0
-    if m > 0
-        for i = 0 to m - 1
-            float v = array.get(arr, sz - 1 - off - i)
-            float w = m - i
-            s += v * w
-            wsum += w
-    s / wsum
-// Hull-8 from an array of closes (needs the last 10 for the full WMA3; partial windows OK).
-hullArr(float[] arr) =>
-    float i0 = 2 * wmaArrOff(arr, 4, 0) - wmaArrOff(arr, 8, 0)
-    float i1 = 2 * wmaArrOff(arr, 4, 1) - wmaArrOff(arr, 8, 1)
-    float i2 = 2 * wmaArrOff(arr, 4, 2) - wmaArrOff(arr, 8, 2)
-    (i0 * 3 + i1 * 2 + i2 * 1) / 6
-var float[] wkCloses = array.new_float()
-if timeframe.change("W") and not na(idxC[1])
-    array.push(wkCloses, idxC[1])
-    if array.size(wkCloses) > 12
-        array.shift(wkCloses)
-float trW = hullArr(wkCloses)
-var float[] moCloses = array.new_float()
-if timeframe.change("M") and not na(idxC[1])
-    array.push(moCloses, idxC[1])
-    if array.size(moCloses) > 12
-        array.shift(moCloses)
-float trM = hullArr(moCloses)
-// Direction persists through the period (step functions only change at boundaries).
-var bool wRising = false
-var bool mRising = false
-if not na(trW) and not na(trW[1]) and trW != trW[1]
-    wRising := trW > trW[1]
-if not na(trM) and not na(trM[1]) and trM != trM[1]
-    mRising := trM > trM[1]
-plot(trD, title="Trend chart", color=trD > trD[1] ? color.new(#089981, 0) : color.new(#f23645, 0), linewidth=3, display=display.pane)
-plot(trW, title="Trend weekly", color=wRising ? color.new(#089981, 0) : color.new(#f23645, 0), linewidth=3, display=display.pane)
-plot(trM, title="Trend monthly", color=mRising ? color.new(#089981, 0) : color.new(#f23645, 0), linewidth=3, display=display.pane)
-
 // --- 11. aggregate gamma walls (baked, refresh daily) ---
 float pw   = 85.82
 float flip = 82.97
@@ -313,12 +246,33 @@ plot(pw,   title="PW",   color=color.new(#f23645, 0), linewidth=1, display=displ
 plot(flip, title="Flip", color=color.new(#ff9800, 0), linewidth=1, display=display.pane)
 plot(mp,   title="MP",   color=color.new(#787b86, 0), linewidth=1, display=display.pane)
 
-// --- 12. Jays tier for the index (same three legs as strength_rank.py; on the daily chart this is the framework tier) ---
-bool leg1 = not na(eW) and not na(eM) and eW > eM
-bool leg2 = not na(emaD) and not na(eW) and emaD > eW
-bool leg3 = not na(idxC) and not na(emaD) and idxC > emaD
-int tier = (leg1 ? 4 : 0) + (leg2 ? 2 : 0) + (leg3 ? 1 : 0)
 
+// --- 12. Board PCR histogram at the bottom of the pane (volume-style) ---
+// PCR is a gamma-job value (prior session OI), baked daily with the walls.
+// Looked up by bar date (last known on or before the bar); scaled into the
+// bottom 20% of the pane so the bars sit under the candles like volume.
+// Red = put-heavy (PCR > 1), green = call-heavy (PCR < 1); dashed line = PCR 1.0.
+int[] pcrDates = array.from(20261015, 20261016, 20261019, 20261020, 20261021, 20261022, 20261023, 20261026, 20261027, 20261028, 20261029, 20261030, 20261102, 20261103, 20261104, 20261105, 20261106, 20261109, 20261110, 20261111)
+float[] pcrVals = array.from(1.03, 1.06, 1.09, 0.96, 0.92, 0.86, 1.27, 1.15, 1.03, 0.89, 0.83, 1.03, 1.11, 1.12, 0.93, 0.97, 1.59, 1.12, 0.89, 0.91)
+int barDate = year(time) * 10000 + month(time) * 100 + dayofmonth(time)
+pcrAt(int d) =>
+    float v = na
+    for i = 0 to array.size(pcrDates) - 1
+        if array.get(pcrDates, i) <= d
+            v := array.get(pcrVals, i)
+        else
+            break
+    v
+float pcr = pcrAt(barDate)
+float paneHi = ta.highest(idxH, 20)
+float paneLo = ta.lowest(idxL, 20)
+float paneRange = math.max(paneHi - paneLo, 1)
+float pcrClamped = math.min(math.max(nz(pcr, 0), 0), 2)
+float pcrPlot = paneLo + pcrClamped / 2.0 * paneRange * 0.2
+float pcrOne = paneLo + 0.5 * paneRange * 0.2
+color pcrCol = na(pcr) ? na : pcr > 1 ? color.new(#f23645, 0) : color.new(#089981, 0)
+plot(pcrPlot, title="PCR", style=plot.style_histogram, color=pcrCol, linewidth=3)
+plot(pcrOne, title="PCR 1.0", color=color.new(#787b86, 0), linewidth=1, style=plot.style_linebr)
 // --- 13. wall labels on the last bar (right of the bar, in the empty space) ---
 var label lbCW = na
 var label lbPW = na
@@ -336,38 +290,26 @@ if barstate.islast
 
 // --- 14. readout table (live values) ---
 string tfName = timeframe.isdaily ? "daily" : timeframe.isweekly ? "weekly" : timeframe.ismonthly ? "monthly" : "intraday"
-var table tb = table.new(position.top_right, 2, 13, border_width=1)
+var table tb = table.new(position.top_right, 2, 7, border_width=1)
 if barstate.islast
     table.cell(tb, 0, 0, "Board index", text_color=color.white, text_size=size.small)
     table.cell(tb, 1, 0, "close " + str.tostring(idxC, "#.##"), text_color=color.white, text_size=size.small)
-    table.cell(tb, 0, 1, "EMA8 " + tfName, text_color=color.white, text_size=size.small)
-    table.cell(tb, 1, 1, str.tostring(emaD, "#.##"), text_color=color.white, text_size=size.small)
-    table.cell(tb, 0, 2, "EMA8 weekly", text_color=color.white, text_size=size.small)
-    table.cell(tb, 1, 2, str.tostring(eW, "#.##"), text_color=color.white, text_size=size.small)
-    table.cell(tb, 0, 3, "EMA8 monthly", text_color=color.white, text_size=size.small)
-    table.cell(tb, 1, 3, str.tostring(eM, "#.##"), text_color=color.white, text_size=size.small)
-    table.cell(tb, 0, 4, "Jays tier", text_color=color.white, text_size=size.small)
-    table.cell(tb, 1, 4, "Tier " + str.tostring(tier) + "  (W>M:" + (leg1 ? "Y" : "n") + " D>W:" + (leg2 ? "Y" : "n") + " Px>D:" + (leg3 ? "Y" : "n") + ")", text_color=color.white, text_size=size.small)
-    table.cell(tb, 0, 5, "PW / Flip", text_color=color.white, text_size=size.small)
-    table.cell(tb, 1, 5, "85.82 / 82.97", text_color=color.white, text_size=size.small)
-    table.cell(tb, 0, 6, "MP / CW", text_color=color.white, text_size=size.small)
-    table.cell(tb, 1, 6, "87.61 / 93.40", text_color=color.white, text_size=size.small)
-    table.cell(tb, 0, 7, "Walls as of", text_color=color.white, text_size=size.small)
-    table.cell(tb, 1, 7, "2026-11-11 (anchor 86.49)", text_color=color.white, text_size=size.small)
-    table.cell(tb, 0, 8, "Gamma regime", text_color=color.white, text_size=size.small)
-    table.cell(tb, 1, 8, (idxC > flip ? "POSITIVE" : "NEGATIVE") + " (close vs flip)", text_color=color.white, text_size=size.small)
-    table.cell(tb, 0, 9, "BBMC 60", text_color=color.white, text_size=size.small)
-    table.cell(tb, 1, 9, na(bbmc) ? "n/a (<60 bars)" : str.tostring(bbmc, "#.##") + " · " + (idxC > upperK ? "ABOVE band" : idxC < lowerK ? "BELOW band" : "inside band"), text_color=color.white, text_size=size.small)
-    table.cell(tb, 0, 10, "Trend " + tfName, text_color=color.white, text_size=size.small)
-    table.cell(tb, 1, 10, na(trD) ? "n/a" : str.tostring(trD, "#.##") + " · " + (trD > trD[1] ? "rising" : "falling"), text_color=color.white, text_size=size.small)
-    table.cell(tb, 0, 11, "Trend weekly", text_color=color.white, text_size=size.small)
-    table.cell(tb, 1, 11, na(trW) ? "n/a" : str.tostring(trW, "#.##") + " · " + (wRising ? "rising" : "falling"), text_color=color.white, text_size=size.small)
-    table.cell(tb, 0, 12, "Trend monthly", text_color=color.white, text_size=size.small)
-    table.cell(tb, 1, 12, na(trM) ? "n/a" : str.tostring(trM, "#.##") + " · " + (mRising ? "rising" : "falling"), text_color=color.white, text_size=size.small)
+    table.cell(tb, 0, 1, "PW / Flip", text_color=color.white, text_size=size.small)
+    table.cell(tb, 1, 1, "85.82 / 82.97", text_color=color.white, text_size=size.small)
+    table.cell(tb, 0, 2, "MP / CW", text_color=color.white, text_size=size.small)
+    table.cell(tb, 1, 2, "87.61 / 93.40", text_color=color.white, text_size=size.small)
+    table.cell(tb, 0, 3, "Walls as of", text_color=color.white, text_size=size.small)
+    table.cell(tb, 1, 3, "2026-11-11 (anchor 86.49)", text_color=color.white, text_size=size.small)
+    table.cell(tb, 0, 4, "Gamma regime", text_color=color.white, text_size=size.small)
+    table.cell(tb, 1, 4, (idxC > flip ? "POSITIVE" : "NEGATIVE") + " (close vs flip)", text_color=color.white, text_size=size.small)
+    table.cell(tb, 0, 5, "BBMC 60", text_color=color.white, text_size=size.small)
+    table.cell(tb, 1, 5, na(bbmc) ? "n/a (<60 bars)" : str.tostring(bbmc, "#.##") + " · " + (idxC > upperK ? "ABOVE band" : idxC < lowerK ? "BELOW band" : "inside band"), text_color=color.white, text_size=size.small)
+    table.cell(tb, 0, 6, "PCR", text_color=color.white, text_size=size.small)
+    table.cell(tb, 1, 6, na(pcr) ? "n/a" : str.tostring(pcr, "#.##") + (pcr > 1 ? " put-heavy" : " call-heavy"), text_color=color.white, text_size=size.small)
 
 // --- 15. history guard (chain never anchored = chart starts after the base date) ---
 var label nohist = na
 if barstate.islast and na(idxC)
     label.delete(nohist)
-    nohist := label.new(bar_index, high, "No index data — index starts 2026-10-14 (20 candles)", xloc=xloc.bar_index, style=label.style_label_down, color=color.new(#f23645, 0), textcolor=color.white, size=size.normal)
+    nohist := label.new(bar_index, high, "No index data — chart needs history back to 2026-10-14", xloc=xloc.bar_index, style=label.style_label_down, color=color.new(#f23645, 0), textcolor=color.white, size=size.normal)
 
