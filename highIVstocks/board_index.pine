@@ -250,7 +250,52 @@ pU = plot(upperK, title="BBMC upper", color=color.new(#2962ff, 0), linewidth=1, 
 pL = plot(lowerK, title="BBMC lower", color=color.new(#2962ff, 0), linewidth=1, display=display.pane)
 fill(pU, pL, color=color.new(#2962ff, 90))
 
-// --- 10. aggregate gamma walls (baked, refresh daily) ---
+// --- 10. Jays trend lines (Hull-8 per timeframe), green when rising, red when falling ---
+// Trend = Hull WMA length 8 (jay_backtest.py primary); trend start = EMA crosses above trend.
+// Weekly/monthly use completed periods only (like the backtest); direction persists through the period.
+float trD = ma(idxC, 8)
+// WMA of n elements in arr ending `off` before the last (off=0 = last n); partial windows OK.
+wmaArrOff(float[] arr, int n, int off) =>
+    int sz = array.size(arr)
+    int m = math.max(0, math.min(n, sz - off))
+    float s = 0.0
+    float wsum = 0.0
+    for i = 0 to m - 1
+        float v = array.get(arr, sz - 1 - off - i)
+        float w = m - i
+        s += v * w
+        wsum += w
+    s / wsum
+// Hull-8 from an array of closes (needs the last 10 for the full WMA3; partial windows OK).
+hullArr(float[] arr) =>
+    float i0 = 2 * wmaArrOff(arr, 4, 0) - wmaArrOff(arr, 8, 0)
+    float i1 = 2 * wmaArrOff(arr, 4, 1) - wmaArrOff(arr, 8, 1)
+    float i2 = 2 * wmaArrOff(arr, 4, 2) - wmaArrOff(arr, 8, 2)
+    (i0 * 3 + i1 * 2 + i2 * 1) / 6
+var float[] wkCloses = array.new_float()
+if timeframe.change("W") and not na(idxC[1])
+    array.push(wkCloses, idxC[1])
+    if array.size(wkCloses) > 12
+        array.shift(wkCloses)
+float trW = hullArr(wkCloses)
+var float[] moCloses = array.new_float()
+if timeframe.change("M") and not na(idxC[1])
+    array.push(moCloses, idxC[1])
+    if array.size(moCloses) > 12
+        array.shift(moCloses)
+float trM = hullArr(moCloses)
+// Direction persists through the period (step functions only change at boundaries).
+var bool wRising = false
+var bool mRising = false
+if not na(trW) and not na(trW[1]) and trW != trW[1]
+    wRising := trW > trW[1]
+if not na(trM) and not na(trM[1]) and trM != trM[1]
+    mRising := trM > trM[1]
+plot(trD, title="Trend chart", color=trD > trD[1] ? color.new(#089981, 0) : color.new(#f23645, 0), linewidth=2, display=display.pane)
+plot(trW, title="Trend weekly", color=wRising ? color.new(#089981, 0) : color.new(#f23645, 0), linewidth=2, display=display.pane)
+plot(trM, title="Trend monthly", color=mRising ? color.new(#089981, 0) : color.new(#f23645, 0), linewidth=2, display=display.pane)
+
+// --- 11. aggregate gamma walls (baked, refresh daily) ---
 float pw   = 536.17
 float flip = 518.35
 float mp   = 547.35
@@ -260,13 +305,13 @@ plot(pw,   title="PW",   color=color.new(#f23645, 0), linewidth=1, display=displ
 plot(flip, title="Flip", color=color.new(#ff9800, 0), linewidth=1, display=display.pane)
 plot(mp,   title="MP",   color=color.new(#787b86, 0), linewidth=1, display=display.pane)
 
-// --- 11. Jays tier for the index (same three legs as strength_rank.py; on the daily chart this is the framework tier) ---
+// --- 12. Jays tier for the index (same three legs as strength_rank.py; on the daily chart this is the framework tier) ---
 bool leg1 = not na(eW) and not na(eM) and eW > eM
 bool leg2 = not na(emaD) and not na(eW) and emaD > eW
 bool leg3 = not na(idxC) and not na(emaD) and idxC > emaD
 int tier = (leg1 ? 4 : 0) + (leg2 ? 2 : 0) + (leg3 ? 1 : 0)
 
-// --- 12. wall labels on the last bar ---
+// --- 13. wall labels on the last bar (right of the bar, in the empty space) ---
 var label lbCW = na
 var label lbPW = na
 var label lbFL = na
@@ -276,14 +321,14 @@ if barstate.islast
     label.delete(lbPW)
     label.delete(lbFL)
     label.delete(lbMP)
-    lbCW := label.new(bar_index, cw,   "CW 583.56",   xloc=xloc.bar_index, style=label.style_label_left, color=color.new(#089981, 0), textcolor=color.white, size=size.small)
-    lbPW := label.new(bar_index, pw,   "PW 536.17",   xloc=xloc.bar_index, style=label.style_label_left, color=color.new(#f23645, 0), textcolor=color.white, size=size.small)
-    lbFL := label.new(bar_index, flip, "FLIP 518.35", xloc=xloc.bar_index, style=label.style_label_left, color=color.new(#ff9800, 0), textcolor=color.white, size=size.small)
-    lbMP := label.new(bar_index, mp,   "MP 547.35",   xloc=xloc.bar_index, style=label.style_label_left, color=color.new(#787b86, 0), textcolor=color.white, size=size.small)
+    lbCW := label.new(bar_index, cw,   "CW 583.56",   xloc=xloc.bar_index, style=label.style_label_right, color=color.new(#089981, 0), textcolor=color.white, size=size.small)
+    lbPW := label.new(bar_index, pw,   "PW 536.17",   xloc=xloc.bar_index, style=label.style_label_right, color=color.new(#f23645, 0), textcolor=color.white, size=size.small)
+    lbFL := label.new(bar_index, flip, "FLIP 518.35", xloc=xloc.bar_index, style=label.style_label_right, color=color.new(#ff9800, 0), textcolor=color.white, size=size.small)
+    lbMP := label.new(bar_index, mp,   "MP 547.35",   xloc=xloc.bar_index, style=label.style_label_right, color=color.new(#787b86, 0), textcolor=color.white, size=size.small)
 
-// --- 13. readout table (live values) ---
+// --- 14. readout table (live values) ---
 string tfName = timeframe.isdaily ? "daily" : timeframe.isweekly ? "weekly" : timeframe.ismonthly ? "monthly" : "intraday"
-var table tb = table.new(position.top_right, 2, 10, border_width=1)
+var table tb = table.new(position.top_right, 2, 13, border_width=1)
 if barstate.islast
     table.cell(tb, 0, 0, "Board index", text_color=color.white, text_size=size.small)
     table.cell(tb, 1, 0, "close " + str.tostring(idxC, "#.##"), text_color=color.white, text_size=size.small)
@@ -305,8 +350,14 @@ if barstate.islast
     table.cell(tb, 1, 8, (idxC > flip ? "POSITIVE" : "NEGATIVE") + " (close vs flip)", text_color=color.white, text_size=size.small)
     table.cell(tb, 0, 9, "BBMC 60", text_color=color.white, text_size=size.small)
     table.cell(tb, 1, 9, na(bbmc) ? "n/a (<60 bars)" : str.tostring(bbmc, "#.##") + " · " + (idxC > upperK ? "ABOVE band" : idxC < lowerK ? "BELOW band" : "inside band"), text_color=color.white, text_size=size.small)
+    table.cell(tb, 0, 10, "Trend " + tfName, text_color=color.white, text_size=size.small)
+    table.cell(tb, 1, 10, na(trD) ? "n/a" : str.tostring(trD, "#.##") + " · " + (trD > trD[1] ? "rising" : "falling"), text_color=color.white, text_size=size.small)
+    table.cell(tb, 0, 11, "Trend weekly", text_color=color.white, text_size=size.small)
+    table.cell(tb, 1, 11, na(trW) ? "n/a" : str.tostring(trW, "#.##") + " · " + (wRising ? "rising" : "falling"), text_color=color.white, text_size=size.small)
+    table.cell(tb, 0, 12, "Trend monthly", text_color=color.white, text_size=size.small)
+    table.cell(tb, 1, 12, na(trM) ? "n/a" : str.tostring(trM, "#.##") + " · " + (mRising ? "rising" : "falling"), text_color=color.white, text_size=size.small)
 
-// --- 14. history guard (chain never anchored = chart starts after the base date) ---
+// --- 15. history guard (chain never anchored = chart starts after the base date) ---
 var label nohist = na
 if barstate.islast and na(idxC)
     label.delete(nohist)
