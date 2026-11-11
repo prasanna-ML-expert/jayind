@@ -229,11 +229,11 @@ if timeframe.change("M") and not na(idxC[1])
     mEmaPrev := na(mEmaPrev) ? idxC[1] : 2.0 / 9.0 * idxC[1] + 7.0 / 9.0 * mEmaPrev
 float eM = na(mEmaPrev) ? na : 2.0 / 9.0 * idxC + 7.0 / 9.0 * mEmaPrev
 
-// --- 8. EMA8 lines, green when rising, red when falling (Jays multi-TF trend) ---
-// display=display.pane: only the index candle OHLC shows beside the indicator name (EMAs/walls live in the table).
-plot(emaD, title="EMA8 chart", color=emaD > emaD[1] ? color.new(#089981, 0) : color.new(#f23645, 0), linewidth=2, display=display.pane)
-plot(eW, title="EMA8 weekly", color=eW > eW[1] ? color.new(#089981, 0) : color.new(#f23645, 0), linewidth=2, display=display.pane)
-plot(eM, title="EMA8 monthly", color=eM > eM[1] ? color.new(#089981, 0) : color.new(#f23645, 0), linewidth=2, display=display.pane)
+// --- 8. EMA8 lines, hardcoded Jays colors (monthly blue / weekly green / daily red) ---
+// display=display.pane: line draws on the chart, value hidden from the legend.
+plot(emaD, title="EMA8 chart", color=color.new(#f23645, 0), linewidth=2, display=display.pane)
+plot(eW, title="EMA8 weekly", color=color.new(#089981, 0), linewidth=2, display=display.pane)
+plot(eM, title="EMA8 monthly", color=color.new(#2962ff, 0), linewidth=2, display=display.pane)
 
 // --- 9. Jays Hull-MA-60 BBMC band (jay_indicator.py), live from the index candles ---
 // ma(src,len) = Hull-style WMA; BBMC = ma(close,60); bands = BBMC +/- 0.2 * EMA(true range,60).
