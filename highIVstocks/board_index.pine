@@ -1,5 +1,5 @@
 //@version=6
-indicator("Board Index — Jays + Gamma (Live)", shorttitle="BOARD 1111", overlay=false)
+indicator("Board Index — Jays + Gamma (Live)", shorttitle="BOARD 1111", overlay=false, max_lines_count=500)
 
 // LIVE equal-weight board index: 33 tickers (baked 2026-11-11 from hoodlist.csv), chained mean returns, base 100 @ 2026-10-14 close.
 // Candles compute live from TradingView quotes IN THE CHART'S TIMEFRAME (daily candles on daily, weekly on weekly, hourly on hourly).
@@ -236,15 +236,49 @@ pU = plot(upperK, title="BBMC upper", color=color.new(#2962ff, 0), linewidth=1, 
 pL = plot(lowerK, title="BBMC lower", color=color.new(#2962ff, 0), linewidth=1, display=display.pane)
 fill(pU, pL, color=color.new(#2962ff, 90))
 
-// --- 11. aggregate gamma walls (baked, refresh daily) ---
+// --- 11. aggregate gamma walls: daily zigzag (baked history) + MP single line ---
+// CW (green) and PW (red) are drawn as one small horizontal segment per
+// bar, at that bar's wall level - the segments step day to day, so the
+// two lines read as a zigzag upper bound (CW) and lower line (PW), ending
+// at the last bar with the latest values. Flip is the same per-day
+// segments but DOTTED (orange). MP stays a single horizontal line (gray)
+// - its daily history is not tracked in opflow_history. The latest values
+// below still feed the labels, the table, and the PCR band (fixed to PW).
 float pw   = 85.82
 float flip = 82.97
 float mp   = 87.61
 float cw   = 93.40
-plot(cw,   title="CW",   color=color.new(#089981, 0), linewidth=1, display=display.pane)
-plot(pw,   title="PW",   color=color.new(#f23645, 0), linewidth=1, display=display.pane)
-plot(flip, title="Flip", color=color.new(#ff9800, 0), linewidth=1, display=display.pane)
 plot(mp,   title="MP",   color=color.new(#787b86, 0), linewidth=1, display=display.pane)
+int[] wallDates = array.from(20261015, 20261016, 20261019, 20261020, 20261021, 20261022, 20261023, 20261026, 20261027, 20261028, 20261029, 20261030, 20261102, 20261103, 20261104, 20261105, 20261106, 20261109, 20261110, 20261111)
+float[] wallPW = array.from(97.95, 99.59, 94.13, 94.55, 93.86, 95.95, 90.28, 90.71, 89.89, 94.70, 97.12, 93.43, 89.55, 86.11, 87.80, 86.78, 78, 82.37, 86.67, 85.82)
+float[] wallCW = array.from(103.82, 105.06, 100.68, 101.36, 100.95, 101.70, 102.51, 100.89, 100.34, 102.24, 103.86, 105.96, 97.67, 95.18, 96.05, 93.78, 90.43, 92.99, 93.69, 93.40)
+float[] wallFlip = array.from(94.69, 93.84, 91.61, 91.32, 90.62, 91.45, 91.83, 90.28, 88.78, 88.46, 88.81, 90.16, 86.40, 85.35, 84.43, 84.91, 84.16, 82.02, 81.92, 82.97)
+int barDate = year(time) * 10000 + month(time) * 100 + dayofmonth(time)
+wallAt(int d, float[] vals) =>
+    float v = na
+    for i = 0 to array.size(wallDates) - 1
+        if array.get(wallDates, i) == d
+            v := array.get(vals, i)
+            break
+    v
+var line[] cwLines = array.new_line()
+var line[] pwLines = array.new_line()
+var line[] flLines = array.new_line()
+float cwDay = wallAt(barDate, wallCW)
+float pwDay = wallAt(barDate, wallPW)
+float flDay = wallAt(barDate, wallFlip)
+if not na(cwDay)
+    array.push(cwLines, line.new(bar_index, cwDay, bar_index + 1, cwDay, color=color.new(#089981, 0), width=1, style=line.style_solid))
+    if array.size(cwLines) > 100
+        line.delete(array.shift(cwLines))
+if not na(pwDay)
+    array.push(pwLines, line.new(bar_index, pwDay, bar_index + 1, pwDay, color=color.new(#f23645, 0), width=1, style=line.style_solid))
+    if array.size(pwLines) > 100
+        line.delete(array.shift(pwLines))
+if not na(flDay)
+    array.push(flLines, line.new(bar_index, flDay, bar_index + 1, flDay, color=color.new(#ff9800, 0), width=1, style=line.style_dotted))
+    if array.size(flLines) > 100
+        line.delete(array.shift(flLines))
 
 
 // --- 12. Board PCR bars at the bottom of the pane (volume-style) ---
@@ -273,7 +307,6 @@ plot(mp,   title="MP",   color=color.new(#787b86, 0), linewidth=1, display=displ
 // so a spike never leaves the band.
 int[] pcrDates = array.from(20261015, 20261016, 20261019, 20261020, 20261021, 20261022, 20261023, 20261026, 20261027, 20261028, 20261029, 20261030, 20261102, 20261103, 20261104, 20261105, 20261106, 20261109, 20261110)
 float[] pcrVals = array.from(1.06, 1.09, 0.96, 0.92, 0.86, 1.27, 1.15, 1.03, 0.89, 0.83, 1.03, 1.11, 1.12, 0.93, 0.97, 1.59, 1.12, 0.89, 0.91)
-int barDate = year(time) * 10000 + month(time) * 100 + dayofmonth(time)
 pcrAt(int d) =>
     float v = na
     for i = 0 to array.size(pcrDates) - 1
