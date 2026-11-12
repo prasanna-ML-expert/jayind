@@ -358,27 +358,28 @@ if barstate.islast
 
 // --- 14. predicted next candle (ghost candle) ---
 // From predict_board_candle.py (gamma-range + PCR + position + momentum
-// heuristic). Drawn as a proper candle at bar_index+1 (plotcandle with
-// offset=1), where tomorrow's real candle will form. Pine has no hatched
-// / striped fill, so the body is GHOSTED (50% transparent fill, solid
-// border) to mark it as a prediction, with a PRED label. It is a
-// scenario, not data - the real candle replaces it tomorrow.
+// heuristic). Drawn as a proper candle TWO bars out (plotcandle with
+// offset=2), so tomorrow the live candle forms at offset 1 and the
+// prediction sits beside it at offset 2 instead of overlapping it. Pine
+// has no hatched / striped fill, so the body is GHOSTED (50% transparent
+// fill, solid border) to mark it as a prediction, with a PRED label. It
+// is a scenario, not data - the real candle replaces it tomorrow.
 float predO = 91.41
 float predH = 94.97
 float predL = 87.85
 float predC = 88.53
 string predDate = "2026-11-12"
-float pO = barstate.islast ? predO : na
-float pH = barstate.islast ? predH : na
-float pL = barstate.islast ? predL : na
-float pC = barstate.islast ? predC : na
+float prO = barstate.islast ? predO : na
+float prH = barstate.islast ? predH : na
+float prL = barstate.islast ? predL : na
+float prC = barstate.islast ? predC : na
 color predBodyCol = predC >= predO ? color.new(#089981, 50) : color.new(#f23645, 50)
 color predBordCol = predC >= predO ? color.new(#089981, 0) : color.new(#f23645, 0)
-plotcandle(pO, pH, pL, pC, title="Predicted " + predDate, color=predBodyCol, wickcolor=predBordCol, bordercolor=predBordCol, offset=1)
+plotcandle(prO, prH, prL, prC, title="Predicted " + predDate, color=predBodyCol, wickcolor=predBordCol, bordercolor=predBordCol, offset=2)
 var label predLab = na
 if barstate.islast
     label.delete(predLab)
-    predLab := label.new(bar_index + 1, predH, "PRED " + predDate, xloc=xloc.bar_index, style=label.style_label_down, color=na, textcolor=color.new(#787b86, 0), size=size.small)
+    predLab := label.new(bar_index + 2, predH, "PRED " + predDate, xloc=xloc.bar_index, style=label.style_label_down, color=na, textcolor=color.new(#787b86, 0), size=size.small)
 
 // --- 14. readout table REMOVED (user, Nov 11 evening) ---
 // The top-right white-text table (Board index / PW-Flip / MP-CW / Walls as
