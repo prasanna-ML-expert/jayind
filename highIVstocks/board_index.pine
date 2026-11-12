@@ -356,24 +356,10 @@ if barstate.islast
     lbFL := label.new(bar_index + 2, flip, "FLIP 82.97", xloc=xloc.bar_index, style=label.style_label_left, color=na, textcolor=color.new(#29b6f6, 0), size=size.small)
     lbMP := label.new(bar_index + 2, mp,   "MP 87.61",   xloc=xloc.bar_index, style=label.style_label_left, color=na, textcolor=color.new(#787b86, 0), size=size.small)
 
-// --- 14. readout table (live values) ---
-string tfName = timeframe.isdaily ? "daily" : timeframe.isweekly ? "weekly" : timeframe.ismonthly ? "monthly" : "intraday"
-var table tb = table.new(position.top_right, 2, 7, border_width=1)
-if barstate.islast
-    table.cell(tb, 0, 0, "Board index", text_color=color.white, text_size=size.small)
-    table.cell(tb, 1, 0, "close " + str.tostring(idxC, "#.##"), text_color=color.white, text_size=size.small)
-    table.cell(tb, 0, 1, "PW / Flip", text_color=color.white, text_size=size.small)
-    table.cell(tb, 1, 1, "85.82 / 82.97", text_color=color.white, text_size=size.small)
-    table.cell(tb, 0, 2, "MP / CW", text_color=color.white, text_size=size.small)
-    table.cell(tb, 1, 2, "87.61 / 93.40", text_color=color.white, text_size=size.small)
-    table.cell(tb, 0, 3, "Walls as of", text_color=color.white, text_size=size.small)
-    table.cell(tb, 1, 3, "2026-11-11 (anchor 86.49)", text_color=color.white, text_size=size.small)
-    table.cell(tb, 0, 4, "Gamma regime", text_color=color.white, text_size=size.small)
-    table.cell(tb, 1, 4, (idxC > flip ? "POSITIVE" : "NEGATIVE") + " (close vs flip)", text_color=color.white, text_size=size.small)
-    table.cell(tb, 0, 5, "BBMC 60", text_color=color.white, text_size=size.small)
-    table.cell(tb, 1, 5, na(bbmc) ? "n/a (<60 bars)" : str.tostring(bbmc, "#.##") + " · " + (idxC > upperK ? "ABOVE band" : idxC < lowerK ? "BELOW band" : "inside band"), text_color=color.white, text_size=size.small)
-    table.cell(tb, 0, 6, "PCR", text_color=color.white, text_size=size.small)
-    table.cell(tb, 1, 6, na(pcr) ? "n/a" : str.tostring(pcr, "#.##") + " (" + str.tostring(pcrMult, "#") + ")" + (pcr > 1 ? " put-heavy" : " call-heavy"), text_color=color.white, text_size=size.small)
+// --- 14. readout table REMOVED (user, Nov 11 evening) ---
+// The top-right white-text table (Board index / PW-Flip / MP-CW / Walls as
+// of / Gamma regime / BBMC 60 / PCR) blurred the candles where it overlapped
+// them. Values still live in the legend (PCR), the wall labels, and the page.
 
 // --- 15. history guard (chain never anchored = chart starts after the base date) ---
 var label nohist = na
