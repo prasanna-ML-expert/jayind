@@ -293,7 +293,8 @@ if not na(pcr) and not na(pcrPlot)
     array.push(pcrLines, ln)
     if array.size(pcrLines) > 60
         line.delete(array.shift(pcrLines))
-plot(pcrFifty, title="PCR 50 (=1.0)", color=color.new(#787b86, 0), linewidth=1, style=plot.style_linebr)
+plot(pcr, title="PCR", color=pcrCol, display=display.status_line)
+plot(pcrFifty, title="PCR 50 (=1.0)", color=color.new(#787b86, 0), linewidth=1, style=plot.style_linebr, display=display.pane)
 // --- 13. wall labels on the last bar (right of the bar, in the empty space) ---
 var label lbCW = na
 var label lbPW = na
