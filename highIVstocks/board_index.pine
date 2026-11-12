@@ -305,10 +305,10 @@ if barstate.islast
     label.delete(lbPW)
     label.delete(lbFL)
     label.delete(lbMP)
-    lbCW := label.new(bar_index + 2, cw,   "CW 93.40",   xloc=xloc.bar_index, style=label.style_label_left, color=color.new(#089981, 0), textcolor=color.white, size=size.small)
-    lbPW := label.new(bar_index + 2, pw,   "PW 85.82",   xloc=xloc.bar_index, style=label.style_label_left, color=color.new(#f23645, 0), textcolor=color.white, size=size.small)
-    lbFL := label.new(bar_index + 2, flip, "FLIP 82.97", xloc=xloc.bar_index, style=label.style_label_left, color=color.new(#ff9800, 0), textcolor=color.white, size=size.small)
-    lbMP := label.new(bar_index + 2, mp,   "MP 87.61",   xloc=xloc.bar_index, style=label.style_label_left, color=color.new(#787b86, 0), textcolor=color.white, size=size.small)
+    lbCW := label.new(bar_index + 2, cw,   "CW 93.40",   xloc=xloc.bar_index, style=label.style_label_left, color=na, textcolor=color.new(#089981, 0), size=size.small)
+    lbPW := label.new(bar_index + 2, pw,   "PW 85.82",   xloc=xloc.bar_index, style=label.style_label_left, color=na, textcolor=color.new(#f23645, 0), size=size.small)
+    lbFL := label.new(bar_index + 2, flip, "FLIP 82.97", xloc=xloc.bar_index, style=label.style_label_left, color=na, textcolor=color.new(#ff9800, 0), size=size.small)
+    lbMP := label.new(bar_index + 2, mp,   "MP 87.61",   xloc=xloc.bar_index, style=label.style_label_left, color=na, textcolor=color.new(#787b86, 0), size=size.small)
 
 // --- 14. readout table (live values) ---
 string tfName = timeframe.isdaily ? "daily" : timeframe.isweekly ? "weekly" : timeframe.ismonthly ? "monthly" : "intraday"
