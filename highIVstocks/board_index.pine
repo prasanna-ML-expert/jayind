@@ -250,6 +250,11 @@ fill(pU, pL, color=color.new(#2962ff, 90))
 // bars). Each bar also draws a vertical connector at its open time joining
 // the previous bar's level to this bar's, same color/style - so green
 // joins green, red joins red, dotted joins dotted, one continuous zigzag.
+// Segments are shifted ONE BAR LEFT: a day's walls are drawn from
+// time-period to time, so they sit under the PRIOR session's candle (the
+// walls are computed from that session's OI, same dating as the PCR bars).
+// The zigzag therefore ends at yesterday's candle; the labels at the right
+// still carry the latest (updated) values.
 float pw   = 85.82
 float flip = 82.97
 float mp   = 87.61
@@ -278,23 +283,23 @@ float cwDay = wallAt(barDate, wallCW)
 float pwDay = wallAt(barDate, wallPW)
 float flDay = wallAt(barDate, wallFlip)
 if not na(cwDay)
-    array.push(cwLines, line.new(time, cwDay, time + periodMs, cwDay, xloc=xloc.bar_time, color=color.new(#089981, 0), width=1, style=line.style_solid))
+    array.push(cwLines, line.new(time - periodMs, cwDay, time, cwDay, xloc=xloc.bar_time, color=color.new(#089981, 0), width=1, style=line.style_solid))
     if not na(prevCW)
-        array.push(cwLines, line.new(time, prevCW, time, cwDay, xloc=xloc.bar_time, color=color.new(#089981, 0), width=1, style=line.style_solid))
+        array.push(cwLines, line.new(time - periodMs, prevCW, time - periodMs, cwDay, xloc=xloc.bar_time, color=color.new(#089981, 0), width=1, style=line.style_solid))
     if array.size(cwLines) > 130
         line.delete(array.shift(cwLines))
     prevCW := cwDay
 if not na(pwDay)
-    array.push(pwLines, line.new(time, pwDay, time + periodMs, pwDay, xloc=xloc.bar_time, color=color.new(#f23645, 0), width=1, style=line.style_solid))
+    array.push(pwLines, line.new(time - periodMs, pwDay, time, pwDay, xloc=xloc.bar_time, color=color.new(#f23645, 0), width=1, style=line.style_solid))
     if not na(prevPW)
-        array.push(pwLines, line.new(time, prevPW, time, pwDay, xloc=xloc.bar_time, color=color.new(#f23645, 0), width=1, style=line.style_solid))
+        array.push(pwLines, line.new(time - periodMs, prevPW, time - periodMs, pwDay, xloc=xloc.bar_time, color=color.new(#f23645, 0), width=1, style=line.style_solid))
     if array.size(pwLines) > 130
         line.delete(array.shift(pwLines))
     prevPW := pwDay
 if not na(flDay)
-    array.push(flLines, line.new(time, flDay, time + periodMs, flDay, xloc=xloc.bar_time, color=color.new(#ff9800, 0), width=1, style=line.style_dotted))
+    array.push(flLines, line.new(time - periodMs, flDay, time, flDay, xloc=xloc.bar_time, color=color.new(#ff9800, 0), width=1, style=line.style_dotted))
     if not na(prevFL)
-        array.push(flLines, line.new(time, prevFL, time, flDay, xloc=xloc.bar_time, color=color.new(#ff9800, 0), width=1, style=line.style_dotted))
+        array.push(flLines, line.new(time - periodMs, prevFL, time - periodMs, flDay, xloc=xloc.bar_time, color=color.new(#ff9800, 0), width=1, style=line.style_dotted))
     if array.size(flLines) > 130
         line.delete(array.shift(flLines))
     prevFL := flDay
