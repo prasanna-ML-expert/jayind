@@ -257,7 +257,11 @@ float pw   = 85.82
 float flip = 82.97
 float mp   = 87.61
 float cw   = 93.40
-plot(mp,   title="MP",   color=color.new(#787b86, 0), linewidth=1, display=display.pane)
+// MP is a dotted segment on the latest candle only (not a full-width line).
+var line mpLine = na
+if barstate.islast and not na(time[1])
+    line.delete(mpLine)
+    mpLine := line.new(time, mp, time + (time - time[1]), mp, xloc=xloc.bar_time, color=color.new(#787b86, 0), width=1, style=line.style_dotted)
 int[] wallDates = array.from(20261015, 20261016, 20261019, 20261020, 20261021, 20261022, 20261023, 20261026, 20261027, 20261028, 20261029, 20261030, 20261102, 20261103, 20261104, 20261105, 20261106, 20261109, 20261110, 20261111)
 float[] wallPW = array.from(97.95, 99.59, 94.13, 94.55, 93.86, 95.95, 90.28, 90.71, 89.89, 94.70, 97.12, 93.43, 89.55, 86.11, 87.80, 86.78, 78, 82.37, 86.67, 85.82)
 float[] wallCW = array.from(103.82, 105.06, 100.68, 101.36, 100.95, 101.70, 102.51, 100.89, 100.34, 102.24, 103.86, 105.96, 97.67, 95.18, 96.05, 93.78, 90.43, 92.99, 93.69, 93.40)
