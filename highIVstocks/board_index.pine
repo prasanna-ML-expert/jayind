@@ -337,10 +337,13 @@ if not na(pcr) and not na(pcrPlot)
         line.delete(array.shift(pcrLines))
 plot(pcr, title="PCR", color=pcrCol, display=display.status_line)
 // 50 line (= PCR 1.0) as a dotted line across the chart (plot has no dotted style).
+// Start anchored at most 1249 bars back, NOT bar 0: Pine caps a line's reach at 1250 bars,
+// so anchoring at bar 0 throws 'offset beyond historical limit 1250' once the chart grows past
+// 1250 bars (daily hit it at the Nov 12 open; any intraday timeframe has far more bars).
 var line fiftyLine = na
 if barstate.islast
     line.delete(fiftyLine)
-    fiftyLine := line.new(0, pcrFifty, bar_index, pcrFifty, xloc=xloc.bar_index, color=color.new(#787b86, 0), width=1, style=line.style_dotted)
+    fiftyLine := line.new(math.max(0, bar_index - 1249), pcrFifty, bar_index, pcrFifty, xloc=xloc.bar_index, color=color.new(#787b86, 0), width=1, style=line.style_dotted)
 // --- 13. wall labels on the last bar (right of the bar, in the empty space) ---
 var label lbCW = na
 var label lbPW = na
