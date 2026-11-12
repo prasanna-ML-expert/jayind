@@ -251,12 +251,14 @@ plot(mp,   title="MP",   color=color.new(#787b86, 0), linewidth=1, display=displ
 // PCR is a gamma-job value (prior session OI), baked daily with the walls.
 // Looked up by bar date (last known on or before the bar). Redrawn clean
 // on a 0-100 scale: PCR 1.0 = 50, extrapolated linearly (scaled = PCR x 50).
-// The 0-100 scale maps to the bottom 30% of the pane, so 50 sits mid-band.
-// Bars are drawn as BOXES diverging from the 50 line (not a histogram - a
-// histogram draws from 0, which dragged the pane scale down to 0 and made
-// every bar look ~80 tall). Red bars rise above 50 when put-heavy (PCR > 1),
-// green bars hang below 50 when call-heavy (PCR < 1). No PCR line plot - it
-// sat on the candles. PCR is clamped to 2.0 (scaled 100) so a spike never leaves the band.
+// The band is FIXED to the put wall (PW - 8 to PW + 6, 50 line at PW - 1),
+// so the 50 line is a straight horizontal reference and every bar aligns
+// to it. (The earlier version tied the band to a 20-bar pane range that
+// changed on every bar, so the 50 line wiggled up and down and the bars
+// scattered.) Red boxes rise above 50 when put-heavy (PCR > 1), green
+// boxes hang below 50 when call-heavy (PCR < 1). Bars are BOXES, not a
+// histogram (a histogram draws from 0 and drags the pane scale to 0).
+// PCR is clamped to 2.0 (scaled 100) so a spike never leaves the band.
 int[] pcrDates = array.from(20261015, 20261016, 20261019, 20261020, 20261021, 20261022, 20261023, 20261026, 20261027, 20261028, 20261029, 20261030, 20261102, 20261103, 20261104, 20261105, 20261106, 20261109, 20261110, 20261111)
 float[] pcrVals = array.from(1.03, 1.06, 1.09, 0.96, 0.92, 0.86, 1.27, 1.15, 1.03, 0.89, 0.83, 1.03, 1.11, 1.12, 0.93, 0.97, 1.59, 1.12, 0.89, 0.91)
 int barDate = year(time) * 10000 + month(time) * 100 + dayofmonth(time)
@@ -270,11 +272,9 @@ pcrAt(int d) =>
     v
 float pcr = pcrAt(barDate)
 float pcrScaled = math.min(math.max(nz(pcr, 1) * 50, 0), 100)
-float paneHi = ta.highest(idxH, 20)
-float paneLo = ta.lowest(idxL, 20)
-float paneRange = math.max(paneHi - paneLo, 1)
-float pcrPlot = paneLo + pcrScaled / 100 * paneRange * 0.3
-float pcrFifty = paneLo + 0.5 * paneRange * 0.3
+float pcrBandLo = pw - 8
+float pcrFifty = pcrBandLo + 7
+float pcrPlot = pcrBandLo + pcrScaled / 100 * 14
 color pcrCol = na(pcr) ? na : pcr > 1 ? color.new(#f23645, 0) : color.new(#089981, 0)
 var box[] pcrBoxes = array.new_box()
 if not na(pcr) and not na(pcrPlot) and not na(pcrFifty)
