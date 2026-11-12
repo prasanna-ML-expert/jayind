@@ -356,27 +356,28 @@ if barstate.islast
     lbFL := label.new(bar_index + 2, flip, "FLIP 82.97", xloc=xloc.bar_index, style=label.style_label_left, color=na, textcolor=color.new(#29b6f6, 0), size=size.small)
     lbMP := label.new(bar_index + 2, mp,   "MP 87.61",   xloc=xloc.bar_index, style=label.style_label_left, color=na, textcolor=color.new(#787b86, 0), size=size.small)
 
-// --- 14. predicted next candle (dotted) ---
+// --- 14. predicted next candle (ghost candle) ---
 // From predict_board_candle.py (gamma-range + PCR + position + momentum
-// heuristic). Drawn at bar_index+1, where tomorrow's real candle will
-// form. Dotted wick (low-high) + thick dotted body (open-close, green if
-// the predicted close is above the open, red if below) + PRED label. It
-// is a scenario, not data - the real candle replaces it tomorrow.
+// heuristic). Drawn as a proper candle at bar_index+1 (plotcandle with
+// offset=1), where tomorrow's real candle will form. Pine has no hatched
+// / striped fill, so the body is GHOSTED (50% transparent fill, solid
+// border) to mark it as a prediction, with a PRED label. It is a
+// scenario, not data - the real candle replaces it tomorrow.
 float predO = 91.41
 float predH = 94.97
 float predL = 87.85
 float predC = 88.53
 string predDate = "2026-11-12"
-var line predWick = na
-var line predBody = na
+float pO = barstate.islast ? predO : na
+float pH = barstate.islast ? predH : na
+float pL = barstate.islast ? predL : na
+float pC = barstate.islast ? predC : na
+color predBodyCol = predC >= predO ? color.new(#089981, 50) : color.new(#f23645, 50)
+color predBordCol = predC >= predO ? color.new(#089981, 0) : color.new(#f23645, 0)
+plotcandle(pO, pH, pL, pC, title="Predicted " + predDate, color=predBodyCol, wickcolor=predBordCol, bordercolor=predBordCol, offset=1)
 var label predLab = na
 if barstate.islast
-    line.delete(predWick)
-    line.delete(predBody)
     label.delete(predLab)
-    color predCol = predC >= predO ? color.new(#089981, 0) : color.new(#f23645, 0)
-    predWick := line.new(bar_index + 1, predL, bar_index + 1, predH, xloc=xloc.bar_index, color=color.new(#787b86, 0), width=1, style=line.style_dotted)
-    predBody := line.new(bar_index + 1, predO, bar_index + 1, predC, xloc=xloc.bar_index, color=predCol, width=5, style=line.style_dotted)
     predLab := label.new(bar_index + 1, predH, "PRED " + predDate, xloc=xloc.bar_index, style=label.style_label_down, color=na, textcolor=color.new(#787b86, 0), size=size.small)
 
 // --- 14. readout table REMOVED (user, Nov 11 evening) ---
