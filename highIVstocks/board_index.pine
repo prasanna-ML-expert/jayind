@@ -258,16 +258,16 @@ plot(mp,   title="MP",   color=color.new(#787b86, 0), linewidth=1, display=displ
 // just below the candles, so the bars never overlap them. The 50 line is
 // a straight horizontal reference and every bar sticks to it (each bar
 // runs from the 50 line out to its value). Boxes are centered under their
-// candle: xloc.bar_time, centered on the candle's time and 80% of a bar
-// wide, so it sits cleanly under its own candle. (bar_index coordinates
-// must be int, so a fractional bar_index - 0.5 does not compile - CE10123.
-// A box from time - one bar to time is centered on the boundary between
-// two candles, so it straddles; a box from time to time + one bar sits half
-// a bar to the RIGHT. Centered on time is the alignment.) Red boxes rise
-// (PCR > 1), green boxes hang below 50 when call-heavy (PCR < 1). Bars are
-// BOXES, not a histogram (a histogram draws from 0 and drags the pane
-// scale to 0). PCR is clamped to 2.0 (scaled 100) so a spike never leaves
-// the band.
+// candle: a thick vertical LINE at the candle's own bar_index, from the 50
+// line out to the value. (box.new cannot center a bar on one candle:
+// bar_index coordinates must be int, so a fractional bar_index - 0.5 does
+// not compile - CE10123 - and xloc.bar_time snaps fractional times to whole
+// bars, so a time-centered box lands on the boundary between two candles
+// and straddles them. A vertical line at bar_index sits exactly on the
+// candle's center.) Red lines rise above 50 when put-heavy (PCR > 1),
+// green lines hang below 50 when call-heavy (PCR < 1). Lines, not boxes
+// or a histogram (a histogram draws from 0 and drags the pane scale to 0).
+// PCR is clamped to 2.0 (scaled 100) so a spike never leaves the band.
 int[] pcrDates = array.from(20261015, 20261016, 20261019, 20261020, 20261021, 20261022, 20261023, 20261026, 20261027, 20261028, 20261029, 20261030, 20261102, 20261103, 20261104, 20261105, 20261106, 20261109, 20261110)
 float[] pcrVals = array.from(1.06, 1.09, 0.96, 0.92, 0.86, 1.27, 1.15, 1.03, 0.89, 0.83, 1.03, 1.11, 1.12, 0.93, 0.97, 1.59, 1.12, 0.89, 0.91)
 int barDate = year(time) * 10000 + month(time) * 100 + dayofmonth(time)
@@ -284,14 +284,14 @@ float pcrBandLo = pw - 26
 float pcrFifty = pcrBandLo + 7
 float pcrPlot = pcrBandLo + pcrScaled / 100 * 14
 color pcrCol = na(pcr) ? na : pcr > 1 ? color.new(#f23645, 0) : color.new(#089981, 0)
-var box[] pcrBoxes = array.new_box()
+var line[] pcrLines = array.new_line()
 if not na(pcr) and not na(pcrPlot) and not na(pcrFifty)
     float bTop = math.max(pcrPlot, pcrFifty)
     float bBot = math.min(pcrPlot, pcrFifty)
-    box b = box.new(time - timeframe.in_seconds() * 400, bTop, time + timeframe.in_seconds() * 400, bBot, xloc=xloc.bar_time, bgcolor=pcrCol, border_color=na)
-    array.push(pcrBoxes, b)
-    if array.size(pcrBoxes) > 60
-        box.delete(array.shift(pcrBoxes))
+    line ln = line.new(bar_index, bTop, bar_index, bBot, color=pcrCol, width=4)
+    array.push(pcrLines, ln)
+    if array.size(pcrLines) > 60
+        line.delete(array.shift(pcrLines))
 plot(pcrFifty, title="PCR 50 (=1.0)", color=color.new(#787b86, 0), linewidth=1, style=plot.style_linebr)
 // --- 13. wall labels on the last bar (right of the bar, in the empty space) ---
 var label lbCW = na
