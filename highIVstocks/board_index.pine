@@ -249,12 +249,12 @@ plot(mp,   title="MP",   color=color.new(#787b86, 0), linewidth=1, display=displ
 
 // --- 12. Board PCR histogram at the bottom of the pane (volume-style) ---
 // PCR is a gamma-job value (prior session OI), baked daily with the walls.
-// Looked up by bar date (last known on or before the bar). Scaled so highs
-// and lows are easy to compare: PCR 0.5-2.0 maps to the bottom 35% of the
-// pane (a fixed 0.5-2.0 window, not 0-2, so the observed 0.83-1.59 spread
-// fills the band instead of clustering near the floor). A line joins the
-// bar tops so the shape reads at a glance. Red = put-heavy (PCR > 1),
-// green = call-heavy (PCR < 1); dashed line = PCR 1.0.
+// Looked up by bar date (last known on or before the bar). Redrawn clean
+// on a 0-100 scale: PCR 1.0 = 50, extrapolated linearly (scaled = PCR x 50).
+// The 0-100 scale maps to the bottom 30% of the pane, so 50 sits mid-band;
+// bars rise above 50 when put-heavy (PCR > 1, red) and stay below 50 when
+// call-heavy (PCR < 1, green). A line joins the bar tops. PCR is clamped
+// to 2.0 (scaled 100) so a spike never leaves the band.
 int[] pcrDates = array.from(20261015, 20261016, 20261019, 20261020, 20261021, 20261022, 20261023, 20261026, 20261027, 20261028, 20261029, 20261030, 20261102, 20261103, 20261104, 20261105, 20261106, 20261109, 20261110, 20261111)
 float[] pcrVals = array.from(1.03, 1.06, 1.09, 0.96, 0.92, 0.86, 1.27, 1.15, 1.03, 0.89, 0.83, 1.03, 1.11, 1.12, 0.93, 0.97, 1.59, 1.12, 0.89, 0.91)
 int barDate = year(time) * 10000 + month(time) * 100 + dayofmonth(time)
@@ -267,16 +267,16 @@ pcrAt(int d) =>
             break
     v
 float pcr = pcrAt(barDate)
+float pcrScaled = math.min(math.max(nz(pcr, 1) * 50, 0), 100)
 float paneHi = ta.highest(idxH, 20)
 float paneLo = ta.lowest(idxL, 20)
 float paneRange = math.max(paneHi - paneLo, 1)
-float pcrNorm = math.min(math.max((nz(pcr, 1) - 0.5) / 1.5, 0), 1)
-float pcrPlot = paneLo + pcrNorm * paneRange * 0.35
-float pcrOne = paneLo + (1.0 - 0.5) / 1.5 * paneRange * 0.35
+float pcrPlot = paneLo + pcrScaled / 100 * paneRange * 0.3
+float pcrFifty = paneLo + 0.5 * paneRange * 0.3
 color pcrCol = na(pcr) ? na : pcr > 1 ? color.new(#f23645, 0) : color.new(#089981, 0)
 plot(pcrPlot, title="PCR", style=plot.style_histogram, color=pcrCol, linewidth=4)
 plot(pcrPlot, title="PCR line", color=pcrCol, linewidth=2)
-plot(pcrOne, title="PCR 1.0", color=color.new(#787b86, 0), linewidth=1, style=plot.style_linebr)
+plot(pcrFifty, title="PCR 50 (=1.0)", color=color.new(#787b86, 0), linewidth=1, style=plot.style_linebr)
 // --- 13. wall labels on the last bar (right of the bar, in the empty space) ---
 var label lbCW = na
 var label lbPW = na
@@ -309,7 +309,7 @@ if barstate.islast
     table.cell(tb, 0, 5, "BBMC 60", text_color=color.white, text_size=size.small)
     table.cell(tb, 1, 5, na(bbmc) ? "n/a (<60 bars)" : str.tostring(bbmc, "#.##") + " · " + (idxC > upperK ? "ABOVE band" : idxC < lowerK ? "BELOW band" : "inside band"), text_color=color.white, text_size=size.small)
     table.cell(tb, 0, 6, "PCR", text_color=color.white, text_size=size.small)
-    table.cell(tb, 1, 6, na(pcr) ? "n/a" : str.tostring(pcr, "#.##") + (pcr > 1 ? " put-heavy" : " call-heavy"), text_color=color.white, text_size=size.small)
+    table.cell(tb, 1, 6, na(pcr) ? "n/a" : str.tostring(pcr, "#.##") + " (" + str.tostring(pcrScaled, "#") + ")" + (pcr > 1 ? " put-heavy" : " call-heavy"), text_color=color.white, text_size=size.small)
 
 // --- 15. history guard (chain never anchored = chart starts after the base date) ---
 var label nohist = na
