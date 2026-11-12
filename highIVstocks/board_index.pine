@@ -258,7 +258,9 @@ plot(mp,   title="MP",   color=color.new(#787b86, 0), linewidth=1, display=displ
 // just below the candles, so the bars never overlap them. The 50 line is
 // a straight horizontal reference and every bar sticks to it (each bar
 // runs from the 50 line out to its value). Boxes are centered under their
-// candle (bar_index - 0.5 to + 0.5). Red boxes rise above 50 when put-heavy
+// candle: xloc.bar_time with left=time and right=time + one bar, so the box
+// spans exactly the candle's own slot. (bar_index coordinates must be int,
+// so a fractional bar_index - 0.5 does not compile - CE10123.) Red boxes
 // (PCR > 1), green boxes hang below 50 when call-heavy (PCR < 1). Bars are
 // BOXES, not a histogram (a histogram draws from 0 and drags the pane
 // scale to 0). PCR is clamped to 2.0 (scaled 100) so a spike never leaves
@@ -283,7 +285,7 @@ var box[] pcrBoxes = array.new_box()
 if not na(pcr) and not na(pcrPlot) and not na(pcrFifty)
     float bTop = math.max(pcrPlot, pcrFifty)
     float bBot = math.min(pcrPlot, pcrFifty)
-    box b = box.new(bar_index - 0.5, bTop, bar_index + 0.5, bBot, bgcolor=pcrCol, border_color=na)
+    box b = box.new(time, bTop, time + timeframe.in_seconds() * 1000, bBot, xloc=xloc.bar_time, bgcolor=pcrCol, border_color=na)
     array.push(pcrBoxes, b)
     if array.size(pcrBoxes) > 60
         box.delete(array.shift(pcrBoxes))
