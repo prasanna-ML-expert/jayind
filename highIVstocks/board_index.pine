@@ -249,31 +249,33 @@ plot(mp,   title="MP",   color=color.new(#787b86, 0), linewidth=1, display=displ
 
 // --- 12. Board PCR bars at the bottom of the pane (volume-style) ---
 // PCR is a gamma-job value (prior session OI), baked daily with the walls.
-// Looked up by bar date (last known on or before the bar). Redrawn clean
+// The value filed under a morning's date measures the PREVIOUS session,
+// so each value is baked under the previous trading day's date and the
+// bar plots exactly under that session's candle (exact-date match, no
+// carry-forward - the current partial day has no bar yet). Redrawn clean
 // on a 0-100 scale: PCR 1.0 = 50, extrapolated linearly (scaled = PCR x 50).
-// The band is FIXED to the put wall (PW - 29 to PW - 15, 50 line at PW - 22),
-// well below the candles, so the bars never overlap them. The 50 line is
+// The band is FIXED to the put wall (PW - 26 to PW - 12, 50 line at PW - 19),
+// just below the candles, so the bars never overlap them. The 50 line is
 // a straight horizontal reference and every bar sticks to it (each bar
-// runs from the 50 line out to its value). (The earlier band sat at PW - 8
-// to PW + 6, inside the candle range, so the bars interfered with the
-// candles.) Red boxes rise above 50 when put-heavy (PCR > 1), green
-// boxes hang below 50 when call-heavy (PCR < 1). Bars are BOXES, not a
-// histogram (a histogram draws from 0 and drags the pane scale to 0).
-// PCR is clamped to 2.0 (scaled 100) so a spike never leaves the band.
-int[] pcrDates = array.from(20261015, 20261016, 20261019, 20261020, 20261021, 20261022, 20261023, 20261026, 20261027, 20261028, 20261029, 20261030, 20261102, 20261103, 20261104, 20261105, 20261106, 20261109, 20261110, 20261111)
-float[] pcrVals = array.from(1.03, 1.06, 1.09, 0.96, 0.92, 0.86, 1.27, 1.15, 1.03, 0.89, 0.83, 1.03, 1.11, 1.12, 0.93, 0.97, 1.59, 1.12, 0.89, 0.91)
+// runs from the 50 line out to its value). Boxes are centered under their
+// candle (bar_index - 0.5 to + 0.5). Red boxes rise above 50 when put-heavy
+// (PCR > 1), green boxes hang below 50 when call-heavy (PCR < 1). Bars are
+// BOXES, not a histogram (a histogram draws from 0 and drags the pane
+// scale to 0). PCR is clamped to 2.0 (scaled 100) so a spike never leaves
+// the band.
+int[] pcrDates = array.from(20261015, 20261016, 20261019, 20261020, 20261021, 20261022, 20261023, 20261026, 20261027, 20261028, 20261029, 20261030, 20261102, 20261103, 20261104, 20261105, 20261106, 20261109, 20261110)
+float[] pcrVals = array.from(1.06, 1.09, 0.96, 0.92, 0.86, 1.27, 1.15, 1.03, 0.89, 0.83, 1.03, 1.11, 1.12, 0.93, 0.97, 1.59, 1.12, 0.89, 0.91)
 int barDate = year(time) * 10000 + month(time) * 100 + dayofmonth(time)
 pcrAt(int d) =>
     float v = na
     for i = 0 to array.size(pcrDates) - 1
-        if array.get(pcrDates, i) <= d
+        if array.get(pcrDates, i) == d
             v := array.get(pcrVals, i)
-        else
             break
     v
 float pcr = pcrAt(barDate)
 float pcrScaled = math.min(math.max(nz(pcr, 1) * 50, 0), 100)
-float pcrBandLo = pw - 29
+float pcrBandLo = pw - 26
 float pcrFifty = pcrBandLo + 7
 float pcrPlot = pcrBandLo + pcrScaled / 100 * 14
 color pcrCol = na(pcr) ? na : pcr > 1 ? color.new(#f23645, 0) : color.new(#089981, 0)
@@ -281,7 +283,7 @@ var box[] pcrBoxes = array.new_box()
 if not na(pcr) and not na(pcrPlot) and not na(pcrFifty)
     float bTop = math.max(pcrPlot, pcrFifty)
     float bBot = math.min(pcrPlot, pcrFifty)
-    box b = box.new(bar_index, bTop, bar_index + 1, bBot, bgcolor=pcrCol, border_color=na)
+    box b = box.new(bar_index - 0.5, bTop, bar_index + 0.5, bBot, bgcolor=pcrCol, border_color=na)
     array.push(pcrBoxes, b)
     if array.size(pcrBoxes) > 60
         box.delete(array.shift(pcrBoxes))
