@@ -231,10 +231,13 @@ float trIdx = math.max(idxH - idxL, math.max(math.abs(idxH - prevC), math.abs(id
 float rangeMa = ta.ema(trIdx, 60)
 float upperK = bbmc + 0.2 * rangeMa
 float lowerK = bbmc - 0.2 * rangeMa
-plot(bbmc, title="BBMC 60", color=color.new(#2962ff, 0), linewidth=2, display=display.pane)
-pU = plot(upperK, title="BBMC upper", color=color.new(#2962ff, 0), linewidth=1, display=display.pane)
-pL = plot(lowerK, title="BBMC lower", color=color.new(#2962ff, 0), linewidth=1, display=display.pane)
-fill(pU, pL, color=color.new(#2962ff, 90))
+// Jays-style coloring (jay_indicator.py barColor): green when the close is above the upper
+// band, red when below the lower band, white when inside the bands — not a fixed blue.
+color bandCol = idxC > upperK ? color.new(#089981, 0) : idxC < lowerK ? color.new(#f23645, 0) : color.new(color.white, 0)
+plot(bbmc, title="BBMC 60", color=bandCol, linewidth=2, display=display.pane)
+pU = plot(upperK, title="BBMC upper", color=bandCol, linewidth=1, display=display.pane)
+pL = plot(lowerK, title="BBMC lower", color=bandCol, linewidth=1, display=display.pane)
+fill(pU, pL, color=color.new(bandCol, 90))
 
 // --- 11. aggregate gamma walls: daily zigzag (baked history) + MP single line ---
 // CW (green) and PW (red) are drawn as one small horizontal segment per
