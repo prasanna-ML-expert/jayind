@@ -358,27 +358,29 @@ if barstate.islast
 
 // --- 14. predicted next candle (ghost candle) ---
 // From predict_board_candle.py (gamma-range + PCR + position + momentum
-// heuristic). Drawn as a proper candle TWO bars out (plotcandle with
-// offset=2), so tomorrow the live candle forms at offset 1 and the
-// prediction sits beside it at offset 2 instead of overlapping it. Pine
-// has no hatched / striped fill, so the body is GHOSTED (50% transparent
-// fill, solid border) to mark it as a prediction, with a PRED label. It
-// is a scenario, not data - the real candle replaces it tomorrow.
+// heuristic). Drawn TWO bars out, so tomorrow the live candle forms at
+// offset 1 and the prediction sits beside it at offset 2 instead of
+// overlapping it. plotcandle has NO offset argument (CE10120), so the
+// candle is drawn with lines: a thin wick (low-high) + a thick body
+// (open-close, width 6, 50% transparent = ghosted) at bar_index+2.
+// Pine has no hatched / striped fill, so the ghosted body + PRED label
+// mark it as a prediction. It is a scenario, not data.
 float predO = 91.41
 float predH = 94.97
 float predL = 87.85
 float predC = 88.53
 string predDate = "2026-11-12"
-float prO = barstate.islast ? predO : na
-float prH = barstate.islast ? predH : na
-float prL = barstate.islast ? predL : na
-float prC = barstate.islast ? predC : na
-color predBodyCol = predC >= predO ? color.new(#089981, 50) : color.new(#f23645, 50)
-color predBordCol = predC >= predO ? color.new(#089981, 0) : color.new(#f23645, 0)
-plotcandle(prO, prH, prL, prC, title="Predicted " + predDate, color=predBodyCol, wickcolor=predBordCol, bordercolor=predBordCol, offset=2)
+var line predWick = na
+var line predBody = na
 var label predLab = na
 if barstate.islast
+    line.delete(predWick)
+    line.delete(predBody)
     label.delete(predLab)
+    color predBodyCol = predC >= predO ? color.new(#089981, 50) : color.new(#f23645, 50)
+    color predBordCol = predC >= predO ? color.new(#089981, 0) : color.new(#f23645, 0)
+    predWick := line.new(bar_index + 2, predL, bar_index + 2, predH, xloc=xloc.bar_index, color=predBordCol, width=1, style=line.style_solid)
+    predBody := line.new(bar_index + 2, predO, bar_index + 2, predC, xloc=xloc.bar_index, color=predBodyCol, width=6, style=line.style_solid)
     predLab := label.new(bar_index + 2, predH, "PRED " + predDate, xloc=xloc.bar_index, style=label.style_label_down, color=na, textcolor=color.new(#787b86, 0), size=size.small)
 
 // --- 14. readout table REMOVED (user, Nov 11 evening) ---
