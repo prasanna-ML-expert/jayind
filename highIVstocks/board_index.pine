@@ -326,7 +326,7 @@ if barstate.islast
     table.cell(tb, 0, 5, "BBMC 60", text_color=color.white, text_size=size.small)
     table.cell(tb, 1, 5, na(bbmc) ? "n/a (<60 bars)" : str.tostring(bbmc, "#.##") + " · " + (idxC > upperK ? "ABOVE band" : idxC < lowerK ? "BELOW band" : "inside band"), text_color=color.white, text_size=size.small)
     table.cell(tb, 0, 6, "PCR", text_color=color.white, text_size=size.small)
-    table.cell(tb, 1, 6, na(pcr) ? "n/a" : str.tostring(pcr, "#.##") + " (" + str.tostring(pcrScaled, "#") + ")" + (pcr > 1 ? " put-heavy" : " call-heavy"), text_color=color.white, text_size=size.small)
+    table.cell(tb, 1, 6, na(pcr) ? "n/a" : str.tostring(pcr, "#.##") + " (" + str.tostring(pcrMult, "#") + ")" + (pcr > 1 ? " put-heavy" : " call-heavy"), text_color=color.white, text_size=size.small)
 
 // --- 15. history guard (chain never anchored = chart starts after the base date) ---
 var label nohist = na
