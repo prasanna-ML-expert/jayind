@@ -1,5 +1,5 @@
 //@version=6
-indicator("Board Index — Jays + Gamma (Live)", shorttitle="BOARD 1111", overlay=false, max_lines_count=500)
+indicator("Board Index — Jays + Gamma (Live)", shorttitle="BOARD 1111", overlay=false, max_lines_count=100)
 
 // LIVE equal-weight board index: 33 tickers (baked 2026-11-11 from hoodlist.csv), chained mean returns, base 100 @ 2026-10-14 close.
 // Candles compute live from TradingView quotes IN THE CHART'S TIMEFRAME (daily candles on daily, weekly on weekly, hourly on hourly).
@@ -274,36 +274,20 @@ wallAt(int d, float[] vals) =>
             v := array.get(vals, i)
             break
     v
-var line[] cwLines = array.new_line()
-var line[] pwLines = array.new_line()
-var line[] flLines = array.new_line()
-var float prevCW = na
-var float prevPW = na
-var float prevFL = na
+// Walls as step lines: a native stepline plot draws each bar's horizontal
+// segment exactly across that bar's width (edges aligned to the candle),
+// which line.new cannot do - bar_index must be int (N to N+1 runs
+// center-to-center) and bar_time snaps fractional times. offset=-1 shifts
+// the whole step line one bar left, so a day's walls sit under the prior
+// session's candle (same dating as PCR). Pine's plot has no dotted
+// stepline, so the flip is solid orange here; the MP keeps its dotted
+// line.new segment on the last bar only.
 float cwDay = wallAt(barDate, wallCW)
 float pwDay = wallAt(barDate, wallPW)
 float flDay = wallAt(barDate, wallFlip)
-if not na(cwDay) and not na(time[1])
-    array.push(cwLines, line.new(time[1], cwDay, time, cwDay, xloc=xloc.bar_time, color=color.new(#089981, 0), width=1, style=line.style_solid))
-    if not na(prevCW)
-        array.push(cwLines, line.new(time[1], prevCW, time[1], cwDay, xloc=xloc.bar_time, color=color.new(#089981, 0), width=1, style=line.style_solid))
-    if array.size(cwLines) > 130
-        line.delete(array.shift(cwLines))
-    prevCW := cwDay
-if not na(pwDay) and not na(time[1])
-    array.push(pwLines, line.new(time[1], pwDay, time, pwDay, xloc=xloc.bar_time, color=color.new(#f23645, 0), width=1, style=line.style_solid))
-    if not na(prevPW)
-        array.push(pwLines, line.new(time[1], prevPW, time[1], pwDay, xloc=xloc.bar_time, color=color.new(#f23645, 0), width=1, style=line.style_solid))
-    if array.size(pwLines) > 130
-        line.delete(array.shift(pwLines))
-    prevPW := pwDay
-if not na(flDay) and not na(time[1])
-    array.push(flLines, line.new(time[1], flDay, time, flDay, xloc=xloc.bar_time, color=color.new(#ff9800, 0), width=1, style=line.style_dotted))
-    if not na(prevFL)
-        array.push(flLines, line.new(time[1], prevFL, time[1], flDay, xloc=xloc.bar_time, color=color.new(#ff9800, 0), width=1, style=line.style_dotted))
-    if array.size(flLines) > 130
-        line.delete(array.shift(flLines))
-    prevFL := flDay
+plot(cwDay, title="CW", color=color.new(#089981, 0), linewidth=1, style=plot.style_stepline, offset=-1, display=display.pane)
+plot(pwDay, title="PW", color=color.new(#f23645, 0), linewidth=1, style=plot.style_stepline, offset=-1, display=display.pane)
+plot(flDay, title="Flip", color=color.new(#ff9800, 0), linewidth=1, style=plot.style_stepline, offset=-1, display=display.pane)
 
 
 // --- 12. Board PCR bars at the bottom of the pane (volume-style) ---
