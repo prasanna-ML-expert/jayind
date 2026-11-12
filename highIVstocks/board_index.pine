@@ -287,7 +287,7 @@ float pwDay = wallAt(barDate, wallPW)
 float flDay = wallAt(barDate, wallFlip)
 plot(cwDay, title="CW", color=color.new(#089981, 0), linewidth=1, style=plot.style_stepline, offset=-1, display=display.pane)
 plot(pwDay, title="PW", color=color.new(#f23645, 0), linewidth=1, style=plot.style_stepline, offset=-1, display=display.pane)
-plot(flDay, title="Flip", color=color.new(#ff9800, 0), linewidth=1, style=plot.style_stepline, offset=-1, display=display.pane)
+plot(flDay, title="Flip", color=color.new(#29b6f6, 0), linewidth=1, style=plot.style_stepline, offset=-1, display=display.pane)
 
 
 // --- 12. Board PCR bars at the bottom of the pane (volume-style) ---
@@ -349,7 +349,7 @@ if barstate.islast
     label.delete(lbMP)
     lbCW := label.new(bar_index + 2, cw,   "CW 93.40",   xloc=xloc.bar_index, style=label.style_label_left, color=na, textcolor=color.new(#089981, 0), size=size.small)
     lbPW := label.new(bar_index + 2, pw,   "PW 85.82",   xloc=xloc.bar_index, style=label.style_label_left, color=na, textcolor=color.new(#f23645, 0), size=size.small)
-    lbFL := label.new(bar_index + 2, flip, "FLIP 82.97", xloc=xloc.bar_index, style=label.style_label_left, color=na, textcolor=color.new(#ff9800, 0), size=size.small)
+    lbFL := label.new(bar_index + 2, flip, "FLIP 82.97", xloc=xloc.bar_index, style=label.style_label_left, color=na, textcolor=color.new(#29b6f6, 0), size=size.small)
     lbMP := label.new(bar_index + 2, mp,   "MP 87.61",   xloc=xloc.bar_index, style=label.style_label_left, color=na, textcolor=color.new(#787b86, 0), size=size.small)
 
 // --- 14. readout table (live values) ---
