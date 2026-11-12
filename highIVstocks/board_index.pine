@@ -365,10 +365,10 @@ if barstate.islast
 // (open-close, width 6, 50% transparent = ghosted) at bar_index+2.
 // Pine has no hatched / striped fill, so the ghosted body + PRED label
 // mark it as a prediction. It is a scenario, not data.
-float predO = 91.41
-float predH = 94.97
-float predL = 87.85
-float predC = 87.85
+float predO = 86.42
+float predH = 89.99
+float predL = 84.52
+float predC = 86.30
 string predDate = "2026-11-12"
 var line predWick = na
 var line predBody = na
