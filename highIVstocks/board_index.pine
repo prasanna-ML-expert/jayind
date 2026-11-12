@@ -244,6 +244,12 @@ fill(pU, pL, color=color.new(#2962ff, 90))
 // segments but DOTTED (orange). MP stays a single horizontal line (gray)
 // - its daily history is not tracked in opflow_history. The latest values
 // below still feed the labels, the table, and the PCR band (fixed to PW).
+// Segments use xloc.bar_time from time to time+period (exact bar edges),
+// NOT bar_index to bar_index+1 - the bar_index span runs center-to-center
+// and straddles two half-bars (the same box-straddle problem as the PCR
+// bars). Each bar also draws a vertical connector at its open time joining
+// the previous bar's level to this bar's, same color/style - so green
+// joins green, red joins red, dotted joins dotted, one continuous zigzag.
 float pw   = 85.82
 float flip = 82.97
 float mp   = 87.61
@@ -264,21 +270,34 @@ wallAt(int d, float[] vals) =>
 var line[] cwLines = array.new_line()
 var line[] pwLines = array.new_line()
 var line[] flLines = array.new_line()
+var float prevCW = na
+var float prevPW = na
+var float prevFL = na
+int periodMs = timeframe.in_seconds(timeframe.period) * 1000
 float cwDay = wallAt(barDate, wallCW)
 float pwDay = wallAt(barDate, wallPW)
 float flDay = wallAt(barDate, wallFlip)
 if not na(cwDay)
-    array.push(cwLines, line.new(bar_index, cwDay, bar_index + 1, cwDay, color=color.new(#089981, 0), width=1, style=line.style_solid))
-    if array.size(cwLines) > 100
+    array.push(cwLines, line.new(time, cwDay, time + periodMs, cwDay, xloc=xloc.bar_time, color=color.new(#089981, 0), width=1, style=line.style_solid))
+    if not na(prevCW)
+        array.push(cwLines, line.new(time, prevCW, time, cwDay, xloc=xloc.bar_time, color=color.new(#089981, 0), width=1, style=line.style_solid))
+    if array.size(cwLines) > 130
         line.delete(array.shift(cwLines))
+    prevCW := cwDay
 if not na(pwDay)
-    array.push(pwLines, line.new(bar_index, pwDay, bar_index + 1, pwDay, color=color.new(#f23645, 0), width=1, style=line.style_solid))
-    if array.size(pwLines) > 100
+    array.push(pwLines, line.new(time, pwDay, time + periodMs, pwDay, xloc=xloc.bar_time, color=color.new(#f23645, 0), width=1, style=line.style_solid))
+    if not na(prevPW)
+        array.push(pwLines, line.new(time, prevPW, time, pwDay, xloc=xloc.bar_time, color=color.new(#f23645, 0), width=1, style=line.style_solid))
+    if array.size(pwLines) > 130
         line.delete(array.shift(pwLines))
+    prevPW := pwDay
 if not na(flDay)
-    array.push(flLines, line.new(bar_index, flDay, bar_index + 1, flDay, color=color.new(#ff9800, 0), width=1, style=line.style_dotted))
-    if array.size(flLines) > 100
+    array.push(flLines, line.new(time, flDay, time + periodMs, flDay, xloc=xloc.bar_time, color=color.new(#ff9800, 0), width=1, style=line.style_dotted))
+    if not na(prevFL)
+        array.push(flLines, line.new(time, prevFL, time, flDay, xloc=xloc.bar_time, color=color.new(#ff9800, 0), width=1, style=line.style_dotted))
+    if array.size(flLines) > 130
         line.delete(array.shift(flLines))
+    prevFL := flDay
 
 
 // --- 12. Board PCR bars at the bottom of the pane (volume-style) ---
