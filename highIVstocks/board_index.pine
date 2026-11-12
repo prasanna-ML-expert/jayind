@@ -251,11 +251,12 @@ plot(mp,   title="MP",   color=color.new(#787b86, 0), linewidth=1, display=displ
 // PCR is a gamma-job value (prior session OI), baked daily with the walls.
 // Looked up by bar date (last known on or before the bar). Redrawn clean
 // on a 0-100 scale: PCR 1.0 = 50, extrapolated linearly (scaled = PCR x 50).
-// The band is FIXED to the put wall (PW - 8 to PW + 6, 50 line at PW - 1),
-// so the 50 line is a straight horizontal reference and every bar aligns
-// to it. (The earlier version tied the band to a 20-bar pane range that
-// changed on every bar, so the 50 line wiggled up and down and the bars
-// scattered.) Red boxes rise above 50 when put-heavy (PCR > 1), green
+// The band is FIXED to the put wall (PW - 29 to PW - 15, 50 line at PW - 22),
+// well below the candles, so the bars never overlap them. The 50 line is
+// a straight horizontal reference and every bar sticks to it (each bar
+// runs from the 50 line out to its value). (The earlier band sat at PW - 8
+// to PW + 6, inside the candle range, so the bars interfered with the
+// candles.) Red boxes rise above 50 when put-heavy (PCR > 1), green
 // boxes hang below 50 when call-heavy (PCR < 1). Bars are BOXES, not a
 // histogram (a histogram draws from 0 and drags the pane scale to 0).
 // PCR is clamped to 2.0 (scaled 100) so a spike never leaves the band.
@@ -272,7 +273,7 @@ pcrAt(int d) =>
     v
 float pcr = pcrAt(barDate)
 float pcrScaled = math.min(math.max(nz(pcr, 1) * 50, 0), 100)
-float pcrBandLo = pw - 8
+float pcrBandLo = pw - 29
 float pcrFifty = pcrBandLo + 7
 float pcrPlot = pcrBandLo + pcrScaled / 100 * 14
 color pcrCol = na(pcr) ? na : pcr > 1 ? color.new(#f23645, 0) : color.new(#089981, 0)
