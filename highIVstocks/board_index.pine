@@ -1,7 +1,7 @@
 //@version=6
-indicator("Board Index — Jays + Gamma (Live)", shorttitle="BOARD 1112", overlay=false, max_lines_count=100)
+indicator("Board Index — Jays + Gamma (Live)", shorttitle="BOARD 1113", overlay=false, max_lines_count=100)
 
-// LIVE equal-weight board index: 33 tickers (baked 2026-11-12 from hoodlist.csv), chained mean returns, base 100 @ 2026-10-14 close.
+// LIVE equal-weight board index: 33 tickers (baked 2026-11-13 from hoodlist.csv), chained mean returns, base 100 @ 2026-10-14 close.
 // Candles compute live from TradingView quotes IN THE CHART'S TIMEFRAME (daily candles on daily, weekly on weekly, hourly on hourly).
 // Aggregate gamma walls baked daily. Regenerate daily for walls, weekly for composition: make_board_index_pine.py + publish_board_index_pine.py
 // Chart must show history back to the base date or the chain never anchors (a label warns).
@@ -256,19 +256,19 @@ fill(pU, pL, color=color.new(bandCol, 90))
 // to this bar's, same color/style - so green joins green, red joins red,
 // dotted joins dotted, one continuous zigzag. Segments sit one bar left:
 // a day's walls span the prior session's slot (same dating as PCR).
-float pw   = 89.01
-float flip = 86.30
-float mp   = 86.75
-float cw   = 94.80
+float pw   = 87.08
+float flip = 84.84
+float mp   = 90.29
+float cw   = 93.27
 // MP is a dotted segment on the latest candle only (not a full-width line).
 var line mpLine = na
 if barstate.islast and not na(time[1])
     line.delete(mpLine)
     mpLine := line.new(time, mp, time + (time - time[1]), mp, xloc=xloc.bar_time, color=color.new(#787b86, 0), width=1, style=line.style_dotted)
-int[] wallDates = array.from(20261015, 20261016, 20261019, 20261020, 20261021, 20261022, 20261023, 20261026, 20261027, 20261028, 20261029, 20261030, 20261102, 20261103, 20261104, 20261105, 20261106, 20261109, 20261110, 20261111, 20261112)
-float[] wallPW = array.from(97.95, 99.59, 94.13, 94.55, 93.86, 95.95, 90.28, 90.71, 89.89, 94.70, 97.12, 93.43, 89.55, 86.11, 87.80, 86.78, 78, 82.37, 86.67, 85.82, 89.01)
-float[] wallCW = array.from(103.82, 105.06, 100.68, 101.36, 100.95, 101.70, 102.51, 100.89, 100.34, 102.24, 103.86, 105.96, 97.67, 95.18, 96.05, 93.78, 90.43, 92.99, 93.69, 93.40, 94.80)
-float[] wallFlip = array.from(94.69, 93.84, 91.61, 91.32, 90.62, 91.45, 91.83, 90.28, 88.78, 88.46, 88.81, 90.16, 86.40, 85.35, 84.43, 84.91, 84.16, 82.02, 81.92, 82.97, 86.30)
+int[] wallDates = array.from(20261015, 20261016, 20261019, 20261020, 20261021, 20261022, 20261023, 20261026, 20261027, 20261028, 20261029, 20261030, 20261102, 20261103, 20261104, 20261105, 20261106, 20261109, 20261110, 20261111, 20261112, 20261113)
+float[] wallPW = array.from(97.95, 99.59, 94.13, 94.55, 93.86, 95.95, 90.28, 90.71, 89.89, 94.70, 97.12, 93.43, 89.55, 86.11, 87.80, 86.78, 78, 82.37, 86.67, 85.82, 89.01, 87.08)
+float[] wallCW = array.from(103.82, 105.06, 100.68, 101.36, 100.95, 101.70, 102.51, 100.89, 100.34, 102.24, 103.86, 105.96, 97.67, 95.18, 96.05, 93.78, 90.43, 92.99, 93.69, 93.40, 94.80, 93.27)
+float[] wallFlip = array.from(94.69, 93.84, 91.61, 91.32, 90.62, 91.45, 91.83, 90.28, 88.78, 88.46, 88.81, 90.16, 86.40, 85.35, 84.43, 84.91, 84.16, 82.02, 81.92, 82.97, 86.30, 84.84)
 int barDate = year(time) * 10000 + month(time) * 100 + dayofmonth(time)
 wallAt(int d, float[] vals) =>
     float v = na
@@ -317,8 +317,8 @@ plot(flDay, title="Flip", color=color.new(#29b6f6, 0), linewidth=1, style=plot.s
 // not boxes or a histogram (a histogram draws from 0 and drags the pane
 // scale to 0). Bar height is clamped to the 14-unit band top (PCR 1.4),
 // so a spike never leaves the band.
-int[] pcrDates = array.from(20261015, 20261016, 20261019, 20261020, 20261021, 20261022, 20261023, 20261026, 20261027, 20261028, 20261029, 20261030, 20261102, 20261103, 20261104, 20261105, 20261106, 20261109, 20261110, 20261111)
-float[] pcrVals = array.from(1.06, 1.09, 0.96, 0.92, 0.86, 1.27, 1.15, 1.03, 0.89, 0.83, 1.03, 1.11, 1.12, 0.93, 0.97, 1.59, 1.12, 0.89, 0.91, 0.78)
+int[] pcrDates = array.from(20261015, 20261016, 20261019, 20261020, 20261021, 20261022, 20261023, 20261026, 20261027, 20261028, 20261029, 20261030, 20261102, 20261103, 20261104, 20261105, 20261106, 20261109, 20261110, 20261111, 20261112)
+float[] pcrVals = array.from(1.06, 1.09, 0.96, 0.92, 0.86, 1.27, 1.15, 1.03, 0.89, 0.83, 1.03, 1.11, 1.12, 0.93, 0.97, 1.59, 1.12, 0.89, 0.91, 0.78, 0.96)
 pcrAt(int d) =>
     float v = na
     for i = 0 to array.size(pcrDates) - 1
@@ -357,10 +357,10 @@ if barstate.islast
     label.delete(lbPW)
     label.delete(lbFL)
     label.delete(lbMP)
-    lbCW := label.new(bar_index + 2, cw,   "CW 94.80",   xloc=xloc.bar_index, style=label.style_label_left, color=na, textcolor=color.new(#089981, 0), size=size.small)
-    lbPW := label.new(bar_index + 2, pw,   "PW 89.01",   xloc=xloc.bar_index, style=label.style_label_left, color=na, textcolor=color.new(#f23645, 0), size=size.small)
-    lbFL := label.new(bar_index + 2, flip, "FLIP 86.30", xloc=xloc.bar_index, style=label.style_label_left, color=na, textcolor=color.new(#29b6f6, 0), size=size.small)
-    lbMP := label.new(bar_index + 2, mp,   "MP 86.75",   xloc=xloc.bar_index, style=label.style_label_left, color=na, textcolor=color.new(#787b86, 0), size=size.small)
+    lbCW := label.new(bar_index + 2, cw,   "CW 93.27",   xloc=xloc.bar_index, style=label.style_label_left, color=na, textcolor=color.new(#089981, 0), size=size.small)
+    lbPW := label.new(bar_index + 2, pw,   "PW 87.08",   xloc=xloc.bar_index, style=label.style_label_left, color=na, textcolor=color.new(#f23645, 0), size=size.small)
+    lbFL := label.new(bar_index + 2, flip, "FLIP 84.84", xloc=xloc.bar_index, style=label.style_label_left, color=na, textcolor=color.new(#29b6f6, 0), size=size.small)
+    lbMP := label.new(bar_index + 2, mp,   "MP 90.29",   xloc=xloc.bar_index, style=label.style_label_left, color=na, textcolor=color.new(#787b86, 0), size=size.small)
 
 // --- 14. predicted next candle (ghost candle) ---
 // From predict_board_candle.py (gamma-range + PCR + position + momentum
@@ -371,11 +371,11 @@ if barstate.islast
 // (open-close, width 6, 50% transparent = ghosted) at bar_index+2.
 // Pine has no hatched / striped fill, so the ghosted body + PRED label
 // mark it as a prediction. It is a scenario, not data.
-float predO = 86.42
-float predH = 89.99
-float predL = 84.52
-float predC = 86.30
-string predDate = "2026-11-12"
+float predO = 88.31
+float predH = 91.41
+float predL = 85.21
+float predC = 88.62
+string predDate = "2026-11-13"
 var line predWick = na
 var line predBody = na
 var label predLab = na
