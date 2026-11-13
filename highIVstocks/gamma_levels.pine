@@ -18,181 +18,181 @@ if syminfo.ticker == "CIFR"
     pw := 7
     flip := 6.12
     mp := 7
-    prO := na
-    prH := na
-    prL := na
-    prC := na
+    prO := 7.17
+    prH := 7.95
+    prL := 6.39
+    prC := 6.94
 else if syminfo.ticker == "NBIS"
     cw := 150
     pw := 115
     flip := 142.6
     mp := 150
-    prO := na
-    prH := na
-    prL := na
-    prC := na
+    prO := 126.09
+    prH := 140.33
+    prL := 111.85
+    prC := 130.36
 else if syminfo.ticker == "MARA"
     cw := 7.5
     pw := 7
     flip := 6.09
     mp := 7.5
-    prO := na
-    prH := na
-    prL := na
-    prC := na
+    prO := 7.19
+    prH := 7.67
+    prL := 6.51
+    prC := 7.19
 else if syminfo.ticker == "WULF"
     cw := 13
     pw := 13
     flip := 11.9
     mp := 13
-    prO := na
-    prH := na
-    prL := na
-    prC := na
+    prO := 12.97
+    prH := 13.29
+    prL := 11.82
+    prC := 12.62
 else if syminfo.ticker == "IREN"
     cw := 22
     pw := 20
     flip := 21.49
     mp := 23
-    prO := na
-    prH := na
-    prL := na
-    prC := na
+    prO := 19.29
+    prH := 21.39
+    prL := 19.29
+    prC := 20
 else if syminfo.ticker == "BE"
     cw := 220
     pw := 200
     flip := 211.87
     mp := 215
-    prO := na
-    prH := na
-    prL := na
-    prC := na
+    prO := 203.75
+    prH := 216.11
+    prL := 195.76
+    prC := 208.84
 else if syminfo.ticker == "INTC"
     cw := 65
     pw := 65
     flip := 58.45
     mp := 62.5
-    prO := na
-    prH := na
-    prL := na
-    prC := na
+    prO := 60.94
+    prH := 64.38
+    prL := 57.59
+    prC := 59.91
 else if syminfo.ticker == "SMCI"
     cw := 29
     pw := 25
     flip := 24.88
     mp := 29
-    prO := na
-    prH := na
-    prL := na
-    prC := na
+    prO := 27.24
+    prH := 29.51
+    prL := 24.97
+    prC := 27.24
 else if syminfo.ticker == "CRWV"
     cw := 60
     pw := 60
     flip := 56.29
     mp := 60
-    prO := na
-    prH := na
-    prL := na
-    prC := na
+    prO := 56.48
+    prH := 61.51
+    prL := 54.78
+    prC := 58.29
 else if syminfo.ticker == "SNDK"
     cw := 1000
     pw := 1000
     flip := 930.75
     mp := 930
-    prO := na
-    prH := na
-    prL := na
-    prC := na
+    prO := 926
+    prH := 1012.37
+    prL := 909.16
+    prC := 951.91
 else if syminfo.ticker == "RKLB"
     cw := 65
     pw := 60
     flip := 56.67
     mp := 59
-    prO := na
-    prH := na
-    prL := na
-    prC := na
+    prO := 64.34
+    prH := 66.51
+    prL := 58.31
+    prC := 64.34
 else if syminfo.ticker == "MSTR"
     cw := 120
     pw := 110
     flip := 110.7
     mp := 120
-    prO := na
-    prH := na
-    prL := na
-    prC := na
+    prO := 112.81
+    prH := 119.04
+    prL := 109.14
+    prC := 114.68
 else if syminfo.ticker == "MRVL"
     cw := 160
     pw := 160
     flip := 191.35
     mp := 177.5
-    prO := na
-    prH := na
-    prL := na
-    prC := na
+    prO := 164.22
+    prH := 176.79
+    prL := 156.86
+    prC := 167.99
 else if syminfo.ticker == "COIN"
     cw := 134
     pw := 120
     flip := 128.34
     mp := 134
-    prO := na
-    prH := na
-    prL := na
-    prC := na
+    prO := 128.18
+    prH := 135.12
+    prL := 126.61
+    prC := 128.34
 else if syminfo.ticker == "MU"
     cw := 900
     pw := 800
     flip := 825.31
     mp := 810
-    prO := na
-    prH := na
-    prL := na
-    prC := na
+    prO := 793
+    prH := 837.79
+    prL := 787.52
+    prC := 807.97
 else if syminfo.ticker == "HOOD"
     cw := 90
     pw := 80
     flip := 83.55
     mp := 85
-    prO := na
-    prH := na
-    prL := na
-    prC := na
+    prO := 80.41
+    prH := 84.42
+    prL := 79
+    prC := 81.61
 else if syminfo.ticker == "AMD"
     cw := 620
     pw := 550
     flip := 523.2
     mp := 520
-    prO := na
-    prH := na
-    prL := na
-    prC := na
+    prO := 570.57
+    prH := 610.93
+    prL := 530.21
+    prC := 558.46
 else if syminfo.ticker == "ORCL"
     cw := 140
     pw := 125
     flip := 127.06
     mp := 135
-    prO := na
-    prH := na
-    prL := na
-    prC := na
+    prO := 128.7
+    prH := 135.34
+    prL := 125.4
+    prC := 128.7
 else if syminfo.ticker == "PLTR"
     cw := 180
     pw := 170
     flip := 169.22
     mp := 177.5
-    prO := na
-    prH := na
-    prL := na
-    prC := na
+    prO := 172.55
+    prH := 178.94
+    prL := 167.62
+    prC := 172.55
 else if syminfo.ticker == "SOFI"
     cw := 16
     pw := 14
     flip := 15.41
     mp := 16
-    prO := na
-    prH := na
-    prL := na
-    prC := na
+    prO := 15.78
+    prH := 16.16
+    prL := 15.25
+    prC := 15.78
 else if syminfo.ticker == "NU"
     cw := 14
     pw := 13
@@ -207,109 +207,109 @@ else if syminfo.ticker == "ASTS"
     pw := 30
     flip := 36.43
     mp := 38
-    prO := na
-    prH := na
-    prL := na
-    prC := na
+    prO := 34.59
+    prH := 37.51
+    prL := 30.26
+    prC := 35.89
 else if syminfo.ticker == "SPCX"
     cw := 145
     pw := 140
     flip := 137.73
     mp := 145
-    prO := na
-    prH := na
-    prL := na
-    prC := na
+    prO := 140.65
+    prH := 146.91
+    prL := 135.82
+    prC := 138.36
 else if syminfo.ticker == "APLD"
     cw := 17
     pw := 16
     flip := 14.59
     mp := 17.5
-    prO := na
-    prH := na
-    prL := na
-    prC := na
+    prO := 16.85
+    prH := 17.33
+    prL := 15.55
+    prC := 16.85
 else if syminfo.ticker == "NVDA"
     cw := 180
     pw := 190
     flip := 168.86
     mp := 177.5
-    prO := na
-    prH := na
-    prL := na
-    prC := na
+    prO := 169.93
+    prH := 180.59
+    prL := 169.93
+    prC := 180.59
 else if syminfo.ticker == "AVGO"
     cw := 380
     pw := 340
     flip := 352.66
     mp := 340
-    prO := na
-    prH := na
-    prL := na
-    prC := na
+    prO := 356.45
+    prH := 373.68
+    prL := 348.35
+    prC := 352.66
 else if syminfo.ticker == "JBLU"
     cw := 4
     pw := 4
     flip := 3.21
     mp := 3.5
-    prO := na
-    prH := na
-    prL := na
-    prC := na
+    prO := 3.82
+    prH := 4.04
+    prL := 3.6
+    prC := 3.82
 else if syminfo.ticker == "MRNA"
     cw := 200
     pw := 230
     flip := 213.07
     mp := 200
-    prO := na
-    prH := na
-    prL := na
-    prC := na
+    prO := 230.08
+    prH := 230.08
+    prL := 208.65
+    prC := 213.07
 else if syminfo.ticker == "RIVN"
     cw := 14
     pw := 13
     flip := 12.09
     mp := 13
-    prO := na
-    prH := na
-    prL := na
-    prC := na
+    prO := 12.85
+    prH := 13.43
+    prL := 12.28
+    prC := 12.85
 else if syminfo.ticker == "NOW"
     cw := 105
     pw := 105
     flip := 103.03
     mp := 105
-    prO := na
-    prH := na
-    prL := na
-    prC := na
+    prO := 102.4
+    prH := 105
+    prL := 102.4
+    prC := 105
 else if syminfo.ticker == "TSLA"
     cw := 400
     pw := 380
     flip := 375.53
     mp := 395
-    prO := na
-    prH := na
-    prL := na
-    prC := na
+    prO := 402.77
+    prH := 403.66
+    prL := 388.15
+    prC := 398.38
 else if syminfo.ticker == "RIOT"
     cw := 18
     pw := 18
     flip := 11.56
     mp := 15
-    prO := na
-    prH := na
-    prL := na
-    prC := na
+    prO := 17.86
+    prH := 18.38
+    prL := 16.34
+    prC := 17.4
 else if syminfo.ticker == "META"
     cw := 650
     pw := 600
     flip := 618.55
     mp := 640
-    prO := na
-    prH := na
-    prL := na
-    prC := na
+    prO := 625.86
+    prH := 641.83
+    prL := 614.56
+    prC := 621.07
 
 drawLevel(level, tag, cl) =>
     var line ln = na
@@ -325,5 +325,23 @@ drawLevel(pw, "PW", #F23645)
 drawLevel(flip, "FLIP", #FF9800)
 drawLevel(mp, "MP", #B0B0B0)
 
-// (no prediction for today yet — run predict_ticker_morning.py after
-// the gamma job and the premarket read, then regenerate this file)
+// --- predicted candle (ghost candle, per ticker) ---
+// From predict_ticker_morning.py (gamma-range + PCR + momentum
+// heuristic, backtest-tuned). Drawn TWO bars out, so the live
+// candle forms at offset 1 and the prediction sits beside it at
+// offset 2 instead of overlapping it. plotcandle has NO offset
+// argument (CE10120), so the candle is drawn with lines: a thin
+// wick (low-high) + a thick body (open-close, width 6, 50%
+// transparent = ghosted) + a PRED label. It is a scenario, not data.
+var line predWick = na
+var line predBody = na
+var label predLab = na
+if barstate.islast and not na(prO) and not na(prC)
+    line.delete(predWick)
+    line.delete(predBody)
+    label.delete(predLab)
+    color predBodyCol = prC >= prO ? color.new(#089981, 50) : color.new(#F23645, 50)
+    color predBordCol = prC >= prO ? color.new(#089981, 0) : color.new(#F23645, 0)
+    predWick := line.new(bar_index + 2, prL, bar_index + 2, prH, xloc=xloc.bar_index, color=predBordCol, width=1, style=line.style_solid)
+    predBody := line.new(bar_index + 2, prO, bar_index + 2, prC, xloc=xloc.bar_index, color=predBodyCol, width=6, style=line.style_solid)
+    predLab := label.new(bar_index + 2, prH, "PRED 1113", xloc=xloc.bar_index, style=label.style_label_down, color=na, textcolor=color.new(#B0B0B0, 0), size=size.small)
