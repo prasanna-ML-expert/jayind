@@ -399,12 +399,16 @@ drawLevel(mp, "MP", #B0B0B0)
 // --- net-GEX profile: same data as the PW popup (gexdata.json) ---
 // Horizontal bars on the right side of the chart, one per strike.
 // Green = net call-heavy, red = net put-heavy (popup colors).
-// Bar length is proportional to |net GEX| / max|net GEX| for this
-// ticker, capped at profMaxW bars right of the last bar. Redrawn
-// on the last bar so the profile tracks the right edge as new
-// bars form. Strikes with a zero-length bar are skipped.
+// Bars are RIGHT-ALIGNED: they share a common right edge
+// (profMaxW + profGap bars right of the last bar) and extend
+// LEFT toward the price, length proportional to |net GEX| /
+// max|net GEX| for this ticker (max profMaxW bars). The longest
+// bar's left edge sits profGap bars clear of the last candle.
+// Redrawn on the last bar so the profile tracks the right edge
+// as new bars form. Strikes with a zero-length bar are skipped.
 var box[] profBoxes = array.new_box()
 int profMaxW = 12
+int profGap = 2
 if barstate.islast
     for b in profBoxes
         box.delete(b)
@@ -416,6 +420,7 @@ if barstate.islast
             mx := math.max(mx, math.abs(v))
         if mx == 0.0
             mx := 1.0
+        int profRight = bar_index + 1 + profGap + profMaxW
         for i = 0 to n - 1
             float s = array.get(gexS, i)
             float v = array.get(gexV, i)
@@ -438,5 +443,5 @@ if barstate.islast
                     top := (s + array.get(gexS, i + 1)) / 2
                     bot := (s + array.get(gexS, i - 1)) / 2
                 color c = v >= 0 ? color.new(#3fb950, 0) : color.new(#f85149, 0)
-                box nb = box.new(bar_index, top, bar_index + w, bot, xloc=xloc.bar_index, bgcolor=c, border_color=c)
+                box nb = box.new(profRight - w, top, profRight, bot, xloc=xloc.bar_index, bgcolor=c, border_color=c)
                 array.push(profBoxes, nb)
