@@ -569,7 +569,8 @@ if barstate.islast
                 array.push(profBoxes, nb)
 
 // --- institutional (cap-structure) levels: same data as the strip bar ---
-// Thin vertical column at the right edge, just past the GEX profile.
+// Thin vertical column at the right edge, its left edge touching
+// the GEX profile's right edge (capGap = 0).
 // Blue = safe-buy zone, red = sell/supply zone (strip colors,
 // translucent solid — Pine has no hatch, so the strip's 16% hatched
 // fill becomes a 16% solid fill). Amber tick = convert strike,
@@ -579,7 +580,7 @@ if barstate.islast
 var box[] capBoxes = array.new_box()
 var line[] capLines = array.new_line()
 int capW = 3
-int capGap = 2
+int capGap = 0
 if barstate.islast
     for b in capBoxes
         box.delete(b)
