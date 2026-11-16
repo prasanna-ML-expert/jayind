@@ -788,10 +788,11 @@ if barstate.islast
 int barDate = year(time) * 10000 + month(time) * 100 + dayofmonth(time)
 pcrAt(int d) =>
     float v = na
-    for i = 0 to array.size(pcrD) - 1
-        if array.get(pcrD, i) == d
-            v := array.get(pcrV, i)
-            break
+    if array.size(pcrD) > 0
+        for i = 0 to array.size(pcrD) - 1
+            if array.get(pcrD, i) == d
+                v := array.get(pcrV, i)
+                break
     v
 float pcr = pcrAt(barDate)
 float pcrBandH = pcrAnchor * 0.16
