@@ -343,18 +343,17 @@ if barstate.islast
     line.delete(fiftyLine)
     fiftyLine := line.new(math.max(0, bar_index - 1249), pcrFifty, bar_index, pcrFifty, xloc=xloc.bar_index, color=color.new(#787b86, 0), width=1, style=line.style_dotted)
 
-// --- 12b. Fear & Greed line in the PCR band (own scale, 50 reference) ---
+// --- 12b. Fear & Greed line (absolute price, 50 base) ---
 // F&G is a live morning read (~8 AM), so it plots under its own day's
-// date (no one-day lag like PCR). The line has its OWN scale - it does
-// not share the PCR band's /5 mapping or anchor to the PCR 50 line.
-// 50 is the reference individually: F&G 0-50 spans the full 14-unit
-// band (height = F&G x 0.28), so F&G 50 sits at the band top and the
-// fear range gets the whole band height. F&G above 50 reads at the
-// band top. The raw value is used - no halving, no /5, no subtract-20.
-// Drawn as a STEPline (horizontal segment per day, connected) in a
-// single fixed ORANGE - no zone coloring (the chart background is
-// white, so a white line was invisible). The raw F&G value shows in
-// the status line. No line before the history starts (Oct 20).
+// date (no one-day lag like PCR). Plotted at ABSOLUTE price 50 +
+// (F&G - 20) - no PCR mixing, no /5, no scaling. F&G 20 reads price
+// 50, F&G 50 reads 80, F&G 0 reads 30, F&G 100 reads 130. The raw
+// value drives the line 1-for-1, so the recent range (19-43) spans
+// prices 49-73. Drawn as a STEPline (horizontal segment per day,
+// connected) in a single fixed ORANGE - no zone coloring (the chart
+// background is white, so a white line was invisible). The raw F&G
+// value shows in the status line. No line before the history starts
+// (Oct 20).
 int[] fgDates = array.from(20261020, 20261021, 20261022, 20261023, 20261026, 20261027, 20261028, 20261029, 20261030, 20261102, 20261103, 20261104, 20261105, 20261106, 20261109, 20261110, 20261111, 20261112, 20261113, 20261116, 20261117)
 float[] fgVals = array.from(22.0, 29.0, 29.0, 21.0, 22.0, 30.0, 33.0, 35.0, 32.0, 27.0, 19.0, 22.0, 35.0, 20.0, 24.0, 30.0, 37.0, 35.0, 40.0, 38.0, 32.0)
 fgAt(int d) =>
@@ -366,7 +365,7 @@ fgAt(int d) =>
                 break
     v
 float fg = fgAt(barDate)
-float fgPlot = na(fg) ? na : pcrBandLo + math.min(fg * 0.28, 14)
+float fgPlot = na(fg) ? na : 50 + (fg - 20)
 plot(fg, title="F&G", color=color.new(#ff9800, 0), display=display.status_line)
 plot(fgPlot, title="F&G", style=plot.style_stepline, color=color.new(#ff9800, 0), linewidth=2, display=display.pane)
 // --- 13. wall labels on the last bar (right of the bar, in the empty space) ---
