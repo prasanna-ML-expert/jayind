@@ -352,7 +352,8 @@ if barstate.islast
 // plotted / 5, clamped to the 14-unit band top), so the line sits in
 // the top of the band, from the 50 line (F&G 0) up to the band top
 // (F&G 40+ reads at the top). Drawn as a STEPline (horizontal segment
-// per day, connected) in a single neutral color - no zone coloring.
+// per day, connected) in a single fixed ORANGE - no zone coloring (the
+// chart background is white, so the original white line was invisible).
 // The raw F&G value shows in the status line. No line before the
 // history starts (Oct 20).
 int[] fgDates = array.from(20261020, 20261021, 20261022, 20261023, 20261026, 20261027, 20261028, 20261029, 20261030, 20261102, 20261103, 20261104, 20261105, 20261106, 20261109, 20261110, 20261111, 20261112, 20261113, 20261116, 20261117)
@@ -367,8 +368,8 @@ fgAt(int d) =>
     v
 float fg = fgAt(barDate)
 float fgPlot = na(fg) ? na : pcrBandLo + math.min((50 + fg / 2) / 5, 14)
-plot(fg, title="F&G", color=color.new(color.white, 0), display=display.status_line)
-plot(fgPlot, title="F&G", style=plot.style_stepline, color=color.new(color.white, 0), linewidth=2, display=display.pane)
+plot(fg, title="F&G", color=color.new(#ff9800, 0), display=display.status_line)
+plot(fgPlot, title="F&G", style=plot.style_stepline, color=color.new(#ff9800, 0), linewidth=2, display=display.pane)
 // --- 13. wall labels on the last bar (right of the bar, in the empty space) ---
 var label lbCW = na
 var label lbPW = na
