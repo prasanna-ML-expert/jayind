@@ -342,6 +342,31 @@ var line fiftyLine = na
 if barstate.islast
     line.delete(fiftyLine)
     fiftyLine := line.new(math.max(0, bar_index - 1249), pcrFifty, bar_index, pcrFifty, xloc=xloc.bar_index, color=color.new(#787b86, 0), width=1, style=line.style_dotted)
+
+// --- 12b. Fear & Greed line in the PCR band (halved, centered on 50) ---
+// F&G is a live morning read (~8 AM), so it plots under its own day's
+// date (no one-day lag like PCR). The value is HALVED and centered on
+// the 50 reference: plotted = 50 + (F&G - 50) / 2, so F&G 50 sits on
+// the 50 line, F&G 100 reads 75, F&G 0 reads 25. Mapped to the PCR band
+// the same way as the PCR bars (height = plotted / 5, clamped to the
+// 14-unit band top), so the line oscillates in a narrow band around the
+// 50 line. Drawn as a STEPline (horizontal segment per day, connected)
+// in a single neutral color - no zone coloring. The raw F&G value shows
+// in the status line. No line before the history starts (Oct 20).
+int[] fgDates = array.from(20261020, 20261021, 20261022, 20261023, 20261026, 20261027, 20261028, 20261029, 20261030, 20261102, 20261103, 20261104, 20261105, 20261106, 20261109, 20261110, 20261111, 20261112, 20261113, 20261116, 20261117)
+float[] fgVals = array.from(22, 29, 29, 21, 22, 30, 33, 35, 32, 27, 19, 22, 35, 20, 24, 30, 37, 35, 40, 38, 32)
+fgAt(int d) =>
+    float v = na
+    if array.size(fgDates) > 0
+        for i = 0 to array.size(fgDates) - 1
+            if array.get(fgDates, i) == d
+                v := array.get(fgVals, i)
+                break
+    v
+float fg = fgAt(barDate)
+float fgPlot = na(fg) ? na : pcrBandLo + math.min((25 + fg / 2) / 5, 14)
+plot(fg, title="F&G", color=color.new(color.white, 0), display=display.status_line)
+plot(fgPlot, title="F&G", style=plot.style_stepline, color=color.new(color.white, 0), linewidth=2, display=display.pane)
 // --- 13. wall labels on the last bar (right of the bar, in the empty space) ---
 var label lbCW = na
 var label lbPW = na
