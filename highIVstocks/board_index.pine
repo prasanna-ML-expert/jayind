@@ -255,6 +255,7 @@ float pw   = 78.76
 float flip = 80.43
 float mp   = 84.60
 float cw   = 84.16
+int wallDateLatest = 20261119
 // MP is a dotted segment on the latest candle only (not a full-width line).
 var line mpLine = na
 if barstate.islast and not na(time[1])
@@ -286,6 +287,24 @@ float flDay = wallAt(barDate, wallFlip)
 plot(cwDay, title="CW", color=color.new(#089981, 0), linewidth=1, style=plot.style_stepline, offset=-1, display=display.pane)
 plot(pwDay, title="PW", color=color.new(#f23645, 0), linewidth=1, style=plot.style_stepline, offset=-1, display=display.pane)
 plot(flDay, title="Flip", color=color.new(#29b6f6, 0), linewidth=1, style=plot.style_stepline, offset=-1, display=display.pane)
+
+// Latest walls on the last bar, pre-open: the stepline's offset=-1 needs
+// the NEXT bar to exist before a day's walls render on the prior candle,
+// so in the morning (last bar = yesterday, walls dated today) the fresh
+// walls stay invisible until today's candle opens. Draw them directly on
+// the last bar with line.new segments (same span as the MP segment) while
+// the last bar predates the latest wall date; once today's bar forms the
+// stepline takes over and these stop drawing (same values, same span).
+var line cwLine = na
+var line pwLine = na
+var line flLine = na
+if barstate.islast and barDate < wallDateLatest and not na(time[1])
+    line.delete(cwLine)
+    line.delete(pwLine)
+    line.delete(flLine)
+    cwLine := line.new(time, cw, time + (time - time[1]), cw, xloc=xloc.bar_time, color=color.new(#089981, 0), width=1)
+    pwLine := line.new(time, pw, time + (time - time[1]), pw, xloc=xloc.bar_time, color=color.new(#f23645, 0), width=1)
+    flLine := line.new(time, flip, time + (time - time[1]), flip, xloc=xloc.bar_time, color=color.new(#29b6f6, 0), width=1)
 
 
 // --- 12. Board PCR bars at the bottom of the pane (volume-style) ---
