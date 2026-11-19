@@ -303,28 +303,44 @@ plot(flDay, title="Flip", color=color.new(#29b6f6, 0), linewidth=1, style=plot.s
 // segment also gets a vertical connector at time-halfBar (the previous
 // bar's center, where the zigzag steps) from the zigzag's last value
 // (cwDay/pwDay/flDay) to the fresh value, so the new segments join the
-// zigzag instead of floating beside it.
+// zigzag instead of floating beside it. The zigzag itself falls half a
+// candle short of the new segments, so each old level also gets a
+// half-candle EXTENSION (time-barW to time-halfBar, at cwDay/pwDay/flDay)
+// that carries the zigzag out to the connector — the user caught it Nov 19.
 var line cwLine = na
 var line pwLine = na
 var line flLine = na
 var line cwConn = na
 var line pwConn = na
 var line flConn = na
+var line cwExt = na
+var line pwExt = na
+var line flExt = na
 if barstate.islast and barDate < wallDateLatest and not na(time[1])
-    int halfBar = (time - time[1]) / 2
+    int barW = time - time[1]
+    int halfBar = barW / 2
     line.delete(cwLine)
     line.delete(pwLine)
     line.delete(flLine)
     line.delete(cwConn)
     line.delete(pwConn)
     line.delete(flConn)
+    line.delete(cwExt)
+    line.delete(pwExt)
+    line.delete(flExt)
     cwLine := line.new(time - halfBar, cw, time + halfBar, cw, xloc=xloc.bar_time, color=color.new(#089981, 0), width=1)
     pwLine := line.new(time - halfBar, pw, time + halfBar, pw, xloc=xloc.bar_time, color=color.new(#f23645, 0), width=1)
     flLine := line.new(time - halfBar, flip, time + halfBar, flip, xloc=xloc.bar_time, color=color.new(#29b6f6, 0), width=1)
+    if not na(cwDay)
+        cwExt := line.new(time - barW, cwDay, time - halfBar, cwDay, xloc=xloc.bar_time, color=color.new(#089981, 0), width=1)
     if not na(cwDay) and cwDay != cw
         cwConn := line.new(time - halfBar, cwDay, time - halfBar, cw, xloc=xloc.bar_time, color=color.new(#089981, 0), width=1)
+    if not na(pwDay)
+        pwExt := line.new(time - barW, pwDay, time - halfBar, pwDay, xloc=xloc.bar_time, color=color.new(#f23645, 0), width=1)
     if not na(pwDay) and pwDay != pw
         pwConn := line.new(time - halfBar, pwDay, time - halfBar, pw, xloc=xloc.bar_time, color=color.new(#f23645, 0), width=1)
+    if not na(flDay)
+        flExt := line.new(time - barW, flDay, time - halfBar, flDay, xloc=xloc.bar_time, color=color.new(#29b6f6, 0), width=1)
     if not na(flDay) and flDay != flip
         flConn := line.new(time - halfBar, flDay, time - halfBar, flip, xloc=xloc.bar_time, color=color.new(#29b6f6, 0), width=1)
 
